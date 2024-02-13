@@ -9,10 +9,10 @@ services:
     depends_on:
       - backend
     restart: always
-    
-  
+
   backend:
     build: ./backend
+    command: sh /scripts/top-entrypoint.sh
     volumes:
       - ./backend/srcs/:/code
     ports:
