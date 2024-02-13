@@ -1,5 +1,6 @@
 FROM python:3.12
-COPY ./scripts/entrypoint.sh .
-RUN chmod +x entrypoint.sh
+WORKDIR /scripts
+COPY ./scripts /scripts
+RUN chmod +x entrypoint.sh top-entrypoint.sh
 EXPOSE 8000
-CMD sh entrypoint.sh 
+CMD sh /scripts/entrypoint.sh
