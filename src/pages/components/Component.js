@@ -24,6 +24,7 @@ export default class {
 
 	// 실제 화면에 그려지는 동작
 	render() {
+		this.$target.innerHTML = '';
 		this.$target.innerHTML = this.template();
 		this.mounted();
 	}

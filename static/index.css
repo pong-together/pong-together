@@ -10,6 +10,9 @@ body {
 	width: 1000px;
 	height: 100vh;
 	margin: 0 auto;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .login-body-wrapper {

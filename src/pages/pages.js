@@ -1,8 +1,9 @@
-import Login from '../pages/components/Login.js';
+import Login from './components/Login.js';
+import GameSelect from './components/GameSelect.js';
 
 export default (main) => {
 	const login = () => new Login(main);
-	const gameSelect = () => null;
+	const gameSelect = () => new GameSelect(main);
 	const local = () => null;
 	const tournament = () => null;
 	const remote = () => null;
