@@ -1,6 +1,5 @@
 FROM python:3.12
-WORKDIR /config
-COPY ./config /config
-RUN pip install -r requirements.txt
+COPY ./scripts/entrypoint.sh .
+RUN chmod +x entrypoint.sh
 EXPOSE 8000
-ENTRYPOINT ["sh", "/config/entrypoint.sh"]
+CMD sh entrypoint.sh 
