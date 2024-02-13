@@ -8,7 +8,7 @@ export default class extends Component {
 		if (window.location.hash === '#/login') {
 			return `
 			<div class="login-wrapper" data-link>
-				<div class="login-body-wrapper"></div>
+			<div class="login-body-wrapper"></div>
 			</div>
 			`;
 		}
@@ -27,8 +27,8 @@ export default class extends Component {
 	mounted() {
 		const $body = this.$target.querySelector('.body-wrapper');
 		const pages = Pages($body);
-		const router = Router($body);
-		router.addRoute('#/', pages.login);
+		const router = new Router($body);
+		router.addRoute('#/login', pages.login);
 		router.addRoute('#/select', pages.gameSelect);
 		router.addRoute('#/local', pages.local);
 		router.addRoute('#/tournament', pages.tournament);
