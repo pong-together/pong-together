@@ -6,7 +6,7 @@ export default class extends Component {
 	template() {
 		return `
 		<div class="back-wrapper" data-link>
-			<div class="back-logo-wrapper"><img class="back-logo" src="" alt=""/></div>
+			<div class="back-logo-wrapper"><img class="back-logo" src="../../static/images/logoBlue.png" alt=""/></div>
 			<div class="body-wrapper"></div>
 			<div class="footer-wrapper">
 				<div class="footer-profile"></div>
@@ -18,7 +18,6 @@ export default class extends Component {
 
 	changeModule() {
 		if (window.location.hash === '#/login') {
-			console.log('login!!!!');
 			this.$target.innerHTML = '';
 			this.$target.innerHTML = `
 			<div class="login-wrapper" data-link>
@@ -28,13 +27,13 @@ export default class extends Component {
 			this.$target.innerHTML = '';
 			this.$target.innerHTML = `
 			<div class="back-wrapper" data-link>
-				<div class="back-logo-wrapper"><img class="back-logo" src="" alt=""/></div>
-				<div class="body-wrapper"></div>
-				<div class="footer-wrapper">
-					<div class="footer-profile"></div>
-					<div class="footer-chat"></div>
-				</div>
+			<div class="back-logo-wrapper"><img class="back-logo" src="../../static/images/logoBlue.png" alt=""/></div>
+			<div class="body-wrapper"></div>
+			<div class="footer-wrapper">
+				<div class="footer-profile"></div>
+				<div class="footer-chat"></div>
 			</div>
+		</div>
 			`;
 		}
 	}
