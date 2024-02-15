@@ -1,11 +1,12 @@
 import Login from './components/Login.js';
 import GameSelect from './components/GameSelect.js';
-import Tournament from './components/Tournament.js';
+import Tournament from './components/Tournament-Bracket.js';
+import Local from './components/Local.js';
 
 export default (main) => {
 	const login = () => new Login(main);
 	const gameSelect = () => new GameSelect(main);
-	const local = () => null;
+	const local = () => new Local(main);
 	const tournament = () => new Tournament(main);
 	const remote = () => null;
 	const game = () => null;
