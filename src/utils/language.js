@@ -14,6 +14,9 @@ const gameSelect = {
 		remoteMode: '',
 		levelOne: '',
 		levelTwo: '',
+		localModal: '',
+		tournamentModal: '',
+		remoteModal: '',
 	},
 	kr: {
 		startBtn: '게임 시작',
@@ -24,6 +27,9 @@ const gameSelect = {
 		remoteMode: '온라인',
 		levelOne: '기본모드',
 		levelTwo: '익스트림모드',
+		localModal: '한 키보드로 두 명의 플레이어가 대결',
+		tournamentModal: '하나의 키보드로 4명의 플레이어가 토너먼트 진행',
+		remoteModal: '원격으로 다른 플레이어와 경쟁',
 	},
 	jp: {
 		startBtn: '',
@@ -34,6 +40,9 @@ const gameSelect = {
 		remoteMode: '',
 		levelOne: '',
 		levelTwo: '',
+		localModal: '',
+		tournamentModal: '',
+		remoteModal: '',
 	},
 };
 
