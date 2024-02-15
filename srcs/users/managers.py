@@ -7,8 +7,14 @@ class UserManager(BaseUserManager):
             raise ValueError('The intra id must be set')
         if not image:
             raise ValueError('The image must be set')
+
         user = self.model(intra_id=intra_id, image=image, **extra_fields)
-        user.set_password(raw_password=extra_fields['password'])
+
+        password = extra_fields['password']
+        if password is None:
+            password = intra_id
+        user.set_password(raw_password=password)
+
         user.save()
         return user
 
