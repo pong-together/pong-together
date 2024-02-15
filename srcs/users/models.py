@@ -24,3 +24,7 @@ class User(AbstractUser):
     objects = UserManager()
 
     USERNAME_FIELD = 'intra_id'
+
+    class DoesNotExist(Exception):
+        def __init__(self, message="does not exist user"):
+            super().__init__(message)
