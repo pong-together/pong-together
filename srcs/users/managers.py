@@ -9,12 +9,12 @@ class UserManager(BaseUserManager):
             raise ValueError('The image must be set')
 
         user = self.model(intra_id=intra_id, image=image, **extra_fields)
-
-        password = extra_fields['password']
-        if password is None:
+        try:
+            password = extra_fields['password']
+        except KeyError:
             password = intra_id
+        user.username = intra_id
         user.set_password(raw_password=password)
-
         user.save()
         return user
 
