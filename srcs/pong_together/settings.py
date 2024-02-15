@@ -45,6 +45,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # app
+    'users.apps.UsersConfig',
+    # rest framework
     'rest_framework',
 ]
 
@@ -83,13 +86,21 @@ WSGI_APPLICATION = 'pong_together.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("POSTGRES_NAME"),
-        "USER": os.getenv("POSTGRES_USER"),
-        "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
-        "HOST": "db",
-        "PORT": 5432,
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': os.getenv('POSTGRES_NAME'),
+    #     'USER': os.getenv('POSTGRES_USER'),
+    #     'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+    #     'HOST': 'db',
+    #     'PORT': 5432,
+    # }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': env('POSTGRES_NAME'),
+        'USER': env('POSTGRES_USER'),
+        'PASSWORD': env('POSTGRES_PASSWORD'),
+        'HOST': 'localhost',
+        'PORT': 5431,
     }
 }
 
@@ -111,6 +122,11 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
+# USER
+
+AUTH_USER_MODEL = 'users.User'
 
 
 # Internationalization
