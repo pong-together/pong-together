@@ -18,7 +18,6 @@ export default class extends Component {
 
 	changeModule() {
 		if (window.location.hash === '#/login') {
-			console.log('login!!!!');
 			this.$target.innerHTML = '';
 			this.$target.innerHTML = `
 			<div class="login-wrapper" data-link>
