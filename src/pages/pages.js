@@ -1,5 +1,5 @@
 import Login from './components/Login.js';
-import GameSelect from './components/GameSelect.js';
+import GameSelect from './components/game_select/GameSelect.js';
 import Tournament from './components/Tournament.js';
 
 export default (main) => {
