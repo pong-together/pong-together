@@ -1,7 +1,16 @@
 const login = {
-	en: {},
-	kr: {},
-	jp: {},
+	en: {
+		languageSelect: 'change',
+		gameStartBtn: 'start',
+	},
+	kr: {
+		languageSelect: '변경',
+		gameStartBtn: '시작하기',
+	},
+	jp: {
+		languageSelect: '変更',
+		gameStartBtn: '始める',
+	},
 };
 
 const gameSelect = {

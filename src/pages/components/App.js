@@ -3,16 +3,15 @@ import Router from '../router.js';
 import Pages from '../pages.js';
 
 export default class extends Component {
+	setup() {
+		this.$state = {
+			region: 'kr',
+		};
+	}
+
 	template() {
 		return `
-		<div class="back-wrapper" data-link>
-			<div class="back-logo-wrapper"><img class="back-logo" src="../../static/images/logoBlue.png" alt=""/></div>
-			<div class="body-wrapper"></div>
-			<div class="footer-wrapper">
-				<div class="footer-profile"></div>
-				<div class="footer-chat"></div>
-			</div>
-		</div>
+		<div class="body-wrapper"></div>
 		`;
 	}
 
@@ -21,8 +20,8 @@ export default class extends Component {
 			this.$target.innerHTML = '';
 			this.$target.innerHTML = `
 			<div class="login-wrapper" data-link>
-			<div class="body-wrapper"></div>
-		</div>`;
+				<div class="body-wrapper"></div>
+			</div>`;
 		} else {
 			this.$target.innerHTML = '';
 			this.$target.innerHTML = `
@@ -40,7 +39,7 @@ export default class extends Component {
 
 	routerModule() {
 		const $body = this.$target.querySelector('.body-wrapper');
-		const pages = Pages($body);
+		const pages = Pages($body, this.$state);
 		const router = Router($body);
 		router.addRoute('#/login', pages.login);
 		router.addRoute('#/select', pages.gameSelect);
