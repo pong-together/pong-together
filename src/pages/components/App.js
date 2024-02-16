@@ -29,7 +29,26 @@ export default class extends Component {
 			<div class="back-logo-wrapper"><img class="back-logo" src="../../static/images/logoBlue.png" alt=""/></div>
 			<div class="body-wrapper"></div>
 			<div class="footer-wrapper">
-				<div class="footer-profile"></div>
+				<div class="chip-container">
+				<div class="chip-top">				
+					<div class="yellow-box1"></div>
+					<div class="yellow-box2"></div>
+					<div class="yellow-box3"></div>
+				</div>
+				<div class="chip-middle">
+					<div class="chip-logo"></div>
+					<div class="intra-info">
+						<div class="intra-nickname">jisulee</div>
+						<div class="record">1승 1패(50%)</div>
+					</div>
+				</div>
+				<div class="intra-picture">
+					<div class="chip-picture"></div>
+				</div>
+				<div class="chip-bottom">
+					<div class="triangle"></div>
+				</div>
+			</div>
 				<div class="footer-chat"></div>
 			</div>
 		</div>
