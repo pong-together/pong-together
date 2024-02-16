@@ -45,13 +45,12 @@ export default class extends Component {
 	}
 
 	mounted() {
-		const $select = this.$target.querySelector('#language-select'); // <select> 요소 선택
-		const selectedRegion = this.$state.region; // 선택하고자 하는 region 값
+		const $select = this.$target.querySelector('#language-select');
+		const selectedRegion = this.$state.region;
 
-		// <select> 내의 모든 <option> 태그를 순회
 		$select.querySelectorAll('option').forEach((option) => {
 			if (option.value === selectedRegion) {
-				option.selected = true; // 일치하는 value를 가진 <option>에 selected 속성 부여
+				option.selected = true;
 			}
 		});
 	}
