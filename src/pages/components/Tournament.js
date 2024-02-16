@@ -1,16 +1,16 @@
-import Component from "./Component.js";
-import Bracket from "./Tournament-Bracket.js"
+import Component from '../../core/Component.js';
+import Bracket from './Tournament-Bracket.js';
 
-export default class extends Component{
+export default class extends Component {
 	setup() {
 		this.$state = {
-			participant: ["","","",""],
-			checkDouble: "",
-			gameMode: "임시 게임모드"
-		} 
+			participant: ['', '', '', ''],
+			checkDouble: '',
+			gameMode: '임시 게임모드',
+		};
 	}
 
-	template () {
+	template() {
 		return `
 		<div class="main-container">
 				<div class="info">${this.$state.gameMode}</div>
@@ -27,7 +27,7 @@ export default class extends Component{
 					<button class="start">매칭하기</button>
 				</div>
 			</div>
-		`
+		`;
 	}
 
 	setEvent() {
@@ -39,20 +39,22 @@ export default class extends Component{
 				const newComponent = new Bracket(this.$target);
 				this.changeComponent(newComponent);
 			}
-		})
+		});
 	}
 
 	checkDuplicate(nicknames) {
 		const seen = {};
 		for (let i = 0; i < nicknames.length; i++) {
 			const nickname = nicknames[i];
-			if (seen[nickname]){
-				this.setState({ checkDouble: "중복된 닉네임입니다. 다시 입력해주세요." });
+			if (seen[nickname]) {
+				this.setState({
+					checkDouble: '중복된 닉네임입니다. 다시 입력해주세요.',
+				});
 				return true;
 			}
 			seen[nickname] = true;
 		}
-		this.setState({ checkDouble: ""});
+		this.setState({ checkDouble: '' });
 		return false;
 	}
 

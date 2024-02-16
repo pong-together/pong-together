@@ -1,12 +1,12 @@
-import Component from "./Component.js";
+import Component from '../../core/Component.js';
 
 export default class extends Component {
 	setup() {
 		this.$state = {
-			participant: ["",""],
-			checkDouble: "",
-			gameMode: "2인용 기본게임",
-		}
+			participant: ['', ''],
+			checkDouble: '',
+			gameMode: '2인용 기본게임',
+		};
 	}
 
 	template() {
@@ -23,27 +23,29 @@ export default class extends Component {
 					<button class="local-start">게임 시작</button>
 				</div>
 			</div>
-		`
+		`;
 	}
 
 	setEvent() {
 		this.addEvent('click', '.local-start', ({ target }) => {
 			const localPrev = this.$state.checkDouble;
 			this.localInputNickname(target, localPrev);
-		})
+		});
 	}
 
 	localCheckDuplicate(localNicknames) {
 		const seen = {};
 		for (let i = 0; i < localNicknames.length; i++) {
 			const nickname = localNicknames[i];
-			if (seen[nickname]){
-				this.setState({ checkDouble: "중복된 닉네임입니다. 다시 입력해주세요." });
+			if (seen[nickname]) {
+				this.setState({
+					checkDouble: '중복된 닉네임입니다. 다시 입력해주세요.',
+				});
 				return true;
 			}
 			seen[nickname] = true;
 		}
-		this.setState({ checkDouble: ""});
+		this.setState({ checkDouble: '' });
 		return false;
 	}
 

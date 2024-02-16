@@ -1,4 +1,4 @@
-import Component from '../Component.js';
+import Component from '../../../core/Component.js';
 import OauthBtn from './OauthBtn.js';
 import SelectLanguage from './SelectLanguage.js';
 import TFABtn from './TFABtn.js';
@@ -6,9 +6,9 @@ import TFABtn from './TFABtn.js';
 export default class extends Component {
 	setup() {
 		this.$state = {
-			progress: 'oauth',
-			region: 'jp',
+			progress: 'language',
 		};
+		this.$store = this.$props;
 	}
 
 	template() {
@@ -23,11 +23,11 @@ export default class extends Component {
 	mounted() {
 		const $parent = this.$target.querySelector('.login-content-wrapper');
 		if (this.$state.progress === 'oauth') {
-			new OauthBtn($parent, this.$state);
+			new OauthBtn($parent, this.$store);
 		} else if (this.$state.progress === 'twoFA') {
-			new TFABtn($parent, this.$state);
+			new TFABtn($parent, this.$store);
 		} else if (this.$state.progress === 'language') {
-			new SelectLanguage($parent, this.$state);
+			new SelectLanguage($parent, this.$store);
 		}
 
 		if (this.$props.region) this.$state.region = this.$props.region;

@@ -1,13 +1,16 @@
 const login = {
 	en: {
+		loginBtn: 'login',
 		languageSelect: 'change',
 		gameStartBtn: 'start',
 	},
 	kr: {
+		loginBtn: '로그인',
 		languageSelect: '변경',
 		gameStartBtn: '시작하기',
 	},
 	jp: {
+		loginBtn: 'login',
 		languageSelect: '変更',
 		gameStartBtn: '始める',
 	},

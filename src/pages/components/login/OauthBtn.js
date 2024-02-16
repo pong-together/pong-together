@@ -1,12 +1,13 @@
-import Component from '../Component.js';
+import Component from '../../../core/Component.js';
+import language from '../../../utils/language.js';
 import http from '../../../core/http.js';
 
 export default class extends Component {
 	setup() {
 		this.$state = {
 			success: 'ananymous',
-			region: 'kr',
 		};
+		this.$store = this.$props;
 	}
 
 	setEvent() {
@@ -17,10 +18,8 @@ export default class extends Component {
 	}
 
 	template() {
-		return `<button class="login-btn" id="login-oauth-btn">Login</button>`;
+		return `<button class="login-btn" id="login-oauth-btn">${language.login[this.$store.state.language].loginBtn}</button>`;
 	}
 
-	mounted() {
-		if (this.$props.region) this.$state.region = this.$props.region;
-	}
+	mounted() {}
 }

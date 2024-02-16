@@ -1,4 +1,4 @@
-import Component from '../Component.js';
+import Component from '../../../core/Component.js';
 import language from '../../../utils/language.js';
 import http from '../../../core/http.js';
 
@@ -7,6 +7,7 @@ export default class extends Component {
 		this.$state = {
 			region: 'kr',
 		};
+		this.$store = this.$props;
 	}
 
 	setEvent() {
@@ -14,6 +15,8 @@ export default class extends Component {
 			const $select = this.$target.querySelector('#language-select');
 			const selectedLanguage = $select.value;
 			this.setState({ region: selectedLanguage });
+			this.$store.dispatch('changeLanguage', this.$state.region);
+			console.log(this.$store.state);
 			// header 나온 뒤에 추가
 			//http.put('', { language: this.$state.region }, {});
 		});

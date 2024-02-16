@@ -1,12 +1,14 @@
 import Component from '../../core/Component.js';
 import Router from '../router.js';
 import Pages from '../pages.js';
+import store from '../../store/index.js';
 
 export default class extends Component {
 	setup() {
 		this.$state = {
 			region: 'kr',
 		};
+		this.$store = this.$props;
 	}
 
 	template() {
@@ -30,7 +32,7 @@ export default class extends Component {
 			<div class="body-wrapper"></div>
 			<div class="footer-wrapper">
 				<div class="chip-container">
-				<div class="chip-top">				
+				<div class="chip-top">
 					<div class="yellow-box1"></div>
 					<div class="yellow-box2"></div>
 					<div class="yellow-box3"></div>
@@ -58,7 +60,7 @@ export default class extends Component {
 
 	routerModule() {
 		const $body = this.$target.querySelector('.body-wrapper');
-		const pages = Pages($body, this.$state);
+		const pages = Pages($body, this.$store);
 		const router = Router($body);
 		router.addRoute('#/login', pages.login);
 		router.addRoute('#/select', pages.gameSelect);
@@ -80,5 +82,6 @@ export default class extends Component {
 		});
 
 		this.routerModule();
+		console.log(this.$store);
 	}
 }
