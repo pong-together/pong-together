@@ -11,5 +11,9 @@ export default {
 
 		return state;
 	},
-	*/
+*/
+	changeLanguage(state, payload) {
+		state.language = payload;
+		return state;
+	},
 };

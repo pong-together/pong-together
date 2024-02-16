@@ -7,7 +7,6 @@ export default class extends Component {
 	setup() {
 		this.$state = {
 			progress: 'language',
-			region: 'jp',
 		};
 		this.$store = this.$props;
 	}

@@ -8,4 +8,7 @@ export default {
 		context.commit('clearItem', payload);
 	},
 	*/
+	changeLanguage(context, payload) {
+		context.commit('changeLanguage', payload);
+	},
 };
