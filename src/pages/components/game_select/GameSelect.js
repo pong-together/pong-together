@@ -1,4 +1,4 @@
-import Component from '../Component.js';
+import Component from '../../../core/Component.js';
 import language from '../../../utils/language.js';
 
 export default class extends Component {
@@ -11,6 +11,7 @@ export default class extends Component {
 			tournamentModal: 'none',
 			remoteModal: 'none',
 		};
+		this.$store = this.$props;
 	}
 
 	setEvent() {
@@ -73,10 +74,10 @@ export default class extends Component {
 		<div class="main-container">
 		<div class="game-select-flex">
 			<div class="game-role-box">
-				${language.gameSelect.kr.roleBox}
+				${language.gameSelect[this.$store.state.language].roleBox}
 			</div>
 			<button data-button="mode-select" class="game-select-button">
-				${language.gameSelect.kr.startBtn}
+				${language.gameSelect[this.$store.state.language].startBtn}
 			</button>
 			</div>
 		</div>`;
@@ -89,44 +90,44 @@ export default class extends Component {
 			<div style="display:flex;">
 				<label class="game-select-mode">
 					<img src="../../../../static/images/selectLocal.png" alt="local game"/>
-					<input type="checkbox" class="mode" value="local"> ${language.gameSelect.kr.localMode}
+					<input type="checkbox" class="mode" value="local"> ${language.gameSelect[this.$store.state.language].localMode}
 					<img src="../../../../static/images/selectModeInfo.png" alt="local mode info" class="select-modal" id="select-modal-local">
 						<div class="select-modal-box" id="select-modal-local-info">
-							<p>${language.gameSelect.kr.localModal}</p>
+							<p>${language.gameSelect[this.$store.state.language].localModal}</p>
 						</div>
 					</img>
 
 				</label>
 				<label class="game-select-mode">
 					<img src="../../../../static/images/selectTournament.png" alt="tourament game"/>
-					<input type="checkbox" class="mode" value="tournament"> ${language.gameSelect.kr.tournamentMode}
+					<input type="checkbox" class="mode" value="tournament"> ${language.gameSelect[this.$store.state.language].tournamentMode}
 					<img src="../../../../static/images/selectModeInfo.png" alt="tournament mode info" class="select-modal" id="select-modal-tournament">
 						<div class="select-modal-box" id="select-modal-tournament-info">
 
-							<p>${language.gameSelect.kr.tournamentModal}</p>
+							<p>${language.gameSelect[this.$store.state.language].tournamentModal}</p>
 						</div>
 					</img>
 				</label>
 				<label class="game-select-mode">
 					<img src="../../../../static/images/selectRemote.png" alt="remote game"/>
-					<input type="checkbox" class="mode" value="remote"> ${language.gameSelect.kr.remoteMode}
+					<input type="checkbox" class="mode" value="remote"> ${language.gameSelect[this.$store.state.language].remoteMode}
 					<img src="../../../../static/images/selectModeInfo.png" alt="remote mode info" class="select-modal" id="select-modal-remote">
 						<div class="select-modal-box" id="select-modal-remote-info">
 
-							<p>${language.gameSelect.kr.remoteModal}</p>
+							<p>${language.gameSelect[this.$store.state.language].remoteModal}</p>
 						</div>
 					</img>
 				</label>
 			</div>
 			<div>
 				<label class="game-select-difficult">
-					<input type="checkbox" class="level" value="basic"> ${language.gameSelect.kr.levelOne}
+					<input type="checkbox" class="level" value="basic"> ${language.gameSelect[this.$store.state.language].levelOne}
 				</label>
 				<label class="game-select-difficult">
-					<input type="checkbox" class="level" value="extreme"> ${language.gameSelect.kr.levelTwo}
+					<input type="checkbox" class="level" value="extreme"> ${language.gameSelect[this.$store.state.language].levelTwo}
 				</label>
 			</div>
-			<button data-button="game-start" class="game-select-button">${language.gameSelect.kr.startBtn}</button>
+			<button data-button="game-start" class="game-select-button">${language.gameSelect[this.$store.state.language].startBtn}</button>
 		</div>
 		</div>
 		`;
@@ -138,8 +139,8 @@ export default class extends Component {
 				return `
 				<div class="main-container">
 					<div class="game-select-flex">
-						<button data-button="mode-select" class="game-select-button">${language.gameSelect.kr.startBtn}</button>
-						<button data-button="game-role" class="game-select-button">${language.gameSelect.kr.roleBtn}</button>
+						<button data-button="mode-select" class="game-select-button">${language.gameSelect[this.$store.state.language].startBtn}</button>
+						<button data-button="game-role" class="game-select-button">${language.gameSelect[this.$store.state.language].roleBtn}</button>
 					</div>
 				</div>`;
 			case 'role':

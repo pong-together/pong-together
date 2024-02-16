@@ -1,4 +1,4 @@
-import Component from '../Component.js';
+import Component from '../../../core/Component.js';
 import language from '../../../utils/language.js';
 import http from '../../../core/http.js';
 
