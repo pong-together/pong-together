@@ -32,7 +32,7 @@ export default class extends Component{
 	setEvent() {
 		this.addEvent('click', '.start', ({ target }) => {
 			const prev = this.$state.checkDouble;
-			this.inputNickname(prev);
+			this.inputNickname(target, prev);
 		})
 	}
 
@@ -42,15 +42,15 @@ export default class extends Component{
 			const nickname = nicknames[i];
 			if (seen[nickname]){
 				this.setState({ checkDouble: "중복된 닉네임입니다. 다시 입력해주세요." });
-				return ;
+				return true;
 			}
 			seen[nickname] = true;
 		}
 		this.setState({ checkDouble: ""});
-		return ;
+		return false;
 	}
 
-	inputNickname(prev) {
+	inputNickname(target, prev) {
 		const nicknames = [];
 		const nickname1 = document.querySelector('.nick1').value;
 		const nickname2 = document.querySelector('.nick2').value;
@@ -61,6 +61,9 @@ export default class extends Component{
 		nicknames.push(nickname3);
 		nicknames.push(nickname4);
 
-		this.checkDuplicate(nicknames);
+		const isDuplicate = this.checkDuplicate(nicknames);
+		if (isDuplicate) {
+			target.disabled = true;
+		}
 	}
 }

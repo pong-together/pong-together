@@ -75,7 +75,7 @@
 }
 
 .game2-vertline1 {
-	width: 85px;
+	width: 88px;
 	height: 2px;
 	background-color: white;
 }
@@ -123,7 +123,7 @@
 }
 
 .game2-winner {
-	margin-left: 275px;
+	margin-left: 270px;
 }
 
 .finalgame-line-container {
@@ -145,7 +145,7 @@
 }
 
 .finalgame-vertline1 {
-	width: 211px;
+	width: 215px;
 	height: 2px;
 	background-color: white;
 }
@@ -163,11 +163,20 @@
 	margin-left: 375px;
 }
 
-.tournament-crown {
-	background-color: yellow;
+.tournament-ball {
+	background-image: url(../../images/Group\ 69.png);
 	width: 50px;
 	height: 50px;
 	margin-left: 350px;
+	background-repeat: round;
+}
+
+.tournament-crown {
+	background-image: url(../../images/Group\ 85.png);
+	width: 50px;
+	height: 40px;
+	margin-left: 350px;
+	background-repeat: round;
 }
 
 .start {
@@ -200,7 +209,7 @@
 
 .bracket-container {
 	position: absolute;
-	top: 30px;
+	top: 5px;
 	left: 80px;
 	display: flex;
 	flex-direction: column;
