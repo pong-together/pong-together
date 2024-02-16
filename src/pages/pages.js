@@ -1,6 +1,10 @@
 import Login from './components/Login.js';
+<<<<<<< HEAD
+import GameSelect from './components/game_select/GameSelect.js';
+=======
 import GameSelect from './components/GameSelect.js';
 <<<<<<< HEAD
+>>>>>>> main
 import Tournament from './components/Tournament.js';
 import Remote from './components/Remote.js';
 =======
