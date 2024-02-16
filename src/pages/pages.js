@@ -1,6 +1,6 @@
 import Login from './components/Login.js';
 import GameSelect from './components/GameSelect.js';
-import Tournament from './components/Tournament-Bracket.js';
+import Tournament from './components/Tournament.js';
 import Local from './components/Local.js';
 
 export default (main) => {
