@@ -1,9 +1,9 @@
 import os
+from json import JSONDecodeError
 
 import requests
 
 from rest_framework import status
-from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -31,7 +31,7 @@ class LoginView(APIView):
             code = request.data['code']
             access_token = self.get_access_token(code)
             self.set_userinfo(access_token)
-        except Exception:
+        except (KeyError, ValueError, JSONDecodeError):
             data = {'login': 'fail'}
             return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
 
@@ -56,7 +56,7 @@ class LoginView(APIView):
         }
         token_response = requests.post(TOKEN_URI, data=body).json()
         if token_response.get('error') is not None:
-            raise ValidationError()
+            raise ValueError()
         access_token = token_response['access_token']
         return access_token
 
