@@ -7,6 +7,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from users.models import User
 
@@ -30,13 +31,18 @@ class LoginView(APIView):
             code = request.data['code']
             access_token = self.get_access_token(code)
             self.set_userinfo(access_token)
-            user = self.get_user()
-            data = {
-                'id': user.id
-            }
         except Exception:
             data = {'login': 'fail'}
             return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
+
+        user = self.get_user()
+        refresh = RefreshToken.for_user(user)
+        data = {
+            'id': user.id,
+            'login': 'success',
+            'access_token': str(refresh.access_token),
+            'refresh_token': str(refresh)
+        }
         return Response(data=data, status=status.HTTP_200_OK)
 
     def get_access_token(self, code):
