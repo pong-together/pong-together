@@ -7,7 +7,9 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenRefreshView
 
 from users.models import User
 
@@ -19,7 +21,7 @@ TOKEN_URI = 'https://api.intra.42.fr/oauth/token'
 API_URI = 'https://api.intra.42.fr/v2/me'
 
 
-class LoginView(APIView):
+class LoginAPIView(APIView):
     permission_classes = [AllowAny]
     client_id = os.environ.get('CLIENT_ID')
     client_secret = os.environ.get('CLIENT_SECRET')
@@ -72,3 +74,13 @@ class LoginView(APIView):
         except User.DoesNotExist:
             user = User.objects.create_user(self.intra_id, self.image_url)
         return user
+
+
+class RefreshTokenAPIView(TokenRefreshView):
+    def post(self, request, *args, **kwargs):
+        try:
+            return super().post(request, *args, **kwargs)
+        except TokenError:
+            data = {'message': 'Token is invalid or expired'}
+            return Response(data=data, status=status.HTTP_401_UNAUTHORIZED)
+
