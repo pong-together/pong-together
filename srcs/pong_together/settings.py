@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # app
     'users.apps.UsersConfig',
+    'tournaments',
     # rest framework
     'rest_framework',
 ]
