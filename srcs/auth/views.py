@@ -22,37 +22,21 @@ class LoginView(APIView):
     permission_classes = [AllowAny]
     client_id = os.environ.get('CLIENT_ID')
     client_secret = os.environ.get('CLIENT_SECRET')
+    intra_id = None
+    image_url = None
 
     def post(self, request):
-        code = request.data.get('code')
         try:
-            if code is None:
-                raise ValidationError()
+            code = request.data['code']
             access_token = self.get_access_token(code)
-
-            header = {'Authorization': f'Bearer {access_token}'}
-            api_response = requests.get(API_URI, headers=header)
-            if api_response.status_code != status.HTTP_200_OK:
-                raise ValidationError()
-            api_response = api_response.json()
-            intra_id = api_response.get('login')
-            image_url = api_response.get('image').get('versions').get('medium')
-            if intra_id is None or image_url is None:
-                raise ValidationError()
-
-            try:
-                user = User.objects.get(intra_id=intra_id)
-            except User.DoesNotExist:
-                user = User.objects.create_user(intra_id, image_url)
-
+            self.set_userinfo(access_token)
+            user = self.get_user()
             data = {
-                "id": user.id
+                'id': user.id
             }
-
-        except ValidationError:
+        except Exception:
             data = {'login': 'fail'}
             return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
-
         return Response(data=data, status=status.HTTP_200_OK)
 
     def get_access_token(self, code):
@@ -64,10 +48,21 @@ class LoginView(APIView):
             'redirect_uri': REDIRECT_URI,
             'state': STATE
         }
-        token_response = requests.post(TOKEN_URI, data=body)
-        if token_response.status_code != status.HTTP_200_OK:
+        token_response = requests.post(TOKEN_URI, data=body).json()
+        if token_response.get('error') is not None:
             raise ValidationError()
-        token_response = token_response.json()
-        error = token_response['error']
         access_token = token_response['access_token']
         return access_token
+
+    def set_userinfo(self, access_token):
+        header = {'Authorization': f'Bearer {access_token}'}
+        api_response = requests.get(API_URI, headers=header).json()
+        self.intra_id = api_response['login']
+        self.image_url = api_response['image']['versions']['medium']
+
+    def get_user(self):
+        try:
+            user = User.objects.get(intra_id=self.intra_id)
+        except User.DoesNotExist:
+            user = User.objects.create_user(self.intra_id, self.image_url)
+        return user
