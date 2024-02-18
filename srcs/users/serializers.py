@@ -15,3 +15,10 @@ class UserLanguageSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('language',)
+
+
+class UserGameSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ('win_count', 'lose_count', 'game_count')

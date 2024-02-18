@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from users.models import User
-from users.serializers import UserInfoSerializer, UserLanguageSerializer
+from users.serializers import UserInfoSerializer, UserLanguageSerializer, UserGameSerializer
 
 
 # Create your views here.
@@ -34,4 +34,17 @@ class UserLanguageAPIView(APIView):
         return Response({'message': '언어 설정 수정 실패'}, status=status.HTTP_400_BAD_REQUEST)
 
 
+class UserGameAPIView(APIView):
+
+    def put(self, request, id):
+        user = get_object_or_404(User, id=id)
+        result = request.data['result']
+        if result == 'win':
+            user.win_count += 1
+        else:
+            user.lose_count += 1
+        user.game_count += 1
+        user.save()
+        serializer = UserGameSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
