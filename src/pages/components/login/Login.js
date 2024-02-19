@@ -22,6 +22,8 @@ export default class extends Component {
 	}
 
 	async oauth() {
+		if (localStorage.getItem('accessToken')) return;
+
 		const queryParams = new URLSearchParams(window.location.search);
 		const code = queryParams.get('code');
 		if (code) {
@@ -49,7 +51,7 @@ export default class extends Component {
 		if (this.$state.progress === 'oauth') {
 			new OauthBtn($parent, this.$store);
 			if (!localStorage.getItem('accessToken')) {
-				this.oauth();
+				await this.oauth();
 			}
 		} else if (this.$state.progress === 'twoFA') {
 			new TFABtn($parent, this.$store);
