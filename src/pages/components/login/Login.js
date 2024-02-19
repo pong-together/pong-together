@@ -37,6 +37,7 @@ export default class extends Component {
 				if (data.login === 'success') {
 					localStorage.setItem('accessToken', data.access_token);
 					this.$store.dispatch('isLogin', true);
+					window.location.hash('#/login');
 				} else if (data.login === 'fail') {
 					this.$store.dispatch('isTwoFA', true);
 				}
