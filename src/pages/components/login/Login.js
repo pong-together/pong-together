@@ -7,7 +7,7 @@ import http from '../../../core/http.js';
 export default class extends Component {
 	setup() {
 		this.$state = {
-			progress: 'language',
+			progress: 'oauth',
 		};
 		this.$store = this.$props;
 	}
