@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     # app
     'users.apps.UsersConfig',
     'auth.apps.AuthConfig',
+    'tournaments.apps.TournamentsConfig',
     # rest framework
     'rest_framework',
     # simplejwt
