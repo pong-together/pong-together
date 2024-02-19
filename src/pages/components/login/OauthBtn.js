@@ -41,7 +41,7 @@ export default class extends Component {
 						this.$store.dispatch('changeLoginProgress', 'twoFA');
 					};
 				}
-				window.location.hash('#/login');
+				window.location.hash = '#/login';
 			} catch (error) {
 				console.error('HTTP 요청 실패:', error);
 			}
