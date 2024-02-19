@@ -45,10 +45,13 @@ export default class extends Component {
 		const code = queryParams.get('code');
 		if (code) {
 			async () => {
-				const data = await http.post('https://localhost:8000/api/auth/login/', {
-					code: code,
-				});
-				await console.log('data:', data);
+				const data = await http.post(
+					'https://localhost:8000/api/auth/login/',
+					{
+						code: code,
+					},
+					null,
+				);
 			};
 		}
 	}
