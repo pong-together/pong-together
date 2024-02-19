@@ -7,8 +7,7 @@ import http from '../../../core/http.js';
 export default class extends Component {
 	setup() {
 		this.$state = {
-			progress: 'oauth',
-			oauthInProgress: false,
+			progress: 'language',
 		};
 		this.$store = this.$props;
 	}
@@ -24,11 +23,10 @@ export default class extends Component {
 
 	async oauth() {
 		if (localStorage.getItem('accessToken')) return;
-		if (this.$state.oauthInProgress) return;
-		this.$state.oauthInProgress = true;
 
-		const queryParams = new URLSearchParams(window.location.search);
-		const code = queryParams.get('code');
+		const queryParams = await new URLSearchParams(window.location.search);
+		const code = await queryParams.get('code');
+
 		if (code) {
 			try {
 				const data = await http.post(
@@ -47,23 +45,22 @@ export default class extends Component {
 			} catch (error) {
 				console.error('HTTP 요청 실패:', error);
 			}
+		} else {
+			console.log('code가 존재하지 않습니다.');
 		}
-		this.oauthInProgress = false;
 	}
 
 	async mounted() {
+		if (this.$props.region) this.$state.region = this.$props.region;
 		const $parent = this.$target.querySelector('.login-content-wrapper');
+
 		if (this.$state.progress === 'oauth') {
+			await this.oauth();
 			new OauthBtn($parent, this.$store);
-			if (!localStorage.getItem('accessToken')) {
-				await this.oauth();
-			}
 		} else if (this.$state.progress === 'twoFA') {
 			new TFABtn($parent, this.$store);
 		} else if (this.$state.progress === 'language') {
 			new SelectLanguage($parent, this.$store);
 		}
-
-		if (this.$props.region) this.$state.region = this.$props.region;
 	}
 }
