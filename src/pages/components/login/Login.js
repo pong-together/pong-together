@@ -44,10 +44,12 @@ export default class extends Component {
 		const queryParams = new URLSearchParams(window.location.search);
 		const code = queryParams.get('code');
 		if (code) {
-			const data = http.post('https://localhost:8000/api/auth/login/', {
-				code: code,
-			});
-			console.log('data:', data);
+			async () => {
+				const data = await http.post('https://localhost:8000/api/auth/login/', {
+					code: code,
+				});
+				await console.log('data:', data);
+			};
 		}
 	}
 }
