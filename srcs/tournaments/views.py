@@ -12,7 +12,7 @@ from tournaments.serializers import TournamentSerializer, TournamentCreateSerial
 
 # Create your views here.
 
-class TournamentsAPIView(APIView):
+class TournamentPostAPIView(APIView):
     def post(self, request):
         serializer = TournamentCreateSerializer(data=request.data)
         if serializer.is_valid():
@@ -32,15 +32,14 @@ class TournamentAPIView(APIView):
         tournament = get_object_or_404(Tournament, id=id)
         game_turn = tournament.game_turn
         winner = request.data.get('winner')
-        if not winner:
-            return Response({'error': 'winner field is required.'}, status=status.HTTP_400_BAD_REQUEST)
+        if not winner or not (1 <= game_turn <= 3):
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
+        tournament.game_turn += 1
         if game_turn == 1:
             tournament.first_winner = winner
-            tournament.game_turn += 1
         elif game_turn == 2:
             tournament.second_winner = winner
-            tournament.game_turn += 1
         elif game_turn == 3:
             tournament.final_winner = winner
 
