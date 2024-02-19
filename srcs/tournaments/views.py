@@ -13,7 +13,6 @@ from tournaments.serializers import TournamentSerializer, TournamentCreateSerial
 # Create your views here.
 
 class TournamentsAPIView(APIView):
-
     def post(self, request):
         serializer = TournamentCreateSerializer(data=request.data)
         if serializer.is_valid():
@@ -24,7 +23,6 @@ class TournamentsAPIView(APIView):
 
 
 class TournamentAPIView(APIView):
-
     def get(self, request, id):
         tournament = get_object_or_404(Tournament, id=id)
         serializer = TournamentSerializer(tournament)
