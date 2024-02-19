@@ -6,7 +6,7 @@ import TFABtn from './TFABtn.js';
 export default class extends Component {
 	setup() {
 		this.$state = {
-			progress: 'oauth',
+			progress: 'language',
 			region: 'jp',
 		};
 	}
