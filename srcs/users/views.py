@@ -10,7 +10,6 @@ from users.serializers import UserInfoSerializer, UserLanguageSerializer, UserGa
 
 # Create your views here.
 class UserInfoAPIView(APIView):
-
     def get(self, request, id):
         user = get_object_or_404(User, id=id)
         serializer = UserInfoSerializer(user)
@@ -18,7 +17,6 @@ class UserInfoAPIView(APIView):
 
 
 class UserLanguageAPIView(APIView):
-
     def get(self, request, id):
         user = get_object_or_404(User, id=id)
         serializer = UserLanguageSerializer(user)
@@ -34,7 +32,6 @@ class UserLanguageAPIView(APIView):
 
 
 class UserGameAPIView(APIView):
-
     def put(self, request, id):
         user = get_object_or_404(User, id=id)
         result = request.data.get('result')
