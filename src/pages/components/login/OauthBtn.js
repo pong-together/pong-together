@@ -21,5 +21,13 @@ export default class extends Component {
 		return `<button class="login-btn" id="login-oauth-btn">${language.login[this.$store.state.language].loginBtn}</button>`;
 	}
 
-	mounted() {}
+	mounted() {
+		const queryParams = new URLSearchParams(window.location.search);
+		const code = queryParams.get('code');
+		if (code) {
+			console.log('Code:', code);
+		} else {
+			console.error('Code 파라미터가 URL에 없습니다.');
+		}
+	}
 }
