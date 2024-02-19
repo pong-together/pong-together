@@ -16,4 +16,20 @@ export default {
 		state.language = payload;
 		return state;
 	},
+	isLogin(state, payload) {
+		state.isLogged = payload;
+		return state;
+	},
+	isTwoFA(state, payload) {
+		state.isTwoFA = payload;
+		return state;
+	},
+	gameModeChange(state, payload) {
+		state.gameMode = payload;
+		return state;
+	},
+	gameLevelChange(state, payload) {
+		state.gameLevel = payload;
+		return state;
+	},
 };
