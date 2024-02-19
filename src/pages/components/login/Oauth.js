@@ -10,7 +10,7 @@ export default class extends Component {
 		const params = new URLSearchParams(window.location.search);
 		const code = params.get('code');
 
-		const data = http.post('https://localhost:8000/api/auth/login/', {
+		const data = http.post('http://localhost:8000/api/auth/login/', {
 			code: code,
 		});
 		console.log(data);
