@@ -16,4 +16,8 @@ export default {
 		state.language = payload;
 		return state;
 	},
+	login(state, payload) {
+		state.login = payload;
+		return state;
+	},
 };

@@ -11,4 +11,8 @@ export default {
 	changeLanguage(context, payload) {
 		context.commit('changeLanguage', payload);
 	},
+
+	login(context) {
+		context.commit('login');
+	},
 };

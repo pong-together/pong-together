@@ -6,7 +6,7 @@ import TFABtn from './TFABtn.js';
 export default class extends Component {
 	setup() {
 		this.$state = {
-			progress: 'language',
+			progress: 'oauth',
 		};
 		this.$store = this.$props;
 	}
@@ -21,6 +21,14 @@ export default class extends Component {
 	}
 
 	mounted() {
+		if (this.$store.state.isLogged === true) {
+			this.$state.progress = 'twoFA';
+		}
+
+		if (this.$store.state.isTwoFA === true) {
+			this.$state.progress = 'language';
+		}
+
 		const $parent = this.$target.querySelector('.login-content-wrapper');
 		if (this.$state.progress === 'oauth') {
 			new OauthBtn($parent, this.$store);
