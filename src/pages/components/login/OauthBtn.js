@@ -37,9 +37,7 @@ export default class extends Component {
 				console.log('data', data);
 				if (data.login === 'success') {
 					localStorage.setItem('accessToken', data.access_token);
-					() => {
-						this.$store.dispatch('changeLoginProgress', 'twoFA');
-					};
+					this.$store.dispatch('changeLoginProgress', 'twoFA');
 				}
 			} catch (error) {
 				console.error('HTTP 요청 실패:', error);
