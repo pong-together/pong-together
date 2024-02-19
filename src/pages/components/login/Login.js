@@ -47,8 +47,8 @@ export default class extends Component {
 	async mounted() {
 		const $parent = this.$target.querySelector('.login-content-wrapper');
 		if (this.$state.progress === 'oauth') {
-			if (localStorage.getItem('accessToken') === undefined) {
-				new OauthBtn($parent, this.$store);
+			new OauthBtn($parent, this.$store);
+			if (!localStorage.getItem('accessToken')) {
 				this.oauth();
 			}
 		} else if (this.$state.progress === 'twoFA') {
