@@ -13,6 +13,7 @@ from rest_framework_simplejwt.views import TokenRefreshView
 
 from users.models import User
 
+
 # Create your views here.
 
 REDIRECT_URI = os.environ.get('REDIRECT_URI')
@@ -53,7 +54,7 @@ class LoginAPIView(APIView):
             'client_secret': self.client_secret,
             'code': code,
             'grant_type': 'authorization_code',
-            'redirect_uri': REDIRECT_URI,
+            # 'redirect_uri': REDIRECT_URI,
             'state': STATE
         }
         token_response = requests.post(TOKEN_URI, data=body).json()
