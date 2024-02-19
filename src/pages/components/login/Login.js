@@ -8,6 +8,7 @@ export default class extends Component {
 	setup() {
 		this.$state = {
 			progress: 'oauth',
+			oauthInProgress: false,
 		};
 		this.$store = this.$props;
 	}
@@ -23,6 +24,8 @@ export default class extends Component {
 
 	async oauth() {
 		if (localStorage.getItem('accessToken')) return;
+		if (this.$state.oauthInProgress) return;
+		this.$state.oauthInProgress = true;
 
 		const queryParams = new URLSearchParams(window.location.search);
 		const code = queryParams.get('code');
@@ -45,6 +48,7 @@ export default class extends Component {
 				console.error('HTTP 요청 실패:', error);
 			}
 		}
+		this.oauthInProgress = false;
 	}
 
 	async mounted() {
