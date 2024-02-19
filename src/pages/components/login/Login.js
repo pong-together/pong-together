@@ -44,17 +44,15 @@ export default class extends Component {
 		const params = new URLSearchParams(window.location.search);
 		const code = params.get('code');
 
-		if (code !== undefined) {
-			async () => {
-				const data = await http.post('https://localhost:8000/api/auth/login/', {
-					code: code,
-				});
-				console.log(data);
-				if (data.login === 'success') {
-					this.$store.dispatch('login');
-					window.location.hash('#/login');
-				}
-			};
-		}
+		async () => {
+			const data = await http.post('https://localhost:8000/api/auth/login/', {
+				code: code,
+			});
+			console.log(data);
+			if (data.login === 'success') {
+				this.$store.dispatch('login');
+				window.location.hash('#/login');
+			}
+		};
 	}
 }
