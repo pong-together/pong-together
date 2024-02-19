@@ -32,7 +32,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     'rest_framework',
     # simplejwt
     'rest_framework_simplejwt',
+    # cors
+    'corsheaders',
 ]
 
 REST_FRAMEWORK = {
@@ -69,6 +71,7 @@ SIMPLE_JWT = {
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -97,6 +100,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'pong_together.wsgi.application'
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
