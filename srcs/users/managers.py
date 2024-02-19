@@ -7,13 +7,20 @@ class UserManager(BaseUserManager):
             raise ValueError('The intra id must be set')
         if not image:
             raise ValueError('The image must be set')
+
         user = self.model(intra_id=intra_id, image=image, **extra_fields)
-        user.set_password(raw_password=extra_fields['password'])
+        user.username = intra_id
+        try:
+            password = extra_fields['password']
+        except KeyError:
+            password = intra_id
+        user.set_password(raw_password=password)
+
         user.save()
         return user
 
     def create_superuser(self, intra_id, password, **extra_fields):
-        image = "http://localhost:8000"
+        image = 'http://localhost:8000'
         superuser = self.create_user(intra_id=intra_id, image=image, password=password)
 
         superuser.is_staff = True
