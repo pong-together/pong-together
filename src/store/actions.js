@@ -19,4 +19,10 @@ export default {
 	isTwoFA(context, payload) {
 		context.commit('isTwoFA', payload);
 	},
+	gameModeChange(context, payload) {
+		context.commit('gameModeChange', payload);
+	},
+	gameLevelChange(context, payload) {
+		context.commit('gameLevelChange', payload);
+	},
 };
