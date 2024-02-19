@@ -9,7 +9,6 @@ from users.serializers import UserInfoSerializer, UserLanguageSerializer, UserGa
 
 
 # Create your views here.
-
 class UserInfoAPIView(APIView):
 
     def get(self, request, id):
@@ -31,14 +30,17 @@ class UserLanguageAPIView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(status=status.HTTP_200_OK)
-        return Response({'message': '언어 설정 수정 실패'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserGameAPIView(APIView):
 
     def put(self, request, id):
         user = get_object_or_404(User, id=id)
-        result = request.data['result']
+        result = request.data.get('result')
+        if not result:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
         if result == 'win':
             user.win_count += 1
         else:
