@@ -1,13 +1,13 @@
 import Component from '../../../core/Component.js';
 import language from '../../../utils/language.js';
 import http from '../../../core/http.js';
+import store from '../../../store/index.js';
 
 export default class extends Component {
 	setup() {
 		this.$state = {
 			success: 'ananymous',
 		};
-		this.$store = this.$props;
 	}
 
 	setEvent() {
@@ -18,14 +18,14 @@ export default class extends Component {
 	}
 
 	template() {
-		return `<button class="login-btn" id="login-oauth-btn">${language.login[this.$store.state.language].loginBtn}</button>`;
+		return `<button class="login-btn" id="login-oauth-btn">${language.login[store.state.language].loginBtn}</button>`;
 	}
 
 	async oauth() {
 		if (localStorage.getItem('accessToken')) return;
 
-		const queryParams = await new URLSearchParams(window.location.search);
-		const code = await queryParams.get('code');
+		const queryParams = new URLSearchParams(window.location.search);
+		const code = queryParams.get('code');
 
 		if (code) {
 			try {
@@ -37,7 +37,7 @@ export default class extends Component {
 				console.log('data', data);
 				if (data.login === 'success') {
 					localStorage.setItem('accessToken', data.access_token);
-					this.$store.dispatch('changeLoginProgress', 'twoFA');
+					store.dispatch('changeLoginProgress', 'twoFA');
 				}
 			} catch (error) {
 				console.error('HTTP 요청 실패:', error);
