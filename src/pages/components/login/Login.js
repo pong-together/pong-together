@@ -40,20 +40,5 @@ export default class extends Component {
 		}
 
 		if (this.$props.region) this.$state.region = this.$props.region;
-
-		const queryParams = new URLSearchParams(window.location.search);
-		const code = queryParams.get('code');
-		if (code) {
-			async () => {
-				const data = await http.post(
-					'http://localhost:8000/api/auth/login/',
-					{
-						code: code,
-					},
-					null,
-				);
-				console.log('data' + data);
-			};
-		}
 	}
 }
