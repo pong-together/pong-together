@@ -21,5 +21,36 @@ export default class extends Component {
 		return `<button class="login-btn" id="login-oauth-btn">${language.login[this.$store.state.language].loginBtn}</button>`;
 	}
 
-	mounted() {}
+	async oauth() {
+		if (localStorage.getItem('accessToken')) return;
+
+		const queryParams = await new URLSearchParams(window.location.search);
+		const code = await queryParams.get('code');
+
+		if (code) {
+			try {
+				const data = await http.post(
+					'https://localhost:443/api/auth/login/',
+					{ code: code },
+					{ 'Content-Type': 'application/json' },
+				);
+				console.log('data', data);
+				if (data.login === 'success') {
+					localStorage.setItem('accessToken', data.access_token);
+					this.$store.dispatch('isLogin', true);
+					window.location.hash('#/login');
+				} else if (data.login === 'fail') {
+					this.$store.dispatch('isTwoFA', true);
+				}
+			} catch (error) {
+				console.error('HTTP 요청 실패:', error);
+			}
+		} else {
+			console.log('code가 존재하지 않습니다.');
+		}
+	}
+
+	async mounted() {
+		await this.oauth();
+	}
 }
