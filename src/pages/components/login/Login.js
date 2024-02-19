@@ -2,6 +2,7 @@ import Component from '../../../core/Component.js';
 import OauthBtn from './OauthBtn.js';
 import SelectLanguage from './SelectLanguage.js';
 import TFABtn from './TFABtn.js';
+import http from '../../../core/http.js';
 
 export default class extends Component {
 	setup() {
