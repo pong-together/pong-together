@@ -23,6 +23,10 @@ export default class extends Component {
 			this.setState({ progress: 'mode' });
 		});
 
+		this.addEvent('click', '[data-button="game-start"]', () => {
+			window.location.hash = `#/tournament`;
+		})
+
 		this.addEvent('click', '.game-select-mode .mode', (e) => {
 			const modeValue = e.target.value;
 			this.setState({
@@ -31,11 +35,13 @@ export default class extends Component {
 				tournamentModal: 'none',
 				remoteModal: 'none',
 			});
+			this.$store.dispatch('gameModeChange', this.$state.mode);
 		});
 
 		this.addEvent('click', '.game-select-difficult .level', (e) => {
 			const levelValue = e.target.value;
 			this.setState({ level: levelValue });
+			this.$store.dispatch('gameLevelChange', this.$state.level);
 		});
 
 		this.addEvent('click', '#select-modal-local', () => {
@@ -66,6 +72,16 @@ export default class extends Component {
 					tournamentModal: 'none',
 				});
 			else this.setState({ remoteModal: 'none' });
+		});
+
+		this.addEvent('click', '#game-mode-button', () => {
+			if (this.$state.mode === 'local') {
+				window.location.hash = '#/local';
+			} else if (this.$state.mode === 'tournament') {
+				window.location.hash = '#/tournament';
+			} else if (this.$state.mode === 'remote') {
+				window.location.hash = '#/remote';
+			}
 		});
 	}
 
@@ -127,7 +143,7 @@ export default class extends Component {
 					<input type="checkbox" class="level" value="extreme"> ${language.gameSelect[this.$store.state.language].levelTwo}
 				</label>
 			</div>
-			<button data-button="game-start" class="game-select-button">${language.gameSelect[this.$store.state.language].startBtn}</button>
+			<button data-button="game-start" id="game-mode-button" class="game-select-button">${language.gameSelect[this.$store.state.language].startBtn}</button>
 		</div>
 		</div>
 		`;
