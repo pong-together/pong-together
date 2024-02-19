@@ -41,8 +41,13 @@ export default class extends Component {
 
 		if (this.$props.region) this.$state.region = this.$props.region;
 
-		const params = new URLSearchParams(window.location.search);
-		const code = params.get('code');
-		console.log(code);
+		const queryParams = new URLSearchParams(window.location.search);
+		const code = queryParams.get('code');
+		if (code) {
+			const data = http.post('https://localhost:8000/api/auth/login/', {
+				code: code,
+			});
+			console.log('data:', data);
+		}
 	}
 }
