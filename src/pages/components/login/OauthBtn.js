@@ -30,9 +30,7 @@ export default class extends Component {
 			try {
 				const data = await http.post(
 					'http://localhost:8000/api/auth/login/',
-					{
-						code: code,
-					},
+					{ code: code },
 					{ 'Content-Type': 'application/json' },
 				);
 				console.log('data', data);
