@@ -54,7 +54,7 @@ class LoginAPIView(APIView):
             'client_secret': self.client_secret,
             'code': code,
             'grant_type': 'authorization_code',
-            # 'redirect_uri': REDIRECT_URI,
+            'redirect_uri': REDIRECT_URI,
             'state': STATE
         }
         token_response = requests.post(TOKEN_URI, data=body).json()
