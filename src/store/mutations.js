@@ -16,8 +16,12 @@ export default {
 		state.language = payload;
 		return state;
 	},
-	login(state, payload) {
-		state.login = payload;
+	isLogin(state, payload) {
+		state.isLogged = true;
+		return state;
+	},
+	isTwoFA(state, payload) {
+		state.isTwoFA = true;
 		return state;
 	},
 };

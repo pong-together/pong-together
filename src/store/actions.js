@@ -12,7 +12,11 @@ export default {
 		context.commit('changeLanguage', payload);
 	},
 
-	login(context) {
-		context.commit('login');
+	isLogin(context, payload) {
+		context.commit('isLogin', payload);
+	},
+
+	isTwoFA(context, payload) {
+		context.commit('isTwoFA', payload);
 	},
 };

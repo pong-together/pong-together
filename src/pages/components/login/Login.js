@@ -7,7 +7,7 @@ import http from '../../../core/http.js';
 export default class extends Component {
 	setup() {
 		this.$state = {
-			progress: 'oauth',
+			progress: 'language',
 		};
 		this.$store = this.$props;
 	}
@@ -21,18 +21,33 @@ export default class extends Component {
 		`;
 	}
 
-	mounted() {
-		if (this.$store.state.isLogged === true) {
-			this.$state.progress = 'twoFA';
+	async oauth() {
+		const queryParams = new URLSearchParams(window.location.search);
+		const code = queryParams.get('code');
+		if (code) {
+			try {
+				const data = await http.post(
+					'http://localhost:8000/api/auth/login/',
+					{ code: code },
+					{ 'Content-Type': 'application/json' },
+				);
+				console.log('data', data);
+				if (data.login === 'success') {
+					this.$store.dispatch('isLogin', true);
+				} else if (data.login === 'fail') {
+					this.$store.dispatch('isTwoFA', true);
+				}
+			} catch (error) {
+				console.error('HTTP 요청 실패:', error);
+			}
 		}
+	}
 
-		if (this.$store.state.isTwoFA === true) {
-			this.$state.progress = 'language';
-		}
-
+	async mounted() {
 		const $parent = this.$target.querySelector('.login-content-wrapper');
 		if (this.$state.progress === 'oauth') {
 			new OauthBtn($parent, this.$store);
+			this.oauth();
 		} else if (this.$state.progress === 'twoFA') {
 			new TFABtn($parent, this.$store);
 		} else if (this.$state.progress === 'language') {
