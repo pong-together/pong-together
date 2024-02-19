@@ -18,11 +18,14 @@ export default class extends Component {
 		const $parent = this.$target.querySelector('.login-content-wrapper');
 
 		if (store.state.loginProgress === 'oauth') {
-			new OauthBtn($parent, store);
-		} else if (store.state.loginProgress === 'twoFA') {
-			new TFABtn($parent, store);
-		} else if (store.state.loginProgress === 'language') {
-			new SelectLanguage($parent, store);
+			new OauthBtn($parent);
 		}
+		if (store.state.loginProgress === 'twoFA') {
+			new TFABtn($parent);
+		}
+		if (store.state.loginProgress === 'language') {
+			new SelectLanguage($parent);
+		}
+		console.log(store.state.loginProgress);
 	}
 }
