@@ -37,11 +37,11 @@ export default class extends Component {
 				console.log('data', data);
 				if (data.login === 'success') {
 					localStorage.setItem('accessToken', data.access_token);
-					this.$store.dispatch('isLogin', true);
-					window.location.hash('#/login');
-				} else if (data.login === 'fail') {
-					this.$store.dispatch('isTwoFA', true);
+					() => {
+						this.$store.dispatch('changeLoginProgress', 'twoFA');
+					};
 				}
+				window.location.hash('#/login');
 			} catch (error) {
 				console.error('HTTP 요청 실패:', error);
 			}
@@ -51,6 +51,7 @@ export default class extends Component {
 	}
 
 	async mounted() {
+		if (localStorage.getItem('accessToken')) return;
 		await this.oauth();
 	}
 }

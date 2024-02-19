@@ -1,8 +1,7 @@
 export default {
 	// userInfo
 	intraId: 'intraId',
-	isLogged: false,
-	isTwoFA: false,
+	loginProgress: 'oauth',
 	language: 'kr',
 	// gameOption
 	gameMode: 'local', // tournament, remote

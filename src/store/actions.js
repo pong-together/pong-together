@@ -12,16 +12,14 @@ export default {
 		context.commit('changeLanguage', payload);
 	},
 
-	isLogin(context, payload) {
-		context.commit('isLogin', payload);
+	changeLoginProgress(context, payload) {
+		context.commit('changeLoginProgress', payload);
 	},
 
-	isTwoFA(context, payload) {
-		context.commit('isTwoFA', payload);
-	},
 	gameModeChange(context, payload) {
 		context.commit('gameModeChange', payload);
 	},
+
 	gameLevelChange(context, payload) {
 		context.commit('gameLevelChange', payload);
 	},

@@ -6,9 +6,6 @@ import http from '../../../core/http.js';
 
 export default class extends Component {
 	setup() {
-		this.$state = {
-			progress: 'oauth',
-		};
 		this.$store = this.$props;
 	}
 
@@ -22,14 +19,13 @@ export default class extends Component {
 	}
 
 	async mounted() {
-		if (this.$props.region) this.$state.region = this.$props.region;
 		const $parent = this.$target.querySelector('.login-content-wrapper');
 
-		if (this.$state.progress === 'oauth') {
+		if (this.$store.state.loginProgress === 'oauth') {
 			new OauthBtn($parent, this.$store);
-		} else if (this.$state.progress === 'twoFA') {
+		} else if (this.$store.state.loginProgress === 'twoFA') {
 			new TFABtn($parent, this.$store);
-		} else if (this.$state.progress === 'language') {
+		} else if (this.$store.state.loginProgress === 'language') {
 			new SelectLanguage($parent, this.$store);
 		}
 	}
