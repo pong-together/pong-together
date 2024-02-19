@@ -46,12 +46,13 @@ export default class extends Component {
 		if (code) {
 			async () => {
 				const data = await http.post(
-					'https://localhost:8000/api/auth/login/',
+					'http://localhost:8000/api/auth/login/',
 					{
 						code: code,
 					},
 					null,
 				);
+				console.log('data' + data);
 			};
 		}
 	}
