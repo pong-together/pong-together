@@ -1,4 +1,4 @@
-import Component from './Component.js';
+import Component from '../../core/Component.js';
 import Router from '../router.js';
 import Pages from '../pages.js';
 
@@ -6,8 +6,8 @@ export default class extends Component {
 	setup() {
 		this.$state = {
 			next: false,
-			home: false
-		}
+			home: false,
+		};
 	}
 
 	template() {
@@ -26,14 +26,12 @@ export default class extends Component {
 	timer(node) {
 		let seconds = 5;
 		let time;
-		
+
 		function updateTimer() {
 			node.textContent = `준비하기(${seconds})`;
 		}
 
-		function stopTimer() {
-			
-		}
+		function stopTimer() {}
 
 		function startTimer() {
 			time = setInterval(() => {
@@ -61,7 +59,7 @@ export default class extends Component {
 		let seconds = 0;
 		let count;
 		const counterElement = document.getElementById('counter');
-		
+
 		function updateCounter() {
 			counterElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 		}
@@ -91,7 +89,7 @@ export default class extends Component {
 	}
 
 	setEvent() {
-		this.addEvent('click', '.match-button', )
+		this.addEvent('click', '.match-button');
 	}
 
 	render() {

@@ -1,4 +1,4 @@
-import Component from "./Component.js";
+import Component from "../../core/Component.js";
 import language from "../../utils/language.js";
 
 export default class extends Component {
@@ -25,14 +25,14 @@ export default class extends Component {
 					<button class="local-start">${language.local[this.$state.region].gameStartButton}</button>
 				</div>
 			</div>
-		`
+		`;
 	}
 
 	setEvent() {
 		this.addEvent('click', '.local-start', ({ target }) => {
 			const localPrev = this.$state.checkDouble;
 			this.localInputNickname(target, localPrev);
-		})
+		});
 	}
 
 	localCheckDuplicate(localNicknames) {
@@ -45,7 +45,7 @@ export default class extends Component {
 			}
 			seen[nickname] = true;
 		}
-		this.setState({ checkDouble: ""});
+		this.setState({ checkDouble: '' });
 		return false;
 	}
 

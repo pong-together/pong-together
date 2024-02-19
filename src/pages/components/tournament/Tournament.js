@@ -1,4 +1,4 @@
-import Component from "../../components/Component.js"
+import Component from "../../../core/Component.js"
 import Bracket from "./Tournament-Bracket.js"
 import language from "../../../utils/language.js"
 
