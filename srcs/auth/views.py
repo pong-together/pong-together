@@ -13,6 +13,7 @@ from rest_framework_simplejwt.views import TokenRefreshView
 
 from users.models import User
 
+
 # Create your views here.
 
 REDIRECT_URI = os.environ.get('REDIRECT_URI')
