@@ -5,6 +5,10 @@ import TFABtn from './TFABtn.js';
 import store from '../../../store/index.js';
 
 export default class extends Component {
+	setup() {
+		store.events.subscribe('loginProgressChange', async () => this.render());
+	}
+
 	template() {
 		return `
 		<div class="login-body-wrapper">
