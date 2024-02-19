@@ -1,19 +1,21 @@
-import Component from '../../core/Component.js';
+import Component from "../../../core/Component.js"
+import language from "../../../utils/language.js";
 
 export default class extends Component {
 	setup() {
 		this.$state = {
-			participant: ['jugwak', 'jonseo', 'sooyang', 'yeepark'],
-			gameround: 3,
-			winner: ['jonseo', 'yeepark', ''],
-			gameMode: '임시 게임모드',
-		};
+			participant: ["jugwak","jonseo","sooyang","yeepark"],
+			gameround: 1,
+			winner: ["jonseo", "yeepark", ""],
+			gameMode: "임시 게임모드",
+			region: "kr"
+		} 
 	}
 
 	template() {
 		return `
 			<div class="main-container-bracket">
-			<div class="info">${this.$state.gameMode}</div>
+			<div class="info">${language.tournament[this.$state.region].normalGameMode}</div>
 				<div class="bracket-container">
 				<div class="tournament-bracket">
 					<div class="crownball">
@@ -53,10 +55,10 @@ export default class extends Component {
 					</div>
 				</div>
 				<div class="gameinfo-container">
-					<div class="firstgame-info1">4강 첫번째 경기</div>
-					<div class="firstgame-info2">4강 두번째 경기</div>
+					<div class="firstgame-info1">${language.tournament[this.$state.region].firstGame}</div>
+					<div class="firstgame-info2">${language.tournament[this.$state.region].secondGame}</div>
 				</div>
-				<button class="game-start">경기 시작하기</button>
+				<button class="game-start">${language.tournament[this.$state.region].gameStartButton}</button>
 			</div>
 		</div>
 		`;

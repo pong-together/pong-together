@@ -1,6 +1,6 @@
 import Login from './components/login/Login.js';
 import GameSelect from './components/game_select/GameSelect.js';
-import Tournament from './components/Tournament.js';
+import Tournament from './components/tournament/Tournament.js';
 import Remote from './components/Remote.js';
 import Local from './components/Local.js';
 

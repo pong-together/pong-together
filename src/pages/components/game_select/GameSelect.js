@@ -23,6 +23,10 @@ export default class extends Component {
 			this.setState({ progress: 'mode' });
 		});
 
+		this.addEvent('click', '[data-button="game-start"]', () => {
+			window.location.hash = `#/tournament`;
+		})
+
 		this.addEvent('click', '.game-select-mode .mode', (e) => {
 			const modeValue = e.target.value;
 			this.setState({
