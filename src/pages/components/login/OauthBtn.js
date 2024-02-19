@@ -21,22 +21,24 @@ export default class extends Component {
 		return `<button class="login-btn" id="login-oauth-btn">${language.login[this.$store.state.language].loginBtn}</button>`;
 	}
 
-	mounted() {
+	async mounted() {
 		const queryParams = new URLSearchParams(window.location.search);
 		const code = queryParams.get('code');
+		console.log(code);
 		if (code) {
-			async () => {
+			console.log('요청');
+			try {
 				const data = await http.post(
 					'http://localhost:8000/api/auth/login/',
 					{
 						code: code,
 					},
-					null,
+					{ 'Content-Type': 'application/json' },
 				);
 				console.log('data', data);
-			};
-		} else {
-			console.error('Code 파라미터가 URL에 없습니다.');
+			} catch (error) {
+				console.error('HTTP 요청 실패:', error);
+			}
 		}
 	}
 }
