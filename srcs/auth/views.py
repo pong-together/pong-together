@@ -87,15 +87,22 @@ class RefreshTokenAPIView(TokenRefreshView):
             return Response(data=data, status=status.HTTP_401_UNAUTHORIZED)
 
 
+def get_user(intra_id):
+    if intra_id is None:
+        return Response({'message': '\'intra_id\' is required'}, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        user = User.objects.get(intra_id=intra_id)
+    except User.DoesNotExist:
+        return Response({'message': 'Non-existent users'}, status=status.HTTP_404_NOT_FOUND)
+    return user
+
+
 class CreateOTPAPIView(APIView):
     def get(self, request):
-        try:
-            intra_id = request.GET['intra_id']
-            user = User.objects.get(intra_id=intra_id)
-        except KeyError as e:
-            return Response({'message': f'{e} is required'}, status=status.HTTP_400_BAD_REQUEST)
-        except User.DoesNotExist:
-            return Response({'message': 'Non-existent users'}, status=status.HTTP_404_NOT_FOUND)
+        intra_id = request.GET.get('intra_id')
+        user = get_user(intra_id)
+        if user.__class__ != User:
+            return user
 
         totp = pyotp.totp.TOTP(user.otp_secret_key)
         qrcode_uri = totp.provisioning_uri(name=intra_id, issuer_name='pong-together')
@@ -104,14 +111,14 @@ class CreateOTPAPIView(APIView):
 
 class VerifyOTPAPIView(APIView):
     def get(self, request):
-        try:
-            intra_id = request.GET['intra_id']
-            code = request.GET['code']
-            user = User.objects.get(intra_id=intra_id)
-        except KeyError as e:
-            return Response({'message': f'{e} is required'}, status=status.HTTP_400_BAD_REQUEST)
-        except User.DoesNotExist:
-            return Response({'message': 'Non-existent users'}, status=status.HTTP_404_NOT_FOUND)
+        intra_id = request.GET.get('intra_id')
+        user = get_user(intra_id)
+        if user.__class__ != User:
+            return user
+
+        code = request.GET.get('code')
+        if code is None:
+            return Response({'message': '\'code\' is required'}, status=status.HTTP_400_BAD_REQUEST)
 
         totp = pyotp.totp.TOTP(user.otp_secret_key)
         if not totp.verify(code):
