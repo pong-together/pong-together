@@ -34,8 +34,14 @@ class LoginAPIView(APIView):
             code = request.data['code']
             access_token = self.get_access_token(code)
             self.set_userinfo(access_token)
-        except (KeyError, ValueError, JSONDecodeError):
-            data = {'login': 'fail'}
+        except (KeyError, ValueError, JSONDecodeError) as e:
+            message = str(e)
+            if e.__class__ is KeyError:
+                message = f'{str(e)} is required'
+            data = {
+                'login': 'fail',
+                'message': message
+            }
             return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
 
         user = self.get_user()
@@ -60,7 +66,7 @@ class LoginAPIView(APIView):
         }
         token_response = requests.post(TOKEN_URI, data=body).json()
         if token_response.get('error') is not None:
-            raise ValueError()
+            raise ValueError('Failed to issue access token')
         access_token = token_response['access_token']
         return access_token
 
@@ -83,8 +89,7 @@ class RefreshTokenAPIView(TokenRefreshView):
         try:
             return super().post(request, *args, **kwargs)
         except TokenError:
-            data = {'message': 'Token is invalid or expired'}
-            return Response(data=data, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'message': 'Token is invalid or expired'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 def get_user(intra_id):
