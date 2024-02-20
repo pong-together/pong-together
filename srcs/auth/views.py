@@ -100,3 +100,21 @@ class CreateOTPAPIView(APIView):
         totp = pyotp.totp.TOTP(user.otp_secret_key)
         qrcode_uri = totp.provisioning_uri(name=intra_id, issuer_name='pong-together')
         return Response({'qrcode_uri': qrcode_uri}, status=status.HTTP_200_OK)
+
+
+class VerifyOTPAPIView(APIView):
+    def get(self, request):
+        try:
+            intra_id = request.GET['intra_id']
+            code = request.GET['code']
+            user = User.objects.get(intra_id=intra_id)
+        except KeyError as e:
+            return Response({'message': f'{e} is required'}, status=status.HTTP_400_BAD_REQUEST)
+        except User.DoesNotExist:
+            return Response({'message': 'Non-existent users'}, status=status.HTTP_404_NOT_FOUND)
+
+        totp = pyotp.totp.TOTP(user.otp_secret_key)
+        if not totp.verify(code):
+            return Response({'message': 'Invalid otp code'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'authentication': 'success'}, status=status.HTTP_200_OK)
+
