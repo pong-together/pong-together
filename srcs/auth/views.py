@@ -90,12 +90,13 @@ class RefreshTokenAPIView(TokenRefreshView):
 class CreateOTPAPIView(APIView):
     def get(self, request):
         try:
-            intra_id = request.GET.get('intra_id')
+            intra_id = request.GET['intra_id']
             user = User.objects.get(intra_id=intra_id)
+        except KeyError as e:
+            return Response({'message': f'{e} is required'}, status=status.HTTP_400_BAD_REQUEST)
         except User.DoesNotExist:
-            data = {'message': 'Non-existent users'}
-            return Response(data=data, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'Non-existent users'}, status=status.HTTP_404_NOT_FOUND)
 
         totp = pyotp.totp.TOTP(user.otp_secret_key)
         qrcode_uri = totp.provisioning_uri(name=intra_id, issuer_name='pong-together')
-        return Response(data={'qrcode_uri': qrcode_uri}, status=status.HTTP_200_OK)
+        return Response({'qrcode_uri': qrcode_uri}, status=status.HTTP_200_OK)
