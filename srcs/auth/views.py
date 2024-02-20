@@ -1,6 +1,7 @@
 import os
 from json import JSONDecodeError
 
+import pyotp
 import requests
 
 from rest_framework import status
@@ -12,7 +13,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenRefreshView
 
 from users.models import User
-
 
 # Create your views here.
 
@@ -86,3 +86,16 @@ class RefreshTokenAPIView(TokenRefreshView):
             data = {'message': 'Token is invalid or expired'}
             return Response(data=data, status=status.HTTP_401_UNAUTHORIZED)
 
+
+class CreateOTPAPIView(APIView):
+    def get(self, request):
+        try:
+            intra_id = request.GET.get('intra_id')
+            user = User.objects.get(intra_id=intra_id)
+        except User.DoesNotExist:
+            data = {'message': 'Non-existent users'}
+            return Response(data=data, status=status.HTTP_404_NOT_FOUND)
+
+        totp = pyotp.totp.TOTP(user.otp_secret_key)
+        qrcode_uri = totp.provisioning_uri(name=intra_id, issuer_name='pong-together')
+        return Response(data={'qrcode_uri': qrcode_uri}, status=status.HTTP_200_OK)
