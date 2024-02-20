@@ -42,6 +42,7 @@ class LoginAPIView(APIView):
         refresh = RefreshToken.for_user(user)
         data = {
             'id': user.id,
+            'intra_id': user.intra_id,
             'login': 'success',
             'access_token': str(refresh.access_token),
             'refresh_token': str(refresh)
