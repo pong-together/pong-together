@@ -4,12 +4,6 @@ import http from '../../../core/http.js';
 import store from '../../../store/index.js';
 
 export default class extends Component {
-	setup() {
-		this.$state = {
-			success: 'ananymous',
-		};
-	}
-
 	setEvent() {
 		this.addEvent('click', '#login-oauth-btn', () => {
 			window.location.href =
@@ -24,13 +18,12 @@ export default class extends Component {
 	async oauth() {
 		if (localStorage.getItem('accessToken')) {
 			store.dispatch('changeLoginProgress', 'twoFA');
-			return;
 		}
 
 		const queryParams = new URLSearchParams(window.location.search);
 		const code = queryParams.get('code');
 
-		if (code) {
+		if (code && !localStorage.getItem('accessToken')) {
 			try {
 				const data = await http.post(
 					'https://localhost:443/api/auth/login/',
