@@ -13,6 +13,7 @@ export default class extends Component {
 		this.addEvent('click', '#twoFABtn', async (e) => {
 			e.preventDefault();
 			const inputValue = this.$target.querySelector('#twoFactorCode').value;
+			const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
 			console.log(inputValue);
 			try {
 				const data = await http.get(
