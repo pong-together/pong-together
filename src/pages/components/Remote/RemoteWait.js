@@ -9,7 +9,7 @@ export default class extends Component {
 	setup() {
 		this.$state = {
 			remoteState: 'none',
-			region: 'jp'
+			region: 'kr'
 		};
 	}
 
