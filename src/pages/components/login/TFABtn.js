@@ -14,7 +14,7 @@ export default class extends Component {
 			<div class="col-md-9">
 				<h2 class="text-center mb-4">Two-factor authentication (2FA)</h2>
 				<div class="text-center mb-4 qrCode">
-						<img id="qrCode" src="../../../static/images/loginLoading.png" alt="QR Code" style="width:100px; class="mb-3">
+						<img id="qrCode" src="../../../static/images/loginLoading.png" alt="QR Code" style="width:150px; class="mb-3">
 				</div>
 				<form id="twoFactorForm">
 						<div class="form-group">
