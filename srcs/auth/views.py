@@ -1,6 +1,7 @@
 import os
 from json import JSONDecodeError
 
+import jwt
 import pyotp
 import requests
 
@@ -12,6 +13,7 @@ from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenRefreshView
 
+from pong_together import settings
 from users.models import User
 
 # Create your views here.
@@ -91,11 +93,12 @@ class RefreshTokenAPIView(TokenRefreshView):
             return Response({'message': 'Token is invalid or expired'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
-def get_user(intra_id):
-    if intra_id is None:
-        return Response({'message': '\'intra_id\' is required'}, status=status.HTTP_400_BAD_REQUEST)
+def get_user(request):
+    access_token = request.META.get('HTTP_AUTHORIZATION')[7:]
+    payload = jwt.decode(access_token, settings.SIMPLE_JWT['SIGNING_KEY'], settings.SIMPLE_JWT['ALGORITHM'])
+    user_id = payload.get('user_id')
     try:
-        user = User.objects.get(intra_id=intra_id)
+        user = User.objects.get(id=user_id)
     except User.DoesNotExist:
         return Response({'message': 'Non-existent users'}, status=status.HTTP_404_NOT_FOUND)
     return user
@@ -103,20 +106,18 @@ def get_user(intra_id):
 
 class CreateOTPAPIView(APIView):
     def get(self, request):
-        intra_id = request.GET.get('intra_id')
-        user = get_user(intra_id)
+        user = get_user(request)
         if user.__class__ != User:
             return user
 
         totp = pyotp.totp.TOTP(user.otp_secret_key)
-        qrcode_uri = totp.provisioning_uri(name=intra_id, issuer_name='pong-together')
+        qrcode_uri = totp.provisioning_uri(name=user.intra_id, issuer_name='pong-together')
         return Response({'qrcode_uri': qrcode_uri}, status=status.HTTP_200_OK)
 
 
 class VerifyOTPAPIView(APIView):
     def get(self, request):
-        intra_id = request.GET.get('intra_id')
-        user = get_user(intra_id)
+        user = get_user(request)
         if user.__class__ != User:
             return user
 
@@ -128,4 +129,3 @@ class VerifyOTPAPIView(APIView):
         if not totp.verify(code):
             return Response({'message': 'Invalid otp code'}, status=status.HTTP_400_BAD_REQUEST)
         return Response({'authentication': 'success'}, status=status.HTTP_200_OK)
-
