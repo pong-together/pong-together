@@ -22,6 +22,7 @@ export default class extends Component {
 						'Content-Type': 'application/json',
 					},
 				);
+				console.log('otp data', data);
 				localStorage.setItem('twoFA', data.authentication);
 				store.dispatch('changeLoginProgress', 'language');
 			} catch (e) {
