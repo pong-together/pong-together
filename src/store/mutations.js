@@ -16,12 +16,8 @@ export default {
 		state.language = payload;
 		return state;
 	},
-	isLogin(state, payload) {
-		state.isLogged = payload;
-		return state;
-	},
-	isTwoFA(state, payload) {
-		state.isTwoFA = payload;
+	changeLoginProgress(state, payload) {
+		state.loginProgress = payload;
 		return state;
 	},
 	gameModeChange(state, payload) {

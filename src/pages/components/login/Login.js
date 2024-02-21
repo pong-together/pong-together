@@ -2,14 +2,11 @@ import Component from '../../../core/Component.js';
 import OauthBtn from './OauthBtn.js';
 import SelectLanguage from './SelectLanguage.js';
 import TFABtn from './TFABtn.js';
-import http from '../../../core/http.js';
+import store from '../../../store/index.js';
 
 export default class extends Component {
 	setup() {
-		this.$state = {
-			progress: 'language',
-		};
-		this.$store = this.$props;
+		store.events.subscribe('loginProgressChange', async () => this.render());
 	}
 
 	template() {
@@ -21,39 +18,18 @@ export default class extends Component {
 		`;
 	}
 
-	async oauth() {
-		const queryParams = new URLSearchParams(window.location.search);
-		const code = queryParams.get('code');
-		if (code) {
-			try {
-				const data = await http.post(
-					'http://localhost:8000/api/auth/login/',
-					{ code: code },
-					{ 'Content-Type': 'application/json' },
-				);
-				console.log('data', data);
-				if (data.login === 'success') {
-					this.$store.dispatch('isLogin', true);
-				} else if (data.login === 'fail') {
-					this.$store.dispatch('isTwoFA', true);
-				}
-			} catch (error) {
-				console.error('HTTP 요청 실패:', error);
-			}
-		}
-	}
-
 	async mounted() {
 		const $parent = this.$target.querySelector('.login-content-wrapper');
-		if (this.$state.progress === 'oauth') {
-			new OauthBtn($parent, this.$store);
-			this.oauth();
-		} else if (this.$state.progress === 'twoFA') {
-			new TFABtn($parent, this.$store);
-		} else if (this.$state.progress === 'language') {
-			new SelectLanguage($parent, this.$store);
-		}
 
-		if (this.$props.region) this.$state.region = this.$props.region;
+		if (store.state.loginProgress === 'oauth') {
+			new OauthBtn($parent);
+		}
+		if (store.state.loginProgress === 'twoFA') {
+			new TFABtn($parent);
+		}
+		if (store.state.loginProgress === 'language') {
+			new SelectLanguage($parent);
+		}
+		console.log(store.state.loginProgress);
 	}
 }
