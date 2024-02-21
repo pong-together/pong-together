@@ -42,7 +42,7 @@ export default class extends Component {
 	async mounted() {
 		const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
 		const data = await http.get(
-			'https://localhost:443/api/auth/otp/?intra_id=yeepark',
+			'https://localhost:443/api/auth/otp/?intra_id=sooyang',
 			{
 				Authorization: accessToken,
 				'Content-Type': 'application/json',
