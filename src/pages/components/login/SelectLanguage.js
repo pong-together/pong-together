@@ -28,6 +28,8 @@ export default class extends Component {
 
 	template() {
 		return `
+		<img src="../../../static/images/logoWhite.png" alt="white logo" class="login-logo"/ >
+			<div class="login-content-wrapper">
 		<div>
 			<div class="language-select">
 				<select name="language-select" id="language-select" class="login-language-select-wrapper">
@@ -44,6 +46,7 @@ export default class extends Component {
 				<input type="submit" value="${language.login[this.$state.region].languageSelect}" class="login-language-select-btn" />
 			</div>
 			<button class="login-btn" id="login-to-start">${language.login[this.$state.region].gameStartBtn}</button>
+		</div>
 		</div>`;
 	}
 
