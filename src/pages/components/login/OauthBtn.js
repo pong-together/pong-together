@@ -24,6 +24,7 @@ export default class extends Component {
 	async oauth() {
 		if (localStorage.getItem('accessToken')) {
 			store.dispatch('changeLoginProgress', 'twoFA');
+			return;
 		}
 
 		const queryParams = new URLSearchParams(window.location.search);
