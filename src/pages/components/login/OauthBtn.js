@@ -30,7 +30,7 @@ export default class extends Component {
 		if (code) {
 			try {
 				const data = await http.post(
-					'/api/auth/login/',
+					'https://localhost:443/api/auth/login/',
 					{ code: code },
 					{ 'Content-Type': 'application/json' },
 				);
