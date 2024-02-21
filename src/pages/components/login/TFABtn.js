@@ -1,5 +1,6 @@
 import Component from '../../../core/Component.js';
 import http from '../../../core/http.js';
+import store from '../../../store/index.js';
 
 export default class extends Component {
 	setup() {
@@ -8,20 +9,39 @@ export default class extends Component {
 		};
 	}
 
+	setEvent() {
+		this.addEvent('click', '#twoFABtn', async (e) => {
+			const inputValue = this.$target.querySelector('#twoFactorCode').value;
+			try {
+				const data = await http.get(
+					`https://localhost:443/api/auth/otp/verify/?code=${inputValue}`,
+					{
+						Authorization: accessToken,
+						'Content-Type': 'application/json',
+					},
+				);
+				localStorage.setItem('twoFA', data.authentication);
+				store.dispatch('changeLoginProgress', 'language');
+			} catch (e) {
+				console.error('HTTP 요청 실패:', e);
+			}
+		});
+	}
+
 	template() {
 		return `
 		<div class="row justify-content-center mt-6 login-twoFA-wrapper">
 			<div class="col-md-9">
 				<h2 class="text-center mb-4">Two-factor authentication (2FA)</h2>
 				<div class="text-center mb-4 qrCode">
-						<img id="qrCode" src="../../../static/images/loginLoading.png" alt="QR Code" style="width:150px; class="mb-3">
+						<img id="qrCode" src="../../../static/images/loginLoading.png" alt="QR Code" style="width:100px; class="mb-3">
 				</div>
 				<form id="twoFactorForm">
-						<div class="form-group">
-								<label for="twoFactorCode">2FA Code</label>
-								<input type="text" class="form-control" id="twoFactorCode" placeholder="Enter your 2FA code">
-						</div>
-						<button type="submit" class="btn btn-primary">Submit</button>
+					<div class="form-group">
+							<label for="twoFactorCode">2FA Code</label>
+							<input type="text" class="form-control" id="twoFactorCode" placeholder="Enter your 6-digit 2FA code" maxlength="6" pattern="\d{6}">
+					</div>
+					<button type="submit" class="btn btn-primary" id="twoFABtn">Submit</button>
 				</form>
 			</div>
 		</div>
@@ -33,8 +53,6 @@ export default class extends Component {
 		let qr = qrcode(0, 'L');
 		qr.addData(text);
 		qr.make();
-
-		// QR 코드를 div 요소에 추가
 		qrElement.innerHTML = qr.createImgTag();
 	}
 
