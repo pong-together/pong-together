@@ -12,10 +12,10 @@ export default class extends Component {
 	setEvent() {
 		this.addEvent('click', '#twoFABtn', async (e) => {
 			const inputValue = this.$target.querySelector('#twoFactorCode').value;
-			console.log('input-value=', inputValue);
+			console.log(inputValue);
 			try {
 				const data = await http.get(
-					`https://localhost:443/api/auth/otp/verify/?code=${inputValue}`,
+					`https://localhost:443/api/auth/otp/verify/?code=${inputValue}&intra_id=sooyang`,
 					{
 						Authorization: accessToken,
 						'Content-Type': 'application/json',
@@ -24,9 +24,9 @@ export default class extends Component {
 				localStorage.setItem('twoFA', data.authentication);
 				store.dispatch('changeLoginProgress', 'language');
 			} catch (e) {
-				localStorage.removeItem('accessToken');
-				localStorage.removeItem('twoFA');
-				store.dispatch('changeLoginProgress', 'oauth');
+				//localStorage.removeItem('accessToken');
+				//localStorage.removeItem('twoFA');
+				//store.dispatch('changeLoginProgress', 'oauth');
 			}
 		});
 	}
@@ -44,7 +44,7 @@ export default class extends Component {
 							<label for="twoFactorCode">2FA Code</label>
 							<input type="text" class="form-control" id="twoFactorCode" placeholder="Enter your 6-digit 2FA code" maxlength="6">
 					</div>
-					<button type="submit" class="btn btn-primary" id="twoFABtn">Submit</button>
+					<button class="btn btn-primary" id="twoFABtn">Submit</button>
 				</form>
 			</div>
 		</div>
