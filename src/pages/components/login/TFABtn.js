@@ -11,6 +11,7 @@ export default class extends Component {
 
 	setEvent() {
 		this.addEvent('click', '#twoFABtn', async (e) => {
+			e.preventDefault();
 			const inputValue = this.$target.querySelector('#twoFactorCode').value;
 			console.log(inputValue);
 			try {
