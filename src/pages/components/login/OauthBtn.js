@@ -22,7 +22,9 @@ export default class extends Component {
 	}
 
 	async oauth() {
-		if (localStorage.getItem('accessToken')) return;
+		if (localStorage.getItem('accessToken')) {
+			store.dispatch('changeLoginProgress', 'twoFA');
+		}
 
 		const queryParams = new URLSearchParams(window.location.search);
 		const code = queryParams.get('code');
