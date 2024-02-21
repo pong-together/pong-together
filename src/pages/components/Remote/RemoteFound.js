@@ -64,8 +64,8 @@ export default class extends Component {
 	render() {
 		const mainboxElement = document.querySelector('.mainbox');
 		mainboxElement.innerHTML = this.template();
-		this.timer();
 		this.mounted();
+		this.timer();
 	}
 
 	mounted() {
