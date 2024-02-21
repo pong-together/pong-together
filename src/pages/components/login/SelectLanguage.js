@@ -1,13 +1,13 @@
 import Component from '../../../core/Component.js';
 import language from '../../../utils/language.js';
+import store from '../../../store/index.js';
 import http from '../../../core/http.js';
 
 export default class extends Component {
 	setup() {
 		this.$state = {
-			region: 'kr',
+			region: store.state.language,
 		};
-		this.$store = this.$props;
 	}
 
 	setEvent() {
@@ -15,8 +15,8 @@ export default class extends Component {
 			const $select = this.$target.querySelector('#language-select');
 			const selectedLanguage = $select.value;
 			this.setState({ region: selectedLanguage });
-			this.$store.dispatch('changeLanguage', this.$state.region);
-			console.log(this.$store.state);
+			store.dispatch('changeLanguage', this.$state.region);
+			console.log(store.state);
 			// header 나온 뒤에 추가
 			//http.put('', { language: this.$state.region }, {});
 		});
@@ -28,6 +28,8 @@ export default class extends Component {
 
 	template() {
 		return `
+		<img src="../../../static/images/logoWhite.png" alt="white logo" class="login-logo"/ >
+			<div class="login-content-wrapper">
 		<div>
 			<div class="language-select">
 				<select name="language-select" id="language-select" class="login-language-select-wrapper">
@@ -44,6 +46,7 @@ export default class extends Component {
 				<input type="submit" value="${language.login[this.$state.region].languageSelect}" class="login-language-select-btn" />
 			</div>
 			<button class="login-btn" id="login-to-start">${language.login[this.$state.region].gameStartBtn}</button>
+		</div>
 		</div>`;
 	}
 

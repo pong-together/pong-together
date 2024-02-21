@@ -43,6 +43,19 @@
 	background: #fdff6c;
 }
 
+.login-twoFA-wrapper {
+	padding: 25px 0;
+	background-color: white;
+	border-radius: 15px;
+}
+
+input:invalid {
+	border-color: #dc3545;
+}
+input:valid {
+	border-color: #28a745;
+}
+
 .language-select {
 	display: flex;
 	margin: auto 0;

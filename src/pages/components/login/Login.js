@@ -12,15 +12,16 @@ export default class extends Component {
 	template() {
 		return `
 		<div class="login-body-wrapper">
-			<img src="../../../static/images/logoWhite.png" alt="white logo" class="login-logo"/ >
-			<div class="login-content-wrapper"></div>
 		</div>
 		`;
 	}
 
 	async mounted() {
-		const $parent = this.$target.querySelector('.login-content-wrapper');
+		const $parent = this.$target.querySelector('.login-body-wrapper');
 
+		if (store.state.loginProgress === 'done') {
+			window.location.hash = '#/select';
+		}
 		if (store.state.loginProgress === 'oauth') {
 			new OauthBtn($parent);
 		}
