@@ -77,11 +77,16 @@ export default class extends Component {
 			this.changeModule();
 			this.routerModule();
 		});
+
 		window.addEventListener('load', () => {
 			console.log('2');
 			this.changeModule();
 			this.routerModule();
 		});
+
+		if (localStorage.getItem('accessToken')) {
+			store.dispatch('changeLoginProgress', 'twoFA');
+		}
 		//this.routerModule();
 		//console.log(this.$store);
 	}
