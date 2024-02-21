@@ -1,20 +1,21 @@
 import Component from '../../../core/Component.js';
 import Router from '../../router.js';
-import Remote from './Remote.js';
+import language from '../../../utils/language.js';
 
 export default class extends Component {
 
 	setup() {
 		this.$state = {
 			remoteState: 'none',
-			intraPicture: 'none',
-			intraID: 'jonseo'
+			region: 'kr',
+			intraPicture: 'none', // API
+			intraID: 'jonseo' // API
 		};
 	}
 
 	template() {
 		return `
-			<div class="top-text">참가자를 찾았습니다!</div>
+			<div class="top-text">${language.remote[this.$state.region].readyText}</div>
 			<img src="static/images/intraPicture.png" id="picture">
 			<button id="match-intra">${this.$state.intraID}(5)</button>
 		`;
