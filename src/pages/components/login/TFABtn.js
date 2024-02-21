@@ -12,6 +12,7 @@ export default class extends Component {
 	setEvent() {
 		this.addEvent('click', '#twoFABtn', async (e) => {
 			const inputValue = this.$target.querySelector('#twoFactorCode').value;
+			console.log('input-value=', inputValue);
 			try {
 				const data = await http.get(
 					`https://localhost:443/api/auth/otp/verify/?code=${inputValue}`,
@@ -23,7 +24,9 @@ export default class extends Component {
 				localStorage.setItem('twoFA', data.authentication);
 				store.dispatch('changeLoginProgress', 'language');
 			} catch (e) {
-				console.error('HTTP 요청 실패:', e);
+				localStorage.removeItem('accessToken');
+				localStorage.removeItem('twoFA');
+				store.dispatch('changeLoginProgress', 'oauth');
 			}
 		});
 	}
@@ -39,7 +42,7 @@ export default class extends Component {
 				<form id="twoFactorForm">
 					<div class="form-group">
 							<label for="twoFactorCode">2FA Code</label>
-							<input type="text" class="form-control" id="twoFactorCode" placeholder="Enter your 6-digit 2FA code" maxlength="6" pattern="\d{6}">
+							<input type="text" class="form-control" id="twoFactorCode" placeholder="Enter your 6-digit 2FA code" maxlength="6">
 					</div>
 					<button type="submit" class="btn btn-primary" id="twoFABtn">Submit</button>
 				</form>
