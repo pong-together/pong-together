@@ -15,7 +15,7 @@ export default class extends Component {
 			console.log(inputValue);
 			try {
 				const data = await http.get(
-					`https://localhost:443/api/auth/otp/verify/?code=${inputValue}&intra_id=sooyang`,
+					`https://localhost:443/api/auth/otp/verify/?code=${inputValue}`,
 					{
 						Authorization: accessToken,
 						'Content-Type': 'application/json',
@@ -61,13 +61,10 @@ export default class extends Component {
 
 	async mounted() {
 		const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
-		const data = await http.get(
-			'https://localhost:443/api/auth/otp/?intra_id=sooyang',
-			{
-				Authorization: accessToken,
-				'Content-Type': 'application/json',
-			},
-		);
+		const data = await http.get('https://localhost:443/api/auth/otp/', {
+			Authorization: accessToken,
+			'Content-Type': 'application/json',
+		});
 		this.generateQRCode(data.qrcode_uri);
 	}
 }
