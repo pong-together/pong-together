@@ -12,7 +12,10 @@ export default class extends Component {
 	}
 
 	template() {
-		return `<button class="login-btn" id="login-oauth-btn">${language.login[store.state.language].loginBtn}</button>`;
+		return `
+		<img src="../../../static/images/logoWhite.png" alt="white logo" class="login-logo"/ >
+			<div class="login-content-wrapper"><button class="login-btn" id="login-oauth-btn">${language.login[store.state.language].loginBtn}</button>
+			</div>`;
 	}
 
 	async oauth() {

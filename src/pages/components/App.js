@@ -84,7 +84,12 @@ export default class extends Component {
 			this.routerModule();
 		});
 
-		if (localStorage.getItem('accessToken')) {
+		if (
+			localStorage.getItem('accessToken') &&
+			localStorage.getItem('twoFASuccess')
+		) {
+			store.dispatch('changeLoginProgress', 'done');
+		} else if (localStorage.getItem('accessToken')) {
 			store.dispatch('changeLoginProgress', 'twoFA');
 		}
 		//this.routerModule();

@@ -43,6 +43,12 @@
 	background: #fdff6c;
 }
 
+.login-twoFA-wrapper {
+	padding: 25px 0;
+	background-color: white;
+	border-radius: 15px;
+}
+
 .language-select {
 	display: flex;
 	margin: auto 0;
