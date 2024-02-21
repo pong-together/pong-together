@@ -1,5 +1,5 @@
 import Component from '../../../core/Component.js';
-import Router from '../../router.js';
+import language from '../../../utils/language.js';
 import Search from './RemoteSearch.js';
 import Wait from './RemoteWait.js';
 
@@ -7,15 +7,16 @@ export default class extends Component {
 
 	setup() {
 		this.$state = {
-			remoteState: 'none'
+			remoteState: 'none',
+			region: 'jp'
 		};
 	}
 
 	template() {
 		return `
-			<div class="top-text">참가자를 찾았습니다!</div>
+			<div class="top-text">${language.remote[this.$state.region].foundText}</div>
 			<img src="static/images/exclamation-mark.png" id="exclamation">
-			<button class="match-button" id="found">준비하기(5)</button>
+			<button class="match-button" id="found">${language.remote[this.$state.region].foundButton}(5)</button>
 		`;
 	}
 
@@ -24,8 +25,8 @@ export default class extends Component {
 		let time;
 		const buttonElement = document.querySelector('.match-button');
 		
-		function updateTimer() {
-			buttonElement.textContent = `준비하기(${seconds})`;
+		const updateTimer = () => {
+			buttonElement.textContent = `${language.remote[this.$state.region].foundButton}(${seconds})`;
 		}
 
 		function stopTimer() {
@@ -63,8 +64,8 @@ export default class extends Component {
 	render() {
 		const mainboxElement = document.querySelector('.mainbox');
 		mainboxElement.innerHTML = this.template();
-		this.mounted();
 		this.timer();
+		this.mounted();
 	}
 
 	mounted() {

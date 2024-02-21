@@ -1,21 +1,23 @@
 import Component from '../../../core/Component.js';
 import Router from '../../router.js';
+import language from '../../../utils/language.js';
 import Found from './RemoteFound.js';
 
 export default class extends Component {
 
 	setup() {
 		this.$state = {
-			remoteState: 'none'
+			remoteState: 'none',
+			region: 'jp'
 		};
 	}
 
 	template() {
 		return `
-			<div class="top-text">참가자 찾는중...</div>
+			<div class="top-text">${language.remote[this.$state.region].searchText}</div>
 			<img src="static/images/question-mark.png" id="question">
 			<div id="counter"></div>
-			<button class="match-button" id="search">취소하기</button>
+			<button class="match-button" id="search">${language.remote[this.$state.region].searchButton}</button>
 		`;
 	}
 

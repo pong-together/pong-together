@@ -155,9 +155,33 @@ const game = {
 };
 
 const remote = {
-	en: {},
-	kr: {},
-	jp: {},
+	en: {
+		searchText: 'Searching for participants',
+		searchButton: 'Cancel',
+		foundText: 'Found a participant!',
+		foundButton: 'Get ready',
+		waitText: 'Waiting for the other person.',
+		waitButton: 'Get ready',
+		readyText: 'Found a participant!',
+	},
+	kr: {
+		searchText: '참가자 찾는 중...',
+		searchButton: '취소하기',
+		foundText: '참가자를 찾았습니다!',
+		foundButton: '준비하기',
+		waitText: '상대방을 기다리는 중입니다.',
+		waitButton: '준비하기',
+		readyText: '참가자를 찾았습니다!',
+	},
+	jp: {
+		searchText: '参加者募集中...',
+		searchButton: 'キャンセルする',
+		foundText: '参加者を見つけました!',
+		foundButton: '準備する',
+		waitText: '相手を待っています.',
+		waitButton: '準備する',
+		readyText: '参加者を見つけました!',
+	},
 };
 
 export default {
