@@ -1,15 +1,7 @@
 import Component from '../../../core/Component.js';
-import Router from '../../router.js';
-import Pages from '../../pages.js';
-import Cancel from './RemoteCancel.js';
+import Search from './RemoteSearch.js';
 
 export default class extends Component {
-
-	setup() {
-		this.$state = {
-			remoteState: 'wait'
-		};
-	}
 
 	template() {
 		return `
@@ -20,6 +12,6 @@ export default class extends Component {
 	}
 
 	mounted() {
-		new Cancel();
+		new Search();
 	}
 }

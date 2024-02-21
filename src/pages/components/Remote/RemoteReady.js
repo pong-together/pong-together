@@ -1,4 +1,6 @@
 import Component from '../../../core/Component.js';
+import Router from '../../router.js';
+import Remote from './Remote.js';
 
 export default class extends Component {
 
@@ -30,8 +32,9 @@ export default class extends Component {
 
 		function stopTimer() {
 			clearInterval(time);
-			// 매칭 화면으로 라우팅
 			bindUpdateTimer();
+			const router = Router();
+			router.navigate('#/select');
 		}
 
 		function startTimer() {
@@ -48,16 +51,9 @@ export default class extends Component {
 		startTimer();
 	}
 
-	// 비동기로 백엔드로부터 매칭됐음을 받아오는 처리
-	// await async
-
 	render() {
 		const mainboxElement = document.querySelector('.mainbox');
 		mainboxElement.innerHTML = this.template();
 		this.timer();
-	}
-
-	mounted() {
-		
 	}
 }

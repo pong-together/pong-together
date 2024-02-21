@@ -1,5 +1,6 @@
 import Component from '../../../core/Component.js';
-import Find from './RemoteFind.js';
+import Router from '../../router.js';
+import Found from './RemoteFound.js';
 
 export default class extends Component {
 
@@ -14,7 +15,7 @@ export default class extends Component {
 			<div class="top-text">참가자 찾는중...</div>
 			<img src="static/images/question-mark.png" id="question">
 			<div id="counter"></div>
-			<button class="match-button">취소하기</button>
+			<button class="match-button" id="search">취소하기</button>
 		`;
 	}
 
@@ -30,19 +31,23 @@ export default class extends Component {
 
 		function stopCounter() {
 			clearInterval(count);
-			// counterElement.remove();
 			updateCounter();
-			new Find();
+			
+			const router = Router();
+			router.navigate('#/select');
 		}
+
+		this.stopCounter = stopCounter;
 
 		function startCounter() {
 			count = setInterval(() => {
-				// if (this.$state.next === true) {
-				// 	this.$state.next = false;
+				// if (this.$state.remoteState === found) {
 				// 	stopCounter();
 				// }
-				if (seconds === 3) {
-					stopCounter();
+				if (seconds === 5) {
+					clearInterval(count);
+					updateCounter();
+					new Found();
 				}
 				if (seconds === 60) {
 					minutes++;
@@ -58,18 +63,27 @@ export default class extends Component {
 	}
 
 	// 비동기로 백엔드로부터 매칭됐음을 받아오는 처리
-	// await async
+	/*
+		getServer() {
+			if (this.$state.remoteState === 'found')
+				new Wait();
+		}
+	*/
 
 	render() {
 		const mainboxElement = document.querySelector('.mainbox');
-		mainboxElement.innerHTML = '';
 		mainboxElement.innerHTML = this.template();
+		this.mounted();
 		this.counter();
 	}
 
 	mounted() {
-		this.addEventListener('click', '.match-button', e => {
-			
-		})
+		// getServer();
+		document.addEventListener('click', e => {
+			const target = e.target;
+			if (target.id === 'search') {
+				this.stopCounter();
+			}
+		});
 	}
 }
