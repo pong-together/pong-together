@@ -12,9 +12,9 @@ export default class extends Component {
 		return `
 		<div class="row justify-content-center mt-6 login-twoFA-wrapper">
 			<div class="col-md-9">
-				<h2 class="text-center mb-4">2FA Authentication</h2>
+				<h2 class="text-center mb-4">Two-factor authentication (2FA)</h2>
 				<div class="text-center mb-4 qrCode">
-						<img id="qrCode" src="https://via.placeholder.com/150" alt="QR Code" class="mb-3">
+						<img id="qrCode" src="../../../static/images/loginLoading.png" alt="QR Code" style="width:100px; class="mb-3">
 				</div>
 				<form id="twoFactorForm">
 						<div class="form-group">
@@ -30,7 +30,6 @@ export default class extends Component {
 
 	generateQRCode(text) {
 		let qrElement = this.$target.querySelector('.qrCode');
-		qrElement.innerHTML = '';
 		let qr = qrcode(0, 'L');
 		qr.addData(text);
 		qr.make();
