@@ -94,7 +94,10 @@ class RefreshTokenAPIView(TokenRefreshView):
 
 
 def get_user(request):
-    access_token = request.META.get('HTTP_AUTHORIZATION')[7:]
+    access_token = request.META.get('HTTP_AUTHORIZATION')
+    if access_token is None:
+        return Response({'message': '\'Authorization\' is required'}, status=status.HTTP_400_BAD_REQUEST)
+    access_token = access_token[7:]
     payload = jwt.decode(access_token, settings.SIMPLE_JWT['SIGNING_KEY'], settings.SIMPLE_JWT['ALGORITHM'])
     user_id = payload.get('user_id')
     try:
