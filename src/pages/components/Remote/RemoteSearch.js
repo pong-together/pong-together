@@ -66,9 +66,16 @@ export default class extends Component {
 
 	// 비동기로 백엔드로부터 매칭됐음을 받아오는 처리
 	/*
+		
+
 		getServer() {
 			if (this.$state.remoteState === 'found')
 				new Wait();
+			const BASE_URL = '';
+			const HEADERS = {
+				'content-Type': 'application/json'
+			}
+			const result = () => http.get(BASE_URL, HEADERS);
 		}
 	*/
 
