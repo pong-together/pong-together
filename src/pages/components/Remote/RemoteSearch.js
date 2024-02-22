@@ -46,6 +46,7 @@ export default class extends Component {
 				// if (this.$state.remoteState === found) {
 				// 	stopCounter();
 				// }
+				updateCounter();
 				if (seconds === 5) {
 					clearInterval(count);
 					updateCounter();
@@ -57,7 +58,6 @@ export default class extends Component {
 				} else {
 					seconds++;
 				}
-				updateCounter();
 			}, 1000);
 		}
 
