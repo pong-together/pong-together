@@ -3,7 +3,11 @@ import GameSelect from './components/game_select/GameSelect.js';
 import Tournament from './components/tournament/Tournament.js';
 import Remote from './components/Remote/Remote.js';
 import Local from './components/Local.js';
+<<<<<<< HEAD
 import Game from './components/jonseo-game/Game.js';
+=======
+import Game from './components/game/Game.js';
+>>>>>>> main
 
 export default (main, props) => {
 	const login = () => new Login(main, props);

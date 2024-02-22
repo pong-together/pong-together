@@ -1,11 +1,12 @@
 import Component from "../../../core/Component.js"
 import Bracket from "./Tournament-Bracket.js"
 import language from "../../../utils/language.js"
+import tourapi from "../tournament/TournamentApi.js"
 
 export default class extends Component{
 	setup() {
 		this.$state = {
-			participant: ["","","",""],
+			participant: [],
 			checkError: "",
 			gameMode: "임시 게임모드",
 		};
@@ -30,6 +31,12 @@ export default class extends Component{
 				</div>
 			</div>
 		`
+	}
+
+	async registNickname (nicknames) { //api부분
+		const result = await tourapi.create(nicknames);
+		const { id } = result; 
+		window.localStorage.setItem('tournament-id', id);
 	}
 
 	setEvent() {
@@ -92,8 +99,10 @@ export default class extends Component{
 		nicknames.push(nickname3);
 		nicknames.push(nickname4);
 
-		if (this.checkEmpty(nicknames) || this.checkDuplicate(nicknames) || this.checkLength(nicknames))
+		if (this.checkEmpty(nicknames) || this.checkDuplicate(nicknames) || this.checkLength(nicknames)){
 			return true;
+		}
+		this.registNickname(nicknames);//중복검사 통과하면 api보냄.
 		return false;
 	}
 }
