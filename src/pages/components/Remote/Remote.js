@@ -5,8 +5,10 @@ export default class extends Component {
 
 	template() {
 		return `
-			<div class="container">
-				<div class="mainbox"></div>
+			<div class="main-container">
+				<div class="container">
+					<div class="mainbox"></div>
+				</div>
 			</div>
 		`;
 	}
