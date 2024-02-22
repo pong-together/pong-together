@@ -18,7 +18,7 @@ export default class extends Component {
 			localStorage.setItem('language', this.$state.region);
 			store.dispatch('changeLanguage', this.$state.region);
 
-			console.log(store.state);
+			//console.log(store.state);
 			// header 나온 뒤에 추가
 			//http.put('', { language: this.$state.region }, {});
 		});

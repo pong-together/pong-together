@@ -61,7 +61,7 @@ export default class extends Component {
 		let qrCodeDummyImg = this.$target.querySelector('#qrCode');
 		let angle = 0;
 		const loadingInterval = setInterval(() => {
-			angle = (angle + 45) % 360; // 각도를 45도씩 증가시키고, 360도에 도달하면 0으로 리셋
+			angle = (angle + 45) % 360;
 			qrCodeDummyImg.style.transform = `rotate(${angle}deg)`;
 		}, 100);
 
@@ -74,7 +74,7 @@ export default class extends Component {
 			this.generateQRCode(data.qrcode_uri);
 		} catch (e) {
 			clearInterval(loadingInterval);
-			console.error('QR 코드 생성 실패:');
+			//console.error('QR 코드 생성 실패:');
 		}
 	}
 }

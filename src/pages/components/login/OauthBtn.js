@@ -52,7 +52,6 @@ export default class extends Component {
 				}
 			} catch (error) {
 				clearInterval(loadingInterval);
-				console.error('HTTP 요청 실패:', error);
 			}
 		} else {
 			//console.log('code가 존재하지 않습니다.');
