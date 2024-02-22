@@ -2,6 +2,7 @@
 	display: flex;
 	flex-direction: column;
 	margin-top: 30px;
+	position: relative;
 }
 
 .local-start {
@@ -11,6 +12,8 @@
 	border-radius: 15px;
 	border-width: 0;
 	font-size: 28px;
+	position: absolute;
+	top: 255px;
 	color: white;
 	font-family: 'jua';
 	margin-top: 15px;

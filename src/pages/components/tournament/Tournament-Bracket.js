@@ -1,21 +1,22 @@
-import Component from "../../../core/Component.js"
+import Component from "../../../core/Component.js";
 import language from "../../../utils/language.js";
+import tourapi from "../tournament/TournamentApi.js";
 
 export default class extends Component {
 	setup() {
 		this.$state = {
-			participant: ["jugwak","jonseo","sooyang","yeepark"],
-			gameround: 1,
-			winner: ["jonseo", "yeepark", ""],
+			participant: [],
+			gameround: 0,
+			winner: [],
 			gameMode: "임시 게임모드",
-			region: "kr"
-		} 
+		}
+		this.$store = this.$props;
 	}
 
 	template() {
 		return `
 			<div class="main-container-bracket">
-			<div class="info">${language.tournament[this.$state.region].normalGameMode}</div>
+			<div class="info">${language.tournament[this.$store.state.language].normalGameMode}</div>
 				<div class="bracket-container">
 				<div class="tournament-bracket">
 					<div class="crownball">
@@ -55,10 +56,10 @@ export default class extends Component {
 					</div>
 				</div>
 				<div class="gameinfo-container">
-					<div class="firstgame-info1">${language.tournament[this.$state.region].firstGame}</div>
-					<div class="firstgame-info2">${language.tournament[this.$state.region].secondGame}</div>
+					<div class="firstgame-info1">${language.tournament[this.$store.state.language].firstGame}</div>
+					<div class="firstgame-info2">${language.tournament[this.$store.state.language].secondGame}</div>
 				</div>
-				<button class="game-start">${language.tournament[this.$state.region].gameStartButton}</button>
+				<button class="game-start">${language.tournament[this.$store.state.language].gameStartButton}</button>
 			</div>
 		</div>
 		`;
@@ -381,8 +382,30 @@ export default class extends Component {
 		);
 		finalGameWinnerLine.style.width = '5px';
 	}
+	//api부분 함수
+	async getTournamentInfo() {
+		console.log("api test!");
+		const result = await tourapi.list(window.localStorage.getItem('tournament-id'));
+		// const result = await tourapi.list(1);
+		const {player1_name, player2_name, player3_name, player4_name, first_winner, second_winner, final_winner, game_turn} = result;
+		const participants = [player1_name, player2_name, player3_name, player4_name];
+		const winners = [first_winner, second_winner, final_winner];
+		if (
+			JSON.stringify(this.$state.participant) !== JSON.stringify(participants) ||
+			JSON.stringify(this.$state.winner) !== JSON.stringify(winners) ||
+			this.$state.gameround !== game_turn
+		) {
+			this.setState({
+				participant: participants,
+				winner: winners,
+				gameround: game_turn
+			});
+		}
+	}
 
 	mounted() {
+		this.getTournamentInfo(); //api로 정보 받아옴.
+
 		const playerBox1 = document.querySelector('.player1');
 		const playerBox2 = document.querySelector('.player2');
 		const playerBox3 = document.querySelector('.player3');

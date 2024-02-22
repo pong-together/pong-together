@@ -51,7 +51,14 @@ export default class extends Component {
 					<div class="triangle"></div>
 				</div>
 			</div>
-				<div class="footer-chat"></div>
+			<div class="chat-container">
+			<div class="message-container">
+				<div id="messages">hi</div>
+			</div>
+			<form action="" id="chat-form">
+				<input id="m" autocomplete="off" /><button>전송</button>
+			</form>
+		</div>
 			</div>
 		</div>
 			`;
@@ -72,6 +79,7 @@ export default class extends Component {
 	}
 
 	mounted() {
+		window.localStorage.removeItem('acessToken');
 		window.addEventListener('hashchange', () => {
 			this.changeModule();
 			this.routerModule();
@@ -90,7 +98,5 @@ export default class extends Component {
 		} else if (localStorage.getItem('accessToken')) {
 			store.dispatch('changeLoginProgress', 'twoFA');
 		}
-		//this.routerModule();
-		//console.log(this.$store);
 	}
 }
