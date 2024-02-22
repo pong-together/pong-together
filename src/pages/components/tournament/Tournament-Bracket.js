@@ -8,14 +8,14 @@ export default class extends Component {
 			gameround: 1,
 			winner: ["jonseo", "yeepark", ""],
 			gameMode: "임시 게임모드",
-			region: "kr"
-		} 
+		}
+		this.$store = this.$props;
 	}
 
 	template() {
 		return `
 			<div class="main-container-bracket">
-			<div class="info">${language.tournament[this.$state.region].normalGameMode}</div>
+			<div class="info">${language.tournament[this.$store.state.language].normalGameMode}</div>
 				<div class="bracket-container">
 				<div class="tournament-bracket">
 					<div class="crownball">
@@ -55,10 +55,10 @@ export default class extends Component {
 					</div>
 				</div>
 				<div class="gameinfo-container">
-					<div class="firstgame-info1">${language.tournament[this.$state.region].firstGame}</div>
-					<div class="firstgame-info2">${language.tournament[this.$state.region].secondGame}</div>
+					<div class="firstgame-info1">${language.tournament[this.$store.state.language].firstGame}</div>
+					<div class="firstgame-info2">${language.tournament[this.$store.state.language].secondGame}</div>
 				</div>
-				<button class="game-start">${language.tournament[this.$state.region].gameStartButton}</button>
+				<button class="game-start">${language.tournament[this.$store.state.language].gameStartButton}</button>
 			</div>
 		</div>
 		`;
