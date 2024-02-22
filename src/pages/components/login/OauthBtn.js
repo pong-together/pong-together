@@ -31,17 +31,27 @@ export default class extends Component {
 			try {
 				const btn = this.$target.querySelector('#login-oauth-btn');
 				// btn의 내용을 로딩중... 으로 변환
-				btn.innerText = '로딩중...';
+				let loadingText = '로딩중';
+				btn.innerText = loadingText;
+				let dotCount = 0;
+
+				const loadingInterval = setInterval(() => {
+					dotCount = (dotCount + 1) % 4;
+					btn.innerText = loadingText + '.'.repeat(dotCount);
+				}, 500);
+
 				const data = await http.post(
 					'https://localhost:443/api/auth/login/',
 					{ code: code },
 					{ 'Content-Type': 'application/json' },
 				);
 				if (data.login === 'success') {
+					clearInterval(loadingInterval);
 					localStorage.setItem('accessToken', data.access_token);
 					store.dispatch('changeLoginProgress', 'twoFA');
 				}
 			} catch (error) {
+				clearInterval(loadingInterval);
 				console.error('HTTP 요청 실패:', error);
 			}
 		} else {
