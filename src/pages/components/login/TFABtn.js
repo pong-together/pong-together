@@ -57,10 +57,24 @@ export default class extends Component {
 
 	async mounted() {
 		const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
-		const data = await http.get('https://localhost:443/api/auth/otp/', {
-			Authorization: accessToken,
-			'Content-Type': 'application/json',
-		});
-		this.generateQRCode(data.qrcode_uri);
+
+		let qrCodeDummyImg = this.$target.querySelector('#qrCode');
+		let angle = 0;
+		const loadingInterval = setInterval(() => {
+			angle = (angle + 45) % 360; // 각도를 45도씩 증가시키고, 360도에 도달하면 0으로 리셋
+			qrCodeDummyImg.style.transform = `rotate(${angle}deg)`;
+		}, 100);
+
+		try {
+			const data = await http.get('https://localhost:443/api/auth/otp/', {
+				Authorization: accessToken,
+				'Content-Type': 'application/json',
+			});
+			clearInterval(loadingInterval);
+			this.generateQRCode(data.qrcode_uri);
+		} catch (e) {
+			clearInterval(loadingInterval);
+			console.error('QR 코드 생성 실패:');
+		}
 	}
 }
