@@ -1,6 +1,7 @@
 import Component from '../../../core/Component.js';
 import http from '../../../core/http.js';
 import store from '../../../store/index.js';
+import language from '../../../utils/language.js';
 
 export default class extends Component {
 	setEvent() {
@@ -30,16 +31,16 @@ export default class extends Component {
 		return `
 		<div class="row justify-content-center mt-6 login-twoFA-wrapper">
 			<div class="col-md-9">
-				<h2 class="text-center mb-4">Two-factor authentication (2FA)</h2>
+				<h2 class="text-center mb-4">${language.login[store.state.language].twoFATitle} (2FA)</h2>
 				<div class="text-center mb-4 qrCode">
 						<img id="qrCode" src="../../../static/images/loginLoading.png" alt="QR Code" style="width:100px; class="mb-3">
 				</div>
 				<form id="twoFactorForm">
 					<div class="form-group">
 							<label for="twoFactorCode">2FA Code</label>
-							<input type="text" class="form-control" id="twoFactorCode" placeholder="Enter your 6-digit 2FA code" maxlength="6">
+							<input type="text" class="form-control" id="twoFactorCode" placeholder="${language.login[store.state.language].twoFAContent}" maxlength="6">
 					</div>
-					<button class="btn btn-primary" id="twoFABtn">Submit</button>
+					<button class="btn btn-primary" id="twoFABtn">${language.login[store.state.language].twoFASubmit}</button>
 				</form>
 			</div>
 		</div>
