@@ -10,14 +10,13 @@ export default class extends Component {
 			remoteState: 'none',
 			region: 'kr'
 		};
-		this.$store = this.$props;
 	}
 
 	template() {
 		return `
-			<div class="top-text">${language.remote[this.$store.state.language].foundText}</div>
+			<div class="top-text">${language.remote[this.$state.region].foundText}</div>
 			<img src="static/images/exclamation-mark.png" id="exclamation">
-			<button class="match-button" id="found">${language.remote[this.$store.state.language].foundButton}(5)</button>
+			<button class="match-button" id="found">${language.remote[this.$state.region].foundButton}(5)</button>
 		`;
 	}
 
@@ -27,7 +26,7 @@ export default class extends Component {
 		const buttonElement = document.querySelector('.match-button');
 		
 		const updateTimer = () => {
-			buttonElement.textContent = `${language.remote[this.$store.state.language].foundButton}(${seconds})`;
+			buttonElement.textContent = `${language.remote[this.$state.region].foundButton}(${seconds})`;
 		}
 
 		function stopTimer() {

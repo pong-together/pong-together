@@ -10,15 +10,14 @@ export default class extends Component {
 			remoteState: 'none',
 			region: 'kr'
 		};
-		this.$store = this.$props;
 	}
 
 	template() {
 		return `
-			<div class="top-text">${language.remote[this.$store.state.language].searchText}</div>
+			<div class="top-text">${language.remote[this.$state.region].searchText}</div>
 			<img src="static/images/question-mark.png" id="question">
 			<div id="counter"></div>
-			<button class="match-button" id="search">${language.remote[this.$store.state.language].searchButton}</button>
+			<button class="match-button" id="search">${language.remote[this.$state.region].searchButton}</button>
 		`;
 	}
 
