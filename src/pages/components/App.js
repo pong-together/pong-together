@@ -73,13 +73,11 @@ export default class extends Component {
 
 	mounted() {
 		window.addEventListener('hashchange', () => {
-			console.log('1');
 			this.changeModule();
 			this.routerModule();
 		});
 
 		window.addEventListener('load', () => {
-			console.log('2');
 			this.changeModule();
 			this.routerModule();
 		});
