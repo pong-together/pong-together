@@ -29,6 +29,9 @@ export default class extends Component {
 
 		if (code && !localStorage.getItem('accessToken')) {
 			try {
+				const btn = this.$target.querySelector('#login-oauth-btn');
+				// btn의 내용을 로딩중... 으로 변환
+				btn.innerText = '로딩중...';
 				const data = await http.post(
 					'https://localhost:443/api/auth/login/',
 					{ code: code },
