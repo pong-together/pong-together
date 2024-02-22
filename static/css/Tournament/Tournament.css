@@ -15,7 +15,6 @@ body {
 	background-color: white;
 	display: flex;
 	flex-direction: column;
-	/* justify-content: center; */
 	align-items: center;
 	width: 1000px;
 	height: 1030px;
@@ -72,15 +71,17 @@ body {
 }
 
 .start {
-	width: 356px;
-	height: 84px;
-	background-color: #ffa6a6;
+	width: 331px;
+	height: 70px;
+	background-color: #FFA6A6;
 	border-radius: 15px;
 	border-width: 0;
 	font-size: 28px;
 	color: white;
 	font-family: 'jua';
-	margin-top: 15px;
+	position: fixed;
+	top: 505px;
+	/* margin-top: 10px; */
 	box-shadow: 3px 3px 3px black;
 }
 

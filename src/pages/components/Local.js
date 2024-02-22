@@ -9,20 +9,21 @@ export default class extends Component {
 			gameMode: "2인용 기본게임",
 			region: 'kr',
 		}
+		this.$store = this.$props;
 	}
 
 	template() {
 		return `
 		<div class="main-container">
-				<div class="info">${language.local[this.$state.region].normalGameMode}</div>
+				<div class="info">${language.local[this.$store.state.language].normalGameMode}</div>
 				<div class="contain">
-					<div class="explaination">${language.local[this.$state.region].localExplain}</div>
+					<div class="explaination">${language.local[this.$store.state.language].localExplain}</div>
 					<div class="local-nick-container">
-						<input type="text" class="local-nick1" id="nickname" placeholder="${language.local[this.$state.region].player1}">
-						<input type="text" class="local-nick2" id="nickname" placeholder="${language.local[this.$state.region].player2}">
+						<input type="text" class="local-nick1" id="nickname" placeholder="${language.local[this.$store.state.language].player1}">
+						<input type="text" class="local-nick2" id="nickname" placeholder="${language.local[this.$store.state.language].player2}">
 					</div>
 					<div class="error-nickname">${this.$state.checkError}</div>
-					<button class="local-start">${language.local[this.$state.region].gameStartButton}</button>
+					<button class="local-start">${language.local[this.$store.state.language].gameStartButton}</button>
 				</div>
 			</div>
 		`;
@@ -40,7 +41,7 @@ export default class extends Component {
 		for (let i = 0; i < localNicknames.length; i++) {
 			const nickname = localNicknames[i];
 			if (seen[nickname]){
-				this.setState({ checkError: `${language.local[this.$state.region].errorNickname}` });
+				this.setState({ checkError: `${language.local[this.$store.state.language].errorNickname}` });
 				return true;
 			}
 			seen[nickname] = true;
@@ -53,7 +54,7 @@ export default class extends Component {
 		for (let i = 0; i < localNicknames.length; i++) {
 			const nickname = localNicknames[i]
 			if (!nickname) {
-				this.setState({ checkError: `${language.local[this.$state.region].emptyNickname}`});
+				this.setState({ checkError: `${language.local[this.$store.state.language].emptyNickname}`});
 				return true;
 			}
 		}
@@ -65,7 +66,7 @@ export default class extends Component {
 		for (let i = 0; i < localNicknames.length; i++) {
 			const nickname = localNicknames[i]
 			if (nickname.length > 10) {
-				this.setState({ checkError: `${language.local[this.$state.region].lengthNickname}`});
+				this.setState({ checkError: `${language.local[this.$store.state.language].lengthNickname}`});
 				return true;
 			}
 		}
