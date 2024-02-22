@@ -30,8 +30,7 @@ export default class extends Component {
 		if (code && !localStorage.getItem('accessToken')) {
 			try {
 				const btn = this.$target.querySelector('#login-oauth-btn');
-				// btn의 내용을 로딩중... 으로 변환
-				let loadingText = '로딩중';
+				let loadingText = language.login[store.state.language].loading;
 				btn.innerText = loadingText;
 				let dotCount = 0;
 
