@@ -6,6 +6,9 @@ import store from '../../../store/index.js';
 
 export default class extends Component {
 	setup() {
+		if (localStorage.getItem('language')) {
+			store.dispatch('changeLanguage', localStorage.getItem('language'));
+		}
 		store.events.subscribe('loginProgressChange', async () => this.render());
 	}
 
@@ -31,6 +34,5 @@ export default class extends Component {
 		if (store.state.loginProgress === 'language') {
 			new SelectLanguage($parent);
 		}
-		console.log(store.state.loginProgress);
 	}
 }

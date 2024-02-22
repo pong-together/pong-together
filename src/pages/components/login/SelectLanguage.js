@@ -15,8 +15,10 @@ export default class extends Component {
 			const $select = this.$target.querySelector('#language-select');
 			const selectedLanguage = $select.value;
 			this.setState({ region: selectedLanguage });
+			localStorage.setItem('language', this.$state.region);
 			store.dispatch('changeLanguage', this.$state.region);
-			console.log(store.state);
+
+			//console.log(store.state);
 			// header 나온 뒤에 추가
 			//http.put('', { language: this.$state.region }, {});
 		});
@@ -43,9 +45,9 @@ export default class extends Component {
 						<img src="./static/japanese.png" alt="japanese" />日本語
 					</option>
 				</select>
-				<input type="submit" value="${language.login[this.$state.region].languageSelect}" class="login-language-select-btn" />
+				<input type="submit" value="${language.login[store.state.language].languageSelect}" class="login-language-select-btn" />
 			</div>
-			<button class="login-btn" id="login-to-start">${language.login[this.$state.region].gameStartBtn}</button>
+			<button class="login-btn" id="login-to-start">${language.login[store.state.language].gameStartBtn}</button>
 		</div>
 		</div>`;
 	}

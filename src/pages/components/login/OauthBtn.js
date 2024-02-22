@@ -29,21 +29,31 @@ export default class extends Component {
 
 		if (code && !localStorage.getItem('accessToken')) {
 			try {
+				const btn = this.$target.querySelector('#login-oauth-btn');
+				let loadingText = language.login[store.state.language].loading;
+				btn.innerText = loadingText;
+				let dotCount = 0;
+
+				const loadingInterval = setInterval(() => {
+					dotCount = (dotCount + 1) % 4;
+					btn.innerText = loadingText + '.'.repeat(dotCount);
+				}, 500);
+
 				const data = await http.post(
 					'https://localhost:443/api/auth/login/',
 					{ code: code },
 					{ 'Content-Type': 'application/json' },
 				);
-				console.log('data', data);
 				if (data.login === 'success') {
+					clearInterval(loadingInterval);
 					localStorage.setItem('accessToken', data.access_token);
 					store.dispatch('changeLoginProgress', 'twoFA');
 				}
 			} catch (error) {
-				console.error('HTTP 요청 실패:', error);
+				clearInterval(loadingInterval);
 			}
 		} else {
-			console.log('code가 존재하지 않습니다.');
+			//console.log('code가 존재하지 않습니다.');
 		}
 	}
 
