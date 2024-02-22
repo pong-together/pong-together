@@ -13,7 +13,6 @@ export default {
 	},
 
 	changeLoginProgress(context, payload) {
-		console.log('change login process');
 		context.commit('changeLoginProgress', payload);
 	},
 

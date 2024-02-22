@@ -3,18 +3,11 @@ import http from '../../../core/http.js';
 import store from '../../../store/index.js';
 
 export default class extends Component {
-	setup() {
-		this.$state = {
-			region: 'kr',
-		};
-	}
-
 	setEvent() {
 		this.addEvent('click', '#twoFABtn', async (e) => {
 			e.preventDefault();
 			const inputValue = this.$target.querySelector('#twoFactorCode').value;
 			const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
-			console.log(inputValue);
 			try {
 				const data = await http.get(
 					`https://localhost:443/api/auth/otp/verify/?code=${inputValue}`,
@@ -23,7 +16,6 @@ export default class extends Component {
 						'Content-Type': 'application/json',
 					},
 				);
-				console.log('otp data', data);
 				localStorage.setItem('twoFA', data.authentication);
 				store.dispatch('changeLoginProgress', 'language');
 			} catch (e) {
