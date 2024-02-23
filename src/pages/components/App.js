@@ -35,7 +35,7 @@ export default class extends Component {
 		}
 		store.events.subscribe('loginProgressChange', async () => {
 			if (
-				(store.state.loginProgress === 'done') &
+				store.state.loginProgress === 'done' &&
 				(localStorage.getItem('intraId') === undefined ||
 					!localStorage.getItem('intraId'))
 			) {
@@ -44,6 +44,7 @@ export default class extends Component {
 					Authorization: accessToken,
 					'Content-Type': 'application/json',
 				});
+				console.log(data);
 				localStorage.setItem('intraId', data.intra_id);
 				store.dispatch('changeIntraId', data.intra_id);
 				localStorage.setItem('winCount', data.win_count);
