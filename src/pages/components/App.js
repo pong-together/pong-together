@@ -13,13 +13,6 @@ export default class extends Component {
 			rate: 0,
 		};
 		this.$store = this.$props;
-		if (store.state.loginProgress === 'done') {
-			store.events.subscribe('intraIdChange', async () => {
-				this.render();
-				this.calcRate();
-			});
-		}
-		//store.events.subscribe('intraIdChange', async () => this.render());
 	}
 
 	template() {
@@ -117,6 +110,8 @@ export default class extends Component {
 			this.changeModule();
 			this.routerModule();
 		});
+
+		this.calcRate();
 
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {
 			store.dispatch('changeLoginProgress', 'done');
