@@ -7,47 +7,18 @@ export default class extends Component {
 	setup() {
 		this.$state = {
 			region: 'kr',
-			rate:
-				store.state.winCount + store.state.loseCount !== 0
-					? Math.round(
-							(store.state.winCount /
-								(store.state.winCount + store.state.loseCount)) *
-								100,
-						)
-					: 0,
+			rate: 0,
 		};
-		this.$store = this.$props;
-		store.events.subscribe('intraIdchange', () => {
-			if (
-				localStorage.getItem('language') &&
-				localStorage.getItem('language') !== undefined
-			) {
-				store.dispatch('changeLanguage', localStorage.getItem('accessToken'));
-			}
-			if (
-				localStorage.getItem('intraId') &&
-				localStorage.getItem('intraId') !== undefined
-			) {
-				store.dispatch('changeIntraId', localStorage.getItem('intraId'));
-			}
-			if (
-				localStorage.getItem('winCount') &&
-				localStorage.getItem('winCount') !== undefined
-			) {
-				store.dispatch('changeWinCount', localStorage.getItem('winCount'));
-			}
-			if (
-				localStorage.getItem('loseCount') &&
-				localStorage.getItem('loseCount') !== undefined
-			) {
-				store.dispatch('changeLoseCount', localStorage.getItem('loseCount'));
-			}
-			if (
-				localStorage.getItem('intraImg') &&
-				localStorage.getItem('intraImg') !== undefined
-			) {
-				store.dispatch('changeIntraImg', localStorage.getItem('intraImg'));
-			}
+		store.events.subscribe('intraIdChange', async () => {
+			this.render();
+		});
+		store.events.subscribe('intraImgChange', async () => {
+			this.render();
+		});
+		store.events.subscribe('intraWinCountChange', async () => {
+			this.render();
+		});
+		store.events.subscribe('intraLoseCountChange', async () => {
 			this.render();
 		});
 
@@ -88,7 +59,7 @@ export default class extends Component {
 					</div>
 				</div>
 				<div class="intra-picture">
-					<div class="chip-picture"><img src="${store.state.intraImg}"/></div>
+					<div class="chip-picture"><img class="chip-image" src="${store.state.intraImg}"/></div>
 				</div>
 				<div class="chip-bottom">
 					<div class="triangle"></div>
@@ -126,6 +97,17 @@ export default class extends Component {
 		router.start();
 	}
 
+	calcRate() {
+		this.$state.rate =
+			store.state.winCount + store.state.loseCount !== 0
+				? Math.round(
+						(store.state.winCount /
+							(store.state.winCount + store.state.loseCount)) *
+							100,
+					)
+				: 0;
+	}
+
 	async mounted() {
 		console.log(store.state.loginProgress);
 		//window.localStorage.removeItem('acessToken');
@@ -139,8 +121,9 @@ export default class extends Component {
 			this.routerModule();
 		});
 
-		this.changeModule();
+		//this.changeModule();
 		//this.routerModule();
+		this.calcRate();
 
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {
 			store.dispatch('changeLoginProgress', 'done');
