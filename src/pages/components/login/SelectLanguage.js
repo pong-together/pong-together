@@ -52,7 +52,7 @@ export default class extends Component {
 			} catch (e) {}
 
 			store.dispatch('changeLoginProgress', 'done');
-			location.pathname = '/';
+			window.location.pathname = '/';
 			window.location.hash = `#/select`;
 		});
 	}
