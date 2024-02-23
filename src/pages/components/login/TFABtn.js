@@ -59,14 +59,14 @@ export default class extends Component {
 	async mounted() {
 		const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
 
-		try {
-			let qrCodeDummyImg = this.$target.querySelector('#qrCode');
-			let angle = 0;
-			const loadingInterval = setInterval(() => {
-				angle = (angle + 45) % 360;
-				qrCodeDummyImg.style.transform = `rotate(${angle}deg)`;
-			}, 100);
+		let qrCodeDummyImg = this.$target.querySelector('#qrCode');
+		let angle = 0;
+		const loadingInterval = setInterval(() => {
+			angle = (angle + 45) % 360;
+			qrCodeDummyImg.style.transform = `rotate(${angle}deg)`;
+		}, 100);
 
+		try {
 			const data = await http.get('https://localhost:443/api/auth/otp/', {
 				Authorization: accessToken,
 				'Content-Type': 'application/json',
