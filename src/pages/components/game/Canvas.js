@@ -33,7 +33,7 @@ export default class extends Component {
 				this.height = h;
 				this.image = i;
 			}
-			
+
 			draw() {
 				// ctx.fillStyle = 'black';
 				// ctx.fillRect(this.x, this.y, this.width, this.height);
@@ -64,41 +64,48 @@ export default class extends Component {
 		// let player2 = new bar(1007, 624, 18, 62, img_p2);
 		// let ball = new sphere(630, 640, 30, 30);
 	
+		function move(key) {
+			switch(key) {
+				case 'KeyW':
+					if (player1.y > 436) {
+						player1.y -= 7;
+					}
+					break;
+				case 'KeyS':
+					if (player1.y < 830) {
+						player1.y += 7;
+					}
+					break;
+				case 'KeyO':
+					if (player2.y > 400) {
+						player2.y -= 7;
+					}
+					break;
+				case 'KeyL':
+					if (player2.y < 830) {
+						player2.y += 7;
+					}
+					break;
+			}
+		}
+
+		document.addEventListener('keydown', e => {
+			move(e.code);
+		});
 
 		function frame() {
 			requestAnimationFrame(frame);
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			
-			function move(key) {
-				switch(key) {
-					case 'KeyW':
-						player1.y--;
-						break;
-					case 'KeyS':
-						player1.y++;
-						break;
-					case 'KeyO':
-						player2.y--;
-						break;
-					case 'KeyL':
-						player2.y++;
-						break;
-				}
-			}
-			
-			document.addEventListener('keydown', e => {
-				move(e.code);
-			});
 
 			player1.draw();
 			player2.draw();
 			ball.draw();
 		}
-		
+
 		frame();
 	}
 
 	mounted() {
 		this.canvas();
 	}
-}	
+}
