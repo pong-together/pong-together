@@ -4,14 +4,15 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from auth.utils import get_user
 from users.models import User
 from users.serializers import UserInfoSerializer, UserLanguageSerializer, UserGameSerializer
 
 
 # Create your views here.
 class UserInfoAPIView(APIView):
-    def get(self, request, id):
-        user = get_object_or_404(User, id=id)
+    def get(self, request):
+        user = get_user(request)
         serializer = UserInfoSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -32,8 +33,8 @@ class UserLanguageAPIView(APIView):
 
 
 class UserGameAPIView(APIView):
-    def put(self, request, id):
-        user = get_object_or_404(User, id=id)
+    def put(self, request):
+        user = get_user(request)
         result = request.data.get('result')
         if not result:
             return Response(status=status.HTTP_400_BAD_REQUEST)
