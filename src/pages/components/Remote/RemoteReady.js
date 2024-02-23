@@ -52,9 +52,7 @@ export default class extends Component {
 		startTimer();
 	}
 
-	render() {
-		const mainboxElement = document.querySelector('.mainbox');
-		mainboxElement.innerHTML = this.template();
+	mounted() {
 		this.timer();
 	}
 }
