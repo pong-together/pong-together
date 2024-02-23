@@ -33,7 +33,22 @@ export default class extends Component {
 		if (localStorage.getItem('intraImg')) {
 			store.dispatch('changeIntraImg', localStorage.getItem('intraImg'));
 		}
-		store.events.subscribe('loginProgressChange', () => {
+		store.events.subscribe('loginProgressChange', async () => {
+			if (store.state.loginProgress === 'done') {
+				const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
+				const data = await http.get('https://localhost:443/api/userinfo/id/', {
+					Authorization: accessToken,
+					'Content-Type': 'application/json',
+				});
+				localStorage.setItem('intraId', data.intraId);
+				store.dispatch('changeIntraId', data.intraId);
+				localStorage.setItem('winCount', data.win_count);
+				store.dispatch('changeWinCount', data.win_count);
+				localStorage.setItem('loseCount', data.lose_count);
+				store.dispatch('changeLoseCount', data.lose_count);
+				localStorage.setItem('intraImg', data.image);
+				store.dispatch('changeIntraImg', data.image);
+			}
 			console.log(store.state.loginProgress);
 		});
 		//store.events.subscribe('intraIdChange', async () => this.render());
