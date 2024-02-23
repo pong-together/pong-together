@@ -39,6 +39,11 @@ export default class extends Component {
 					btn.innerText = loadingText + '.'.repeat(dotCount);
 				}, 500);
 
+				if (localStorage.getItem('accessToken')) {
+					clearInterval(loadingInterval);
+					store.dispatch('changeLoginProgress', 'twoFA');
+				}
+
 				const data = await http.post(
 					'https://localhost:443/api/auth/login/',
 					{ code: code },
