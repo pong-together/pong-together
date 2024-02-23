@@ -28,11 +28,11 @@ export default {
 		state.intraImg = payload;
 		return state;
 	},
-	changeWinCount() {
+	changeWinCount(state, payload) {
 		state.winCount = payload;
 		return state;
 	},
-	changeLoseCount() {
+	changeLoseCount(state, payload) {
 		state.loseCount = payload;
 		return state;
 	},
