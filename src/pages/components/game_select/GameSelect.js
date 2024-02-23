@@ -33,6 +33,7 @@ export default class extends Component {
 					store.dispatch('changeLoseCount', data.lose_count);
 					localStorage.setItem('intraImg', data.image);
 					store.dispatch('changeIntraImg', data.image);
+					store.events.publish('intraIdChange');
 				}
 			}
 		} catch (e) {}

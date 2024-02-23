@@ -15,19 +15,10 @@ export default class extends Component {
 		this.$store = this.$props;
 		if (store.state.loginProgress === 'done') {
 			store.events.subscribe('intraIdChange', async () => {
-				location.reload();
+				this.render();
+				this.calcRate();
 			});
 		}
-		//store.events.subscribe('intraImgChange', async () => {
-		//	this.render();
-		//});
-		//store.events.subscribe('intraWinCountChange', async () => {
-		//	this.render();
-		//});
-		//store.events.subscribe('intraLoseCountChange', async () => {
-		//	this.render();
-		//});
-
 		//store.events.subscribe('intraIdChange', async () => this.render());
 	}
 
@@ -126,10 +117,6 @@ export default class extends Component {
 			this.changeModule();
 			this.routerModule();
 		});
-
-		//this.changeModule();
-		//this.routerModule();
-		//this.calcRate();
 
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {
 			store.dispatch('changeLoginProgress', 'done');
