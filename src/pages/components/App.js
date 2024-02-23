@@ -33,6 +33,7 @@ export default class extends Component {
 		if (localStorage.getItem('intraImg')) {
 			store.dispatch('changeIntraImg', localStorage.getItem('intraImg'));
 		}
+		store.events.subscribe('intraIdChange', async () => this.render());
 	}
 
 	template() {
