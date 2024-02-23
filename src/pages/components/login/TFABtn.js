@@ -17,8 +17,10 @@ export default class extends Component {
 						'Content-Type': 'application/json',
 					},
 				);
-				localStorage.setItem('twoFA', data.authentication);
-				store.dispatch('changeLoginProgress', 'language');
+				if (data.authentication === 'success') {
+					localStorage.setItem('twoFA', data.authentication);
+					store.dispatch('changeLoginProgress', 'language');
+				}
 			} catch (e) {
 				//localStorage.removeItem('accessToken');
 				//localStorage.removeItem('twoFA');

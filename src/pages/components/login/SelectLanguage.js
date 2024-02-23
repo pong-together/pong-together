@@ -24,6 +24,7 @@ export default class extends Component {
 		});
 
 		this.addEvent('click', '#login-to-start', () => {
+			store.dispatch('changeLoginProgress', 'done');
 			window.location.hash = `#/select`;
 		});
 	}
