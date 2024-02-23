@@ -1,7 +1,6 @@
 import Component from '../../../core/Component.js';
 import language from '../../../utils/language.js';
 import store from '../../../store/index.js';
-import http from '../../../core/http.js';
 
 export default class extends Component {
 	setup() {

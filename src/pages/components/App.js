@@ -9,18 +9,18 @@ export default class extends Component {
 			region: 'kr',
 			rate: 0,
 		};
-		store.events.subscribe('intraIdChange', async () => {
-			this.render();
-		});
-		store.events.subscribe('intraImgChange', async () => {
-			this.render();
-		});
-		store.events.subscribe('intraWinCountChange', async () => {
-			this.render();
-		});
-		store.events.subscribe('intraLoseCountChange', async () => {
-			this.render();
-		});
+		//store.events.subscribe('intraIdChange', async () => {
+		//	this.render();
+		//});
+		//store.events.subscribe('intraImgChange', async () => {
+		//	this.render();
+		//});
+		//store.events.subscribe('intraWinCountChange', async () => {
+		//	this.render();
+		//});
+		//store.events.subscribe('intraLoseCountChange', async () => {
+		//	this.render();
+		//});
 
 		//store.events.subscribe('intraIdChange', async () => this.render());
 	}
@@ -123,7 +123,7 @@ export default class extends Component {
 
 		//this.changeModule();
 		//this.routerModule();
-		this.calcRate();
+		//this.calcRate();
 
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {
 			store.dispatch('changeLoginProgress', 'done');
