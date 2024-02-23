@@ -6,7 +6,7 @@ const parseResponse = async (response) => {
 			data = await response.json();
 		}
 	} catch (error) {
-		console.error('Error parsing response:', error);
+		//console.error('Error parsing response:', error);
 		// data는 null로 유지됩니다.
 	}
 
