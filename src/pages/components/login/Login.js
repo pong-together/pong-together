@@ -23,9 +23,6 @@ export default class extends Component {
 		const $parent = this.$target.querySelector('.login-body-wrapper');
 
 		if (store.state.loginProgress === 'done') {
-			//const newFragment = '#/select';
-			//const newUrl = window.location.pathname + newFragment;
-			//window.history.pushState({ path: newUrl }, '', newUrl);
 			window.location.hash = '#/select';
 		}
 		if (store.state.loginProgress === 'oauth') {
