@@ -22,7 +22,7 @@ export default class extends Component {
 					store.dispatch('changeLoginProgress', 'language');
 				} else {
 					this.$target.querySelector('.twoFAWarning').innerHTML =
-						'인증코드가 잘못되었습니다';
+						language.login[store.state.language].twoFAWarning;
 				}
 			} catch (e) {}
 		});
@@ -37,16 +37,14 @@ export default class extends Component {
 						<img id="qrCode" src="../../../static/images/loginLoading.png" alt="QR Code" style="width:100px; class="mb-3">
 				</div>
 				<form id="twoFactorForm" class="column justify-content-center">
-					<div class="form-group">
-							<label for="twoFactorCode">2FA Code</label>
-							<div class="row justify-content-center">
-								<input type="text" class="form-control" id="twoFactorCode" placeholder="${language.login[store.state.language].twoFAContent}" maxlength="6">
-								<div class="twoFAWarning"></div>
-								<button class="btn btn-primary " id="twoFABtn">${language.login[store.state.language].twoFASubmit}</button>
-							</div>
-
-					</div>
-
+						<div class="form-group">
+								<label for="twoFactorCode">2FA Code</label>
+								<div class="column justify-content-center" style="display: flex; flex-direction: column; align-items: center;">
+										<input type="text" class="form-control" id="twoFactorCode" placeholder="${language.login[store.state.language].twoFAContent}" maxlength="6" />
+										<div class="twoFAWarning"></div>
+										<button class="btn btn-primary" id="twoFABtn">${language.login[store.state.language].twoFASubmit}</button>
+								</div>
+						</div>
 				</form>
 			</div>
 		</div>

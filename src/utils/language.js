@@ -6,6 +6,7 @@ const login = {
 		twoFATitle: 'Two factor authentication ',
 		twoFAContent: 'Enter your 2FA code',
 		twoFASubmit: 'submit',
+		twoFAWarning: 'Verification code is incorrect',
 		loading: 'loading',
 	},
 	kr: {
@@ -15,6 +16,7 @@ const login = {
 		twoFATitle: '2단계 인증을 해주세요 ',
 		twoFAContent: '6자리 코드를 입력하세요.',
 		twoFASubmit: '제출',
+		twoFAWarning: '인증코드가 잘못되었습니다',
 		loading: '로딩중',
 	},
 	jp: {
@@ -24,6 +26,7 @@ const login = {
 		twoFATitle: '二要素認証をお願いします',
 		twoFAContent: '2FA コードを入力してください',
 		twoFASubmit: '提出する',
+		twoFAWarning: '認証コードが間違っています',
 		loading: '読み込み中',
 	},
 };
