@@ -1,7 +1,6 @@
 import os
 from json import JSONDecodeError
 
-import jwt
 import pyotp
 import requests
 
@@ -13,7 +12,7 @@ from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenRefreshView
 
-from pong_together import settings
+from auth.utils import get_user
 from users.models import User
 
 # Create your views here.
@@ -91,20 +90,6 @@ class RefreshTokenAPIView(TokenRefreshView):
             return super().post(request, *args, **kwargs)
         except TokenError:
             return Response({'message': 'Token is invalid or expired'}, status=status.HTTP_401_UNAUTHORIZED)
-
-
-def get_user(request):
-    access_token = request.META.get('HTTP_AUTHORIZATION')
-    if access_token is None:
-        return Response({'message': '\'Authorization\' is required'}, status=status.HTTP_400_BAD_REQUEST)
-    access_token = access_token[7:]
-    payload = jwt.decode(access_token, settings.SIMPLE_JWT['SIGNING_KEY'], settings.SIMPLE_JWT['ALGORITHM'])
-    user_id = payload.get('user_id')
-    try:
-        user = User.objects.get(id=user_id)
-    except User.DoesNotExist:
-        return Response({'message': 'Non-existent users'}, status=status.HTTP_404_NOT_FOUND)
-    return user
 
 
 class CreateOTPAPIView(APIView):
