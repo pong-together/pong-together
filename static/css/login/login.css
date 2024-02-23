@@ -60,6 +60,11 @@ input:valid {
 	margin-top: 10px;
 }
 
+.twoFAWarning {
+	color: #dc3545;
+	font-size: 20px;
+}
+
 .language-select {
 	display: flex;
 	margin: auto 0;

@@ -21,7 +21,7 @@ export default class extends Component {
 					localStorage.setItem('twoFA', data.authentication);
 					store.dispatch('changeLoginProgress', 'language');
 				} else {
-					this.$target.querySelector('#twoFAWarnning').innerHTML =
+					this.$target.querySelector('.twoFAWarning').innerHTML =
 						'인증코드가 잘못되었습니다';
 				}
 			} catch (e) {}
@@ -43,7 +43,7 @@ export default class extends Component {
 								<input type="text" class="form-control" id="twoFactorCode" placeholder="${language.login[store.state.language].twoFAContent}" maxlength="6">
 								<button class="btn btn-primary " id="twoFABtn">${language.login[store.state.language].twoFASubmit}</button>
 							</div>
-							<span class="twoFAWarnning"></span>
+							<span class="twoFAWarning"></span>
 					</div>
 
 				</form>
