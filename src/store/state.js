@@ -2,7 +2,7 @@ export default {
 	// userInfo
 	intraId: 'anonymous',
 	intraImg: '',
-	loginProgress: 'language', // twoFA, language, done
+	loginProgress: 'oauth', // twoFA, language, done
 	language: 'kr',
 	winCount: 0,
 	loseCount: 0,
