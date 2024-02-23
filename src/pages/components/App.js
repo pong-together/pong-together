@@ -121,8 +121,8 @@ export default class extends Component {
 			this.routerModule();
 		});
 
-		//this.changeModule();
-		//this.routerModule();
+		this.changeModule();
+		this.routerModule();
 		//this.calcRate();
 
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {
