@@ -36,7 +36,7 @@ export default class extends Component {
 		store.events.subscribe('loginProgressChange', async () => {
 			if (store.state.loginProgress === 'done') {
 				const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
-				const data = await http.get('https://localhost:443/api/userinfo/id/', {
+				const data = await http.get('https://localhost:443/api/userinfo/', {
 					Authorization: accessToken,
 					'Content-Type': 'application/json',
 				});
@@ -139,10 +139,7 @@ export default class extends Component {
 			this.routerModule();
 		});
 
-		if (
-			localStorage.getItem('accessToken') &&
-			localStorage.getItem('twoFASuccess')
-		) {
+		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {
 			store.dispatch('changeLoginProgress', 'done');
 		} else if (localStorage.getItem('accessToken')) {
 			store.dispatch('changeLoginProgress', 'twoFA');
