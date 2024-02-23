@@ -2,13 +2,37 @@ import Component from '../../core/Component.js';
 import Router from '../router.js';
 import Pages from '../pages.js';
 import store from '../../store/index.js';
+import http from '../../core/http.js';
 
 export default class extends Component {
 	setup() {
 		this.$state = {
 			region: 'kr',
+			rate:
+				store.state.winCount + store.state.loseCount !== 0
+					? Math.round(
+							(store.state.winCount /
+								(store.state.winCount + store.state.loseCount)) *
+								100,
+						)
+					: 0,
 		};
 		this.$store = this.$props;
+		if (localStorage.getItem('language')) {
+			store.dispatch('changeLanguage', localStorage.getItem('accessToken'));
+		}
+		if (localStorage.getItem('intraId')) {
+			store.dispatch('changeIntraId', localStorage.getItem('intraId'));
+		}
+		if (localStorage.getItem('winCount')) {
+			store.dispatch('changeWinCount', localStorage.getItem('winCount'));
+		}
+		if (localStorage.getItem('loseCount')) {
+			store.dispatch('changeLoseCount', localStorage.getItem('loseCount'));
+		}
+		if (localStorage.getItem('intraImg')) {
+			store.dispatch('changeIntraImg', localStorage.getItem('intraImg'));
+		}
 	}
 
 	template() {
@@ -40,8 +64,8 @@ export default class extends Component {
 				<div class="chip-middle">
 					<div class="chip-logo"></div>
 					<div class="intra-info">
-						<div class="intra-nickname">jisulee</div>
-						<div class="record">1승 1패(50%)</div>
+						<div class="intra-nickname">${store.state.intraId}</div>
+						<div class="record">${store.state.winCount}승 ${store.state.loseCount}패(${this.$state.rate}%)</div>
 					</div>
 				</div>
 				<div class="intra-picture">
@@ -83,8 +107,8 @@ export default class extends Component {
 		router.start();
 	}
 
-	mounted() {
-		window.localStorage.removeItem('acessToken');
+	async mounted() {
+		//window.localStorage.removeItem('acessToken');
 		window.addEventListener('hashchange', () => {
 			this.changeModule();
 			this.routerModule();
@@ -103,5 +127,29 @@ export default class extends Component {
 		} else if (localStorage.getItem('accessToken')) {
 			store.dispatch('changeLoginProgress', 'twoFA');
 		}
+
+		try {
+			const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
+			const data = await http.get('https://localhost:443/api/userinfo/id/', {
+				Authorization: accessToken,
+				'Content-Type': 'application/json',
+			});
+			localStorage.setItem('intraId', data.intraId);
+			store.dispatch('changeIntraId', data.intraId);
+			localStorage.setItem('winCount', data.win_count);
+			store.dispatch('changeWinCount', data.win_count);
+			localStorage.setItem('loseCount', data.lose_count);
+			store.dispatch('changeLoseCount', data.lose_count);
+			localStorage.setItem('intraImg', data.image);
+			store.dispatch('changeIntraImg', data.image);
+			this.$state.rate =
+				store.state.winCount + store.state.loseCount !== 0
+					? Math.round(
+							(store.state.winCount /
+								(store.state.winCount + store.state.loseCount)) *
+								100,
+						)
+					: 0;
+		} catch (e) {}
 	}
 }

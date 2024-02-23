@@ -20,6 +20,22 @@ export default {
 		state.loginProgress = payload;
 		return state;
 	},
+	changeIntraId(state, payload) {
+		state.intraId = payload;
+		return state;
+	},
+	changeIntraImg(state, payload) {
+		state.intraImg = payload;
+		return state;
+	},
+	changeWinCount() {
+		state.winCount = payload;
+		return state;
+	},
+	changeLoseCount() {
+		state.loseCount = payload;
+		return state;
+	},
 	gameModeChange(state, payload) {
 		state.gameMode = payload;
 		return state;
