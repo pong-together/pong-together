@@ -117,4 +117,5 @@ export default class extends Component {
 	mounted() {
 		this.canvas();
 	}
+	// git 테스트 중입니다.
 }
