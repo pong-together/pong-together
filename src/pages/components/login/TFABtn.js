@@ -41,7 +41,7 @@ export default class extends Component {
 							<label for="twoFactorCode">2FA Code</label>
 							<div class="row justify-content-center">
 								<input type="text" class="form-control" id="twoFactorCode" placeholder="${language.login[store.state.language].twoFAContent}" maxlength="6">
-								<span class="twoFAWarning"></span>
+								<div class="twoFAWarning"></div>
 								<button class="btn btn-primary " id="twoFABtn">${language.login[store.state.language].twoFASubmit}</button>
 							</div>
 
