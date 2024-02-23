@@ -55,7 +55,7 @@ export default class extends Component {
 			//const newFragment = '#/select';
 			//const newUrl = window.location.pathname + newFragment;
 			//window.history.pushState({ path: newUrl }, '', newUrl);
-			//window.location.hash = `#/select`;
+			window.location.hash = `#/select`;
 		});
 	}
 
