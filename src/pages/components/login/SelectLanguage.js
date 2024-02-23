@@ -40,6 +40,10 @@ export default class extends Component {
 					store.dispatch('changeLoseCount', data.lose_count);
 					localStorage.setItem('intraImg', data.image);
 					store.dispatch('changeIntraImg', data.image);
+					localStorage.setItem(
+						'rate',
+						(data.win_count / (data.lose_count + data.win_count)) * 100,
+					);
 				}
 			} catch (e) {}
 

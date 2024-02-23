@@ -7,10 +7,6 @@ export default class extends Component {
 	setup() {
 		this.$state = {
 			region: 'kr',
-			intraId: 'anonymous',
-			loseCount: 0,
-			winCount: 0,
-			rate: 0,
 		};
 		this.$store = this.$props;
 	}
@@ -45,7 +41,7 @@ export default class extends Component {
 					<div class="chip-logo"></div>
 					<div class="intra-info">
 						<div class="intra-nickname">${localStorage.getItem('intraId')}</div>
-						<div class="record">${localStorage.getItem('winCount')}승 ${localStorage.getItem('loseCount')}패(${this.$state.rate}%)</div>
+						<div class="record">${localStorage.getItem('winCount')}승 ${localStorage.getItem('loseCount')}패(${localStorage.getItem('rate')}%)</div>
 					</div>
 				</div>
 				<div class="intra-picture">
