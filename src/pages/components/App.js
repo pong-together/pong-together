@@ -12,7 +12,7 @@ export default class extends Component {
 		this.$store = this.$props;
 		if (store.state.loginProgress === 'done') {
 			store.events.subscribe('intraIdChange', async () => {
-				this.mounted();
+				location.reload();
 			});
 		}
 		//store.events.subscribe('intraImgChange', async () => {

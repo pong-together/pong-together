@@ -227,7 +227,6 @@ export default class extends Component {
 					store.dispatch('changeLoseCount', data.lose_count);
 					localStorage.setItem('intraImg', data.image);
 					store.dispatch('changeIntraImg', data.image);
-					location.reload();
 				}
 			}
 		} catch (e) {}
