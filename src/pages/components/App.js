@@ -2,7 +2,6 @@ import Component from '../../core/Component.js';
 import Router from '../router.js';
 import Pages from '../pages.js';
 import store from '../../store/index.js';
-import http from '../../core/http.js';
 
 export default class extends Component {
 	setup() {
@@ -33,29 +32,7 @@ export default class extends Component {
 		if (localStorage.getItem('intraImg')) {
 			store.dispatch('changeIntraImg', localStorage.getItem('intraImg'));
 		}
-		store.events.subscribe('loginProgressChange', async () => {
-			if (
-				store.state.loginProgress === 'done' &&
-				(localStorage.getItem('intraId') === undefined ||
-					!localStorage.getItem('intraId'))
-			) {
-				const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
-				const data = await http.get('https://localhost:443/api/userinfo/', {
-					Authorization: accessToken,
-					'Content-Type': 'application/json',
-				});
-				console.log(data);
-				localStorage.setItem('intraId', data.intra_id);
-				store.dispatch('changeIntraId', data.intra_id);
-				localStorage.setItem('winCount', data.win_count);
-				store.dispatch('changeWinCount', data.win_count);
-				localStorage.setItem('loseCount', data.lose_count);
-				store.dispatch('changeLoseCount', data.lose_count);
-				localStorage.setItem('intraImg', data.image);
-				store.dispatch('changeIntraImg', data.image);
-			}
-			//console.log(store.state.loginProgress);
-		});
+
 		//store.events.subscribe('intraIdChange', async () => this.render());
 	}
 
@@ -93,7 +70,7 @@ export default class extends Component {
 					</div>
 				</div>
 				<div class="intra-picture">
-					<div class="chip-picture"></div>
+					<div class="chip-picture"><img src="${store.state.intraImg}"/></div>
 				</div>
 				<div class="chip-bottom">
 					<div class="triangle"></div>
@@ -148,9 +125,6 @@ export default class extends Component {
 			store.dispatch('changeLoginProgress', 'done');
 		} else if (localStorage.getItem('accessToken')) {
 			store.dispatch('changeLoginProgress', 'twoFA');
-		}
-
-		if (store.state.loginProgress === 'done') {
 		}
 	}
 }
