@@ -16,6 +16,7 @@ export default class extends Component {
 			tournamentModal: 'none',
 			remoteModal: 'none',
 		};
+		this.$store = this.$props;
 	}
 
 	setEvent() {
