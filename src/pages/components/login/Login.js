@@ -22,7 +22,6 @@ export default class extends Component {
 	async mounted() {
 		const $parent = this.$target.querySelector('.login-body-wrapper');
 		console.log(store.state.loginProgress);
-
 		if (store.state.loginProgress === 'done') {
 			try {
 				const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
@@ -38,14 +37,6 @@ export default class extends Component {
 				store.dispatch('changeLoseCount', data.lose_count);
 				localStorage.setItem('intraImg', data.image);
 				store.dispatch('changeIntraImg', data.image);
-				//this.$state.rate =
-				//	store.state.winCount + store.state.loseCount !== 0
-				//		? Math.round(
-				//				(store.state.winCount /
-				//					(store.state.winCount + store.state.loseCount)) *
-				//					100,
-				//			)
-				//		: 0;
 			} catch (e) {}
 			window.location.hash = '#/select';
 		}
