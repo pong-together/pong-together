@@ -55,12 +55,12 @@ export default class extends Component {
 				<div class="chip-middle">
 					<div class="chip-logo"></div>
 					<div class="intra-info">
-						<div class="intra-nickname">${store.state.intraId}</div>
-						<div class="record">${store.state.winCount}승 ${store.state.loseCount}패(${this.$state.rate}%)</div>
+						<div class="intra-nickname">${localStorage.getItem('intraId')}</div>
+						<div class="record">${localStorage.getItem('winCount')}승 ${localStorage.getItem('loseCount')}패(${this.$state.rate}%)</div>
 					</div>
 				</div>
 				<div class="intra-picture">
-					<div class="chip-picture"><img class="chip-image" src="${store.state.intraImg}"/></div>
+					<div class="chip-picture"><img class="chip-image" src="${localStorage.getItem('intraImg')}"/></div>
 				</div>
 				<div class="chip-bottom">
 					<div class="triangle"></div>
