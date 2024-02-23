@@ -34,7 +34,10 @@ export default class extends Component {
 			store.dispatch('changeIntraImg', localStorage.getItem('intraImg'));
 		}
 		store.events.subscribe('loginProgressChange', async () => {
-			if (store.state.loginProgress === 'done') {
+			if (
+				(store.state.loginProgress === 'done') &
+				!localStorage.getItem('intraId')
+			) {
 				const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
 				const data = await http.get('https://localhost:443/api/userinfo/', {
 					Authorization: accessToken,
@@ -49,7 +52,7 @@ export default class extends Component {
 				localStorage.setItem('intraImg', data.image);
 				store.dispatch('changeIntraImg', data.image);
 			}
-			console.log(store.state.loginProgress);
+			//console.log(store.state.loginProgress);
 		});
 		//store.events.subscribe('intraIdChange', async () => this.render());
 	}
