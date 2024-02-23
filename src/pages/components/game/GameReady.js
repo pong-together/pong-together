@@ -23,7 +23,7 @@ export default class extends Component {
 		function startTimer() {
 			time = setInterval(() => {
 				updateTimer();
-				if (seconds === 5) {
+				if (seconds === 0) {
 					clearInterval(time);
 					new Canvas(document.querySelector('.display-container'));
 				} else {
