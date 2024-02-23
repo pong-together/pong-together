@@ -43,8 +43,8 @@ export default class extends Component {
 					Authorization: accessToken,
 					'Content-Type': 'application/json',
 				});
-				localStorage.setItem('intraId', data.intraId);
-				store.dispatch('changeIntraId', data.intraId);
+				localStorage.setItem('intraId', data.intra_id);
+				store.dispatch('changeIntraId', data.intra_id);
 				localStorage.setItem('winCount', data.win_count);
 				store.dispatch('changeWinCount', data.win_count);
 				localStorage.setItem('loseCount', data.lose_count);
