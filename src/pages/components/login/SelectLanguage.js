@@ -51,7 +51,8 @@ export default class extends Component {
 				}
 			} catch (e) {}
 
-			await store.dispatch('changeLoginProgress', 'done');
+			store.dispatch('changeLoginProgress', 'done');
+			location.pathname = '/';
 			window.location.hash = `#/select`;
 		});
 	}
