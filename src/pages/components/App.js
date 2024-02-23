@@ -74,6 +74,7 @@ export default class extends Component {
 		const $body = this.$target.querySelector('.body-wrapper');
 		const pages = Pages($body, this.$store);
 		const router = Router($body);
+		router.addRoute('#/', pages.login);
 		router.addRoute('#/login', pages.login);
 		router.addRoute('#/select', pages.gameSelect);
 		router.addRoute('#/local', pages.local);
