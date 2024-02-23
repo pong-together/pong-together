@@ -52,7 +52,9 @@ export default class extends Component {
 			} catch (e) {}
 
 			store.dispatch('changeLoginProgress', 'done');
-			window.location.pathname = '/';
+			const newFragment = '#/select';
+			const newUrl = window.location.pathname + newFragment;
+			window.history.pushState({ path: newUrl }, '', newUrl);
 			window.location.hash = `#/select`;
 		});
 	}

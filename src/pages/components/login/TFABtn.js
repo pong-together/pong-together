@@ -19,6 +19,9 @@ export default class extends Component {
 				);
 				if (data.authentication === 'success') {
 					localStorage.setItem('twoFA', data.authentication);
+					const newFragment = '#/select';
+					const newUrl = window.location.pathname + newFragment;
+					window.history.pushState({ path: newUrl }, '', newUrl);
 					store.dispatch('changeLoginProgress', 'language');
 				}
 			} catch (e) {}
