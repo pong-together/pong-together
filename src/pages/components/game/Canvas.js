@@ -109,5 +109,5 @@ export default class extends Component {
 		this.canvas();
 	}
 
-	// git 테스트 중입니다.
+	// git 테스트 중입니다. #39
 }
