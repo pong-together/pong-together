@@ -1,6 +1,6 @@
-import Component from "../../../core/Component.js";
-import language from "../../../utils/language.js";
-import tourapi from "../tournament/TournamentApi.js";
+import Component from '../../../core/Component.js';
+import language from '../../../utils/language.js';
+import tourapi from '../tournament/TournamentApi.js';
 
 export default class extends Component {
 	setup() {
@@ -8,8 +8,8 @@ export default class extends Component {
 			participant: [],
 			gameround: 0,
 			winner: [],
-			gameMode: "임시 게임모드",
-		}
+			gameMode: '임시 게임모드',
+		};
 		this.$store = this.$props;
 	}
 
@@ -384,21 +384,38 @@ export default class extends Component {
 	}
 	//api부분 함수
 	async getTournamentInfo() {
-		console.log("api test!");
-		const result = await tourapi.list(window.localStorage.getItem('tournament-id'));
+		console.log('api test!');
+		const result = await tourapi.list(
+			window.localStorage.getItem('tournament-id'),
+		);
 		// const result = await tourapi.list(1);
-		const {player1_name, player2_name, player3_name, player4_name, first_winner, second_winner, final_winner, game_turn} = result;
-		const participants = [player1_name, player2_name, player3_name, player4_name];
+		const {
+			player1_name,
+			player2_name,
+			player3_name,
+			player4_name,
+			first_winner,
+			second_winner,
+			final_winner,
+			game_turn,
+		} = result;
+		const participants = [
+			player1_name,
+			player2_name,
+			player3_name,
+			player4_name,
+		];
 		const winners = [first_winner, second_winner, final_winner];
 		if (
-			JSON.stringify(this.$state.participant) !== JSON.stringify(participants) ||
+			JSON.stringify(this.$state.participant) !==
+				JSON.stringify(participants) ||
 			JSON.stringify(this.$state.winner) !== JSON.stringify(winners) ||
 			this.$state.gameround !== game_turn
 		) {
 			this.setState({
 				participant: participants,
 				winner: winners,
-				gameround: game_turn
+				gameround: game_turn,
 			});
 		}
 	}

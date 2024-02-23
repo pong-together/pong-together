@@ -17,13 +17,14 @@ export default class extends Component {
 						'Content-Type': 'application/json',
 					},
 				);
-				localStorage.setItem('twoFA', data.authentication);
-				store.dispatch('changeLoginProgress', 'language');
-			} catch (e) {
-				//localStorage.removeItem('accessToken');
-				//localStorage.removeItem('twoFA');
-				//store.dispatch('changeLoginProgress', 'oauth');
-			}
+				if (data.authentication === 'success') {
+					localStorage.setItem('twoFA', data.authentication);
+					store.dispatch('changeLoginProgress', 'language');
+				} else {
+					this.$target.querySelector('.twoFAWarning').innerHTML =
+						language.login[store.state.language].twoFAWarning;
+				}
+			} catch (e) {}
 		});
 	}
 
@@ -35,12 +36,15 @@ export default class extends Component {
 				<div class="text-center mb-4 qrCode">
 						<img id="qrCode" src="../../../static/images/loginLoading.png" alt="QR Code" style="width:100px; class="mb-3">
 				</div>
-				<form id="twoFactorForm">
-					<div class="form-group">
-							<label for="twoFactorCode">2FA Code</label>
-							<input type="text" class="form-control" id="twoFactorCode" placeholder="${language.login[store.state.language].twoFAContent}" maxlength="6">
-					</div>
-					<button class="btn btn-primary" id="twoFABtn">${language.login[store.state.language].twoFASubmit}</button>
+				<form id="twoFactorForm" class="column justify-content-center">
+						<div class="form-group">
+								<label for="twoFactorCode">2FA Code</label>
+								<div class="column justify-content-center" style="display: flex; flex-direction: column; align-items: center;">
+										<input type="text" class="form-control" id="twoFactorCode" placeholder="${language.login[store.state.language].twoFAContent}" maxlength="6" />
+										<div class="twoFAWarning"></div>
+										<button class="btn btn-primary" id="twoFABtn">${language.login[store.state.language].twoFASubmit}</button>
+								</div>
+						</div>
 				</form>
 			</div>
 		</div>
@@ -58,14 +62,14 @@ export default class extends Component {
 	async mounted() {
 		const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
 
-		try {
-			let qrCodeDummyImg = this.$target.querySelector('#qrCode');
-			let angle = 0;
-			const loadingInterval = setInterval(() => {
-				angle = (angle + 45) % 360;
-				qrCodeDummyImg.style.transform = `rotate(${angle}deg)`;
-			}, 100);
+		let qrCodeDummyImg = this.$target.querySelector('#qrCode');
+		let angle = 0;
+		const loadingInterval = setInterval(() => {
+			angle = (angle + 45) % 360;
+			qrCodeDummyImg.style.transform = `rotate(${angle}deg)`;
+		}, 100);
 
+		try {
 			const data = await http.get('https://localhost:443/api/auth/otp/', {
 				Authorization: accessToken,
 				'Content-Type': 'application/json',

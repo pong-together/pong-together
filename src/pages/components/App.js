@@ -40,20 +40,25 @@ export default class extends Component {
 				<div class="chip-middle">
 					<div class="chip-logo"></div>
 					<div class="intra-info">
-						<div class="intra-nickname">jisulee</div>
-						<div class="record">1승 1패(50%)</div>
+						<div class="intra-nickname">${localStorage.getItem('intraId')}</div>
+						<div class="record">${localStorage.getItem('winCount')}승 ${localStorage.getItem('loseCount')}패(${localStorage.getItem('rate')}%)</div>
 					</div>
 				</div>
 				<div class="intra-picture">
-					<div class="chip-picture"></div>
+					<div class="chip-picture"><img class="chip-image" src="${localStorage.getItem('intraImg')}"/></div>
 				</div>
 				<div class="chip-bottom">
 					<div class="triangle"></div>
 				</div>
 			</div>
+
 			<div class="chat-container">
 			<div class="message-container">
-				<div id="messages">hi</div>
+
+				<div id="messages"><span id="message-time-stamp">24.02.23</span><span id="message">sooyang: 안녕하세요 </span></div>
+				<div id="messages"><span id="message-time-stamp">24.02.23</span><span id="message">sooyang: 안녕하세요 </span></div>
+				<div id="messages"><span id="message-time-stamp">24.02.23</span><span id="message">sooyang: 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트  </span></div>
+
 			</div>
 			<form action="" id="chat-form">
 				<input id="m" autocomplete="off" /><button>전송</button>
@@ -69,6 +74,7 @@ export default class extends Component {
 		const $body = this.$target.querySelector('.body-wrapper');
 		const pages = Pages($body, this.$store);
 		const router = Router($body);
+		router.addRoute('#/', pages.login);
 		router.addRoute('#/login', pages.login);
 		router.addRoute('#/select', pages.gameSelect);
 		router.addRoute('#/local', pages.local);
@@ -78,8 +84,20 @@ export default class extends Component {
 		router.start();
 	}
 
-	mounted() {
-		window.localStorage.removeItem('acessToken');
+	calcRate() {
+		this.$state.rate =
+			store.state.winCount + store.state.loseCount !== 0
+				? Math.round(
+						(store.state.winCount /
+							(store.state.winCount + store.state.loseCount)) *
+							100,
+					)
+				: 0;
+	}
+
+	async mounted() {
+		console.log(store.state.loginProgress);
+		//window.localStorage.removeItem('acessToken');
 		window.addEventListener('hashchange', () => {
 			this.changeModule();
 			this.routerModule();
@@ -90,10 +108,9 @@ export default class extends Component {
 			this.routerModule();
 		});
 
-		if (
-			localStorage.getItem('accessToken') &&
-			localStorage.getItem('twoFASuccess')
-		) {
+		this.calcRate();
+
+		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {
 			store.dispatch('changeLoginProgress', 'done');
 		} else if (localStorage.getItem('accessToken')) {
 			store.dispatch('changeLoginProgress', 'twoFA');

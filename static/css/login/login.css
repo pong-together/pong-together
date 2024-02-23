@@ -56,6 +56,15 @@ input:valid {
 	border-color: #28a745;
 }
 
+#twoFABtn {
+	margin-top: 10px;
+}
+
+.twoFAWarning {
+	color: #dc3545;
+	font-size: 16px;
+}
+
 .language-select {
 	display: flex;
 	margin: auto 0;
