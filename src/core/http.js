@@ -1,8 +1,13 @@
 const parseResponse = async (response) => {
 	const { status } = response;
-	let data;
-	if (status !== 204) {
-		data = await response.json();
+	let data = null; // 초기값을 null로 설정
+	try {
+		if (status !== 204) {
+			data = await response.json();
+		}
+	} catch (error) {
+		console.error('Error parsing response:', error);
+		// data는 null로 유지됩니다.
 	}
 
 	return {
@@ -13,7 +18,7 @@ const parseResponse = async (response) => {
 
 const request = async (params) => {
 	const { method = 'GET', url, headers = {}, body } = params;
-
+	let response;
 	const config = {
 		method,
 		headers: new window.Headers(headers),
@@ -23,7 +28,15 @@ const request = async (params) => {
 		config.body = JSON.stringify(body);
 	}
 
-	const response = await window.fetch(url, config);
+	try {
+		response = await window.fetch(url, config);
+	} catch (error) {
+		console.error('Network error:', error);
+		return {
+			status: 500, // 예시로 500 상태 코드를 반환
+			data: null, // 데이터는 없음
+		};
+	}
 
 	return parseResponse(response);
 };
