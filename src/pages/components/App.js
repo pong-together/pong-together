@@ -17,19 +17,34 @@ export default class extends Component {
 					: 0,
 		};
 		this.$store = this.$props;
-		if (localStorage.getItem('language')) {
+		if (
+			localStorage.getItem('language') &&
+			localStorage.getItem('language') !== undefined
+		) {
 			store.dispatch('changeLanguage', localStorage.getItem('accessToken'));
 		}
-		if (localStorage.getItem('intraId')) {
+		if (
+			localStorage.getItem('intraId') &&
+			localStorage.getItem('intraId') !== undefined
+		) {
 			store.dispatch('changeIntraId', localStorage.getItem('intraId'));
 		}
-		if (localStorage.getItem('winCount')) {
+		if (
+			localStorage.getItem('winCount') &&
+			localStorage.getItem('winCount') !== undefined
+		) {
 			store.dispatch('changeWinCount', localStorage.getItem('winCount'));
 		}
-		if (localStorage.getItem('loseCount')) {
+		if (
+			localStorage.getItem('loseCount') &&
+			localStorage.getItem('loseCount') !== undefined
+		) {
 			store.dispatch('changeLoseCount', localStorage.getItem('loseCount'));
 		}
-		if (localStorage.getItem('intraImg')) {
+		if (
+			localStorage.getItem('intraImg') &&
+			localStorage.getItem('intraImg') !== undefined
+		) {
 			store.dispatch('changeIntraImg', localStorage.getItem('intraImg'));
 		}
 
