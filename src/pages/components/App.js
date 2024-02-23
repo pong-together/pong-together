@@ -36,7 +36,8 @@ export default class extends Component {
 		store.events.subscribe('loginProgressChange', async () => {
 			if (
 				(store.state.loginProgress === 'done') &
-				!localStorage.getItem('intraId')
+				(localStorage.getItem('intraId') === undefined ||
+					!localStorage.getItem('intraId'))
 			) {
 				const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
 				const data = await http.get('https://localhost:443/api/userinfo/', {
