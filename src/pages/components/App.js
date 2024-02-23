@@ -10,18 +10,18 @@ export default class extends Component {
 			rate: 0,
 		};
 		this.$store = this.$props;
-		//store.events.subscribe('intraIdChange', async () => {
-		//	this.render();
-		//});
-		//store.events.subscribe('intraImgChange', async () => {
-		//	this.render();
-		//});
-		//store.events.subscribe('intraWinCountChange', async () => {
-		//	this.render();
-		//});
-		//store.events.subscribe('intraLoseCountChange', async () => {
-		//	this.render();
-		//});
+		store.events.subscribe('intraIdChange', async () => {
+			this.render();
+		});
+		store.events.subscribe('intraImgChange', async () => {
+			this.render();
+		});
+		store.events.subscribe('intraWinCountChange', async () => {
+			this.render();
+		});
+		store.events.subscribe('intraLoseCountChange', async () => {
+			this.render();
+		});
 
 		//store.events.subscribe('intraIdChange', async () => this.render());
 	}
