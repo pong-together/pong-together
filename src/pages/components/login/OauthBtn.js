@@ -27,18 +27,18 @@ export default class extends Component {
 		const queryParams = new URLSearchParams(window.location.search);
 		const code = queryParams.get('code');
 
-		const btn = this.$target.querySelector('#login-oauth-btn');
-		let loadingText = language.login[store.state.language].loading;
-		btn.innerText = loadingText;
-		let dotCount = 0;
-
-		const loadingInterval = setInterval(() => {
-			dotCount = (dotCount + 1) % 4;
-			btn.innerText = loadingText + '.'.repeat(dotCount);
-		}, 500);
-
 		if (code && !localStorage.getItem('accessToken')) {
 			try {
+				const btn = this.$target.querySelector('#login-oauth-btn');
+				let loadingText = language.login[store.state.language].loading;
+				btn.innerText = loadingText;
+				let dotCount = 0;
+
+				const loadingInterval = setInterval(() => {
+					dotCount = (dotCount + 1) % 4;
+					btn.innerText = loadingText + '.'.repeat(dotCount);
+				}, 500);
+
 				if (localStorage.getItem('accessToken')) {
 					clearInterval(loadingInterval);
 					store.dispatch('changeLoginProgress', 'twoFA');
