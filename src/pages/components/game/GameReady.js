@@ -31,7 +31,6 @@ export default class extends Component {
 				}
 			}, 1000);
 		}
-
 		startTimer();
 	}
 

@@ -65,25 +65,34 @@ export default class extends Component {
 		// let ball = new sphere(630, 640, 30, 30);
 	
 		function move(key) {
+			let speed = 60;
 			switch(key) {
 				case 'KeyW':
-					if (player1.y > 436) {
-						player1.y -= 7;
+					if (player1.y > 434) {
+						if ((player1.y -= speed) <= 434) {
+							player1.y = 434;
+						}
 					}
 					break;
 				case 'KeyS':
-					if (player1.y < 830) {
-						player1.y += 7;
+					if (player1.y < 815) {
+						if ((player1.y += speed) >= 815) {
+							player1.y = 815;
+						}
 					}
 					break;
 				case 'KeyO':
-					if (player2.y > 400) {
-						player2.y -= 7;
+					if (player2.y > 436) {
+						if ((player2.y -= speed) <= 434) {
+							player2.y = 434;
+						}
 					}
 					break;
 				case 'KeyL':
-					if (player2.y < 830) {
-						player2.y += 7;
+					if (player2.y < 810) {
+						if ((player2.y += speed) >= 815) {
+							player2.y = 815;
+						}
 					}
 					break;
 			}
@@ -101,13 +110,11 @@ export default class extends Component {
 			player2.draw();
 			ball.draw();
 		}
-
+		
 		frame();
 	}
 
 	mounted() {
 		this.canvas();
 	}
-
-	// git 테스트 중입니다. #39
 }
