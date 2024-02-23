@@ -22,7 +22,26 @@ export default class extends Component {
 			//http.put('', { language: this.$state.region }, {});
 		});
 
-		this.addEvent('click', '#login-to-start', () => {
+		this.addEvent('click', '#login-to-start', async () => {
+			try {
+				const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
+				const data = await http.get('https://localhost:443/api/userinfo/', {
+					Authorization: accessToken,
+					'Content-Type': 'application/json',
+				});
+				console.log(data);
+				if (data) {
+					localStorage.setItem('intraId', data.intra_id);
+					store.dispatch('changeIntraId', data.intra_id);
+					localStorage.setItem('winCount', data.win_count);
+					store.dispatch('changeWinCount', data.win_count);
+					localStorage.setItem('loseCount', data.lose_count);
+					store.dispatch('changeLoseCount', data.lose_count);
+					localStorage.setItem('intraImg', data.image);
+					store.dispatch('changeIntraImg', data.image);
+				}
+			} catch (e) {}
+
 			store.dispatch('changeLoginProgress', 'done');
 			window.location.hash = `#/select`;
 		});
@@ -52,7 +71,7 @@ export default class extends Component {
 		</div>`;
 	}
 
-	async mounted() {
+	mounted() {
 		const $select = this.$target.querySelector('#language-select');
 		const selectedRegion = this.$state.region;
 
@@ -61,24 +80,5 @@ export default class extends Component {
 				option.selected = true;
 			}
 		});
-
-		try {
-			const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
-			const data = await http.get('https://localhost:443/api/userinfo/', {
-				Authorization: accessToken,
-				'Content-Type': 'application/json',
-			});
-			console.log(data);
-			if (data) {
-				localStorage.setItem('intraId', data.intra_id);
-				store.dispatch('changeIntraId', data.intra_id);
-				localStorage.setItem('winCount', data.win_count);
-				store.dispatch('changeWinCount', data.win_count);
-				localStorage.setItem('loseCount', data.lose_count);
-				store.dispatch('changeLoseCount', data.lose_count);
-				localStorage.setItem('intraImg', data.image);
-				store.dispatch('changeIntraImg', data.image);
-			}
-		} catch (e) {}
 	}
 }
