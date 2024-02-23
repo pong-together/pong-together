@@ -42,6 +42,7 @@ export default class extends Component {
 				if (localStorage.getItem('accessToken')) {
 					clearInterval(loadingInterval);
 					store.dispatch('changeLoginProgress', 'twoFA');
+					return;
 				}
 
 				const data = await http.post(
