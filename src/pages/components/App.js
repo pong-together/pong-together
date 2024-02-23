@@ -7,6 +7,9 @@ export default class extends Component {
 	setup() {
 		this.$state = {
 			region: 'kr',
+			intraId: 'anonymous',
+			loseCount: 0,
+			winCount: 0,
 			rate: 0,
 		};
 		this.$store = this.$props;
@@ -124,8 +127,8 @@ export default class extends Component {
 			this.routerModule();
 		});
 
-		this.changeModule();
-		this.routerModule();
+		//this.changeModule();
+		//this.routerModule();
 		//this.calcRate();
 
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {
