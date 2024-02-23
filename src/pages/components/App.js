@@ -33,6 +33,10 @@ export default class extends Component {
 		if (localStorage.getItem('intraImg')) {
 			store.dispatch('changeIntraImg', localStorage.getItem('intraImg'));
 		}
+		store.events.subscribe(
+			'loginProgressChange',
+			console.log(store.state.loginProgress),
+		);
 		//store.events.subscribe('intraIdChange', async () => this.render());
 	}
 
@@ -109,6 +113,7 @@ export default class extends Component {
 	}
 
 	async mounted() {
+		console.log(store.state.loginProgress);
 		//window.localStorage.removeItem('acessToken');
 		window.addEventListener('hashchange', () => {
 			this.changeModule();

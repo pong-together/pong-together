@@ -21,7 +21,7 @@ export default class extends Component {
 
 	async mounted() {
 		const $parent = this.$target.querySelector('.login-body-wrapper');
-		console.log(store.state.loginProgress);
+
 		if (store.state.loginProgress === 'done') {
 			try {
 				const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
