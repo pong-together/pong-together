@@ -51,6 +51,7 @@ export default class extends Component {
 					<div class="triangle"></div>
 				</div>
 			</div>
+
 			<div class="chat-container">
 			<div class="message-container">
 				<div id="messages">hi</div>
