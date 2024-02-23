@@ -4,7 +4,7 @@ import store from '../../../store/index.js';
 import http from '../../../core/http.js';
 
 export default class extends Component {
-	async setup() {
+	setup() {
 		if (localStorage.getItem('language')) {
 			store.dispatch('changeLanguage', localStorage.getItem('language'));
 		}
