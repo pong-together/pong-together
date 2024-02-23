@@ -9,6 +9,7 @@ export default class extends Component {
 			region: 'kr',
 			rate: 0,
 		};
+		this.$store = this.$props;
 		//store.events.subscribe('intraIdChange', async () => {
 		//	this.render();
 		//});

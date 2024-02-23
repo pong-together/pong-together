@@ -16,7 +16,6 @@ export default class extends Component {
 			tournamentModal: 'none',
 			remoteModal: 'none',
 		};
-		this.$store = this.$props;
 	}
 
 	setEvent() {
@@ -179,9 +178,6 @@ export default class extends Component {
 			);
 			const remoteModal = document.getElementById('select-modal-remote-info');
 
-			//console.log(localModal);
-			//console.log(tournamentModal);
-			//console.log(remoteModal);
 			if (this.$state.localModal === 'block') {
 				localModal.style.display = 'block';
 			}
