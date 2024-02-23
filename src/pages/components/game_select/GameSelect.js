@@ -1,6 +1,7 @@
 import Component from '../../../core/Component.js';
 import language from '../../../utils/language.js';
 import store from '../../../store/index.js';
+import http from '../../../core/http.js';
 
 export default class extends Component {
 	setup() {
@@ -169,7 +170,7 @@ export default class extends Component {
 		}
 	}
 
-	mounted() {
+	async mounted() {
 		if (this.$state.progress === 'mode') {
 			const localModal = document.getElementById('select-modal-local-info');
 			const tournamentModal = document.getElementById(
@@ -177,9 +178,6 @@ export default class extends Component {
 			);
 			const remoteModal = document.getElementById('select-modal-remote-info');
 
-			//console.log(localModal);
-			//console.log(tournamentModal);
-			//console.log(remoteModal);
 			if (this.$state.localModal === 'block') {
 				localModal.style.display = 'block';
 			}
