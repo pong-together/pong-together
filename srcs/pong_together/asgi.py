@@ -19,7 +19,7 @@ from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.security.websocket import AllowedHostsOriginValidator
 
-import chats
+import chats.routing
 
 application = ProtocolTypeRouter({
     'http': asgi_application,
