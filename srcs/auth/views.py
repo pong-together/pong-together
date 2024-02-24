@@ -94,7 +94,7 @@ class RefreshTokenAPIView(TokenRefreshView):
 
 class CreateOTPAPIView(APIView):
     def get(self, request):
-        user = get_user(request)
+        user = get_user(request=request)
         if user.__class__ != User:
             return user
 
@@ -105,7 +105,7 @@ class CreateOTPAPIView(APIView):
 
 class VerifyOTPAPIView(APIView):
     def get(self, request):
-        user = get_user(request)
+        user = get_user(request=request)
         if user.__class__ != User:
             return user
 
