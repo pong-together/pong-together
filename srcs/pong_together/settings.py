@@ -37,6 +37,8 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -104,12 +106,14 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'pong_together.wsgi.application'
+ASGI_APPLICATION = 'pong_together.asgi.application'
+
 
 CORS_ORIGIN_ALLOW_ALL = True
 
+
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
 
 is_docker = os.getenv('DOCKER_COMPOSE', False)
 
@@ -135,6 +139,19 @@ else:
             'PORT': 5431,
         }
     }
+
+
+# Channel Layers
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [(os.getenv('REDIS_HOST', 'localhost'), 6379)],
+        },
+    },
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
