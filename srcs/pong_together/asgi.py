@@ -15,7 +15,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pong_together.settings')
 asgi_application = get_asgi_application()
 
 
-from channels.auth import AuthMiddlewareStack
+from chats.middlewares import WebSocketJWTAuthenticationMiddleware
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.security.websocket import AllowedHostsOriginValidator
 
@@ -24,7 +24,7 @@ import chats.routing
 application = ProtocolTypeRouter({
     'http': asgi_application,
     'websocket':
-    AuthMiddlewareStack(
+    WebSocketJWTAuthenticationMiddleware(
         AllowedHostsOriginValidator(
             URLRouter(
                 chats.routing.websocket_urlpatterns
