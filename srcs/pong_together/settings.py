@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'auth.apps.AuthConfig',
     'tournaments.apps.TournamentsConfig',
+    'chats.apps.ChatsConfig',
     # rest framework
     'rest_framework',
     # simplejwt
@@ -146,6 +147,9 @@ else:
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        # 'MIDDLEWARE': [
+        #     'chats.middlewares.WebSocketJWTAuthenticationMiddleware'
+        # ],
         'CONFIG': {
             'hosts': [(os.getenv('REDIS_HOST', 'localhost'), 6379)],
         },
