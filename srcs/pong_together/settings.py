@@ -144,14 +144,15 @@ else:
 
 # Channel Layers
 
+redis_host = 'localhost'
+if is_docker:
+    redis_host = 'redis'
+
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        # 'MIDDLEWARE': [
-        #     'chats.middlewares.WebSocketJWTAuthenticationMiddleware'
-        # ],
         'CONFIG': {
-            'hosts': [(os.getenv('REDIS_HOST', 'localhost'), 6379)],
+            'hosts': [(redis_host, 6379)],
         },
     },
 }
