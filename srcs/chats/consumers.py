@@ -43,7 +43,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
 
     async def send_ping(self):
         while True:
-            await asyncio.sleep(10)  # 10초마다 핑 메시지를 보냄
+            await asyncio.sleep(60)  # 60초마다 핑 메시지를 보냄
             await self.send(text_data=json.dumps({
                 'type': 'ping',
                 'timestamp': datetime.now().isoformat()
@@ -58,6 +58,11 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             await self.send_json({'error': str(e)})
 
     async def receive_json(self, content, **kwargs):
+
+        message_type = content.get('type')
+        if message_type == 'pong':
+            return
+
         try:
             data = {
                 'type': 'chat_message',
