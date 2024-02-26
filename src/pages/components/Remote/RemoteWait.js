@@ -33,7 +33,7 @@ export default class extends Component {
 		function stopTimer() {
 			clearInterval(time);
 			updateTimer();
-			new Ready();
+			new Ready(document.querySelector('.mainbox'));
 		}
 
 		this.stopTimer = stopTimer;
@@ -62,14 +62,8 @@ export default class extends Component {
 		}
 	*/
 
-	render() {
-		const mainboxElement = document.querySelector('.mainbox');
-		mainboxElement.innerHTML = this.template();
-		this.mounted();
-		this.timer();
-	}
-
 	mounted() {
+		this.timer();
 		// getServer();
 		document.addEventListener('click', e => {
 			const target = e.target;

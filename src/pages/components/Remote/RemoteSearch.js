@@ -50,7 +50,7 @@ export default class extends Component {
 				if (seconds === 5) {
 					clearInterval(count);
 					updateCounter();
-					new Found();
+					new Found(document.querySelector('.mainbox'));
 				}
 				if (seconds === 60) {
 					minutes++;
@@ -79,14 +79,8 @@ export default class extends Component {
 		}
 	*/
 
-	render() {
-		const mainboxElement = document.querySelector('.mainbox');
-		mainboxElement.innerHTML = this.template();
-		this.mounted();
-		this.counter();
-	}
-
 	mounted() {
+		this.counter();
 		// getServer();
 		document.addEventListener('click', e => {
 			const target = e.target;

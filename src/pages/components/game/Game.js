@@ -1,5 +1,5 @@
 import Component from '../../../core/Component.js';
-import GameStart from './GameStart.js';
+import GameReady from './GameReady.js';
 
 export default class extends Component {
 
@@ -25,37 +25,7 @@ export default class extends Component {
 		`;
     }
 
-	timer() {
-		let seconds = 5;
-		let time;
-		const countdown = document.querySelector('.game-count');
-		
-		const updateTimer = () => {
-			countdown.textContent = `${seconds}`;
-		}
-
-		function startTimer() {
-			time = setInterval(() => {
-				updateTimer();
-				if (seconds === 1) {
-					clearInterval(time);
-					new GameStart();
-				} else {
-					seconds--;
-				}
-			}, 1000);
-		}
-
-		startTimer();
-	}
-
 	mounted() {
-		// getServer();
-		const displayNode = document.querySelector('.game-display');
-		const countNode = document.createElement('div');
-		countNode.classList.add('game-count');
-		displayNode.appendChild(countNode);
-		// countNode.textContent = '5';
-		this.timer();
-	}
+		new GameReady(document.querySelector('.game-display'));
+	}	
 }

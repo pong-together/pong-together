@@ -14,6 +14,6 @@ export default class extends Component {
 	}
 
 	mounted() {
-		new Search();
+		new Search(document.querySelector('.mainbox'));
 	}
 }
