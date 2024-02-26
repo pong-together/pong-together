@@ -4,7 +4,7 @@ from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 
 class ChatConsumer(AsyncJsonWebsocketConsumer):
-    GROUP_NAME = 'pong-together'
+    GROUP_NAME = 'pong-together-chats'
 
     def __init__(self, *args, **kwargs):
         super().__init__(args, kwargs)
@@ -22,6 +22,14 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
     async def disconnect(self, code):
         try:
             await self.channel_layer.group_discard(self.GROUP_NAME, self.channel_name)
+        except Exception as e:
+            await self.send_json({'error': str(e)})
+
+    async def receive(self, text_data=None, bytes_data=None, **kwargs):
+        if text_data is None:
+            await self.send_json({'error': 'No message'})
+        try:
+            await self.receive_json(await self.decode_json(text_data), **kwargs)
         except Exception as e:
             await self.send_json({'error': str(e)})
 
