@@ -4,23 +4,34 @@ from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 
 class ChatConsumer(AsyncJsonWebsocketConsumer):
+    chat_users = dict()
     GROUP_NAME = 'pong-together-chats'
 
     def __init__(self, *args, **kwargs):
         super().__init__(args, kwargs)
         self.user = None
+        self.channel_name = None
 
     async def connect(self):
         try:
             self.user = self.scope['user']
 
+            intra_id = self.user.intra_id
+            if intra_id in self.chat_users:
+                raise ValueError()
+            self.chat_users[intra_id] = self.channel_name
+
             await self.channel_layer.group_add(self.GROUP_NAME, self.channel_name)
             await self.accept()
         except Exception:
-            await self.close()
+            await self. close()
 
     async def disconnect(self, code):
         try:
+            intra_id = self.user.intra_id
+            if self.chat_users[intra_id] is self.channel_name:
+                del self.chat_users[intra_id]
+
             await self.channel_layer.group_discard(self.GROUP_NAME, self.channel_name)
         except Exception as e:
             await self.send_json({'error': str(e)})
