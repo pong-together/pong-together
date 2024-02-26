@@ -1,4 +1,5 @@
 import jwt
+from jwt import InvalidTokenError
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
@@ -7,23 +8,31 @@ from pong_together import settings
 from users.models import User
 
 
-def decode_token(request):
-    try:
-        access_token = request.META['HTTP_AUTHORIZATION']
-    except KeyError as e:
-        raise ValidationError(f'{str(e)} is required')
-    access_token = access_token[7:]
-    payload = jwt.decode(access_token, settings.SIMPLE_JWT['SIGNING_KEY'], settings.SIMPLE_JWT['ALGORITHM'])
+def get_access_token(request):
+    access_token = request.META.get('HTTP_AUTHORIZATION')
+    if access_token is None:
+        raise ValidationError('\'authorization\' is required')
+    return access_token[7:]
+
+
+def decode_token(token):
+    payload = jwt.decode(token, settings.SIMPLE_JWT['SIGNING_KEY'], settings.SIMPLE_JWT['ALGORITHM'])
     user_id = payload.get('user_id')
+    if user_id is None:
+        raise ValidationError('Token has no user info')
     return user_id
 
 
-def get_user(request):
+def get_user(request=None, access_token=None):
     try:
-        user_id = decode_token(request)
+        if access_token is None:
+            access_token = get_access_token(request)
+        user_id = decode_token(access_token)
         user = User.objects.get(id=user_id)
     except ValidationError as e:
         return Response({'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+    except InvalidTokenError:
+        return Response({'message': 'Invalid or expired token'}, status=status.HTTP_400_BAD_REQUEST)
     except User.DoesNotExist:
         return Response({'message': 'Non-existent users'}, status=status.HTTP_404_NOT_FOUND)
     return user

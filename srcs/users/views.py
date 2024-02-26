@@ -12,7 +12,7 @@ from users.serializers import UserInfoSerializer, UserLanguageSerializer, UserGa
 # Create your views here.
 class UserInfoAPIView(APIView):
     def get(self, request):
-        user = get_user(request)
+        user = get_user(request=request)
         if user.__class__ != User:
             return user
         serializer = UserInfoSerializer(user)
@@ -36,7 +36,7 @@ class UserLanguageAPIView(APIView):
 
 class UserGameAPIView(APIView):
     def put(self, request):
-        user = get_user(request)
+        user = get_user(request=request)
         result = request.data.get('result')
         if user.__class__ != User:
             return user
