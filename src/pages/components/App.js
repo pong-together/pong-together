@@ -60,9 +60,9 @@ export default class extends Component {
 					<div id="messages"><span id="message-time-stamp">24.02.23</span><span id="message">sooyang: 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트  </span></div>
 
 				</div>
-				<form action="" id="chat-form">
+				<div action="" id="chat-form">
 					<input id="m" autocomplete="off" /><button class="message-btn">전송</button>
-				</form>
+				</div>
 			</div>
 			</div>
 		</div>
@@ -97,7 +97,7 @@ export default class extends Component {
 
 	connectSocket() {
 		const chatSocket = new WebSocket(
-			`wss://localhost:443/ws/chats/?token=${localStorage.getItem('accessToken')}`,
+			`ws://localhost:8000/ws/chats/?token=${localStorage.getItem('accessToken')}`,
 		);
 
 		chatSocket.onopen = () => {
