@@ -95,6 +95,62 @@ export default class extends Component {
 				: 0;
 	}
 
+	//connectSocket() {
+	//	const chatSocket = new WebSocket(
+	//		`wss://localhost:443/ws/chats/?token=${localStorage.getItem('accessToken')}`,
+	//	);
+
+	//	chatSocket.onopen = () => {
+	//		this.addEvent('click', '.message-btn', (e) => {
+	//			e.preventDefault();
+	//			var message = this.$target.querySelector('#m').value;
+	//			if (message) {
+	//				chatSocket.send(JSON.stringify({ message }));
+	//				console.log('Message sent: ' + message);
+	//				this.$target.querySelector('#m').value = '';
+	//			}
+	//		});
+	//	};
+
+	//	chatSocket.onclose = () => {
+	//		console.log('Connection closed, attempting to reconnect...');
+	//		setTimeout(() => this.connectSocket(), 1000);
+	//	};
+
+	//	chatSocket.onerror = function (e) {
+	//		console.log(e);
+	//	};
+
+	//	chatSocket.onmessage = function (event) {
+	//		console.log(event.data);
+	//		const data = JSON.parse(event.data);
+	//		//console.log(event.data);
+	//		if (data.type && data.type === 'chat_message') {
+	//			displayMessage(data);
+	//		} else if (data.type && data.type === 'ping') {
+	//			console.log('pong');
+	//			chatSocket.send(JSON.stringify({ type: 'pong' }));
+	//		}
+	//	}.bind(this);
+
+	//	function displayMessage(data) {
+	//		console.log(data);
+	//		const messageContainer = this.$target.querySelector('.message-container');
+	//		const messageElement = document.createElement('div');
+	//		messageElement.classList.add('messages');
+	//		const messageTime = document.createElement('span');
+	//		messageTime.classList.add('message-time-stamp');
+	//		const messageContent = document.createElement('span');
+	//		messageContent.classList.add('message');
+
+	//		messageTime.textContent = `${data.timestamp}`;
+	//		messageContent.textContent = `${data.intra_id}: ${data.message}`;
+	//		messageElement.appendChild(messageTime);
+	//		messageElement.appendChild(messageContent);
+	//		messageContainer.appendChild(messageElement);
+	//	}
+	//}
+
 	connectSocket() {
 		const chatSocket = new WebSocket(
 			`wss://localhost:443/ws/chats/?token=${localStorage.getItem('accessToken')}`,
@@ -121,34 +177,35 @@ export default class extends Component {
 			console.log(e);
 		};
 
-		chatSocket.onmessage = function (event) {
+		chatSocket.onmessage = (event) => {
+			// Changed to arrow function
 			console.log(event.data);
 			const data = JSON.parse(event.data);
-			//console.log(event.data);
 			if (data.type && data.type === 'chat_message') {
-				displayMessage(data);
+				this.displayMessage(data); // Now correctly refers to the class method
 			} else if (data.type && data.type === 'ping') {
 				console.log('pong');
 				chatSocket.send(JSON.stringify({ type: 'pong' }));
 			}
-		}.bind(this);
+		};
+	}
 
-		function displayMessage(data) {
-			console.log(data);
-			const messageContainer = this.$target.querySelector('.message-container');
-			const messageElement = document.createElement('div');
-			messageElement.classList.add('messages');
-			const messageTime = document.createElement('span');
-			messageTime.classList.add('message-time-stamp');
-			const messageContent = document.createElement('span');
-			messageContent.classList.add('message');
+	displayMessage(data) {
+		// Moved outside and made a class method
+		console.log(data);
+		const messageContainer = this.$target.querySelector('.message-container');
+		const messageElement = document.createElement('div');
+		messageElement.classList.add('messages');
+		const messageTime = document.createElement('span');
+		messageTime.classList.add('message-time-stamp');
+		const messageContent = document.createElement('span');
+		messageContent.classList.add('message');
 
-			messageTime.textContent = `${data.timestamp}`;
-			messageContent.textContent = `${data.intra_id}: ${data.message}`;
-			messageElement.appendChild(messageTime);
-			messageElement.appendChild(messageContent);
-			messageContainer.appendChild(messageElement);
-		}
+		messageTime.textContent = `${data.timestamp}`;
+		messageContent.textContent = `${data.intra_id}: ${data.message}`;
+		messageElement.appendChild(messageTime);
+		messageElement.appendChild(messageContent);
+		messageContainer.appendChild(messageElement);
 	}
 
 	async mounted() {
