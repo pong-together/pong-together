@@ -97,7 +97,7 @@ export default class extends Component {
 
 	connectSocket() {
 		const chatSocket = new WebSocket(
-			`wss://localhost/ws/chats/?token=${localStorage.getItem('accessToken')}`,
+			`wss://localhos:443/ws/chats/?token=${localStorage.getItem('accessToken')}`,
 		);
 
 		chatSocket.onopen = () => {
