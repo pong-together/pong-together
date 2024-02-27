@@ -94,8 +94,8 @@ class RefreshTokenAPIView(TokenRefreshView):
 
 class CreateOTPAPIView(APIView):
     def get(self, request):
-        user = get_user(request=request)
-        if user.__class__ != User:
+        user = get_user(request)
+        if not isinstance(user, User):
             return user
 
         totp = pyotp.totp.TOTP(user.otp_secret_key)
@@ -105,8 +105,8 @@ class CreateOTPAPIView(APIView):
 
 class VerifyOTPAPIView(APIView):
     def get(self, request):
-        user = get_user(request=request)
-        if user.__class__ != User:
+        user = get_user(request)
+        if not isinstance(user, User):
             return user
 
         code = request.GET.get('code')
