@@ -41,7 +41,6 @@ export default () => {
 
 		const urlParams = extractUrlParams(currentRoute, window.location.hash);
 
-		console.log(currentRoute);
 		currentRoute.component(urlParams);
 	};
 
@@ -54,8 +53,6 @@ export default () => {
 				return URL_FRAGMENT_REGEXP;
 			})
 			.replace(/\//g, '\\/');
-
-		console.log(`^${parsedFragment}$`);
 
 		routes.push({
 			testRegExp: new RegExp(`^${parsedFragment}$`),

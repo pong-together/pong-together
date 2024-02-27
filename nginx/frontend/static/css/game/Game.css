@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+* {
+	box-sizing: border-box;
+	border: 0;
+	margin: 0;
+	padding: 0;
+	font-family: 'Jua', sans-serif;
+}
+
+.game-container {
+    width: 905px;
+    height: 446px;
+    display: flex;
+	background-color: white;
+}
+
+.player1-container {
+    width: 132px;
+    height: 446px;
+    background-color: #FFA6A6;
+    border-top-left-radius: 80px;
+    border-bottom-left-radius: 80px;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    position: relative;
+}
+
+.game-display {
+    width: 637px;
+    height: 446px;
+    background-image: url("../../images/game-background.png");
+    background-repeat: round;
+    /* margin-left: -5px; */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.game-count {
+	font-size: 50px;
+}
+
+.player2-container {
+    width: 131px;
+    height: 446px;
+    background-color: #99CCFF;
+    border-top-right-radius: 80px;
+    border-bottom-right-radius: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.player1-image {
+    width: 106px;
+    height: 106px;
+    background-color: white;
+    border-radius: 180px;
+    margin-top: 30px;
+}
+
+.player1-nickname {
+    font-size: 20px;
+    margin-top: 8px;
+}
+
+.player1-gameresult {
+    font-size: 60px;
+    margin-top: 25px;
+}
+
+.player1-score-info {
+    position: absolute;
+    top: 300px;
+    font-size: 20px;
+}
+
+.player1-game-score {
+    position: absolute;
+    top: 320px;
+    font-size: 64px;
+}
+
+.player2-game-score {
+    font-size: 64px;
+    margin-top: 20px;
+}
+
+.player2-score-info {
+    font-size: 20px;
+    margin-top: -10px;
+}
+
+.player2-gameresult {
+    font-size: 60px;
+    margin-top: 20px;
+}
+
+.player2-nickname {
+    position: absolute;
+    top: 260px;
+    font-size: 20px;
+    margin-top: 8px;
+}
+
+.player2-image {
+    position: absolute;
+    top: 310px;
+    width: 106px;
+    height: 106px;
+    background-color: white;
+    border-radius: 180px;
+}
