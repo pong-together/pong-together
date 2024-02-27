@@ -5,12 +5,7 @@ import Found from './RemoteFound.js';
 
 export default class extends Component {
 
-	// constructor($target, $props) {
-	// 	super($target, $props);
-	// }
-
 	setup() {
-		// super.setup();
 		this.$state = this.$props;
 	}
 

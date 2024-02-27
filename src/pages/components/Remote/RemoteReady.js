@@ -4,17 +4,13 @@ import language from '../../../utils/language.js';
 
 export default class extends Component {
 
-	constructor($target, $props) {
-		super($target, $props);
-	}
-
 	setup() {
-		super.setup();
-		intra = {
+		this.$state = this.$props;
+		this.intra = {
 			intraPicture: 'none', // API
 			intraID: 'jonseo' // API
 		};
-		this.$state = this.$props;
+		this.setState({ ...this.$state, ...this.intra});
 	}
 
 	template() {
@@ -57,7 +53,6 @@ export default class extends Component {
 	}
 
 	mounted() {
-		setState(intra);
 		this.timer();
 	}
 }

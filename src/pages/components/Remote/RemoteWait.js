@@ -5,12 +5,7 @@ import Ready from './RemoteReady.js';
 
 export default class extends Component {
 
-	// constructor($target, $props) {
-	// 	super($target, $props);
-	// }
-
 	setup() {
-		// super.setup();
 		this.$state = this.$props;
 	}
 
