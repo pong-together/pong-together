@@ -9,8 +9,8 @@ export default class extends Component {
 			region: 'en'
 		};
 
-		if (localStorage.getItem('language')) {
-			this.$state.region = localStorage.getItem('language');
+		if (window.localStorage.getItem('language')) {
+			this.$state.region = window.localStorage.getItem('language');
 		}
 	}
 

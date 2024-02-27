@@ -23,6 +23,7 @@ export default class extends Component {
 		let seconds = 0;
 		let count;
 		const counterElement = document.getElementById('counter');
+		counterElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 		
 		function updateCounter() {
 			counterElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
@@ -43,8 +44,7 @@ export default class extends Component {
 				// if (this.$state.remoteState === found) {
 				// 	stopCounter();
 				// }
-				updateCounter();
-				if (seconds === 5) {
+				if (seconds === 4) {
 					clearInterval(count);
 					updateCounter();
 					new Found(document.querySelector('.mainbox'), this.$state);
@@ -55,6 +55,7 @@ export default class extends Component {
 				} else {
 					seconds++;
 				}
+				updateCounter();
 			}, 1000);
 		}
 

@@ -40,7 +40,7 @@ export default class extends Component {
 
 		function startTimer() {
 			time = setInterval(() => {
-				if (seconds === 0) {
+				if (seconds === 1) {
 					stopTimer();
 				} else {
 					seconds--;

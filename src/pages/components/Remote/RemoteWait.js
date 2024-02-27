@@ -36,7 +36,7 @@ export default class extends Component {
 
 		const startTimer = () => {
 			time = setInterval(() => {
-				if (seconds === 0) {
+				if (seconds === 1) {
 					clearInterval(time);
 					updateTimer();
 					new Search(document.querySelector('.mainbox'), this.$state);
