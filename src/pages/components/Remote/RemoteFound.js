@@ -4,7 +4,6 @@ import Search from './RemoteSearch.js';
 import Wait from './RemoteWait.js';
 
 export default class extends Component {
-
 	setup() {
 		this.$state = this.$props;
 	}
@@ -17,14 +16,24 @@ export default class extends Component {
 		`;
 	}
 
+	setEvent() {
+		document.addEventListener('click', (e) => {
+			const target = e.target;
+			if (target.id === 'found') {
+				// 서버로 준비 상태 보내기
+				this.stopTimer();
+			}
+		});
+	}
+
 	timer() {
 		let seconds = 5;
 		let time;
 		const buttonElement = document.querySelector('.match-button');
-		
+
 		const updateTimer = () => {
 			buttonElement.textContent = `${language.remote[this.$state.region].foundButton}(${seconds})`;
-		}
+		};
 
 		function stopTimer() {
 			clearInterval(time);
@@ -45,12 +54,11 @@ export default class extends Component {
 				}
 				updateTimer();
 			}, 1000);
-		}
+		};
 
 		startTimer();
 	}
 
-	// 비동기로 백엔드로부터 매칭됐음을 받아오는 처리
 	/*
 		getServer() {
 			if (this.$state.remoteState === 'wait')
@@ -61,12 +69,5 @@ export default class extends Component {
 	mounted() {
 		this.timer();
 		// getServer();
-		document.addEventListener('click', e => {
-			const target = e.target;
-			if (target.id === 'found') {
-				// 서버로 준비 상태 보내기
-				this.stopTimer();
-			}
-		});
 	}
 }

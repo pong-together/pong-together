@@ -3,14 +3,13 @@ import Router from '../../router.js';
 import language from '../../../utils/language.js';
 
 export default class extends Component {
-
 	setup() {
 		this.$state = this.$props;
 		this.intra = {
-			intraPicture: 'none', // API
-			intraID: 'jonseo' // API
+			intraPicture: 'none',
+			intraID: 'jonseo',
 		};
-		this.setState({ ...this.$state, ...this.intra});
+		this.setState({ ...this.$state, ...this.intra });
 	}
 
 	template() {
@@ -26,7 +25,7 @@ export default class extends Component {
 		let time;
 		const buttonElement = document.getElementById('match-intra');
 		const bindUpdateTimer = updateTimer.bind(this);
-		
+
 		function updateTimer() {
 			buttonElement.textContent = `${this.$state.intraID}(${seconds})`;
 		}

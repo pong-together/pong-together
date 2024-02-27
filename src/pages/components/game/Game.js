@@ -2,9 +2,8 @@ import Component from '../../../core/Component.js';
 import GameReady from './GameReady.js';
 
 export default class extends Component {
-
 	template() {
-        return `
+		return `
 		<div class="game-container">
 			<div class="player1-container">
 				<div class="player1-image"></div>
@@ -23,9 +22,9 @@ export default class extends Component {
 			</div>
 		</div>
 		`;
-    }
+	}
 
 	mounted() {
 		new GameReady(document.querySelector('.game-display'));
-	}	
+	}
 }

@@ -2,14 +2,12 @@ import Component from '../../../core/Component.js';
 
 export default class extends Component {
 	template() {
-        return `
+		return `
 			<canvas id="canvas"></canvas>
 		`;
-    }
-
-	setEvent() {
-
 	}
+
+	setEvent() {}
 
 	canvas() {
 		const displayElement = document.querySelector('.game-display');
@@ -30,9 +28,9 @@ export default class extends Component {
 		let img_p2 = new Image();
 		let img_ball = new Image();
 
-		img_p1.src = '../../../../static/images/player1_bar.png'
-		img_p2.src = '../../../../static/images/player2_bar.png'
-		img_ball.src = '../../../../static/images/ball2.png'
+		img_p1.src = '../../../../static/images/player1_bar.png';
+		img_p2.src = '../../../../static/images/player2_bar.png';
+		img_ball.src = '../../../../static/images/ball2.png';
 
 		class bar {
 			constructor(x, y, w, h, i) {
@@ -93,17 +91,17 @@ export default class extends Component {
 		let player2 = new bar(4867, 1200, 18, 62, img_p2);
 		let ball = new sphere(2475, 1350, 30, 30);
 
-		window.addEventListener('resize', e => {
+		window.addEventListener('resize', (e) => {
 			canvas.width = displayElement.clientWidth;
 			canvas.height = displayElement.clientHeight;
 			player1.reCoordinate();
 			player2.reCoordinate();
 			ball.reCoordinate();
-		})
+		});
 
 		function move(key) {
 			let speed = 60;
-			switch(key) {
+			switch (key) {
 				case 'KeyW':
 					if (player1.y > 28) {
 						if ((player1.y -= speed) <= 28) {
@@ -135,7 +133,7 @@ export default class extends Component {
 			}
 		}
 
-		document.addEventListener('keydown', e => {
+		document.addEventListener('keydown', (e) => {
 			move(e.code);
 		});
 
@@ -147,7 +145,7 @@ export default class extends Component {
 			player2.draw();
 			ball.draw();
 		}
-		
+
 		frame();
 	}
 
@@ -155,5 +153,3 @@ export default class extends Component {
 		this.canvas();
 	}
 }
-
-//// git 2/23/20/26
