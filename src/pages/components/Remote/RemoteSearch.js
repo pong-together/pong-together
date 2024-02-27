@@ -5,11 +5,13 @@ import Found from './RemoteFound.js';
 
 export default class extends Component {
 
+	// constructor($target, $props) {
+	// 	super($target, $props);
+	// }
+
 	setup() {
-		this.$state = {
-			remoteState: 'none',
-			region: 'kr'
-		};
+		// super.setup();
+		this.$state = this.$props;
 	}
 
 	template() {
@@ -41,7 +43,7 @@ export default class extends Component {
 
 		this.stopCounter = stopCounter;
 
-		function startCounter() {
+		const startCounter = () => {
 			count = setInterval(() => {
 				// if (this.$state.remoteState === found) {
 				// 	stopCounter();
@@ -50,7 +52,7 @@ export default class extends Component {
 				if (seconds === 5) {
 					clearInterval(count);
 					updateCounter();
-					new Found(document.querySelector('.mainbox'));
+					new Found(document.querySelector('.mainbox'), this.$state);
 				}
 				if (seconds === 60) {
 					minutes++;

@@ -5,11 +5,13 @@ import Wait from './RemoteWait.js';
 
 export default class extends Component {
 
+	// constructor($target, $props) {
+	// 	super($target, $props);
+	// }
+
 	setup() {
-		this.$state = {
-			remoteState: 'none',
-			region: 'kr'
-		};
+		// super.setup();
+		this.$state = this.$props;
 	}
 
 	template() {
@@ -32,17 +34,17 @@ export default class extends Component {
 		function stopTimer() {
 			clearInterval(time);
 			updateTimer();
-			new Wait(document.querySelector('.mainbox'));
+			new Wait(document.querySelector('.mainbox'), this.$state);
 		}
 
 		this.stopTimer = stopTimer;
 
-		function startTimer() {
+		const startTimer = () => {
 			time = setInterval(() => {
 				if (seconds === 0) {
 					clearInterval(time);
 					updateTimer();
-					new Search();
+					new Search(document.querySelector('.mainbox'), this.$state);
 				} else {
 					seconds--;
 				}

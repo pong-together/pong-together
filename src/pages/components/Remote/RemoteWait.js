@@ -1,16 +1,17 @@
 import Component from '../../../core/Component.js';
-import Router from '../../router.js';
 import language from '../../../utils/language.js';
 import Search from './RemoteSearch.js';
 import Ready from './RemoteReady.js';
 
 export default class extends Component {
 
+	// constructor($target, $props) {
+	// 	super($target, $props);
+	// }
+
 	setup() {
-		this.$state = {
-			remoteState: 'none',
-			region: 'kr'
-		};
+		// super.setup();
+		this.$state = this.$props;
 	}
 
 	template() {
@@ -33,17 +34,17 @@ export default class extends Component {
 		function stopTimer() {
 			clearInterval(time);
 			updateTimer();
-			new Ready(document.querySelector('.mainbox'));
+			new Ready(document.querySelector('.mainbox'), this.$state);
 		}
 
 		this.stopTimer = stopTimer;
 
-		function startTimer() {
+		const startTimer = () => {
 			time = setInterval(() => {
 				if (seconds === 0) {
 					clearInterval(time);
 					updateTimer();
-					new Search();
+					new Search(document.querySelector('.mainbox'), this.$state);
 				} else {
 					seconds--;
 				}

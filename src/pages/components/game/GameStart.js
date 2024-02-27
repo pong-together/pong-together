@@ -92,7 +92,7 @@ export default class extends Component {
 		let player1 = new bar(107, 1200, 18, 62, img_p1);
 		let player2 = new bar(4867, 1200, 18, 62, img_p2);
 		let ball = new sphere(2475, 1350, 30, 30);
-	
+
 		window.addEventListener('resize', e => {
 			canvas.width = displayElement.clientWidth;
 			canvas.height = displayElement.clientHeight;
