@@ -122,7 +122,7 @@ export default class extends Component {
 		};
 
 		chatSocket.onmessage = function (event) {
-			//console.log(event);
+			console.log(event.data);
 			const data = JSON.parse(event.data);
 			//console.log(event.data);
 			if (data.type && data.type === 'chat_message') {
