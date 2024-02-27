@@ -121,17 +121,17 @@ export default class extends Component {
 			console.log(e);
 		};
 
-		chatSocket.onmessage = (event) => {
+		chatSocket.onmessage = function (event) {
 			console.log(event.data);
 			const data = JSON.parse(event.data);
 			//console.log(event.data);
 			if (data.type && data.type === 'chat_message') {
-				this.displayMessage(data);
+				displayMessage(data);
 			} else if (data.type && data.type === 'ping') {
 				console.log('pong');
 				chatSocket.send(JSON.stringify({ type: 'pong' }));
 			}
-		};
+		}.bind(this);
 
 		function displayMessage(data) {
 			console.log(data);
