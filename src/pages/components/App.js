@@ -153,11 +153,11 @@ export default class extends Component {
 		);
 
 		chatSocket.onopen = () => {
-			console.log('chat socket', chatSocket);
 			this.addEvent('click', '.message-btn', (e) => {
 				e.preventDefault();
 				var message = this.$target.querySelector('#m').value;
-				if (message) {
+				if (message && chatSocket.readyState === WebSocket.OPEN) {
+					// 여기에 조건 추가
 					chatSocket.send(JSON.stringify({ message }));
 					console.log('Message sent: ' + message);
 					this.$target.querySelector('#m').value = '';
@@ -165,10 +165,10 @@ export default class extends Component {
 			});
 		};
 
-		chatSocket.onclose = () => {
-			console.log('Connection closed, attempting to reconnect...');
-			setTimeout(() => this.connectSocket(), 1000);
-		};
+		//chatSocket.onclose = () => {
+		//	console.log('Connection closed, attempting to reconnect...');
+		//	setTimeout(() => this.connectSocket(), 1000);
+		//};
 
 		chatSocket.onerror = function (e) {
 			console.log(e);
@@ -185,6 +185,23 @@ export default class extends Component {
 				chatSocket.send(JSON.stringify({ type: 'pong' }));
 			}
 		};
+
+		this.chatSocket.onclose = function (e) {
+			if (e.wasClean) {
+				console.log(
+					`Connection closed cleanly, code=${e.code} reason=${e.reason}`,
+				);
+			} else {
+				// 예를 들어, 서버 프로세스가 죽거나 네트워크가 끊긴 경우
+				console.log('Connection died');
+			}
+			// 재연결 로직
+			// WebSocket의 readyState가 CLOSED 상태인지 확인 후 재연결
+			if (this.readyState === WebSocket.CLOSED) {
+				console.log('Attempting to reconnect...');
+				setTimeout(() => this.connectSocket(), 1000);
+			}
+		}.bind(this); // this가 connectSocket 메서드를 가리키도록 바인딩
 	}
 
 	displayMessage(data) {
