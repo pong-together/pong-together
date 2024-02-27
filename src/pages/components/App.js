@@ -103,7 +103,7 @@ export default class extends Component {
 		chatSocket.onopen = () => {
 			this.addEvent('click', '.message-btn', (e) => {
 				e.preventDefault();
-				var message = this.$taregt.querySelector('#m').value;
+				var message = this.$target.querySelector('#m').value;
 				if (message) {
 					chatSocket.send(JSON.stringify({ message }));
 					console.log('Message sent: ' + message);
