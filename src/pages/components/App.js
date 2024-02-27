@@ -311,7 +311,7 @@ export default class extends Component {
 		router.addRoute('#/tournament', pages.tournament);
 		router.addRoute('#/remote', pages.remote);
 		router.addRoute('#/game', pages.game);
-		router.route();
+		router.start();
 	}
 
 	connectSocket() {
