@@ -11,6 +11,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(args, kwargs)
+        self.ping_task = None
         self.user = None
         self.channel_name = None
 
@@ -25,6 +26,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
 
             await self.channel_layer.group_add(self.GROUP_NAME, self.channel_name)
             await self.accept()
+
             self.ping_task = asyncio.create_task(self.send_ping())
 
         except Exception:
@@ -37,7 +39,12 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 del self.chat_users[intra_id]
 
             await self.channel_layer.group_discard(self.GROUP_NAME, self.channel_name)
+
             self.ping_task.cancel()
+            try:
+                await self.ping_task
+            except asyncio.CancelledError:
+                pass
 
         except Exception as e:
             await self.send_json({'error': str(e)})
@@ -51,7 +58,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             }))
 
     async def receive(self, text_data=None, bytes_data=None, **kwargs):
-        if text_data is None:
+        if text_data is None or bytes_data is None:
             await self.send_json({'error': 'No message'})
         try:
             await self.receive_json(await self.decode_json(text_data), **kwargs)
@@ -59,7 +66,6 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             await self.send_json({'error': str(e)})
 
     async def receive_json(self, content, **kwargs):
-
         message_type = content.get('type')
         if message_type == 'pong':
             return
