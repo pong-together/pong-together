@@ -101,7 +101,7 @@ export default class extends Component {
 		);
 
 		chatSocket.onopen = () => {
-			this.addEvent('click', '#message-btn', (e) => {
+			this.addEvent('click', '.message-btn', (e) => {
 				e.preventDefault();
 				var message = this.$taregt.querySelector('#m').value;
 				if (message) {
