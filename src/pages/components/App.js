@@ -55,9 +55,9 @@ export default class extends Component {
 			<div class="chat-container">
 				<div class="message-container">
 
-					<div id="messages"><span id="message-time-stamp">24.02.23</span><span id="message">sooyang: 안녕하세요 </span></div>
-					<div id="messages"><span id="message-time-stamp">24.02.23</span><span id="message">sooyang: 안녕하세요 </span></div>
-					<div id="messages"><span id="message-time-stamp">24.02.23</span><span id="message">sooyang: 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트  </span></div>
+					<div class="messages"><span class="message-time-stamp">24.02.23</span><span class="message">sooyang: 안녕하세요 </span></div>
+					<div class="messages"><span class="message-time-stamp">24.02.23</span><span class="message">sooyang: 안녕하세요 </span></div>
+					<div class="messages"><span class="message-time-stamp">24.02.23</span><span class="message">sooyang: 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트  </span></div>
 
 				</div>
 				<div action="" id="chat-form">
@@ -137,11 +137,11 @@ export default class extends Component {
 			console.log(data);
 			const messageContainer = this.$target.querySelector('.message-container');
 			const messageElement = document.createElement('div');
-			messageElement.id = 'messages';
+			messageElement.classList.add('messages');
 			const messageTime = document.createElement('span');
-			messageTime.id = 'message-time-stamp';
+			messageTime.classList.add('message-time-stamp');
 			const messageContent = document.createElement('span');
-			messageContent.id = 'message';
+			messageContent.classList.add('message');
 
 			messageTime.textContent = `${data.timestamp}`;
 			messageContent.textContent = `${data.intra_id}: ${data.message}`;
