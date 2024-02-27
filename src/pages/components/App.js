@@ -126,7 +126,7 @@ export default class extends Component {
 			const data = JSON.parse(event.data);
 			//console.log(event.data);
 			if (data.type && data.type === 'chat_message') {
-				displayMessage(data);
+				this.displayMessage(data);
 			} else if (data.type && data.type === 'ping') {
 				console.log('pong');
 				chatSocket.send(JSON.stringify({ type: 'pong' }));
