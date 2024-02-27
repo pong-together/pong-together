@@ -97,7 +97,7 @@ export default class extends Component {
 
 	connectSocket() {
 		const chatSocket = new WebSocket(
-			`ws://localhost:8000/ws/chats/?token=${localStorage.getItem('accessToken')}`,
+			`wss://localhost/ws/chats/?token=${localStorage.getItem('accessToken')}`,
 		);
 
 		chatSocket.onopen = () => {
@@ -105,16 +105,16 @@ export default class extends Component {
 				e.preventDefault();
 				var message = this.$taregt.querySelector('#m').value;
 				if (message) {
-					chatSocket.send({ message });
+					chatSocket.send(JSON.stringify({ message }));
 					console.log('Message sent: ' + message);
-					this.$taregt.querySelector('#m').value = '';
+					this.$target.querySelector('#m').value = '';
 				}
 			});
 		};
 
-		chatSocket.onclose = function () {
+		chatSocket.onclose = () => {
 			console.log('Connection closed, attempting to reconnect...');
-			setTimeout(connectSocket, 1000);
+			setTimeout(() => this.connectSocket(), 1000);
 		};
 
 		chatSocket.onerror = function (e) {
@@ -165,7 +165,9 @@ export default class extends Component {
 		});
 
 		this.calcRate();
-		this.connectSocket();
+		if (localStorage.getItem('accessToken')) {
+			this.connectSocket();
+		}
 
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {
 			store.dispatch('changeLoginProgress', 'done');
