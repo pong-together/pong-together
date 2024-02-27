@@ -202,6 +202,7 @@ export default class extends Component {
 		messageElement.appendChild(messageTime);
 		messageElement.appendChild(messageContent);
 		messageContainer.appendChild(messageElement);
+		messageContainer.scrollTop = messageContainer.scrollHeight;
 	}
 
 	async mounted() {
