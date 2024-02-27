@@ -53,17 +53,17 @@ export default class extends Component {
 			</div>
 
 			<div class="chat-container">
-			<div class="message-container">
+				<div class="message-container">
 
-				<div id="messages"><span id="message-time-stamp">24.02.23</span><span id="message">sooyang: 안녕하세요 </span></div>
-				<div id="messages"><span id="message-time-stamp">24.02.23</span><span id="message">sooyang: 안녕하세요 </span></div>
-				<div id="messages"><span id="message-time-stamp">24.02.23</span><span id="message">sooyang: 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트  </span></div>
+					<div id="messages"><span id="message-time-stamp">24.02.23</span><span id="message">sooyang: 안녕하세요 </span></div>
+					<div id="messages"><span id="message-time-stamp">24.02.23</span><span id="message">sooyang: 안녕하세요 </span></div>
+					<div id="messages"><span id="message-time-stamp">24.02.23</span><span id="message">sooyang: 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트  </span></div>
 
+				</div>
+				<form action="" id="chat-form">
+					<input id="m" autocomplete="off" /><button class="message-btn">전송</button>
+				</form>
 			</div>
-			<form action="" id="chat-form">
-				<input id="m" autocomplete="off" /><button>전송</button>
-			</form>
-		</div>
 			</div>
 		</div>
 			`;
@@ -95,6 +95,62 @@ export default class extends Component {
 				: 0;
 	}
 
+	connectSocket() {
+		const chatSocket = new WebSocket(
+			`ws://localhost:443/ws/chat/?${localStorage.getItem('accessToken')}`,
+		);
+
+		chatSocket.onopen = () => {
+			this.addEvent('click', '#message-btn', (e) => {
+				e.preventDefault();
+				var message = this.$taregt.querySelector('#m').value;
+				if (message) {
+					chatSocket.send({ message });
+					console.log('Message sent: ' + message);
+					this.$taregt.querySelector('#m').value = '';
+				}
+			});
+		};
+
+		chatSocket.onclose = function () {
+			console.log('Connection closed, attempting to reconnect...');
+			setTimeout(connectSocket, 1000);
+		};
+
+		chatSocket.onerror = function (e) {
+			console.log(e);
+		};
+
+		chatSocket.onmessage = function (event) {
+			//console.log(event);
+			const data = JSON.parse(event.data);
+			//console.log(event.data);
+			if (data.type && data.type === 'chat_message') {
+				displayMessage(data);
+			} else if (data.type && data.type === 'ping') {
+				console.log('pong');
+				chatSocket.send(JSON.stringify({ type: 'pong' }));
+			}
+		};
+
+		function displayMessage(data) {
+			console.log(data);
+			const messageContainer = this.$target.querySelector('.message-container');
+			const messageElement = document.createElement('div');
+			messageElement.id = 'messages';
+			const messageTime = document.createElement('span');
+			messageTime.id = 'message-time-stamp';
+			const messageContent = document.createElement('span');
+			messageContent.id = 'message';
+
+			messageTime.textContent = `${data.timestamp}`;
+			messageContent.textContent = `${data.intra_id}: ${data.message}`;
+			messageElement.appendChild(messageTime);
+			messageElement.appendChild(messageContent);
+			messageContainer.appendChild(messageElement);
+		}
+	}
+
 	async mounted() {
 		console.log(store.state.loginProgress);
 		//window.localStorage.removeItem('acessToken');
@@ -109,6 +165,7 @@ export default class extends Component {
 		});
 
 		this.calcRate();
+		this.connectSocket();
 
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {
 			store.dispatch('changeLoginProgress', 'done');
