@@ -121,7 +121,7 @@ export default class extends Component {
 			console.log(e);
 		};
 
-		chatSocket.onmessage = function (event) {
+		chatSocket.onmessage = (event) => {
 			console.log(event.data);
 			const data = JSON.parse(event.data);
 			//console.log(event.data);
