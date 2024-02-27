@@ -12,7 +12,7 @@ def get_access_token(request):
     access_token = request.META.get('HTTP_AUTHORIZATION')
     if access_token is None:
         raise ValidationError('\'authorization\' is required')
-    return access_token[7:]
+    return access_token.replace('Bearer ', '', 1)
 
 
 def decode_token(token):
@@ -23,10 +23,9 @@ def decode_token(token):
     return user_id
 
 
-def get_user(request=None, access_token=None):
+def get_user(request):
     try:
-        if access_token is None:
-            access_token = get_access_token(request)
+        access_token = get_access_token(request)
         user_id = decode_token(access_token)
         user = User.objects.get(id=user_id)
     except ValidationError as e:
