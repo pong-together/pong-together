@@ -57,6 +57,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
     async def chat_message(self, event):
         try:
             message = {
+                'type': 'chat_message',
                 'intra_id': event['intra_id'],
                 'message': event['message'],
                 'timestamp': event['timestamp']
