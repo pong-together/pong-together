@@ -37,6 +37,8 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,6 +49,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'auth.apps.AuthConfig',
     'tournaments.apps.TournamentsConfig',
+    'chats.apps.ChatsConfig',
     # rest framework
     'rest_framework',
     # simplejwt
@@ -65,10 +68,13 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=2),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ACCESS_TOKEN_LIFETIME': timedelta(weeks=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(weeks=4),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
 }
 
 MIDDLEWARE = [
@@ -101,12 +107,14 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'pong_together.wsgi.application'
+ASGI_APPLICATION = 'pong_together.asgi.application'
+
 
 CORS_ORIGIN_ALLOW_ALL = True
 
+
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
 
 is_docker = os.getenv('DOCKER_COMPOSE', False)
 
@@ -132,6 +140,25 @@ else:
             'PORT': 5431,
         }
     }
+
+
+# Channel Layers
+
+redis_host = 'localhost'
+if is_docker:
+    redis_host = 'redis'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+
+        # 'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        # 'CONFIG': {
+        #     'hosts': [(redis_host, 6379)],
+        # },
+    },
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

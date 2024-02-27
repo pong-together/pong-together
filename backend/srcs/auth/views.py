@@ -1,6 +1,7 @@
 import os
 from json import JSONDecodeError
 
+import pyotp
 import requests
 
 from rest_framework import status
@@ -11,8 +12,8 @@ from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenRefreshView
 
+from auth.utils import get_user
 from users.models import User
-
 
 # Create your views here.
 
@@ -34,8 +35,14 @@ class LoginAPIView(APIView):
             code = request.data['code']
             access_token = self.get_access_token(code)
             self.set_userinfo(access_token)
-        except (KeyError, ValueError, JSONDecodeError):
-            data = {'login': 'fail'}
+        except (KeyError, ValueError, JSONDecodeError) as e:
+            message = str(e)
+            if e.__class__ is KeyError:
+                message = f'{str(e)} is required'
+            data = {
+                'login': 'fail',
+                'message': message
+            }
             return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
 
         user = self.get_user()
@@ -59,7 +66,7 @@ class LoginAPIView(APIView):
         }
         token_response = requests.post(TOKEN_URI, data=body).json()
         if token_response.get('error') is not None:
-            raise ValueError()
+            raise ValueError('Failed to issue access token')
         access_token = token_response['access_token']
         return access_token
 
@@ -82,6 +89,31 @@ class RefreshTokenAPIView(TokenRefreshView):
         try:
             return super().post(request, *args, **kwargs)
         except TokenError:
-            data = {'message': 'Token is invalid or expired'}
-            return Response(data=data, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'message': 'Token is invalid or expired'}, status=status.HTTP_401_UNAUTHORIZED)
 
+
+class CreateOTPAPIView(APIView):
+    def get(self, request):
+        user = get_user(request=request)
+        if user.__class__ != User:
+            return user
+
+        totp = pyotp.totp.TOTP(user.otp_secret_key)
+        qrcode_uri = totp.provisioning_uri(name=user.intra_id, issuer_name='pong-together')
+        return Response({'qrcode_uri': qrcode_uri}, status=status.HTTP_200_OK)
+
+
+class VerifyOTPAPIView(APIView):
+    def get(self, request):
+        user = get_user(request=request)
+        if user.__class__ != User:
+            return user
+
+        code = request.GET.get('code')
+        if code is None:
+            return Response({'message': '\'code\' is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        totp = pyotp.totp.TOTP(user.otp_secret_key)
+        if not totp.verify(code):
+            return Response({'message': 'Invalid otp code'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'authentication': 'success'}, status=status.HTTP_200_OK)

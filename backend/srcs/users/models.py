@@ -1,3 +1,4 @@
+import pyotp
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator
 from django.db import models
@@ -20,6 +21,7 @@ class User(AbstractUser):
     lose_count = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     game_count = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     language = models.CharField(max_length=2, choices=LanguageChoice, default=LanguageChoice.KOREAN)
+    otp_secret_key = models.CharField(max_length=32, default=pyotp.random_base32)
 
     objects = UserManager()
 
