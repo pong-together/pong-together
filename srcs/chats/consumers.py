@@ -38,15 +38,16 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
 
             await self.channel_layer.group_discard(self.GROUP_NAME, self.channel_name)
             self.ping_task.cancel()
+
         except Exception as e:
             await self.send_json({'error': str(e)})
 
     async def send_ping(self):
         while True:
-            await asyncio.sleep(60)  # 60초마다 핑 메시지를 보냄
+            await asyncio.sleep(60)
             await self.send(text_data=json.dumps({
                 'type': 'ping',
-                'timestamp': datetime.now().isoformat()
+                'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             }))
 
     async def receive(self, text_data=None, bytes_data=None, **kwargs):
