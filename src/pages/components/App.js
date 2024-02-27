@@ -55,10 +55,6 @@ export default class extends Component {
 			<div class="chat-container">
 				<div class="message-container">
 
-					<div class="messages"><span class="message-time-stamp">24.02.23</span><span class="message">sooyang: 안녕하세요 </span></div>
-					<div class="messages"><span class="message-time-stamp">24.02.23</span><span class="message">sooyang: 안녕하세요 </span></div>
-					<div class="messages"><span class="message-time-stamp">24.02.23</span><span class="message">sooyang: 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트 긴 텍스트  </span></div>
-
 				</div>
 				<div action="" id="chat-form">
 					<input id="m" autocomplete="off" /><button class="message-btn">전송</button>
