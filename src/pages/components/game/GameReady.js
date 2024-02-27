@@ -1,5 +1,5 @@
 import Component from '../../../core/Component.js';
-import Canvas from './Canvas.js';
+import Start from './GameStart.js';
 
 export default class extends Component {
 
@@ -25,7 +25,7 @@ export default class extends Component {
 				updateTimer();
 				if (seconds === 0) {
 					clearInterval(time);
-					new Canvas(document.querySelector('.display-container'));
+					new Start(document.querySelector('.game-display'));
 				} else {
 					seconds--;
 				}
