@@ -150,10 +150,12 @@ if is_docker:
 
 CHANNEL_LAYERS = {
     'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            'hosts': [(redis_host, 6379)],
-        },
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+
+        # 'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        # 'CONFIG': {
+        #     'hosts': [(redis_host, 6379)],
+        # },
     },
 }
 
