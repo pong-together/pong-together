@@ -7,74 +7,74 @@
 	font-family: 'Jua', sans-serif;
 }
 
- .main-container {
+.main-container {
 	background-image: url('../../images/background.png');
 	background-repeat: round;
 
 	width: 900px;
 	height: 446px;
- }
+}
 
- .container {
+.container {
 	width: 100%;
 	height: 100%;
 
 	display: flex;
 	align-items: center;
 	justify-content: center;
-  }
+}
 
-  .mainbox {
-	background-color: #FAA8A8;
+.mainbox {
+	background-color: #faa8a8;
 
 	width: 421px;
 	height: 371px;
 	border-radius: 15px;
 
 	display: flex;
-  	flex-direction: column;
-  	align-items: center;
-  	justify-content: space-between;
-  }
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+}
 
-  .top-text {
+.top-text {
 	color: white;
-	
+
 	font-size: 28px;
 
 	margin-top: 35px;
-  }
+}
 
-  .match-image {
+.match-image {
 	width: 80px;
 	height: 130px;
-  }
+}
 
-  #question {
+#question {
 	width: 80px;
 	height: 130px;
-  }
+}
 
-  #exclamation {
+#exclamation {
 	width: 30px;
 	height: 130px;
-  }
+}
 
-  #picture {
+#picture {
 	width: 133px;
 	height: 133px;
-  }
+}
 
-  #counter {
+#counter {
 	color: white;
 
 	font-size: 32px;
-  }
+}
 
-  .match-button {
+.match-button {
 	color: black;
-	background-color: #FDFFA5;
-	
+	background-color: #fdffa5;
+
 	font-size: 32px;
 	font-weight: bold;
 
@@ -85,21 +85,21 @@
 
 	margin-top: 0px;
 	margin-bottom: 35px;
-  }
+}
 
-  .match-button:active {
+.match-button:active {
 	transform: translate(4px, 4px);
 	box-shadow: none;
-  }
+}
 
-  .match-button:hover {
-	background-color: #6CD3FF;
-  }
+.match-button:hover {
+	background-color: #6cd3ff;
+}
 
-  #match-wait {
+#match-wait {
 	color: black;
-	background-color: #D4D4D4;
-	
+	background-color: #d4d4d4;
+
 	font-size: 32px;
 	font-weight: bold;
 
@@ -110,12 +110,12 @@
 
 	margin-top: 0px;
 	margin-bottom: 35px;
-  }
+}
 
-  #match-intra {
+#match-intra {
 	color: white;
-	background-color: #FAA8A8;
-	
+	background-color: #faa8a8;
+
 	font-size: 32px;
 	font-weight: bold;
 
@@ -124,4 +124,4 @@
 
 	margin-top: 0px;
 	margin-bottom: 35px;
-  }
+}
