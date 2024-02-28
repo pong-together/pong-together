@@ -28,7 +28,7 @@ export default class extends Component {
 		});
 
 		this.addEvent('click', '[data-button="game-start"]', () => {
-			window.location.hash = `#/tournament`;
+			window.location.pathname = `/tournament`;
 		});
 
 		this.addEvent('click', '.game-select-mode .mode', (e) => {
@@ -80,11 +80,11 @@ export default class extends Component {
 
 		this.addEvent('click', '#game-mode-button', () => {
 			if (this.$state.mode === 'local') {
-				window.location.hash = '#/local';
+				window.location.pathname = '/local';
 			} else if (this.$state.mode === 'tournament') {
-				window.location.hash = '#/tournament';
+				window.location.pathname = '/tournament';
 			} else if (this.$state.mode === 'remote') {
-				window.location.hash = '#/remote';
+				window.location.pathname = '/remote';
 			}
 		});
 	}
@@ -109,9 +109,9 @@ export default class extends Component {
 		<div class="game-select-flex">
 			<div style="display:flex;">
 				<label class="game-select-mode">
-					<img src="../../../../static/images/selectLocal.png" alt="local game"/>
+					<img src="/static/images/selectLocal.png" alt="local game"/>
 					<input type="checkbox" class="mode" value="local"> ${language.gameSelect[store.state.language].localMode}
-					<img src="../../../../static/images/selectModeInfo.png" alt="local mode info" class="select-modal" id="select-modal-local">
+					<img src="/static/images/selectModeInfo.png" alt="local mode info" class="select-modal" id="select-modal-local">
 						<div class="select-modal-box" id="select-modal-local-info">
 							<p>${language.gameSelect[store.state.language].localModal}</p>
 						</div>
@@ -119,9 +119,9 @@ export default class extends Component {
 
 				</label>
 				<label class="game-select-mode">
-					<img src="../../../../static/images/selectTournament.png" alt="tourament game"/>
+					<img src="/static/images/selectTournament.png" alt="tourament game"/>
 					<input type="checkbox" class="mode" value="tournament"> ${language.gameSelect[store.state.language].tournamentMode}
-					<img src="../../../../static/images/selectModeInfo.png" alt="tournament mode info" class="select-modal" id="select-modal-tournament">
+					<img src="/static/images/selectModeInfo.png" alt="tournament mode info" class="select-modal" id="select-modal-tournament">
 						<div class="select-modal-box" id="select-modal-tournament-info">
 
 							<p>${language.gameSelect[store.state.language].tournamentModal}</p>
@@ -129,9 +129,9 @@ export default class extends Component {
 					</img>
 				</label>
 				<label class="game-select-mode">
-					<img src="../../../../static/images/selectRemote.png" alt="remote game"/>
+					<img src="/static/images/selectRemote.png" alt="remote game"/>
 					<input type="checkbox" class="mode" value="remote"> ${language.gameSelect[store.state.language].remoteMode}
-					<img src="../../../../static/images/selectModeInfo.png" alt="remote mode info" class="select-modal" id="select-modal-remote">
+					<img src="/static/images/selectModeInfo.png" alt="remote mode info" class="select-modal" id="select-modal-remote">
 						<div class="select-modal-box" id="select-modal-remote-info">
 
 							<p>${language.gameSelect[store.state.language].remoteModal}</p>
