@@ -33,8 +33,7 @@ export default class extends Component {
 		function stopTimer() {
 			clearInterval(time);
 			bindUpdateTimer();
-			//const router = Router();
-			navigate('/select');
+			navigate('/game');
 		}
 
 		function startTimer() {
