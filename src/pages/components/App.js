@@ -1,5 +1,5 @@
 import Component from '../../core/Component.js';
-import Router from '../router.js';
+import Router from '../../router/router.js';
 import Pages from '../pages.js';
 import store from '../../store/index.js';
 
@@ -18,7 +18,7 @@ export default class extends Component {
 	}
 
 	changeModule() {
-		if (window.location.hash === '#/login') {
+		if (window.location.pathname === '/login') {
 			this.$target.innerHTML = '';
 			this.$target.innerHTML = `
 				<div class="login-wrapper" data-link>
@@ -68,16 +68,16 @@ export default class extends Component {
 
 	routerModule() {
 		const $body = this.$target.querySelector('.body-wrapper');
-		const pages = Pages($body, this.$store);
-		const router = Router($body);
-		router.addRoute('#/', pages.login);
-		router.addRoute('#/login', pages.login);
-		router.addRoute('#/select', pages.gameSelect);
-		router.addRoute('#/local', pages.local);
-		router.addRoute('#/tournament', pages.tournament);
-		router.addRoute('#/remote', pages.remote);
-		router.addRoute('#/game', pages.game);
-		router.start();
+		//const pages = Pages($body, this.$store);
+		new Router($body);
+		//router.addRoute('/', pages.login);
+		//router.addRoute('/login', pages.login);
+		//router.addRoute('/select', pages.gameSelect);
+		//router.addRoute('/local', pages.local);
+		//router.addRoute('/tournament', pages.tournament);
+		//router.addRoute('/remote', pages.remote);
+		//router.addRoute('/game', pages.game);
+		//router.start();
 	}
 
 	calcRate() {
