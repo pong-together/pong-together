@@ -27,7 +27,13 @@ export default class extends Component {
 				<div class="login-wrapper" data-link>
 						<div class="body-wrapper"></div>
 				</div>`;
-		} else {
+		} else if (
+			window.location.pathname === '/select' ||
+			window.location.pathname === '/local' ||
+			window.location.pathname === '/remote' ||
+			window.location.pathname === '/tournament' ||
+			window.location.pathname === '/game'
+		) {
 			this.$target.innerHTML = '';
 			this.$target.innerHTML = `
 				<div class="back-wrapper" data-link>
