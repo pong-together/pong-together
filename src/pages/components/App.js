@@ -19,7 +19,8 @@ export default class extends Component {
 	changeModule() {
 		if (
 			window.location.pathname === '/login' ||
-			window.location.pathname === '/'
+			window.location.pathname === '/' ||
+			window.location.pathname === '/auth'
 		) {
 			this.$target.innerHTML = '';
 			this.$target.innerHTML = `
@@ -152,13 +153,6 @@ export default class extends Component {
 	}
 
 	async mounted() {
-		console.log(store.state.loginProgress);
-		//window.localStorage.removeItem('acessToken');
-		//window.addEventListener('hashchange', () => {
-		//	this.changeModule();
-		//	this.routerModule();
-		//});
-
 		window.addEventListener('load', () => {
 			this.changeModule();
 			this.routerModule();

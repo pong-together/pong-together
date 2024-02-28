@@ -29,7 +29,6 @@ export default class extends Component {
 		});
 
 		this.addEvent('click', '[data-button="game-start"]', () => {
-			//window.location.pathname = `/tournament`;
 			navigate('/tournament');
 		});
 
@@ -83,13 +82,10 @@ export default class extends Component {
 		this.addEvent('click', '#game-mode-button', () => {
 			if (this.$state.mode === 'local') {
 				navigate('/local');
-				//window.location.pathname = '/local';
 			} else if (this.$state.mode === 'tournament') {
 				navigate('/tournament');
-				//window.location.pathname = '/tournament';
 			} else if (this.$state.mode === 'remote') {
 				navigate('/remote');
-				//window.location.pathname = '/remote';
 			}
 		});
 	}
