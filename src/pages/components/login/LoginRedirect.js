@@ -57,6 +57,7 @@ export default class extends Component {
 				}
 			} catch (error) {
 				//clearInterval(loadingInterval);
+				console.log('error: ', error);
 				//navigate('/login');
 			}
 		}
