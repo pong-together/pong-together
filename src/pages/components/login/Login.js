@@ -28,6 +28,13 @@ export default class extends Component {
 			navigate('/select');
 		}
 		if (store.state.loginProgress === 'oauth') {
+			if (
+				localStorage.getItem('accessToken') &&
+				!localStorage.getItem('twoFA')
+			) {
+				store.dispatch('changeLoginProgress', 'twoFA');
+				return;
+			}
 			new OauthBtn($parent);
 		}
 		if (store.state.loginProgress === 'twoFA') {
