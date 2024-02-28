@@ -24,7 +24,7 @@ export default class extends Component {
 
 		if (store.state.loginProgress === 'done') {
 			//location.pathname = '/';
-			window.location.hash = '#/select';
+			window.location.pathname = '/select';
 		}
 		if (store.state.loginProgress === 'oauth') {
 			new OauthBtn($parent);

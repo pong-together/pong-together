@@ -57,19 +57,19 @@ export default class extends Component {
 
 	template() {
 		return `
-		<img src="../../../static/images/logoWhite.png" alt="white logo" class="login-logo"/ >
+		<img src="/static/images/logoWhite.png" alt="white logo" class="login-logo"/ >
 			<div class="login-content-wrapper">
 		<div>
 			<div class="language-select">
 				<select name="language-select" id="language-select" class="login-language-select-wrapper">
 					<option value="kr">
-						<img src="./static/korean.png" alt="korean" />한국어
+						<img src="/static/images/korean.png" alt="korean" />한국어
 					</option>
 					<option value="en">
-						<img src="./static/american.png" alt="american" />English
+						<img src="/static/images/american.png" alt="american" />English
 					</option>
 					<option value="jp">
-						<img src="./static/japanese.png" alt="japanese" />日本語
+						<img src="/static/images/japanese.png" alt="japanese" />日本語
 					</option>
 				</select>
 				<input type="submit" value="${language.login[store.state.language].languageSelect}" class="login-language-select-btn" />
