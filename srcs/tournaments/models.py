@@ -7,6 +7,10 @@ from django.db import models
 
 
 class Tournament(models.Model):
+    class GameModeChoice(models.TextChoices):
+        DEFAULT = 'DEF', 'Default'
+        EXTREME = 'EXT', 'Extreme'
+
     player1_name = models.CharField(max_length=10)
     player2_name = models.CharField(max_length=10)
     player3_name = models.CharField(max_length=10)
@@ -15,3 +19,4 @@ class Tournament(models.Model):
     second_winner = models.CharField(null=True, max_length=10)
     final_winner = models.CharField(null=True, max_length=10)
     game_turn = models.IntegerField(default=1)
+    game_mode = models.CharField(max_length=3, choices=GameModeChoice)
