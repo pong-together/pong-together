@@ -53,10 +53,12 @@ export default class extends Component {
 				if (data.login === 'success') {
 					localStorage.setItem('accessToken', data.access_token);
 					store.dispatch('changeLoginProgress', 'twoFA');
+					navigate('/login');
 				}
-			} catch (error) {}
-			clearInterval(loadingInterval);
+			} catch (error) {
+				clearInterval(loadingInterval);
+				navigate('/login');
+			}
 		}
-		navigate('/login');
 	}
 }
