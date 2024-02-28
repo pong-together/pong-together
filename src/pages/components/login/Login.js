@@ -24,8 +24,8 @@ export default class extends Component {
 		const $parent = this.$target.querySelector('.login-body-wrapper');
 
 		if (store.state.loginProgress === 'done') {
-			window.location.pathname = '/select';
-			//navigate('/select');
+			//window.location.pathname = '/select';
+			navigate('/select');
 		}
 		if (store.state.loginProgress === 'oauth') {
 			new OauthBtn($parent);
