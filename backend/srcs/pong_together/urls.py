@@ -22,4 +22,5 @@ urlpatterns = [
     path('api/auth/', include('auth.urls')),
     path('api/userinfo/', include('users.urls')),
     path('api/tournament/', include('tournaments.urls')),
+    path('api/local/', include('local.urls')),
 ]
