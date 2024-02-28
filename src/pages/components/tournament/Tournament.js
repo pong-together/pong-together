@@ -1,19 +1,22 @@
-import Component from "../../../core/Component.js"
-import Bracket from "./Tournament-Bracket.js"
-import language from "../../../utils/language.js"
-import tourapi from "../tournament/TournamentApi.js"
+import Component from '../../../core/Component.js';
+import Bracket from './Tournament-Bracket.js';
+import language from '../../../utils/language.js';
+import tourapi from '../tournament/TournamentApi.js';
 
-export default class extends Component{
+export default class extends Component {
 	setup() {
 		this.$state = {
 			participant: [],
-			checkError: "",
-			gameMode: "임시 게임모드",
+			checkError: '',
+			gameMode: '임시 게임모드',
+			region: localStorage.getItem('language')
+				? localStorage.getItem('language')
+				: 'kr',
 		};
 		this.$store = this.$props;
 	}
 
-	template () {
+	template() {
 		return `
 		<div class="main-container">
 				<div class="info">${language.tournament[this.$store.state.language].normalGameMode}</div>
@@ -30,12 +33,13 @@ export default class extends Component{
 					<button class="start">${language.tournament[this.$store.state.language].startButton}</button>
 				</div>
 			</div>
-		`
+		`;
 	}
 
-	async registNickname (nicknames) { //api부분
+	async registNickname(nicknames) {
+		//api부분
 		const result = await tourapi.create(nicknames);
-		const { id } = result; 
+		const { id } = result;
 		window.localStorage.setItem('tournament-id', id);
 	}
 
@@ -47,44 +51,50 @@ export default class extends Component{
 			if (!isDuplicate) {
 				new Bracket(this.$target, this.$props);
 			}
-		})
+		});
 	}
 
 	checkDuplicate(nicknames) {
 		const seen = {};
 		for (let i = 0; i < nicknames.length; i++) {
 			const nickname = nicknames[i];
-			if (seen[nickname]){
-				this.setState({ checkError: `${language.tournament[this.$store.state.language].errorNickname}` });
+			if (seen[nickname]) {
+				this.setState({
+					checkError: `${language.tournament[this.$store.state.language].errorNickname}`,
+				});
 				return true;
 			}
 			seen[nickname] = true;
 		}
-		this.setState({ checkError: ""});
+		this.setState({ checkError: '' });
 		return false;
 	}
 
 	checkEmpty(nicknames) {
 		for (let i = 0; i < nicknames.length; i++) {
-			const nickname = nicknames[i]
+			const nickname = nicknames[i];
 			if (!nickname) {
-				this.setState({ checkError: `${language.tournament[this.$store.state.language].emptyNickname}`});
+				this.setState({
+					checkError: `${language.tournament[this.$store.state.language].emptyNickname}`,
+				});
 				return true;
 			}
 		}
-		this.setState({ checkError: ""});
+		this.setState({ checkError: '' });
 		return false;
 	}
 
 	checkLength(nicknames) {
 		for (let i = 0; i < nicknames.length; i++) {
-			const nickname = nicknames[i]
+			const nickname = nicknames[i];
 			if (nickname.length > 10) {
-				this.setState({ checkError: `${language.tournament[this.$store.state.language].lengthNickname}`});
+				this.setState({
+					checkError: `${language.tournament[this.$store.state.language].lengthNickname}`,
+				});
 				return true;
 			}
 		}
-		this.setState({ checkError: ""});
+		this.setState({ checkError: '' });
 		return false;
 	}
 
@@ -99,10 +109,14 @@ export default class extends Component{
 		nicknames.push(nickname3);
 		nicknames.push(nickname4);
 
-		if (this.checkEmpty(nicknames) || this.checkDuplicate(nicknames) || this.checkLength(nicknames)){
+		if (
+			this.checkEmpty(nicknames) ||
+			this.checkDuplicate(nicknames) ||
+			this.checkLength(nicknames)
+		) {
 			return true;
 		}
-		this.registNickname(nicknames);//중복검사 통과하면 api보냄.
+		this.registNickname(nicknames); //중복검사 통과하면 api보냄.
 		return false;
 	}
 }

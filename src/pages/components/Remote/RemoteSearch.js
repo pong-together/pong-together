@@ -1,14 +1,13 @@
 import Component from '../../../core/Component.js';
-import Router from '../../router.js';
+import { navigate } from '../../../router/utils/navigate.js';
 import language from '../../../utils/language.js';
 import Found from './RemoteFound.js';
 
 export default class extends Component {
-
 	setup() {
 		this.$state = {
 			remoteState: 'none',
-			region: 'kr'
+			region: 'kr',
 		};
 	}
 
@@ -26,7 +25,7 @@ export default class extends Component {
 		let seconds = 0;
 		let count;
 		const counterElement = document.getElementById('counter');
-		
+
 		function updateCounter() {
 			counterElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 		}
@@ -34,9 +33,8 @@ export default class extends Component {
 		function stopCounter() {
 			clearInterval(count);
 			updateCounter();
-			
-			const router = Router();
-			router.navigate('#/select');
+
+			navigate('/select');
 		}
 
 		this.stopCounter = stopCounter;
@@ -66,7 +64,7 @@ export default class extends Component {
 
 	// 비동기로 백엔드로부터 매칭됐음을 받아오는 처리
 	/*
-		
+
 
 		getServer() {
 			if (this.$state.remoteState === 'found')
@@ -82,7 +80,7 @@ export default class extends Component {
 	mounted() {
 		this.counter();
 		// getServer();
-		document.addEventListener('click', e => {
+		document.addEventListener('click', (e) => {
 			const target = e.target;
 			if (target.id === 'search') {
 				this.stopCounter();

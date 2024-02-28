@@ -4,11 +4,9 @@
   "description": "퐁투게더 프론트엔드 ",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "http-server",
     "build": "vite build",
     "dev": "vite",
-    "preview": "vite preview"
+    "preview": "vite preview --port 3000"
   },
   "repository": {
     "type": "git",

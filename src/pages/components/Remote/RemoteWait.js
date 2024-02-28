@@ -1,15 +1,13 @@
 import Component from '../../../core/Component.js';
-import Router from '../../router.js';
 import language from '../../../utils/language.js';
 import Search from './RemoteSearch.js';
 import Ready from './RemoteReady.js';
 
 export default class extends Component {
-
 	setup() {
 		this.$state = {
 			remoteState: 'none',
-			region: 'kr'
+			region: 'kr',
 		};
 	}
 
@@ -25,10 +23,10 @@ export default class extends Component {
 		let seconds = 5;
 		let time;
 		const buttonElement = document.getElementById('match-wait');
-		
+
 		const updateTimer = () => {
 			buttonElement.textContent = `${language.remote[this.$state.region].waitButton}(${seconds})`;
-		}
+		};
 
 		function stopTimer() {
 			clearInterval(time);
@@ -65,7 +63,7 @@ export default class extends Component {
 	mounted() {
 		this.timer();
 		// getServer();
-		document.addEventListener('click', e => {
+		document.addEventListener('click', (e) => {
 			const target = e.target;
 			if (target.id === 'match-wait') {
 				// 서버로 준비 상태 보내기

@@ -1,15 +1,14 @@
 import Component from '../../../core/Component.js';
-import Router from '../../router.js';
+import { navigate } from '../../../router/utils/navigate.js';
 import language from '../../../utils/language.js';
 
 export default class extends Component {
-
 	setup() {
 		this.$state = {
 			remoteState: 'none',
 			region: 'kr',
 			intraPicture: 'none', // API
-			intraID: 'jonseo' // API
+			intraID: 'jonseo', // API
 		};
 	}
 
@@ -26,7 +25,7 @@ export default class extends Component {
 		let time;
 		const buttonElement = document.getElementById('match-intra');
 		const bindUpdateTimer = updateTimer.bind(this);
-		
+
 		function updateTimer() {
 			buttonElement.textContent = `${this.$state.intraID}(${seconds})`;
 		}
@@ -34,8 +33,8 @@ export default class extends Component {
 		function stopTimer() {
 			clearInterval(time);
 			bindUpdateTimer();
-			const router = Router();
-			router.navigate('#/select');
+			//const router = Router();
+			navigate('/select');
 		}
 
 		function startTimer() {

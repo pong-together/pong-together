@@ -1,6 +1,5 @@
 import Component from '../../core/Component.js';
 import Router from '../../router/router.js';
-import Pages from '../pages.js';
 import store from '../../store/index.js';
 
 export default class extends Component {
@@ -28,7 +27,7 @@ export default class extends Component {
 			this.$target.innerHTML = '';
 			this.$target.innerHTML = `
 				<div class="back-wrapper" data-link>
-				<div class="back-logo-wrapper"><img class="back-logo" src="../../static/images/logoBlue.png" alt=""/></div>
+				<div class="back-logo-wrapper"><img class="back-logo" src="/static/images/logoBlue.png" alt=""/></div>
 				<div class="body-wrapper"></div>
 				<div class="footer-wrapper">
 						<div class="chip-container">
@@ -45,7 +44,7 @@ export default class extends Component {
 								</div>
 						</div>
 						<div class="intra-picture">
-								<div class="chip-picture"><img class="chip-image" src="${localStorage.getItem('intraImg')}"/></div>
+								<div class="chip-picture"><img class="chip-image" src="/static/images/${localStorage.getItem('intraImg')}"/></div>
 						</div>
 						<div class="chip-bottom">
 								<div class="triangle"></div>
@@ -68,7 +67,6 @@ export default class extends Component {
 
 	routerModule() {
 		const $body = this.$target.querySelector('.body-wrapper');
-		//const pages = Pages($body, this.$store);
 		new Router($body);
 		//router.addRoute('/', pages.login);
 		//router.addRoute('/login', pages.login);
