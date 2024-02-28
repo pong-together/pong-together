@@ -17,7 +17,10 @@ export default class extends Component {
 	}
 
 	changeModule() {
-		if (window.location.pathname === '/login') {
+		if (
+			window.location.pathname === '/login' ||
+			window.location.pathname === ''
+		) {
 			this.$target.innerHTML = '';
 			this.$target.innerHTML = `
 				<div class="login-wrapper" data-link>
