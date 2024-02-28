@@ -5,11 +5,13 @@ export default function Canvas() {
 	canvas.width = displayElement.clientWidth;
 	canvas.height = displayElement.clientHeight;
 
-	// 맥북 13인치 1440 x 900
-	// const baseWidth = 1440;
-	// const baseHeight = 900;
+	/*
+		맥북 13인치 1440 x 900
+		const baseWidth = 1440;
+		const baseHeight = 900;
+	*/
 
-	// 클러스터 아이맥27인치 5120 x 2880
+	// 클러스터 아이맥 27인치 5120 x 2880
 	const baseWidth = 5120;
 	const baseHeight = 2880;
 
@@ -40,7 +42,7 @@ export default function Canvas() {
 
 		reCoordinate() {
 			this.x = this.baseX * (canvas.width / baseWidth);
-			this.y = this.baseY * (canvas.height / baseHeight);
+			// this.y = this.baseY * (canvas.height / baseHeight);
 		}
 	}
 
@@ -62,23 +64,66 @@ export default function Canvas() {
 
 		reCoordinate() {
 			this.x = this.baseX * (canvas.width / baseWidth);
-			this.y = this.baseY * (canvas.height / baseHeight);
+			// this.y = this.baseY * (canvas.height / baseHeight);
 		}
 	}
 
-	// 맥북 13인치 1440 x 900
-	// let player1 = new bar(414 / baseWidth, 350 / baseHeight, 18, 62, img_p1);
-	// let player2 = new bar(1007 / baseWidth, 350 / baseHeight, 18, 62, img_p2);
-	// let ball = new sphere(710 / baseWidth, 370 / baseHeight, 30, 30);
+	/*
+		맥북 13인치 1440 x 900
+		let player1 = new bar(414 / baseWidth, 350 / baseHeight, 18, 62, img_p1);
+		let player2 = new bar(1007 / baseWidth, 350 / baseHeight, 18, 62, img_p2);
+		let ball = new sphere(710 / baseWidth, 370 / baseHeight, 30, 30);
+	*/
 
-	// 클러스터 아이맥 27인치 5120 x 2880
-	// let player1 = new bar(600 / baseWidth, 625 / baseHeight, 18, 62, img_p1);
-	// let player2 = new bar(927 / baseWidth, 625 / baseHeight, 18, 62, img_p2);
-	// let ball = new sphere(630 / baseWidth, 640 / baseHeight, 30, 30);
+	/*
+		클러스터 아이맥 27인치 5120 x 2880
+		let player1 = new bar(600 / baseWidth, 625 / baseHeight, 18, 62, img_p1);
+		let player2 = new bar(927 / baseWidth, 625 / baseHeight, 18, 62, img_p2);
+		let ball = new sphere(630 / baseWidth, 640 / baseHeight, 30, 30);
+	*/
 
 	let player1 = new bar(107, 1200, 18, 62, img_p1);
 	let player2 = new bar(4867, 1200, 18, 62, img_p2);
 	let ball = new sphere(2475, 1350, 30, 30);
+
+	const key = {
+		KeyW: false,
+		KeyS: false,
+		ArrowUp: false,
+		ArrowDown: false,
+	};
+
+	function move() {
+		let speed = 3;
+		if (key['KeyW'] && player1.y > 28) {
+			if ((player1.y -= speed) <= 28) {
+				player1.y = 28;
+			}
+		}
+		if (key['KeyS'] && player1.y < 355) {
+			if ((player1.y += speed) >= 355) {
+				player1.y = 355;
+			}
+		}
+		if (key['ArrowUp'] && player2.y > 28) {
+			if ((player2.y -= speed) <= 28) {
+				player2.y = 28;
+			}
+		}
+		if (key['ArrowDown'] && player2.y < 355) {
+			if ((player2.y += speed) >= 355) {
+				player2.y = 355;
+			}
+		}
+	}
+
+	document.addEventListener('keydown', (e) => {
+		key[e.code] = true;
+	});
+
+	document.addEventListener('keyup', (e) => {
+		key[e.code] = false;
+	});
 
 	window.addEventListener('resize', (e) => {
 		canvas.width = displayElement.clientWidth;
@@ -88,48 +133,11 @@ export default function Canvas() {
 		ball.reCoordinate();
 	});
 
-	function move(key) {
-		let speed = 60;
-		switch (key) {
-			case 'KeyW':
-				if (player1.y > 28) {
-					if ((player1.y -= speed) <= 28) {
-						player1.y = 28;
-					}
-				}
-				break;
-			case 'KeyS':
-				if (player1.y < 355) {
-					if ((player1.y += speed) >= 355) {
-						player1.y = 355;
-					}
-				}
-				break;
-			case 'KeyO':
-				if (player2.y > 28) {
-					if ((player2.y -= speed) <= 28) {
-						player2.y = 28;
-					}
-				}
-				break;
-			case 'KeyL':
-				if (player2.y < 355) {
-					if ((player2.y += speed) >= 355) {
-						player2.y = 355;
-					}
-				}
-				break;
-		}
-	}
-
-	document.addEventListener('keydown', (e) => {
-		move(e.code);
-	});
-
 	function frame() {
 		requestAnimationFrame(frame);
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+		move();
 		player1.draw();
 		player2.draw();
 		ball.draw();
