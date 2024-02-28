@@ -5,10 +5,7 @@ import Found from './RemoteFound.js';
 
 export default class extends Component {
 	setup() {
-		this.$state = {
-			remoteState: 'none',
-			region: 'kr',
-		};
+		this.$state = this.$props;
 	}
 
 	template() {
@@ -20,11 +17,22 @@ export default class extends Component {
 		`;
 	}
 
+	setEvent() {
+		document.addEventListener('click', (e) => {
+			const target = e.target;
+			if (target.id === 'search') {
+				this.stopCounter();
+			}
+		});
+	}
+
 	counter() {
 		let minutes = 0;
 		let seconds = 0;
 		let count;
 		const counterElement = document.getElementById('counter');
+
+		counterElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
 		function updateCounter() {
 			counterElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
@@ -39,16 +47,15 @@ export default class extends Component {
 
 		this.stopCounter = stopCounter;
 
-		function startCounter() {
+		const startCounter = () => {
 			count = setInterval(() => {
 				// if (this.$state.remoteState === found) {
 				// 	stopCounter();
 				// }
-				updateCounter();
-				if (seconds === 5) {
+				if (seconds === 4) {
 					clearInterval(count);
 					updateCounter();
-					new Found(document.querySelector('.mainbox'));
+					new Found(document.querySelector('.mainbox'), this.$state);
 				}
 				if (seconds === 60) {
 					minutes++;
@@ -56,16 +63,14 @@ export default class extends Component {
 				} else {
 					seconds++;
 				}
+				updateCounter();
 			}, 1000);
-		}
+		};
 
 		startCounter();
 	}
 
-	// 비동기로 백엔드로부터 매칭됐음을 받아오는 처리
 	/*
-
-
 		getServer() {
 			if (this.$state.remoteState === 'found')
 				new Wait();
@@ -80,11 +85,5 @@ export default class extends Component {
 	mounted() {
 		this.counter();
 		// getServer();
-		document.addEventListener('click', (e) => {
-			const target = e.target;
-			if (target.id === 'search') {
-				this.stopCounter();
-			}
-		});
 	}
 }

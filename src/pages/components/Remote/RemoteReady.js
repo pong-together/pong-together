@@ -4,12 +4,12 @@ import language from '../../../utils/language.js';
 
 export default class extends Component {
 	setup() {
-		this.$state = {
-			remoteState: 'none',
-			region: 'kr',
-			intraPicture: 'none', // API
-			intraID: 'jonseo', // API
+		this.$state = this.$props;
+		this.intra = {
+			intraPicture: 'none',
+			intraID: 'jonseo',
 		};
+		this.setState({ ...this.$state, ...this.intra });
 	}
 
 	template() {
@@ -39,7 +39,7 @@ export default class extends Component {
 
 		function startTimer() {
 			time = setInterval(() => {
-				if (seconds === 0) {
+				if (seconds === 1) {
 					stopTimer();
 				} else {
 					seconds--;

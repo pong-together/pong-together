@@ -2,6 +2,16 @@ import Component from '../../../core/Component.js';
 import Search from './RemoteSearch.js';
 
 export default class extends Component {
+	setup() {
+		this.$state = {
+			remoteState: 'none',
+			region: 'en',
+		};
+
+		if (window.localStorage.getItem('language')) {
+			this.$state.region = window.localStorage.getItem('language');
+		}
+	}
 
 	template() {
 		return `
@@ -14,6 +24,6 @@ export default class extends Component {
 	}
 
 	mounted() {
-		new Search(document.querySelector('.mainbox'));
+		new Search(document.querySelector('.mainbox'), this.$state);
 	}
 }
