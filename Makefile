@@ -14,9 +14,9 @@ clean:
 	docker-compose down --rmi all --volumes
 
 fclean: clean
-	docker system prune
+	docker system prune -f
 
-re: 
+re:
 	make fclean
 	make all
 
