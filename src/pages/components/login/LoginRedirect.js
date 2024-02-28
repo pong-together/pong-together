@@ -56,8 +56,8 @@ export default class extends Component {
 					navigate('/login');
 				}
 			} catch (error) {
-				clearInterval(loadingInterval);
-				navigate('/login');
+				//clearInterval(loadingInterval);
+				//navigate('/login');
 			}
 		}
 	}
