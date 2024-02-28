@@ -1,5 +1,5 @@
 import Component from '../../../core/Component.js';
-import Router from '../../router.js';
+import { navigate } from '../../../router/utils/navigate.js';
 import language from '../../../utils/language.js';
 
 export default class extends Component {
@@ -33,8 +33,8 @@ export default class extends Component {
 		function stopTimer() {
 			clearInterval(time);
 			bindUpdateTimer();
-			const router = Router();
-			router.navigate('#/select');
+			//const router = Router();
+			navigate('/select');
 		}
 
 		function startTimer() {

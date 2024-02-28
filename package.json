@@ -4,9 +4,9 @@
   "description": "퐁투게더 프론트엔드 ",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "http-server",
-    "build": "webpack --mode production"
+    "build": "vite build",
+    "dev": "vite",
+    "preview": "vite preview --port 3000"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,7 @@
     "eslint": "^8.56.0",
     "http-server": "^14.1.1",
     "prettier": "^3.2.5",
+    "vite": "^5.1.4",
     "webpack": "^5.90.1"
   },
   "devDependencies": {

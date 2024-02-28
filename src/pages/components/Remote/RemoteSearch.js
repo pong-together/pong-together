@@ -1,5 +1,5 @@
 import Component from '../../../core/Component.js';
-import Router from '../../router.js';
+import { navigate } from '../../../router/utils/navigate.js';
 import language from '../../../utils/language.js';
 import Found from './RemoteFound.js';
 
@@ -31,6 +31,7 @@ export default class extends Component {
 		let seconds = 0;
 		let count;
 		const counterElement = document.getElementById('counter');
+
 		counterElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
 		function updateCounter() {
@@ -41,8 +42,7 @@ export default class extends Component {
 			clearInterval(count);
 			updateCounter();
 
-			const router = Router();
-			router.navigate('#/select');
+			navigate('/select');
 		}
 
 		this.stopCounter = stopCounter;
