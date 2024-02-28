@@ -5,7 +5,7 @@ import Remote from '../../pages/components/Remote/Remote.js';
 import Local from '../../pages/components/Local.js';
 import Game from '../../pages/components/game/Game.js';
 
-export const BASE_URL = 'http://localhost:5173';
+export const BASE_URL = 'https://localhost:443';
 
 export const routes = [
 	{ path: /^\/$/, element: Login },
