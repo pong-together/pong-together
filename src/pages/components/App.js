@@ -54,7 +54,7 @@ export default class extends Component {
 								</div>
 						</div>
 						<div class="intra-picture">
-								<div class="chip-picture"><img class="chip-image" src="/static/images/${localStorage.getItem('intraImg')}"/></div>
+								<div class="chip-picture"><img class="chip-image" src="${localStorage.getItem('intraImg')}"/></div>
 						</div>
 						<div class="chip-bottom">
 								<div class="triangle"></div>
