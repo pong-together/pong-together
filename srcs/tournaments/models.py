@@ -8,8 +8,8 @@ from django.db import models
 
 class Tournament(models.Model):
     class GameModeChoice(models.TextChoices):
-        DEFAULT = 'default', 'default'
-        EXTREME = 'extreme', 'extreme'
+        DEFAULT = 'default'
+        EXTREME = 'extreme'
 
     player1_name = models.CharField(max_length=10)
     player2_name = models.CharField(max_length=10)
