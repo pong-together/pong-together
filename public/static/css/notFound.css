@@ -1,0 +1,28 @@
+.not-found-wrapper {
+	display: flex;
+	height: 100vh;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	color: white;
+	font-size: 52px;
+}
+.not-found-btn {
+	font-size: 32px;
+}
+
+@keyframes floatAnimation {
+	0% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-20px);
+	}
+	100% {
+		transform: translateY(0);
+	}
+}
+
+.not-found-wrapper img {
+	animation: floatAnimation 1s ease-in-out infinite;
+}

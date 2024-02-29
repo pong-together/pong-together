@@ -37,6 +37,10 @@ body {
 	align-items: center;
 }
 
+.back-logo:hover {
+	cursor: pointer;
+}
+
 .back-logo {
 	height: 100%;
 	margin: 0 auto;

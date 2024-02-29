@@ -1,6 +1,7 @@
 import Component from '../../core/Component.js';
 import Router from '../../router/router.js';
 import store from '../../store/index.js';
+import { navigate } from '../../router/utils/navigate.js';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
@@ -10,6 +11,12 @@ export default class extends Component {
 			region: 'kr',
 		};
 		this.$store = this.$props;
+	}
+
+	setEvent() {
+		this.addEvent('click', '.back-logo', () => {
+			navigate('/select');
+		});
 	}
 
 	template() {
@@ -80,14 +87,6 @@ export default class extends Component {
 	routerModule() {
 		const $body = this.$target.querySelector('.body-wrapper');
 		new Router($body);
-		//router.addRoute('/', pages.login);
-		//router.addRoute('/login', pages.login);
-		//router.addRoute('/select', pages.gameSelect);
-		//router.addRoute('/local', pages.local);
-		//router.addRoute('/tournament', pages.tournament);
-		//router.addRoute('/remote', pages.remote);
-		//router.addRoute('/game', pages.game);
-		//router.start();
 	}
 
 	calcRate() {
