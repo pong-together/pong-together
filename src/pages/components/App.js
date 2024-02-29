@@ -112,9 +112,17 @@ export default class extends Component {
 				var message = this.$target.querySelector('#m').value;
 				if (message && chatSocket.readyState === WebSocket.OPEN) {
 					// 여기에 조건 추가
-					chatSocket.send(JSON.stringify({ message }));
-					console.log('Message sent: ' + message);
-					this.$target.querySelector('#m').value = '';
+					if (message.trim() !== '') {
+						chatSocket.send(JSON.stringify({ message }));
+						console.log('Message sent: ' + message);
+						this.$target.querySelector('#m').value = '';
+					}
+				}
+			});
+			this.addEvent('keypress', '#m', (e) => {
+				if (e.key === 'Enter' && !e.shiftKey) {
+					e.preventDefault();
+					this.$target.querySelector('.message-btn').click();
 				}
 			});
 		};
