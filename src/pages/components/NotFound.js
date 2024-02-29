@@ -11,10 +11,15 @@ export default class extends Component {
 		return `
 		<div class="body-wrapper">
 			<div class="not-found-wrapper">
+				<img src="/static/images/sorrysorrysorry.png" alt="sorry" style="width:200px;" />
 				<div><span>404 Not Found</span></div>
 				<button class="not-found-btn btn btn-danger">메인으로 돌아가기</button>
 			</div>
 		</div>
 		`;
+	}
+
+	mounted() {
+		setInterval(() => {}, 1000);
 	}
 }
