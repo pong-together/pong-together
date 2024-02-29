@@ -4,7 +4,7 @@ import http from '../../../core/http';
 import { navigate } from '../../../router/utils/navigate';
 import language from '../../../utils/language';
 
-const BASE_URL = process.env.BASE_URL;
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export default class extends Component {
 	setup() {

@@ -2,7 +2,7 @@ import Component from '../../core/Component.js';
 import Router from '../../router/router.js';
 import store from '../../store/index.js';
 
-const SOCKET_URL = process.env.SOCKET_URL;
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
 export default class extends Component {
 	setup() {
