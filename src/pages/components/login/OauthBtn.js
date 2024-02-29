@@ -2,11 +2,12 @@ import Component from '../../../core/Component.js';
 import language from '../../../utils/language.js';
 import store from '../../../store/index.js';
 
+const BASE_URL = process.env.BASE_URL;
+
 export default class extends Component {
 	setEvent() {
 		this.addEvent('click', '#login-oauth-btn', () => {
-			window.location.href =
-				'https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-9faf7925c4cf5dfe9518b96183f6225ad7c1c45e2f186121a5d808d8dcdad924&redirect_uri=https://localhost:443/auth&response_type=code';
+			window.location.href = `https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-9faf7925c4cf5dfe9518b96183f6225ad7c1c45e2f186121a5d808d8dcdad924&redirect_uri=${BASE_URL}/auth&response_type=code`;
 		});
 	}
 

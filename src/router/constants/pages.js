@@ -6,8 +6,6 @@ import Local from '../../pages/components/Local.js';
 import Game from '../../pages/components/game/Game.js';
 import LoginRedirect from '../../pages/components/login/LoginRedirect';
 
-export const BASE_URL = 'https://localhost:443';
-
 export const routes = [
 	{ path: /^\/$/, element: Login },
 	{ path: /^\/login$/, element: Login },

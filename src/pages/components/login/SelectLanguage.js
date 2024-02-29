@@ -3,6 +3,8 @@ import language from '../../../utils/language.js';
 import store from '../../../store/index.js';
 import http from '../../../core/http.js';
 
+const BASE_URL = process.env.BASE_URL;
+
 export default class extends Component {
 	setup() {
 		this.$state = {
@@ -17,16 +19,12 @@ export default class extends Component {
 			this.setState({ region: selectedLanguage });
 			localStorage.setItem('language', this.$state.region);
 			store.dispatch('changeLanguage', this.$state.region);
-
-			//console.log(store.state);
-			// header 나온 뒤에 추가
-			//http.put('', { language: this.$state.region }, {});
 		});
 
 		this.addEvent('click', '#login-to-start', async () => {
 			try {
 				const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
-				const data = await http.get('https://localhost:443/api/userinfo/', {
+				const data = await http.get(`${BASE_URL}/api/userinfo/`, {
 					Authorization: accessToken,
 					'Content-Type': 'application/json',
 				});

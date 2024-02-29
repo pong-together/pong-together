@@ -4,6 +4,8 @@ import http from '../../../core/http';
 import { navigate } from '../../../router/utils/navigate';
 import language from '../../../utils/language';
 
+const BASE_URL = process.env.BASE_URL;
+
 export default class extends Component {
 	setup() {
 		this.$state = {
@@ -45,14 +47,13 @@ export default class extends Component {
 				console.log(code);
 
 				const data = await http.post(
-					'https://localhost:443/api/auth/login/',
+					`${BASE_URL}/api/auth/login/`,
 					{ code: code },
 					{ 'Content-Type': 'application/json' },
 				);
 
 				if (data.login === 'success') {
 					localStorage.setItem('accessToken', data.access_token);
-					//store.dispatch('changeLoginProgress', 'twoFA');
 					navigate('/login');
 				}
 			} catch (error) {

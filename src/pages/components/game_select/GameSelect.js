@@ -2,7 +2,6 @@ import Component from '../../../core/Component.js';
 import language from '../../../utils/language.js';
 import store from '../../../store/index.js';
 import { navigate } from '../../../router/utils/navigate';
-import http from '../../../core/http.js';
 
 export default class extends Component {
 	setup() {
