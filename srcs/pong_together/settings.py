@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'tournaments.apps.TournamentsConfig',
     'chats.apps.ChatsConfig',
     'local.apps.LocalConfig',
+    'remote.apps.RemoteConfig',
     # rest framework
     'rest_framework',
     # simplejwt
