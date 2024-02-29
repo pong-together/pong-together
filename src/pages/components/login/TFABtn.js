@@ -3,6 +3,8 @@ import http from '../../../core/http.js';
 import store from '../../../store/index.js';
 import language from '../../../utils/language.js';
 
+const BASE_URL = import.meta.env.BASE_URL;
+
 export default class extends Component {
 	setEvent() {
 		this.addEvent('click', '#twoFABtn', async (e) => {
@@ -11,7 +13,7 @@ export default class extends Component {
 			const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
 			try {
 				const data = await http.get(
-					`https://localhost:443/api/auth/otp/verify/?code=${inputValue}`,
+					`${BASE_URL}/api/auth/otp/verify/?code=${inputValue}`,
 					{
 						Authorization: accessToken,
 						'Content-Type': 'application/json',
@@ -70,7 +72,7 @@ export default class extends Component {
 		}, 100);
 
 		try {
-			const data = await http.get('https://localhost:443/api/auth/otp/', {
+			const data = await http.get(`${BASE_URL}/api/auth/otp/`, {
 				Authorization: accessToken,
 				'Content-Type': 'application/json',
 			});

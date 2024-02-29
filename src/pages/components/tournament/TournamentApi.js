@@ -1,5 +1,5 @@
 import http from '../../../core/http.js';
-const BASE_URL = process.env.BASE_URL;
+const BASE_URL = import.meta.env.BASE_URL;
 
 var id = 1;
 

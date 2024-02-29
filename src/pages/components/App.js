@@ -2,6 +2,8 @@ import Component from '../../core/Component.js';
 import Router from '../../router/router.js';
 import store from '../../store/index.js';
 
+const SOCKET_URL = process.env.SOCKET_URL;
+
 export default class extends Component {
 	setup() {
 		this.$state = {
@@ -101,7 +103,7 @@ export default class extends Component {
 
 	connectSocket() {
 		const chatSocket = new WebSocket(
-			`wss://localhost:443/ws/chats/?token=${localStorage.getItem('accessToken')}`,
+			`${SOCKET_URL}/ws/chats/?token=${localStorage.getItem('accessToken')}`,
 		);
 
 		chatSocket.onopen = () => {

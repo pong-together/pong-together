@@ -2,7 +2,7 @@ import Component from '../../../core/Component.js';
 import language from '../../../utils/language.js';
 import store from '../../../store/index.js';
 
-const BASE_URL = process.env.BASE_URL;
+const BASE_URL = import.meta.env.BASE_URL;
 
 export default class extends Component {
 	setEvent() {
