@@ -46,6 +46,11 @@ class LoginAPIView(APIView):
             return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
 
         user = self.get_user()
+        if user.chat_connection:
+            data = {
+                'chat_connection': True
+            }
+            return Response(data=data, status=status.HTTP_200_OK)
         refresh = RefreshToken.for_user(user)
         data = {
             'id': user.id,

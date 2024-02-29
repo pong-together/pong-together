@@ -7,11 +7,8 @@ services:
       - ./srcs/:/code
     ports:
       - "8000:8000"
-    environment:
-      - DOCKER_COMPOSE=on
-      - POSTGRES_NAME=${POSTGRES_NAME}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    env_file:
+      - .env
     depends_on:
       - db
     restart: always
@@ -20,10 +17,8 @@ services:
     image: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    env_file:
+      - .env
     ports:
       - "5432:5432"
     restart: always

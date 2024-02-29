@@ -6,6 +6,8 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    env_file:
+      - .env
     depends_on:
       - backend
     restart: always
@@ -17,11 +19,8 @@ services:
       - ./backend/srcs/:/code
     ports:
       - "8000:8000"
-    environment:
-      - DOCKER_COMPOSE="on"
-      - POSTGRES_NAME=${POSTGRES_NAME}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    env_file:
+      - .env
     depends_on:
       - db
     restart: always
@@ -32,10 +31,8 @@ services:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-    environment:
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    env_file:
+      - .env
     restart: always
   
 volumes:
