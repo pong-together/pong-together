@@ -39,4 +39,8 @@ export default {
 	gameLevelChange(context, payload) {
 		context.commit('gameLevelChange', payload);
 	},
+
+	changeTournamentId(context, payload) {
+		context.commit('changeTorunamentId', payload);
+	},
 };

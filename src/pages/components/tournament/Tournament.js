@@ -2,6 +2,7 @@ import Component from '../../../core/Component.js';
 import Bracket from './Tournament-Bracket.js';
 import language from '../../../utils/language.js';
 import tourapi from '../tournament/TournamentApi.js';
+import store from '../../../store/index.js';
 
 export default class extends Component {
 	setup() {
@@ -14,12 +15,18 @@ export default class extends Component {
 				: 'kr',
 		};
 		this.$store = this.$props;
+
+		if (this.$state.gameMode == 'basic')
+			this.$state.gamemodemessage = language.tournament[this.$state.region].normalGameMode;
+		else
+			this.$state.gamemodemessage = language.tournament[this.$state.region].extreamGameMode;
+		store.events.subscribe('tournamentIdChange', async() => this.render());
 	}
 
 	template() {
 		return `
 		<div class="main-container">
-				<div class="info">${language.tournament[this.$state.region].normalGameMode}</div>
+				<div class="info">${this.$state.gamemodemessage}</div>
 				<div class="contain">
 					<div class="explaination">${language.tournament[this.$state.region].tournamentExplain1}</div>
 					<div class="explaination2">${language.tournament[this.$state.region].tournamentExplain2}</div>
@@ -37,16 +44,21 @@ export default class extends Component {
 	}
 
 	async registNickname(nicknames) {
+		var gamemode = '';
+		if (this.$state.gameMode == 'basic')
+			gamemode = 'default';
+		else
+			gamemode = 'extreme';
 		//api부분
-		const result = await tourapi.create(nicknames);
-		const { id } = result;
+		const result = await tourapi.create(nicknames, gamemode);
+		const {id} = result;
 		window.localStorage.setItem('tournament-id', id);
 	}
 
 	setEvent() {
-		this.addEvent('click', '.start', ({ target }) => {
+		this.addEvent('click', '.start', async ({ target }) => {
 			const prev = this.$state.checkDouble;
-			const isDuplicate = this.inputNickname(target, prev);
+			const isDuplicate = await this.inputNickname(target, prev);
 
 			if (!isDuplicate) {
 				new Bracket(this.$target, this.$props);
@@ -98,7 +110,7 @@ export default class extends Component {
 		return false;
 	}
 
-	inputNickname(target, prev) {
+	async inputNickname(target, prev) {
 		const nicknames = [];
 		const nickname1 = document.querySelector('.nick1').value;
 		const nickname2 = document.querySelector('.nick2').value;
@@ -116,7 +128,7 @@ export default class extends Component {
 		) {
 			return true;
 		}
-		this.registNickname(nicknames); //중복검사 통과하면 api보냄.
+		await this.registNickname(nicknames);
 		return false;
 	}
 
