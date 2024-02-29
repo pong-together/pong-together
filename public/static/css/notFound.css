@@ -1,0 +1,12 @@
+.not-found-wrapper {
+	display: flex;
+	height: 100vh;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	color: white;
+	font-size: 52px;
+}
+.not-found-btn {
+	font-size: 32px;
+}

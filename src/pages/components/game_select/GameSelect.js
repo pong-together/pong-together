@@ -171,6 +171,14 @@ export default class extends Component {
 	}
 
 	async mounted() {
+		if (
+			!localStorage.getItem('accessToken') ||
+			!localStorage.getItem('twoFA')
+		) {
+			window.location.pathname = '/login';
+			navigate('/login');
+		}
+
 		if (this.$state.progress === 'mode') {
 			const localModal = document.getElementById('select-modal-local-info');
 			const tournamentModal = document.getElementById(

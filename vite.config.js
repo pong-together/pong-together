@@ -5,4 +5,8 @@ export default defineConfig({
 	server: {
 		port: 3000,
 	},
+	define: {
+		'process.env.VITE_BASE_URL': JSON.stringify(process.env.VITE_BASE_URL),
+		'process.env.VITE_BASE_URL': JSON.stringify(process.env.VITE_SOCKET_URL),
+	},
 });

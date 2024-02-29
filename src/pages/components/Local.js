@@ -97,4 +97,14 @@ export default class extends Component {
 			return true;
 		return false;
 	}
+
+	mounted() {
+		if (
+			!localStorage.getItem('accessToken') ||
+			!localStorage.getItem('twoFA')
+		) {
+			window.location.pathname = '/login';
+			navigate('/login');
+		}
+	}
 }
