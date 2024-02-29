@@ -27,6 +27,7 @@ class User(AbstractUser):
     language = models.CharField(max_length=2, choices=LanguageChoice, default=LanguageChoice.KOREAN)
     otp_secret_key = models.CharField(max_length=32, default=pyotp.random_base32)
     game_status = models.CharField(max_length=12, choices=GameStatusChoice, default=GameStatusChoice.DISCONNECTED)
+    chat_connection = models.BooleanField(default=False)
     objects = UserManager()
 
     USERNAME_FIELD = 'intra_id'

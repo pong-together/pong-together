@@ -20,6 +20,7 @@
         "language": "KR",
         "otp_secret_key": "5ZDCFP35GT52FO33SSCLKHHSETMQEYWB",
         "game_status": "disconnected",
+        "chat_connection": "False",
         "groups": [],
         "user_permissions": []
     }
@@ -45,6 +46,7 @@
         "language": "KR",
         "otp_secret_key": "V7P257QJK3T5RSQE5RYRWRPLRP2MPGYX",
         "game_status": "disconnected",
+        "chat_connection": "False",
         "groups": [],
         "user_permissions": []
     }
@@ -70,6 +72,7 @@
         "language": "KR",
         "otp_secret_key": "5WELXIHFR7SALEG33YJMOMV6N2NLYRL6",
         "game_status": "disconnected",
+        "chat_connection": "False",
         "groups": [],
         "user_permissions": []
     }
@@ -95,6 +98,7 @@
         "language": "KR",
         "otp_secret_key": "B7JNNYN4QWF3LY6WXRQ7HG6ZT3YGTAH7",
         "game_status": "disconnected",
+        "chat_connection": "False",
         "groups": [],
         "user_permissions": []
     }
@@ -120,6 +124,7 @@
         "language": "KR",
         "otp_secret_key": "HJWNV3JDCPRINJ6JPTEVRXWVS67O6Q2O",
         "game_status": "disconnected",
+        "chat_connection": "False",
         "groups": [],
         "user_permissions": []
     }
@@ -145,6 +150,7 @@
         "language": "KR",
         "otp_secret_key": "VL5KJGGCEFFZQBEYHXTPUHYGZFHKOTAK",
         "game_status": "disconnected",
+        "chat_connection": "False",
         "groups": [],
         "user_permissions": []
     }
