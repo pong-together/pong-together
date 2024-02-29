@@ -11,7 +11,8 @@ class TournamentCreateSerializer(serializers.ModelSerializer):
         fields = ('player1_name', 'player2_name', 'player3_name', 'player4_name', 'game_mode')
 
     def create(self, validated_data):
-        player_names = list(validated_data.values())
+        player_names_keys = ['player1_name', 'player2_name', 'player3_name', 'player4_name']
+        player_names = [validated_data[key] for key in player_names_keys]
 
         shuffled_player_names = random.sample(player_names, len(player_names))
 
