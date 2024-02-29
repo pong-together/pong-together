@@ -1,7 +1,7 @@
 import Component from '../../../core/Component.js';
 import language from '../../../utils/language.js';
 import store from '../../../store/index.js';
-import http from '../../../core/http.js';
+import { navigate } from '../../../router/utils/navigate';
 
 export default class extends Component {
 	setup() {
@@ -28,7 +28,7 @@ export default class extends Component {
 		});
 
 		this.addEvent('click', '[data-button="game-start"]', () => {
-			window.location.pathname = `/tournament`;
+			navigate('/tournament');
 		});
 
 		this.addEvent('click', '.game-select-mode .mode', (e) => {
@@ -80,11 +80,11 @@ export default class extends Component {
 
 		this.addEvent('click', '#game-mode-button', () => {
 			if (this.$state.mode === 'local') {
-				window.location.pathname = '/local';
+				navigate('/local');
 			} else if (this.$state.mode === 'tournament') {
-				window.location.pathname = '/tournament';
+				navigate('/tournament');
 			} else if (this.$state.mode === 'remote') {
-				window.location.pathname = '/remote';
+				navigate('/remote');
 			}
 		});
 	}
