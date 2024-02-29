@@ -50,6 +50,10 @@
 	list-style-type: none;
 	margin: 10px 0;
 }
+.my-messages {
+	align-self: flex-end;
+	background-color: lightblue;
+}
 .message {
 	display: block;
 	font-size: 20px;

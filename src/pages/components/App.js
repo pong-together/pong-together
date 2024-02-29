@@ -154,6 +154,9 @@ export default class extends Component {
 		const messageContainer = this.$target.querySelector('.message-container');
 		const messageElement = document.createElement('div');
 		messageElement.classList.add('messages');
+		if (data.intra_id === localStorage.getItem('intraId')) {
+			messageElement.classList.add('my-messages');
+		}
 		const messageTime = document.createElement('span');
 		messageTime.classList.add('message-time-stamp');
 		const messageContent = document.createElement('span');
