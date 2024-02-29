@@ -148,24 +148,48 @@ export default class extends Component {
 		};
 	}
 
+	//displayMessage(data) {
+	// Moved outside and made a class method
+	//console.log(data);
+	//const messageContainer = this.$target.querySelector('.message-container');
+	//const messageElement = document.createElement('div');
+	//messageElement.classList.add('messages');
+	//if (data.intra_id === localStorage.getItem('intraId')) {
+	//	messageElement.classList.add('my-message');
+	//} else {
+	//	messageElement.classList.add('others-message');
+	//}
+	//const messageTime = document.createElement('span');
+	//messageTime.classList.add('message-time-stamp');
+	//const messageContent = document.createElement('span');
+	//messageContent.classList.add('message');
+
+	//messageTime.textContent = `${data.timestamp}`;
+	//messageContent.textContent = `${data.intra_id}: ${data.message}`;
+	//messageElement.appendChild(messageTime);
+	//messageElement.appendChild(messageContent);
+	//messageContainer.appendChild(messageElement);
+	//messageContainer.scrollTop = messageContainer.scrollHeight;
 	displayMessage(data) {
-		// Moved outside and made a class method
-		console.log(data);
 		const messageContainer = this.$target.querySelector('.message-container');
 		const messageElement = document.createElement('div');
-		messageElement.classList.add('messages');
+		messageElement.classList.add('message-wrapper');
+
+		// 사용자 자신의 메시지에 'my-message' 클래스 추가
 		if (data.intra_id === localStorage.getItem('intraId')) {
 			messageElement.classList.add('my-message');
 		} else {
 			messageElement.classList.add('others-message');
 		}
+
 		const messageTime = document.createElement('span');
 		messageTime.classList.add('message-time-stamp');
 		const messageContent = document.createElement('span');
-		messageContent.classList.add('message');
+		messageContent.classList.add('message-content');
 
 		messageTime.textContent = `${data.timestamp}`;
 		messageContent.textContent = `${data.intra_id}: ${data.message}`;
+
 		messageElement.appendChild(messageTime);
 		messageElement.appendChild(messageContent);
 		messageContainer.appendChild(messageElement);
