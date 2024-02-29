@@ -119,4 +119,11 @@ export default class extends Component {
 		this.registNickname(nicknames); //중복검사 통과하면 api보냄.
 		return false;
 	}
+
+	mounted() {
+		if (!localStorage.getItem('accessToken')) {
+			window.location.pathname = '/login';
+			navigate('/login');
+		}
+	}
 }

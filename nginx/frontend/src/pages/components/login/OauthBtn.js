@@ -6,7 +6,6 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export default class extends Component {
 	setEvent() {
-		console.log(BASE_URL);
 		this.addEvent('click', '#login-oauth-btn', () => {
 			window.location.href = `https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-9faf7925c4cf5dfe9518b96183f6225ad7c1c45e2f186121a5d808d8dcdad924&redirect_uri=${BASE_URL}/auth&response_type=code`;
 		});
