@@ -1,6 +1,9 @@
 import Component from '../../core/Component.js';
 import Router from '../../router/router.js';
 import store from '../../store/index.js';
+import { navigate } from '../../router/utils/navigate.js';
+
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
 export default class extends Component {
 	setup() {
@@ -8,6 +11,12 @@ export default class extends Component {
 			region: 'kr',
 		};
 		this.$store = this.$props;
+	}
+
+	setEvent() {
+		this.addEvent('click', '.back-logo', () => {
+			navigate('/select');
+		});
 	}
 
 	template() {
@@ -19,14 +28,21 @@ export default class extends Component {
 	changeModule() {
 		if (
 			window.location.pathname === '/login' ||
-			window.location.pathname === ''
+			window.location.pathname === '/' ||
+			window.location.pathname === '/auth'
 		) {
 			this.$target.innerHTML = '';
 			this.$target.innerHTML = `
 				<div class="login-wrapper" data-link>
 						<div class="body-wrapper"></div>
 				</div>`;
-		} else {
+		} else if (
+			window.location.pathname === '/select' ||
+			window.location.pathname === '/local' ||
+			window.location.pathname === '/remote' ||
+			window.location.pathname === '/tournament' ||
+			window.location.pathname === '/game'
+		) {
 			this.$target.innerHTML = '';
 			this.$target.innerHTML = `
 				<div class="back-wrapper" data-link>
@@ -47,7 +63,7 @@ export default class extends Component {
 								</div>
 						</div>
 						<div class="intra-picture">
-								<div class="chip-picture"><img class="chip-image" src="/static/images/${localStorage.getItem('intraImg')}"/></div>
+								<div class="chip-picture"><img class="chip-image" src="${localStorage.getItem('intraImg')}"/></div>
 						</div>
 						<div class="chip-bottom">
 								<div class="triangle"></div>
@@ -71,14 +87,6 @@ export default class extends Component {
 	routerModule() {
 		const $body = this.$target.querySelector('.body-wrapper');
 		new Router($body);
-		//router.addRoute('/', pages.login);
-		//router.addRoute('/login', pages.login);
-		//router.addRoute('/select', pages.gameSelect);
-		//router.addRoute('/local', pages.local);
-		//router.addRoute('/tournament', pages.tournament);
-		//router.addRoute('/remote', pages.remote);
-		//router.addRoute('/game', pages.game);
-		//router.start();
 	}
 
 	calcRate() {
@@ -94,7 +102,7 @@ export default class extends Component {
 
 	connectSocket() {
 		const chatSocket = new WebSocket(
-			`wss://localhost:443/ws/chats/?token=${localStorage.getItem('accessToken')}`,
+			`${SOCKET_URL}/ws/chats/?token=${localStorage.getItem('accessToken')}`,
 		);
 
 		chatSocket.onopen = () => {
@@ -103,9 +111,17 @@ export default class extends Component {
 				var message = this.$target.querySelector('#m').value;
 				if (message && chatSocket.readyState === WebSocket.OPEN) {
 					// 여기에 조건 추가
-					chatSocket.send(JSON.stringify({ message }));
-					console.log('Message sent: ' + message);
-					this.$target.querySelector('#m').value = '';
+					if (message.trim() !== '') {
+						chatSocket.send(JSON.stringify({ message }));
+						console.log('Message sent: ' + message);
+						this.$target.querySelector('#m').value = '';
+					}
+				}
+			});
+			this.addEvent('keypress', '#m', (e) => {
+				if (e.key === 'Enter' && !e.shiftKey) {
+					e.preventDefault();
+					this.$target.querySelector('.message-btn').click();
 				}
 			});
 		};
@@ -152,13 +168,6 @@ export default class extends Component {
 	}
 
 	async mounted() {
-		console.log(store.state.loginProgress);
-		//window.localStorage.removeItem('acessToken');
-		window.addEventListener('hashchange', () => {
-			this.changeModule();
-			this.routerModule();
-		});
-
 		window.addEventListener('load', () => {
 			this.changeModule();
 			this.routerModule();

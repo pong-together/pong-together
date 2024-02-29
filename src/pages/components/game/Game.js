@@ -25,6 +25,13 @@ export default class extends Component {
 	}
 
 	mounted() {
+		if (
+			!localStorage.getItem('accessToken') ||
+			!localStorage.getItem('twoFA')
+		) {
+			window.location.pathname = '/login';
+			navigate('/login');
+		}
 		new GameReady(document.querySelector('.game-display'));
 	}
 }

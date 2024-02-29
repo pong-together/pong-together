@@ -51,6 +51,13 @@ export default class extends Component {
 	}
 
 	mounted() {
+		if (
+			!localStorage.getItem('accessToken') ||
+			!localStorage.getItem('twoFA')
+		) {
+			window.location.pathname = '/login';
+			navigate('/login');
+		}
 		this.timer();
 	}
 }
