@@ -11,10 +11,27 @@
 	margin-top: 30px;
 }
 
+/*.message-container {
+    width: 100%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}*/
 .message-container {
-	width: 605px;
-	height: 165px;
+	width: 100%;
 	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+}
+
+.message-wrapper {
+	display: flex;
+	flex-direction: column;
+	max-width: 70%;
+	margin: 5px;
+	padding: 5px;
+	border-radius: 15px;
+	font-size: 16px;
 }
 
 #chat-form {
@@ -50,9 +67,13 @@
 	list-style-type: none;
 	margin: 10px 0;
 }
-.my-messages {
+.my-message {
 	align-self: flex-end;
-	background-color: lightblue;
+	background-color: #fdffa5; /* 사용자 메시지 배경색 */
+}
+.others-message {
+	align-self: flex-start;
+	background-color: #6cd3ff; /* 다른 사용자 메시지 배경색 */
 }
 .message {
 	display: block;
@@ -64,12 +85,23 @@
 	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 	border-radius: 0px 15px 15px 15px;
 }
+/*.message-time-stamp {
+	font-size: 12px;
+	color: gray;
+}*/
+.message-content {
+	padding: 5px 20px;
+	border-radius: 15px;
+	font-family: 'jua';
+}
+
 .message-time-stamp {
 	font-size: 12px;
 	color: gray;
+	align-self: flex-end;
 }
 
-.others-message-wrapper {
+/*.others-message-wrapper {
 	max-width: 70%;
 	align-items: flex-start;
 	background-color: #6cd3ff;
@@ -89,4 +121,4 @@
 	padding: 3px 5px;
 	margin: 5px 5px 5px auto;
 	font-family: 'jua';
-}
+}*/

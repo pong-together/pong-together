@@ -155,7 +155,9 @@ export default class extends Component {
 		const messageElement = document.createElement('div');
 		messageElement.classList.add('messages');
 		if (data.intra_id === localStorage.getItem('intraId')) {
-			messageElement.classList.add('my-messages');
+			messageElement.classList.add('my-message');
+		} else {
+			messageElement.classList.add('others-message');
 		}
 		const messageTime = document.createElement('span');
 		messageTime.classList.add('message-time-stamp');
