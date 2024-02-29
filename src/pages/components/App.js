@@ -73,6 +73,7 @@ export default class extends Component {
 				<div class="chat-container">
 						<div class="message-container">
 
+
 						</div>
 						<div action="" id="chat-form">
 								<input id="m" autocomplete="off" /><button class="message-btn">전송</button>
@@ -165,7 +166,9 @@ export default class extends Component {
 		messageContent.classList.add('message');
 
 		messageTime.textContent = `${data.timestamp}`;
-		messageContent.textContent = `${data.intra_id}: ${data.message}`;
+		if (data.intra_id === localStorage.getItem('intraId')) {
+			messageContent.textContent = `${data.message}`;
+		} else messageContent.textContent = `${data.intra_id}: ${data.message}`;
 		messageElement.appendChild(messageTime);
 		messageElement.appendChild(messageContent);
 		messageContainer.appendChild(messageElement);
