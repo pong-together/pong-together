@@ -6,7 +6,8 @@ from users.models import User
 class UserInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'intra_id', 'image', 'win_count', 'lose_count', 'game_count', 'language', 'game_status')
+        fields = ('id', 'intra_id', 'image', 'win_count', 'lose_count', 'game_count',
+                  'language', 'game_status', 'chat_connection')
 
 
 class UserLanguageSerializer(serializers.ModelSerializer):

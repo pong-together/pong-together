@@ -2,6 +2,7 @@ import asyncio
 import json
 from datetime import datetime
 
+from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 
@@ -21,6 +22,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             await self.channel_layer.group_add(self.GROUP_NAME, self.channel_name)
             await self.accept()
             self.ping_task = asyncio.create_task(self.send_ping())
+            await self.update_user_chat_connection(True)
         except Exception:
             await self.close()
 
@@ -29,6 +31,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             await self.delete_chat_users()
             await self.channel_layer.group_discard(self.GROUP_NAME, self.channel_name)
             await self.cancel_ping_task()
+            await self.update_user_chat_connection(False)
         except Exception as e:
             await self.send_json({'error': str(e)})
 
@@ -98,3 +101,10 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
     @staticmethod
     async def is_pong(type):
         return type == 'pong'
+
+    @database_sync_to_async
+    def update_user_chat_connection(self, is_connected):
+        self.user.chat_connection = is_connected
+        self.user.save()
+
+
