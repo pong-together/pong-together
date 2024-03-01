@@ -1,6 +1,6 @@
 import Component from '../../../core/Component.js';
 import { navigate } from '../../../router/utils/navigate.js';
-import Search from './RemoteSearch.js';
+import RemoteSearch from './RemoteSearch.js';
 
 export default class extends Component {
 	setup() {
@@ -33,6 +33,6 @@ export default class extends Component {
 	}
 
 	mounted() {
-		new Search(document.querySelector('.mainbox'), this.$state);
+		new RemoteSearch(document.querySelector('.mainbox'), this.$state);
 	}
 }

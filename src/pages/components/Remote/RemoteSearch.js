@@ -1,7 +1,7 @@
 import Component from '../../../core/Component.js';
 import { navigate } from '../../../router/utils/navigate.js';
 import language from '../../../utils/language.js';
-import Ready from './RemoteReady.js';
+import RemoteReady from './RemoteReady.js';
 
 export default class extends Component {
 	setup() {
@@ -56,7 +56,7 @@ export default class extends Component {
 			count = setInterval(() => {
 				if (seconds === 4) {
 					clearInterval(count);
-					new Ready(document.querySelector('.mainbox'), this.$state);
+					new RemoteReady(document.querySelector('.mainbox'), this.$state);
 				}
 				if (seconds === 60) {
 					minutes++;

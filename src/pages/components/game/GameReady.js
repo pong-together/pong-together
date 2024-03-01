@@ -1,6 +1,6 @@
 import Component from '../../../core/Component.js';
 import { navigate } from '../../../router/utils/navigate.js';
-import Start from './GameStart.js';
+import GameStart from './GameStart.js';
 
 export default class extends Component {
 	setup() {
@@ -35,7 +35,7 @@ export default class extends Component {
 				updateTimer();
 				if (seconds === 0) {
 					clearInterval(time);
-					new Start(document.querySelector('.game-display'));
+					new GameStart(document.querySelector('.game-display'));
 				} else {
 					seconds--;
 				}
