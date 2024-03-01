@@ -177,7 +177,6 @@ export default class extends Component {
 	}
 
 	async mounted() {
-		console.log('select store state:', store.state);
 		if (
 			!localStorage.getItem('accessToken') ||
 			!localStorage.getItem('twoFA')

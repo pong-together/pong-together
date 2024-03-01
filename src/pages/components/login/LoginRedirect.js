@@ -24,7 +24,6 @@ export default class extends Component {
 	}
 
 	async mounted() {
-		console.log('auth');
 		const queryParams = new URLSearchParams(window.location.search);
 		const code = queryParams.get('code');
 		if (code && !localStorage.getItem('accessToken')) {

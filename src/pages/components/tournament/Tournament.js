@@ -16,12 +16,14 @@ export default class extends Component {
 		};
 		this.$store = this.$props;
 
-		console.log(this.$state.gameMode)
+		console.log(this.$state.gameMode);
 		if (this.$state.gameMode == 'basic')
-			this.$state.gamemodemessage = language.tournament[this.$state.region].normalGameMode;
+			this.$state.gamemodemessage =
+				language.tournament[this.$state.region].normalGameMode;
 		else
-			this.$state.gamemodemessage = language.tournament[this.$state.region].extreamGameMode;
-		store.events.subscribe('tournamentIdChange', async() => this.render());
+			this.$state.gamemodemessage =
+				language.tournament[this.$state.region].extreamGameMode;
+		store.events.subscribe('tournamentIdChange', async () => this.render());
 	}
 
 	template() {
@@ -46,13 +48,11 @@ export default class extends Component {
 
 	async registNickname(nicknames) {
 		var gamemode = '';
-		if (this.$state.gameMode == 'basic')
-			gamemode = 'default';
-		else
-			gamemode = 'extreme';
+		if (this.$state.gameMode == 'basic') gamemode = 'default';
+		else gamemode = 'extreme';
 		//api부분
 		const result = await tourapi.create(nicknames, gamemode);
-		const {id} = result;
+		const { id } = result;
 		window.localStorage.setItem('tournament-id', id);
 	}
 

@@ -1,7 +1,7 @@
 import Component from '../../../core/Component.js';
 import language from '../../../utils/language.js';
 import tourapi from '../tournament/TournamentApi.js';
-import store from '../../../store/index.js'
+import store from '../../../store/index.js';
 
 export default class extends Component {
 	setup() {
@@ -18,9 +18,11 @@ export default class extends Component {
 		this.$store = this.$props;
 
 		if (this.$state.gameMode == 'default')
-			this.$state.gamemodemessage = language.tournament[this.$state.region].normalGameMode;
+			this.$state.gamemodemessage =
+				language.tournament[this.$state.region].normalGameMode;
 		else
-			this.$state.gamemodemessage = language.tournament[this.$state.region].extreamGameMode;
+			this.$state.gamemodemessage =
+				language.tournament[this.$state.region].extreamGameMode;
 	}
 
 	template() {

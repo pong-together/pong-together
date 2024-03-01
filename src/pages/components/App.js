@@ -15,7 +15,6 @@ export default class extends Component {
 
 	setEvent() {
 		this.addEvent('click', '.back-logo', () => {
-			console.log('store state:', store.state);
 			if (localStorage.getItem('tournament-id')) {
 				localStorage.removeItem('tournament-id');
 			}
@@ -186,7 +185,7 @@ export default class extends Component {
 
 		this.calcRate();
 		if (localStorage.getItem('accessToken')) {
-			//this.connectSocket();
+			this.connectSocket();
 		}
 
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {
