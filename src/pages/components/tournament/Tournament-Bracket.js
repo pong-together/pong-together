@@ -9,7 +9,7 @@ export default class extends Component {
 			participant: [],
 			gameround: 0,
 			winner: [],
-			gameMode: '',
+			gameMode: store.state.gameLevel,
 			gamemodemessage: '',
 			region: localStorage.getItem('language')
 				? localStorage.getItem('language')
@@ -394,7 +394,7 @@ export default class extends Component {
 	}
 	//api부분 함수
 	async getTournamentInfo() {
-		console.log(window.localStorage.getItem('tournament-id'));
+		// console.log(window.localStorage.getItem('tournament-id'));
 		const result = await tourapi.list(
 			window.localStorage.getItem('tournament-id'),
 		);

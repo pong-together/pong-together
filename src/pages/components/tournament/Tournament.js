@@ -9,13 +9,14 @@ export default class extends Component {
 		this.$state = {
 			participant: [],
 			checkError: '',
-			gameMode: '임시 게임모드',
+			gameMode: store.state.gameLevel,
 			region: localStorage.getItem('language')
 				? localStorage.getItem('language')
 				: 'kr',
 		};
 		this.$store = this.$props;
 
+		console.log(this.$state.gameMode)
 		if (this.$state.gameMode == 'basic')
 			this.$state.gamemodemessage = language.tournament[this.$state.region].normalGameMode;
 		else
