@@ -163,7 +163,7 @@
 }
 
 .tournament-ball {
-	background-image: url(../../images/Group\ 69.png);
+	background-image: url(../../images/ball.png);
 	width: 50px;
 	height: 50px;
 	margin-left: 350px;
@@ -171,7 +171,7 @@
 }
 
 .tournament-crown {
-	background-image: url(../../images/Group\ 85.png);
+	background-image: url(../../images/crown.png);
 	width: 50px;
 	height: 40px;
 	margin-left: 350px;

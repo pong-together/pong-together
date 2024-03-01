@@ -9,4 +9,5 @@ export default {
 	// gameOption
 	gameMode: 'local', // tournament, remote
 	gameLevel: 'basic', // extreme
+	tournamentId: 0,
 };
