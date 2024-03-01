@@ -1,6 +1,7 @@
 import Component from '../../../core/Component.js';
 import language from '../../../utils/language.js';
 import tourapi from '../tournament/TournamentApi.js';
+import store from '../../../store/index.js'
 
 export default class extends Component {
 	setup() {
@@ -8,15 +9,24 @@ export default class extends Component {
 			participant: [],
 			gameround: 0,
 			winner: [],
-			gameMode: '임시 게임모드',
+			gameMode: store.state.gameLevel,
+			gamemodemessage: '',
+			region: localStorage.getItem('language')
+				? localStorage.getItem('language')
+				: 'kr',
 		};
 		this.$store = this.$props;
+
+		if (this.$state.gameMode == 'default')
+			this.$state.gamemodemessage = language.tournament[this.$state.region].normalGameMode;
+		else
+			this.$state.gamemodemessage = language.tournament[this.$state.region].extreamGameMode;
 	}
 
 	template() {
 		return `
 			<div class="main-container-bracket">
-			<div class="info">${language.tournament[this.$store.state.language].normalGameMode}</div>
+			<div class="info">${this.$state.gamemodemessage}</div>
 				<div class="bracket-container">
 				<div class="tournament-bracket">
 					<div class="crownball">
@@ -56,10 +66,10 @@ export default class extends Component {
 					</div>
 				</div>
 				<div class="gameinfo-container">
-					<div class="firstgame-info1">${language.tournament[this.$store.state.language].firstGame}</div>
-					<div class="firstgame-info2">${language.tournament[this.$store.state.language].secondGame}</div>
+					<div class="firstgame-info1">${language.tournament[this.$state.region].firstGame}</div>
+					<div class="firstgame-info2">${language.tournament[this.$state.region].secondGame}</div>
 				</div>
-				<button class="game-start">${language.tournament[this.$store.state.language].gameStartButton}</button>
+				<button class="game-start">${language.tournament[this.$state.region].gameStartButton}</button>
 			</div>
 		</div>
 		`;
@@ -384,11 +394,10 @@ export default class extends Component {
 	}
 	//api부분 함수
 	async getTournamentInfo() {
-		console.log('api test!');
+		// console.log(window.localStorage.getItem('tournament-id'));
 		const result = await tourapi.list(
 			window.localStorage.getItem('tournament-id'),
 		);
-		// const result = await tourapi.list(1);
 		const {
 			player1_name,
 			player2_name,
@@ -398,6 +407,7 @@ export default class extends Component {
 			second_winner,
 			final_winner,
 			game_turn,
+			game_mode,
 		} = result;
 		const participants = [
 			player1_name,
@@ -416,6 +426,7 @@ export default class extends Component {
 				participant: participants,
 				winner: winners,
 				gameround: game_turn,
+				gameMode: game_mode,
 			});
 		}
 	}
