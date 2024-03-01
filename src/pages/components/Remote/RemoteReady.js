@@ -14,7 +14,7 @@ export default class extends Component {
 
 		this.intra = {
 			intraPicture: 'static/images/intraPicture.png',
-			intraID: 'jonseo',
+			intraID: 'jonseo42',
 		};
 		this.$state = this.$props;
 		this.setState(this.intra);
