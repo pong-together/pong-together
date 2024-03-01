@@ -2,6 +2,7 @@ import Component from '../../../core/Component.js';
 import Search from './RemoteSearch.js';
 
 export default class extends Component {
+	//check
 	setup() {
 		this.$state = {
 			remoteState: 'none',
