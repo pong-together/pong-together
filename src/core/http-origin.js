@@ -1,5 +1,3 @@
-import { navigate } from '../router/utils/navigate.js';
-
 const parseResponse = async (response) => {
 	const { status } = response;
 	let data = null; // 초기값을 null로 설정
@@ -18,47 +16,6 @@ const parseResponse = async (response) => {
 	};
 };
 
-const refreshToken = async () => {
-	const header = {
-		'Content-Type': 'application/json',
-		Authorization: `Bearer ${localStorage.getItem('refreshToken')}`,
-	};
-
-	const refToken = localStorage.getItem('refreshToken');
-	if (refToken) {
-		try {
-			const response = await window.fetch(url, {
-				method: 'GET',
-				headers: new window.Headers(header),
-			});
-
-			if (!response.ok) {
-				if (response.status === 401) {
-					console.error('Unauthorized: 401 error, refreshToken is expired');
-					console.log('refreshToken has expired and requires re-login.');
-					localStorage.clear();
-					navigate('/login');
-				}
-			} else {
-				const data = await response.json();
-				localStorage.setItem('accessToken', data.accessToken);
-				console.log('new acessToken:', data.accessToken);
-			}
-		} catch (error) {
-			console.error('Network error:', error);
-			return {
-				status: error.status,
-				message: error.message,
-				data: error.data,
-			};
-		}
-	} else {
-		console.error("refreshToken doesn't exist, so re-login is required.");
-		localStorage.clear();
-		navigate('/login');
-	}
-};
-
 const request = async (params) => {
 	const { method = 'GET', url, headers = {}, body } = params;
 	let response;
@@ -73,20 +30,11 @@ const request = async (params) => {
 
 	try {
 		response = await window.fetch(url, config);
-		if (!response.ok) {
-			if (response.status === 401) {
-				console.error('Unauthorized: 401 error, accessToken is expired');
-				await refreshToken();
-			}
-		}
 	} catch (error) {
 		console.error('Network error:', error);
 		return {
-			// status: 500, 예시로 500 상태 코드를 반환
-			// data: null, 데이터는 없음
-			status: error.status,
-			message: error.message,
-			data: error.data,
+			status: 500, // 예시로 500 상태 코드를 반환
+			data: null, // 데이터는 없음
 		};
 	}
 

@@ -1,8 +1,17 @@
 import Component from '../../../core/Component.js';
+import { navigate } from '../../../router/utils/navigate.js';
 import Search from './RemoteSearch.js';
 
 export default class extends Component {
 	setup() {
+		if (
+			!localStorage.getItem('accessToken') ||
+			!localStorage.getItem('twoFA')
+		) {
+			window.location.pathname = '/login';
+			navigate('/login');
+		}
+
 		this.$state = {
 			remoteState: 'none',
 			region: 'kr',
