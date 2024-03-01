@@ -52,7 +52,7 @@ export default class extends Component {
 					{ 'Content-Type': 'application/json' },
 				);
 
-				if (data.login === 'success') {
+				if (data?.login === 'success') {
 					localStorage.setItem('accessToken', data.access_token);
 					localStorage.setItem('refreshToken', data.refresh_token);
 					navigate('/login');

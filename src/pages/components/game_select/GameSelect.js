@@ -19,19 +19,23 @@ export default class extends Component {
 	}
 
 	setEvent() {
-		this.addEvent('click', '[data-button="game-role"]', () => {
+		this.addEvent('click', '[data-button="game-role"]', (e) => {
+			e.stopPropagation();
 			this.setState({ progress: 'role' });
 		});
 
-		this.addEvent('click', '[data-button="mode-select"]', () => {
+		this.addEvent('click', '[data-button="mode-select"]', (e) => {
+			e.stopPropagation();
 			this.setState({ progress: 'mode' });
 		});
 
-		this.addEvent('click', '[data-button="game-start"]', () => {
+		this.addEvent('click', '[data-button="game-start"]', (e) => {
+			e.stopPropagation();
 			navigate('/tournament');
 		});
 
 		this.addEvent('click', '.game-select-mode .mode', (e) => {
+			e.stopPropagation();
 			const modeValue = e.target.value;
 			this.setState({
 				mode: modeValue,
@@ -43,6 +47,7 @@ export default class extends Component {
 		});
 
 		this.addEvent('click', '.game-select-difficult .level', (e) => {
+			e.stopPropagation();
 			const levelValue = e.target.value;
 			this.setState({ level: levelValue });
 			store.dispatch('gameLevelChange', this.$state.level);
@@ -78,7 +83,8 @@ export default class extends Component {
 			else this.setState({ remoteModal: 'none' });
 		});
 
-		this.addEvent('click', '#game-mode-button', () => {
+		this.addEvent('click', '#game-mode-button', (e) => {
+			e.stopPropagation();
 			if (this.$state.mode === 'local') {
 				navigate('/local');
 			} else if (this.$state.mode === 'tournament') {
@@ -171,6 +177,7 @@ export default class extends Component {
 	}
 
 	async mounted() {
+		console.log('select store state:', store.state);
 		if (
 			!localStorage.getItem('accessToken') ||
 			!localStorage.getItem('twoFA')

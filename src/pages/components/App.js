@@ -15,7 +15,11 @@ export default class extends Component {
 
 	setEvent() {
 		this.addEvent('click', '.back-logo', () => {
-			navigate('/select');
+			console.log('store state:', store.state);
+			if (localStorage.getItem('tournament-id')) {
+				localStorage.removeItem('tournament-id');
+			}
+			window.location.pathname = '/select';
 		});
 	}
 
@@ -182,7 +186,7 @@ export default class extends Component {
 
 		this.calcRate();
 		if (localStorage.getItem('accessToken')) {
-			this.connectSocket();
+			//this.connectSocket();
 		}
 
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {
