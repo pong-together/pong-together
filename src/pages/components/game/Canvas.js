@@ -89,12 +89,12 @@ export default function Canvas() {
 	const key = {
 		KeyW: false,
 		KeyS: false,
-		ArrowUp: false,
-		ArrowDown: false,
+		KeyP: false,
+		Semicolon: false,
 	};
 
 	function move() {
-		let speed = 3;
+		let speed = 2;
 		if (key['KeyW'] && player1.y > 28) {
 			if ((player1.y -= speed) <= 28) {
 				player1.y = 28;
@@ -105,12 +105,12 @@ export default function Canvas() {
 				player1.y = 355;
 			}
 		}
-		if (key['ArrowUp'] && player2.y > 28) {
+		if (key['KeyP'] && player2.y > 28) {
 			if ((player2.y -= speed) <= 28) {
 				player2.y = 28;
 			}
 		}
-		if (key['ArrowDown'] && player2.y < 355) {
+		if (key['Semicolon'] && player2.y < 355) {
 			if ((player2.y += speed) >= 355) {
 				player2.y = 355;
 			}

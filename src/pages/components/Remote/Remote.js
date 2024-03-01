@@ -5,7 +5,7 @@ export default class extends Component {
 	setup() {
 		this.$state = {
 			remoteState: 'none',
-			region: 'en',
+			region: 'kr',
 		};
 
 		if (window.localStorage.getItem('language')) {

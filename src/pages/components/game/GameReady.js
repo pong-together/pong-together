@@ -5,13 +5,13 @@ export default class extends Component {
 	template() {
 		return `
 			<div class="display-container">
-				<div class="game-count"></div>
+				<div class="game-count">3</div>
 			</div>
 		`;
 	}
 
 	timer() {
-		let seconds = 5;
+		let seconds = 2;
 		let time;
 		const countdown = document.querySelector('.game-count');
 
