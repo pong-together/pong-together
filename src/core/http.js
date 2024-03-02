@@ -18,7 +18,7 @@ const parseResponse = async (response) => {
 	};
 };
 
-const refreshToken = async () => {
+const refreshToken = async (url) => {
 	const header = {
 		'Content-Type': 'application/json',
 		Authorization: `Bearer ${localStorage.getItem('refreshToken')}`,
@@ -47,9 +47,8 @@ const refreshToken = async () => {
 		} catch (error) {
 			console.error('Network error:', error);
 			return {
-				status: error.status,
-				message: error.message,
-				data: error.data,
+				status: 500,
+				data: null,
 			};
 		}
 	} else {
@@ -76,17 +75,15 @@ const request = async (params) => {
 		if (!response.ok) {
 			if (response.status === 401) {
 				console.error('Unauthorized: 401 error, accessToken is expired');
-				await refreshToken();
+				await refreshToken(url);
+				response = await window.fetch(url, config);
 			}
 		}
 	} catch (error) {
 		console.error('Network error:', error);
 		return {
-			// status: 500, 예시로 500 상태 코드를 반환
-			// data: null, 데이터는 없음
-			status: error.status,
-			message: error.message,
-			data: error.data,
+			status: 500, // 예시로 500 상태 코드를 반환
+			data: null, // 데이터는 없음
 		};
 	}
 
