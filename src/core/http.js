@@ -1,4 +1,9 @@
+import App from '../pages/components/App.js';
 import { navigate } from '../router/utils/navigate.js';
+
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+const REFRESH_BASE_URL = `${BASE_URL}/api/auth/token/refresh/`;
+const CHECK_BASE_URL = `${BASE_URL}/api/auth/otp/`;
 
 const parseResponse = async (response) => {
 	const { status } = response;
@@ -18,37 +23,83 @@ const parseResponse = async (response) => {
 	};
 };
 
-const refreshToken = async (url) => {
-	const header = {
+const checkToken = async () => {
+	let header = {
+		'Content-Type': 'application/json',
+		Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+	};
+
+	try {
+		console.log('test checkToken1');
+		const response = await window.fetch(CHECK_BASE_URL, {
+			method: 'GET',
+			headers: new window.Headers(header),
+		});
+		console.log('test checkToken2');
+		console.log('status:', response.status);
+		if (!response.ok) {
+			if (response.status === 401) {
+				console.error('Unauthorized: 401 error, accessToken is expired');
+				await refreshToken();
+			}
+		}
+	} catch (error) {
+		console.error('test checkToken error');
+		console.log(error);
+		console.log(error.message);
+		// return {
+		// 	status: error.status,
+		// 	message: error.message,
+		// };
+	}
+};
+
+const refreshToken = async () => {
+	let header = {
 		'Content-Type': 'application/json',
 		Authorization: `Bearer ${localStorage.getItem('refreshToken')}`,
 	};
+	let refBody = {
+		refresh_token: localStorage.getItem('refreshToken'),
+	};
+	refBody = JSON.stringify(refBody);
+	// const config = {
+	// 	method: 'POST',
+	// 	headers: new window.Headers(header),
+	// };
+	// config.body = JSON.stringify(refBody);
 
 	const refToken = localStorage.getItem('refreshToken');
 	if (refToken) {
 		try {
-			const response = await window.fetch(url, {
-				method: 'GET',
+			console.log('test checkToken3');
+			const response = await window.fetch(REFRESH_BASE_URL, {
+				method: 'POST',
 				headers: new window.Headers(header),
+				body: refBody,
 			});
-
+			// const response = await window.fetch(REFRESH_BASE_URL, config);
+			console.log('test checkToken4');
+			console.log('status:', response.status);
+			console.log(response);
 			if (!response.ok) {
 				if (response.status === 401) {
 					console.error('Unauthorized: 401 error, refreshToken is expired');
-					console.log('refreshToken has expired and requires re-login.');
+					console.error('refreshToken has expired and requires re-login.');
 					localStorage.clear();
 					navigate('/login');
 				}
 			} else {
 				const data = await response.json();
-				localStorage.setItem('accessToken', data.accessToken);
-				console.log('new acessToken:', data.accessToken);
+				localStorage.setItem('accessToken', data.access_token);
+				console.log('new acessToken:', data.access_token);
+				App.connectSocket();
 			}
 		} catch (error) {
 			console.error('Network error:', error);
 			return {
-				status: 500,
-				data: null,
+				status: error.status,
+				message: error.message,
 			};
 		}
 	} else {
@@ -75,7 +126,7 @@ const request = async (params) => {
 		if (!response.ok) {
 			if (response.status === 401) {
 				console.error('Unauthorized: 401 error, accessToken is expired');
-				await refreshToken(url);
+				await refreshToken();
 				response = await window.fetch(url, config);
 			}
 		}
@@ -145,4 +196,5 @@ export default {
 	put,
 	patch,
 	delete: deleteRequest,
+	checkToken,
 };

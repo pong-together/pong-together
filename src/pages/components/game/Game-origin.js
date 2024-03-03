@@ -1,5 +1,4 @@
 import Component from '../../../core/Component.js';
-import http from '../../../core/http.js';
 import { navigate } from '../../../router/utils/navigate.js';
 import GameReady from './GameReady.js';
 
@@ -12,10 +11,6 @@ export default class extends Component {
 			window.location.pathname = '/login';
 			navigate('/login');
 		}
-
-		(async () => {
-			await http.checkToken();
-		})();
 	}
 
 	template() {
