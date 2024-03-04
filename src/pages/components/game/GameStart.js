@@ -1,5 +1,4 @@
 import Component from '../../../core/Component.js';
-import { navigate } from '../../../router/utils/navigate.js';
 import Canvas from './Canvas.js';
 
 export default class extends Component {

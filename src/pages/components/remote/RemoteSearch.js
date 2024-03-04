@@ -1,5 +1,4 @@
 import Component from '../../../core/Component.js';
-import { navigate } from '../../../router/utils/navigate.js';
 import language from '../../../utils/language.js';
 import RemoteReady from './RemoteReady.js';
 
@@ -47,7 +46,7 @@ export default class extends Component {
 		function stopCounter() {
 			clearInterval(count);
 			updateCounter();
-			navigate('/select');
+			window.location.pathname = '/select';
 		}
 		this.stopCounter = stopCounter;
 

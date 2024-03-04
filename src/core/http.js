@@ -1,4 +1,3 @@
-// import App from '../pages/components/App.js';
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const REFRESH_BASE_URL = `${BASE_URL}/api/auth/token/refresh/`;
 const CHECK_BASE_URL = `${BASE_URL}/api/auth/otp/`;
