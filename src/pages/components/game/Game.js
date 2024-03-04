@@ -1,7 +1,21 @@
 import Component from '../../../core/Component.js';
+import http from '../../../core/http.js';
+import { navigate } from '../../../router/utils/navigate.js';
 import GameReady from './GameReady.js';
 
 export default class extends Component {
+	setup() {
+		if (
+			!localStorage.getItem('accessToken') ||
+			!localStorage.getItem('twoFA')
+		) {
+			window.location.pathname = '/login';
+			navigate('/login');
+		} else {
+			http.checkToken();
+		}
+	}
+
 	template() {
 		return `
 			<div class="game-container">
@@ -25,13 +39,6 @@ export default class extends Component {
 	}
 
 	mounted() {
-		if (
-			!localStorage.getItem('accessToken') ||
-			!localStorage.getItem('twoFA')
-		) {
-			window.location.pathname = '/login';
-			navigate('/login');
-		}
 		new GameReady(document.querySelector('.game-display'));
 	}
 }
