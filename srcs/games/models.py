@@ -12,3 +12,7 @@ class Game(models.Model):
     player2_y = models.IntegerField()
     ball_x = models.IntegerField()
     ball_y = models.IntegerField()
+
+    class DoesNotExist(Exception):
+        def __init__(self):
+            super().__init__('does not exist game')
