@@ -58,13 +58,18 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
             }))
 
     async def start_matching(self):
-        match_info = self.waiting_list[self.group_name][:2]
+        first_channel, first_id = self.waiting_list[self.group_name][0]
+        second_channel, second_id = self.waiting_list[self.group_name][1]
 
-        for channel_name, intra_id in match_info:
-            await self.channel_layer.send(channel_name, {
-                'type': 'find_opponent',
-                'opponent': self.
-            })
+        await self.channel_layer.send(first_channel, {
+            'type': 'find_opponent',
+            'opponent': second_id
+        })
+
+        await self.channel_layer.send(second_channel, {
+            'type': 'find_opponent',
+            'opponent': first_id
+        })
 
     async def find_opponent(self, event):
         try:
