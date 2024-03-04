@@ -1,10 +1,18 @@
 import Component from '../../../core/Component.js';
 import { navigate } from '../../../router/utils/navigate.js';
 import language from '../../../utils/language.js';
-import Ready from './RemoteReady.js';
+import RemoteReady from './RemoteReady.js';
 
 export default class extends Component {
 	setup() {
+		if (
+			!localStorage.getItem('accessToken') ||
+			!localStorage.getItem('twoFA')
+		) {
+			window.location.pathname = '/login';
+			navigate('/login');
+		}
+
 		this.$state = this.$props;
 	}
 
@@ -32,7 +40,6 @@ export default class extends Component {
 		let count;
 		const counterElement = document.getElementById('counter');
 		counterElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-		this.stopCounter = stopCounter;
 
 		function updateCounter() {
 			counterElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
@@ -43,12 +50,13 @@ export default class extends Component {
 			updateCounter();
 			navigate('/select');
 		}
+		this.stopCounter = stopCounter;
 
 		const startCounter = () => {
 			count = setInterval(() => {
 				if (seconds === 4) {
 					clearInterval(count);
-					new Ready(document.querySelector('.mainbox'), this.$state);
+					new RemoteReady(document.querySelector('.mainbox'), this.$state);
 				}
 				if (seconds === 60) {
 					minutes++;
@@ -64,10 +72,6 @@ export default class extends Component {
 	}
 
 	mounted() {
-		if (!localStorage.getItem('accessToken')) {
-			window.location.pathname = '/login';
-			navigate('/login');
-		}
 		this.counter();
 	}
 }
