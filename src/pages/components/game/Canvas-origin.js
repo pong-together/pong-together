@@ -12,11 +12,8 @@ export default function Canvas() {
 	*/
 
 	// 클러스터 아이맥 27인치 5120 x 2880
-	// const BASEWIDTH = 5120;
-	// const BASEHEIGHT = 2880;
-
-	const BASEWIDTH = 637;
-	const BASEHEIGHT = 446;
+	const BASEWIDTH = 5120;
+	const BASEHEIGHT = 2880;
 
 	let img_p1 = new Image();
 	let img_p2 = new Image();
@@ -85,13 +82,9 @@ export default function Canvas() {
 		let ball = new Sphere(630 / BASEWIDTH, 640 / BASEHEIGHT, 30, 30);
 	*/
 
-	// let player1 = new Bar(107, 1200, 18, 62, img_p1);
-	// let player2 = new Bar(4867, 1200, 18, 62, img_p2);
-	// let ball = new Sphere(2475, 1350, 30, 30);
-
-	let player1 = new Bar(15, 186, 18, 62, img_p1);
-	let player2 = new Bar(622, 186, 18, 62, img_p2);
-	let ball = new Sphere(327, 209, 30, 30);
+	let player1 = new Bar(107, 1200, 18, 62, img_p1);
+	let player2 = new Bar(4867, 1200, 18, 62, img_p2);
+	let ball = new Sphere(2475, 1350, 30, 30);
 
 	const key = {
 		KeyW: false,
