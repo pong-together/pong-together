@@ -5,13 +5,13 @@ import RemoteReady from './RemoteReady.js';
 
 export default class extends Component {
 	setup() {
-		if (
-			!localStorage.getItem('accessToken') ||
-			!localStorage.getItem('twoFA')
-		) {
-			window.location.pathname = '/login';
-			navigate('/login');
-		}
+		// if (
+		// 	!localStorage.getItem('accessToken') ||
+		// 	!localStorage.getItem('twoFA')
+		// ) {
+		// 	window.location.pathname = '/login';
+		// 	navigate('/login');
+		// }
 
 		this.$state = this.$props;
 	}
