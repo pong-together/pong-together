@@ -3,15 +3,15 @@ import { navigate } from '../../../router/utils/navigate.js';
 import Canvas from './Canvas.js';
 
 export default class extends Component {
-	// setup() {
-	// 	if (
-	// 		!localStorage.getItem('accessToken') ||
-	// 		!localStorage.getItem('twoFA')
-	// 	) {
-	// 		window.location.pathname = '/login';
-	// 		navigate('/login');
-	// 	}
-	// }
+	setup() {
+		if (
+			!localStorage.getItem('accessToken') ||
+			!localStorage.getItem('twoFA')
+		) {
+			window.location.pathname = '/login';
+			navigate('/login');
+		}
+	}
 
 	template() {
 		return `

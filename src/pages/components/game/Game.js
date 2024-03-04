@@ -9,14 +9,11 @@ export default class extends Component {
 			!localStorage.getItem('accessToken') ||
 			!localStorage.getItem('twoFA')
 		) {
-			// window.location.pathname = '/login';
+			window.location.pathname = '/login';
 			navigate('/login');
+		} else {
+			http.checkToken();
 		}
-
-		// (async () => {
-		// 	await http.checkToken();
-		// })();
-		http.checkToken();
 	}
 
 	template() {

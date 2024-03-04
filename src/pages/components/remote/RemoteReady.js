@@ -4,13 +4,13 @@ import language from '../../../utils/language.js';
 
 export default class extends Component {
 	setup() {
-		// if (
-		// 	!localStorage.getItem('accessToken') ||
-		// 	!localStorage.getItem('twoFA')
-		// ) {
-		// 	window.location.pathname = '/login';
-		// 	navigate('/login');
-		// }
+		if (
+			!localStorage.getItem('accessToken') ||
+			!localStorage.getItem('twoFA')
+		) {
+			window.location.pathname = '/login';
+			navigate('/login');
+		}
 
 		this.intra = {
 			intraPicture: 'static/images/intraPicture.png',

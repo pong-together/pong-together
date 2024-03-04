@@ -74,12 +74,13 @@ const refreshToken = async () => {
 					console.log('Unauthorized: 401, refreshToken is expired');
 					console.log('refreshToken has expired and requires re-login');
 					localStorage.clear();
+					window.location.pathname = '/login';
 					navigate('/login');
 				}
 			} else {
 				const data = await response.json();
 				localStorage.setItem('accessToken', data.access);
-				console.log('accessToken reissued')
+				console.log('accessToken reissued');
 				// App.connectSocket();
 			}
 		} catch (error) {
@@ -92,6 +93,7 @@ const refreshToken = async () => {
 	} else {
 		console.log("refreshToken doesn't exist, so re-login is required");
 		localStorage.clear();
+		window.location.pathname = '/login';
 		navigate('/login');
 	}
 };
