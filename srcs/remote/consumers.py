@@ -24,6 +24,13 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
         except Exception:
             await self.close()
 
+    async def disconnect(self, code):
+        try:
+            await self.channel_layer.group_discard(self.group_name, self.channel_name)
+            await self.cancel_ping_task()
+        except Exception as e:
+            await self.send_json({'error': str(e)})
+
     async def init_connection(self):
         self.user = self.scope['user']
         query_string = parse_qs(self.scope['query_string'].strip().decode())
@@ -40,3 +47,9 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
                 'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             }))
 
+    async def cancel_ping_task(self):
+        self.ping_task.cancel()
+        try:
+            await self.ping_task
+        except asyncio.CancelledError:
+            pass
