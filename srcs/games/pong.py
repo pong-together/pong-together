@@ -9,21 +9,22 @@ PLAYER2 = 1
 
 
 class Pong:
-    def __init__(self, id, consumer):
-        self.id = id
+    WIDTH = 637
+    HEIGHT = 446
+
+    def __init__(self, game_id, consumer):
+        self.id = game_id
         self.consumer = consumer
-        self.width = 637
-        self.height = 446
         self.scores = [0, 0]
 
-        paddle1_x = 20
-        paddle2_x = self.width - paddle1_x - Paddle.WIDTH
-        paddle_y = (self.height - Paddle.HEIGHT) / 2
+        paddle1_x = 15
+        paddle2_x = self.WIDTH - paddle1_x - Paddle.WIDTH
+        paddle_y = (self.HEIGHT - Paddle.HEIGHT) / 2
         self.player1 = Paddle(paddle1_x, paddle_y)
         self.player2 = Paddle(paddle2_x, paddle_y)
 
-        ball_x = (self.width - Ball.SIZE) / 2
-        ball_y = (self.height - Ball.SIZE) / 2
+        ball_x = (self.WIDTH - Ball.SIZE) / 2
+        ball_y = (self.HEIGHT - Ball.SIZE) / 2
         self.ball = Ball(ball_x, ball_y)
 
     async def run(self):
