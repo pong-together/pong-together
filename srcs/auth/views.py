@@ -90,6 +90,8 @@ class LoginAPIView(APIView):
 
 
 class RefreshTokenAPIView(TokenRefreshView):
+    permission_classes = [AllowAny]
+
     def post(self, request, *args, **kwargs):
         try:
             return super().post(request, *args, **kwargs)
