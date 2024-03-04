@@ -10,7 +10,6 @@ export default class extends Component {
 			!localStorage.getItem('twoFA')
 		) {
 			window.location.pathname = '/login';
-			navigate('/login');
 		}
 
 		this.$state = this.$props;
