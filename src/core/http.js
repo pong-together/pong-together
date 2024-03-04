@@ -60,7 +60,7 @@ const refreshToken = async () => {
 		Authorization: `Bearer ${localStorage.getItem('refreshToken')}`,
 	};
 	let refBody = {
-		refresh_token: localStorage.getItem('refreshToken'),
+		refresh: localStorage.getItem('refreshToken'),
 	};
 	refBody = JSON.stringify(refBody);
 	// const config = {
@@ -91,8 +91,8 @@ const refreshToken = async () => {
 				}
 			} else {
 				const data = await response.json();
-				localStorage.setItem('accessToken', data.access_token);
-				console.log('new acessToken:', data.access_token);
+				localStorage.setItem('accessToken', data.access);
+				console.log('new acessToken:', data.access);
 				App.connectSocket();
 			}
 		} catch (error) {
