@@ -7,10 +7,12 @@ from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 
 class RemoteConsumer(AsyncJsonWebsocketConsumer):
+    waiting_list = {}
 
     def __init__(self, *args, **kwargs):
         super().__init__(args, kwargs)
         self.ping_task = None
+        self.matching_task = None
         self.user = None
         self.group_name = None
         self.channel_name = None
@@ -21,6 +23,14 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
             await self.channel_layer.group_add(self.group_name, self.channel_name)
             await self.accept()
             self.ping_task = asyncio.create_task(self.send_ping())
+
+            if self.group_name not in self.waiting_list:
+                self.waiting_list[self.group_name] = []
+            self.waiting_list[self.group_name].append((self.channel_name, self.user.intra_id))
+
+            if len(self.waiting_list[self.group_name]) >= 2:
+                await self.start_matching()
+            print(self.user.intra_id)
         except Exception:
             await self.close()
 
@@ -46,6 +56,27 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
                 'type': 'ping',
                 'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             }))
+
+    async def start_matching(self):
+        match_info = self.waiting_list[self.group_name][:2]
+
+        for channel_name, intra_id in match_info:
+            await self.channel_layer.send(channel_name, {
+                'type': 'find_opponent',
+                'opponent': self.
+            })
+
+    async def find_opponent(self, event):
+        try:
+            message = {
+                'type': 'find_opponent',
+                'opponent': event['opponent'],
+            }
+            await self.send_json(message)
+        except KeyError as e:
+            await self.send({'error': f'{str(e)} is required'})
+        except Exception as e:
+            await self.send_json({'error': str(e)})
 
     async def cancel_ping_task(self):
         self.ping_task.cancel()
