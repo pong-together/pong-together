@@ -11,15 +11,16 @@ import os
 from django.core.asgi import get_asgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pong_together.settings')
-
 asgi_application = get_asgi_application()
 
-
-from chats.middlewares import WebSocketJWTAuthenticationMiddleware
+from pong_together.middlewares import WebSocketJWTAuthenticationMiddleware
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.security.websocket import AllowedHostsOriginValidator
 
 import chats.routing
+import remote.routing
+
+websocket_urlpatterns = chats.routing.websocket_urlpatterns + remote.routing.websocket_urlpatterns
 
 application = ProtocolTypeRouter({
     'http': asgi_application,
@@ -27,7 +28,7 @@ application = ProtocolTypeRouter({
     WebSocketJWTAuthenticationMiddleware(
         AllowedHostsOriginValidator(
             URLRouter(
-                chats.routing.websocket_urlpatterns
+                websocket_urlpatterns
             )
         )
     )

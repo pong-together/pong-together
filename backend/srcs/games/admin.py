@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from local.models import Local
+from games.models import Game
 
 # Register your models here.
-admin.site.register(Local)
+admin.site.register(Game)

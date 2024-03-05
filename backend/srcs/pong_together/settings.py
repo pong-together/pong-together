@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'chats.apps.ChatsConfig',
     'local.apps.LocalConfig',
     'remote.apps.RemoteConfig',
+    'games.apps.GamesConfig',
     # rest framework
     'rest_framework',
     # simplejwt
