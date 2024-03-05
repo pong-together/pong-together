@@ -89,9 +89,9 @@ export default function Canvas() {
 	// let player2 = new Bar(4867, 1200, 18, 62, img_p2);
 	// let ball = new Sphere(2475, 1350, 30, 30);
 
-	let player1 = new Bar(11, 192, 18, 62, img_p1);
-	let player2 = new Bar(608, 192, 18, 62, img_p2);
-	let ball = new Sphere(308.5, 213, 20, 20);
+	let player1 = new Bar(10, 192, 19, 63, img_p1);
+	let player2 = new Bar(608, 192, 19, 63, img_p2);
+	let ball = new Sphere(309, 213, 20, 20);
 
 	const key = {
 		KeyW: false,
