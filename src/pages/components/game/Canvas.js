@@ -124,7 +124,7 @@ export default function Canvas() {
 			}
 		}
 	}
-*/
+	*/
 
 	function move() {
 		const SPEED = 3;

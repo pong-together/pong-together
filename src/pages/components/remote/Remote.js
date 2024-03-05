@@ -1,4 +1,5 @@
 import Component from '../../../core/Component.js';
+import http from '../../../core/http.js';
 import RemoteSearch from './RemoteSearch.js';
 
 export default class extends Component {
