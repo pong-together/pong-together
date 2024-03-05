@@ -2,7 +2,6 @@ import Component from '../../../core/Component.js';
 import language from '../../../utils/language.js';
 import store from '../../../store/index.js';
 import http from '../../../core/http.js';
-//import { navigate } from '../../../router/utils/navigate';
 
 export default class extends Component {
 	setup() {
@@ -41,7 +40,6 @@ export default class extends Component {
 
 		this.addEvent('click', '[data-button="game-start"]', (e) => {
 			e.stopPropagation();
-			navigate('/tournament');
 		});
 
 		this.addEvent('click', '.game-select-mode .mode', (e) => {
