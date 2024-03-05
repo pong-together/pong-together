@@ -24,8 +24,8 @@ class Pong:
         self.player1 = Paddle(paddle1_x, paddle_y)
         self.player2 = Paddle(paddle2_x, paddle_y)
 
-        ball_x = (self.WIDTH - Ball.SIZE) / 2
-        ball_y = (self.HEIGHT - Ball.SIZE) / 2
+        ball_x = (self.WIDTH - Ball.WIDTH) / 2
+        ball_y = (self.HEIGHT - Ball.HEIGHT) / 2
         self.ball = Ball(ball_x, ball_y)
 
     async def run(self):
@@ -47,21 +47,24 @@ class Pong:
             self.ball.update(game, self.turn)
             status = self.ball.update_velocity(game, self.turn)
 
-            game_info = {
-                'type': 'get_game_info',
-                'player1_y': self.player1.y,
-                'player2_y': self.player2.y,
-                'ball_x': self.ball.x,
-                'ball_y': self.ball.y
-            }
-            # await self.consumer.send_json(game_info)
-            await self.consumer.channel_layer.group_send(self.consumer.GROUP_NAME, game_info)
+            await self.send_game_info()
             await self.save_game()
 
     def update_positions(self, game):
         self.player1.set_position(game.player1_y)
         self.player2.set_position(game.player2_y)
         self.ball.set_position(game.ball_x, game.ball_y)
+
+    async def send_game_info(self):
+        game_info = {
+            'type': 'get_game_info',
+            'player1_y': self.player1.y,
+            'player2_y': self.player2.y,
+            'ball_x': self.ball.x,
+            'ball_y': self.ball.y
+        }
+        # await self.consumer.send_json(game_info)
+        await self.consumer.channel_layer.group_send(self.consumer.GROUP_NAME, game_info)
 
     @database_sync_to_async
     def get_game(self):

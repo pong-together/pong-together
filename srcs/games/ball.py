@@ -2,7 +2,8 @@ import math
 
 
 class Ball:
-    SIZE = 20
+    WIDTH = 20
+    HEIGHT = 20
     MINIMUM_SPEED = 7
 
     def __init__(self, x, y):
@@ -25,14 +26,14 @@ class Ball:
     def update_velocity(self, game, turn):
         top_limit = 0
         from games.pong import Pong
-        bottom_limit = Pong.HEIGHT - self.SIZE
+        bottom_limit = Pong.HEIGHT - self.HEIGHT
         if self.y <= top_limit:
             self.velocity[1] *= -1
         if self.y >= bottom_limit:
             self.velocity[1] *= -1
 
         escape_degree = 15
-        left_limit = -(self.SIZE + escape_degree)
+        left_limit = -(self.WIDTH + escape_degree)
         right_limit = Pong.WIDTH + escape_degree
         if self.x < left_limit:
             self.go_off_screen(game, (turn == 1) - (turn == 0))
