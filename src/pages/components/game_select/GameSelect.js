@@ -94,11 +94,11 @@ export default class extends Component {
 		this.addEvent('click', '#game-mode-button', (e) => {
 			e.stopPropagation();
 			if (this.$state.mode === 'local') {
-				window.location.pathname('/local');
+				window.location.pathname = '/local';
 			} else if (this.$state.mode === 'tournament') {
-				window.location.pathname('/tournament');
+				window.location.pathname = '/tournament';
 			} else if (this.$state.mode === 'remote') {
-				window.location.pathname('/remote');
+				window.location.pathname = '/remote';
 			}
 		});
 	}
