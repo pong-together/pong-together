@@ -30,7 +30,6 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
 
             if len(self.waiting_list[self.group_name]) >= 2:
                 await self.start_matching()
-            print(self.user.intra_id)
         except Exception:
             await self.close()
 
@@ -38,6 +37,10 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
         try:
             await self.channel_layer.group_discard(self.group_name, self.channel_name)
             await self.cancel_ping_task()
+
+            if self.channel_name in self.waiting_list[self.group_name]:
+                self.waiting_list[self.group_name].remove(self.channel_name)
+
         except Exception as e:
             await self.send_json({'error': str(e)})
 
@@ -58,17 +61,27 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
             }))
 
     async def start_matching(self):
+
+        #db생성. 매칭 된 사람들
+        await self.send_channel() #한 그룹의 매칭 된 2개의 채널들에게 전송
+        self.waiting_list[self.group_name] = self.waiting_list[self.group_name][2:] #대기 리스트 수정
+
+    async def send_channel(self):
         first_channel, first_id = self.waiting_list[self.group_name][0]
         second_channel, second_id = self.waiting_list[self.group_name][1]
 
         await self.channel_layer.send(first_channel, {
             'type': 'find_opponent',
-            'opponent': second_id
+            'opponent': second_id,
+
+            'intra_id': first_id
         })
 
         await self.channel_layer.send(second_channel, {
             'type': 'find_opponent',
-            'opponent': first_id
+            'opponent': first_id,
+
+            'intra_id': second_id
         })
 
     async def find_opponent(self, event):
@@ -76,6 +89,7 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
             message = {
                 'type': 'find_opponent',
                 'opponent': event['opponent'],
+                'intra_id': event['intra_id']
             }
             await self.send_json(message)
         except KeyError as e:
