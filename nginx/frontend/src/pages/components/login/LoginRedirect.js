@@ -24,7 +24,6 @@ export default class extends Component {
 	}
 
 	async mounted() {
-		console.log('auth');
 		const queryParams = new URLSearchParams(window.location.search);
 		const code = queryParams.get('code');
 		if (code && !localStorage.getItem('accessToken')) {
@@ -52,10 +51,11 @@ export default class extends Component {
 					{ 'Content-Type': 'application/json' },
 				);
 
-				if (data.login === 'success') {
+				if (data?.login === 'success') {
 					localStorage.setItem('accessToken', data.access_token);
 					localStorage.setItem('refreshToken', data.refresh_token);
-					navigate('/login');
+					window.location.pathname('/login');
+					//navigate('/login');
 				}
 			} catch (error) {
 				//clearInterval(loadingInterval);

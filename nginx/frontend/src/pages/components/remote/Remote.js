@@ -1,11 +1,22 @@
 import Component from '../../../core/Component.js';
-import Search from './RemoteSearch.js';
+import http from '../../../core/http.js';
+import RemoteSearch from './RemoteSearch.js';
 
 export default class extends Component {
+	//check
 	setup() {
+		if (
+			!localStorage.getItem('accessToken') ||
+			!localStorage.getItem('twoFA')
+		) {
+			window.location.pathname = '/login';
+		} else {
+			http.checkToken();
+		}
+
 		this.$state = {
 			remoteState: 'none',
-			region: 'en',
+			region: 'kr',
 		};
 
 		if (window.localStorage.getItem('language')) {
@@ -24,6 +35,6 @@ export default class extends Component {
 	}
 
 	mounted() {
-		new Search(document.querySelector('.mainbox'), this.$state);
+		new RemoteSearch(document.querySelector('.mainbox'), this.$state);
 	}
 }

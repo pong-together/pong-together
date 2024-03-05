@@ -44,4 +44,8 @@ export default {
 		state.gameLevel = payload;
 		return state;
 	},
+	changeTournamentId(state, payload) {
+		state.torunamentId = payload;
+		return state;
+	}
 };

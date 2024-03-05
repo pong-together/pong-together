@@ -1,21 +1,27 @@
 import Component from '../../../core/Component.js';
-import { navigate } from '../../../router/utils/navigate.js';
 import language from '../../../utils/language.js';
 
 export default class extends Component {
 	setup() {
-		this.$state = this.$props;
+		if (
+			!localStorage.getItem('accessToken') ||
+			!localStorage.getItem('twoFA')
+		) {
+			window.location.pathname = '/login';
+		}
+
 		this.intra = {
-			intraPicture: 'none',
+			intraPicture: 'static/images/intraPicture.png',
 			intraID: 'jonseo',
 		};
-		this.setState({ ...this.$state, ...this.intra });
+		this.$state = this.$props;
+		this.setState(this.intra);
 	}
 
 	template() {
 		return `
 			<div class="top-text">${language.remote[this.$state.region].readyText}</div>
-			<img src="static/images/intraPicture.png" id="picture">
+			<img src="${this.$state.intraPicture}" id="picture">
 			<button id="match-intra">${this.$state.intraID}(5)</button>
 		`;
 	}
@@ -33,8 +39,7 @@ export default class extends Component {
 		function stopTimer() {
 			clearInterval(time);
 			bindUpdateTimer();
-			//const router = Router();
-			navigate('/select');
+			window.location.pathname = '/game';
 		}
 
 		function startTimer() {
@@ -52,13 +57,6 @@ export default class extends Component {
 	}
 
 	mounted() {
-		if (
-			!localStorage.getItem('accessToken') ||
-			!localStorage.getItem('twoFA')
-		) {
-			window.location.pathname = '/login';
-			navigate('/login');
-		}
 		this.timer();
 	}
 }

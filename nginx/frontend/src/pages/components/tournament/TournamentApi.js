@@ -15,12 +15,13 @@ const list = (id) => {
 	return http.get(BASE_URL_ID, HEADERS);
 };
 
-const create = (nicknames) => {
+const create = (nicknames, gamemode) => {
 	const list = {
 		player1_name: nicknames[0],
 		player2_name: nicknames[1],
 		player3_name: nicknames[2],
 		player4_name: nicknames[3],
+		game_mode: gamemode,
 	};
 
 	return http.post(TOURNAMENT_BASE_URL, list, HEADERS);

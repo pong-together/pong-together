@@ -16,7 +16,7 @@
 	width: 151px;
 	height: 54px;
 	border-radius: 15px;
-	background-color: #FFA6A6;
+	background-color: #ffa6a6;
 	font-size: 28px;
 	justify-content: center;
 	align-items: center;
@@ -163,7 +163,7 @@
 }
 
 .tournament-ball {
-	background-image: url(../../images/Group\ 69.png);
+	background-image: url(../../images/ball.png);
 	width: 50px;
 	height: 50px;
 	margin-left: 350px;
@@ -171,7 +171,7 @@
 }
 
 .tournament-crown {
-	background-image: url(../../images/Group\ 85.png);
+	background-image: url(../../images/crown.png);
 	width: 50px;
 	height: 40px;
 	margin-left: 350px;
@@ -224,7 +224,7 @@
 .game-start {
 	width: 331px;
 	height: 70px;
-	background-color: #FFA6A6;
+	background-color: #ffa6a6;
 	border-radius: 15px;
 	border-width: 0;
 	font-size: 28px;
@@ -232,6 +232,7 @@
 	font-family: 'jua';
 	margin-top: 15px;
 	box-shadow: 3px 3px 3px black;
+	/**/
 }
 
 .game-start:active {
