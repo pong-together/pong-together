@@ -89,9 +89,9 @@ export default function Canvas() {
 	// let player2 = new Bar(4867, 1200, 18, 62, img_p2);
 	// let ball = new Sphere(2475, 1350, 30, 30);
 
-	let player1 = new Bar(13, 192, 18, 62, img_p1);
-	let player2 = new Bar(606, 192, 18, 62, img_p2);
-	let ball = new Sphere(313, 215, 20, 20);
+	let player1 = new Bar(11, 192, 18, 62, img_p1);
+	let player2 = new Bar(608, 192, 18, 62, img_p2);
+	let ball = new Sphere(308.5, 213, 20, 20);
 
 	const key = {
 		KeyW: false,
@@ -100,55 +100,53 @@ export default function Canvas() {
 		Semicolon: false,
 	};
 
-	/*	y 좌표를 경기장 폭으로 제한
 	function move() {
 		const SPEED = 3;
-		if (key['KeyW'] && player1.y > 28) {
-			if ((player1.y -= SPEED) <= 28) {
-				player1.y = 28;
+		if (key['KeyW'] && player1.y > 30) {
+			if ((player1.y -= SPEED) <= 30) {
+				player1.y = 30;
 			}
 		}
-		if (key['KeyS'] && player1.y < 355) {
-			if ((player1.y += SPEED) >= 355) {
-				player1.y = 355;
+		if (key['KeyS'] && player1.y < 353) {
+			if ((player1.y += SPEED) >= 353) {
+				player1.y = 353;
 			}
 		}
-		if (key['KeyP'] && player2.y > 28) {
-			if ((player2.y -= SPEED) <= 28) {
-				player2.y = 28;
+		if (key['KeyP'] && player2.y > 30) {
+			if ((player2.y -= SPEED) <= 30) {
+				player2.y = 30;
 			}
 		}
-		if (key['Semicolon'] && player2.y < 355) {
-			if ((player2.y += SPEED) >= 355) {
-				player2.y = 355;
+		if (key['Semicolon'] && player2.y < 353) {
+			if ((player2.y += SPEED) >= 353) {
+				player2.y = 353;
 			}
 		}
 	}
-	*/
 
-	function move() {
-		const SPEED = 3;
-		if (key['KeyW'] && player1.y > 0) {
-			if ((player1.y -= SPEED) <= 0) {
-				player1.y = 0;
-			}
-		}
-		if (key['KeyS'] && player1.y < 384) {
-			if ((player1.y += SPEED) >= 384) {
-				player1.y = 384;
-			}
-		}
-		if (key['KeyP'] && player2.y > 0) {
-			if ((player2.y -= SPEED) <= 0) {
-				player2.y = 0;
-			}
-		}
-		if (key['Semicolon'] && player2.y < 384) {
-			if ((player2.y += SPEED) >= 384) {
-				player2.y = 384;
-			}
-		}
-	}
+	// function move() {
+	// 	const SPEED = 3;
+	// 	if (key['KeyW'] && player1.y > 0) {
+	// 		if ((player1.y -= SPEED) <= 0) {
+	// 			player1.y = 0;
+	// 		}
+	// 	}
+	// 	if (key['KeyS'] && player1.y < 384) {
+	// 		if ((player1.y += SPEED) >= 384) {
+	// 			player1.y = 384;
+	// 		}
+	// 	}
+	// 	if (key['KeyP'] && player2.y > 0) {
+	// 		if ((player2.y -= SPEED) <= 0) {
+	// 			player2.y = 0;
+	// 		}
+	// 	}
+	// 	if (key['Semicolon'] && player2.y < 384) {
+	// 		if ((player2.y += SPEED) >= 384) {
+	// 			player2.y = 384;
+	// 		}
+	// 	}
+	// }
 
 	document.addEventListener('keydown', (e) => {
 		key[e.code] = true;
