@@ -2,13 +2,13 @@ import math
 
 
 class Ball:
-    SIZE = 30
-    MINIMUM_VELOCITY = 7
+    SIZE = 20
+    MINIMUM_SPEED = 7
 
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.velocity = [5, 0]
+        self.velocity = [7, 0]
 
     def set_position(self, x, y):
         self.x = x
@@ -45,10 +45,18 @@ class Ball:
     def go_off_screen(self, game, sign):
         self.velocity = [game.player1_y % 7, game.player2_y % 7]
         self.velocity[0] *= sign
-        self.normalize_velocity()
+        if self.velocity[0] == 0:
+            self.velocity[0] = 1
+        self.adjust_slope()
+        self.adjust_speed()
 
-    def normalize_velocity(self):
+    def adjust_slope(self):
+        slope = self.velocity[1] / self.velocity[0]
+        if abs(slope) > 1:
+            self.velocity[1] = 0
+
+    def adjust_speed(self, speed=MINIMUM_SPEED):
         size = math.sqrt(self.velocity[0] ** 2 + self.velocity[1] ** 2)
-        if size > self.MINIMUM_VELOCITY:
-            rate = self.MINIMUM_VELOCITY / size
+        if size < speed:
+            rate = speed / size
             self.velocity = [self.velocity[0] * rate, self.velocity[1] * rate]
