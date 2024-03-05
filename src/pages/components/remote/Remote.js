@@ -3,6 +3,7 @@ import http from '../../../core/http.js';
 import RemoteSearch from './RemoteSearch.js';
 
 export default class extends Component {
+	//check
 	setup() {
 		if (
 			!localStorage.getItem('accessToken') ||

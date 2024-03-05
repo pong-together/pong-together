@@ -15,7 +15,10 @@ export default class extends Component {
 
 	setEvent() {
 		this.addEvent('click', '.back-logo', () => {
-			navigate('/select');
+			if (localStorage.getItem('tournament-id')) {
+				localStorage.removeItem('tournament-id');
+			}
+			window.location.pathname = '/select';
 		});
 	}
 
@@ -154,13 +157,20 @@ export default class extends Component {
 		const messageContainer = this.$target.querySelector('.message-container');
 		const messageElement = document.createElement('div');
 		messageElement.classList.add('messages');
+		if (data.intra_id === localStorage.getItem('intraId')) {
+			messageElement.classList.add('my-message-wrapper');
+		} else {
+			messageElement.classList.add('others-message-wrapper');
+		}
 		const messageTime = document.createElement('span');
 		messageTime.classList.add('message-time-stamp');
 		const messageContent = document.createElement('span');
 		messageContent.classList.add('message');
 
 		messageTime.textContent = `${data.timestamp}`;
-		messageContent.textContent = `${data.intra_id}: ${data.message}`;
+		if (data.intra_id === localStorage.getItem('intraId')) {
+			messageContent.textContent = `${data.message}`;
+		} else messageContent.textContent = `${data.intra_id}: ${data.message}`;
 		messageElement.appendChild(messageTime);
 		messageElement.appendChild(messageContent);
 		messageContainer.appendChild(messageElement);
