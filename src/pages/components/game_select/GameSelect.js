@@ -1,10 +1,16 @@
 import Component from '../../../core/Component.js';
 import language from '../../../utils/language.js';
 import store from '../../../store/index.js';
-import { navigate } from '../../../router/utils/navigate';
+//import { navigate } from '../../../router/utils/navigate';
 
 export default class extends Component {
 	setup() {
+		if (
+			!localStorage.getItem('accessToken') ||
+			!localStorage.getItem('twoFA')
+		) {
+			window.location.pathname = '/login';
+		}
 		if (localStorage.getItem('language')) {
 			store.dispatch('changeLanguage', localStorage.getItem('language'));
 		}
@@ -86,11 +92,11 @@ export default class extends Component {
 		this.addEvent('click', '#game-mode-button', (e) => {
 			e.stopPropagation();
 			if (this.$state.mode === 'local') {
-				navigate('/local');
+				window.location.pathname('/local');
 			} else if (this.$state.mode === 'tournament') {
-				navigate('/tournament');
+				window.location.pathname('/tournament');
 			} else if (this.$state.mode === 'remote') {
-				navigate('/remote');
+				window.location.pathname('/remote');
 			}
 		});
 	}
@@ -177,14 +183,6 @@ export default class extends Component {
 	}
 
 	async mounted() {
-		if (
-			!localStorage.getItem('accessToken') ||
-			!localStorage.getItem('twoFA')
-		) {
-			window.location.pathname = '/login';
-			navigate('/login');
-		}
-
 		if (this.$state.progress === 'mode') {
 			const localModal = document.getElementById('select-modal-local-info');
 			const tournamentModal = document.getElementById(

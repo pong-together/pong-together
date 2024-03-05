@@ -54,7 +54,8 @@ export default class extends Component {
 				if (data?.login === 'success') {
 					localStorage.setItem('accessToken', data.access_token);
 					localStorage.setItem('refreshToken', data.refresh_token);
-					navigate('/login');
+					window.location.pathname('/login');
+					//navigate('/login');
 				}
 			} catch (error) {
 				//clearInterval(loadingInterval);
