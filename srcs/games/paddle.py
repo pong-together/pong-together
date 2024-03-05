@@ -1,6 +1,6 @@
 class Paddle:
-    WIDTH = 18
-    HEIGHT = 62
+    WIDTH = 19
+    HEIGHT = 63
 
     def __init__(self, x, y):
         self.x = x

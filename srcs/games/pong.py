@@ -26,7 +26,7 @@ class Pong:
         self.scores = [0, 0]
         self.turn = PLAYER1
 
-        paddle1_x = 15
+        paddle1_x = 10
         paddle2_x = self.WIDTH - paddle1_x - Paddle.WIDTH
         paddle_y = (self.HEIGHT - Paddle.HEIGHT) / 2
         self.player1 = Paddle(paddle1_x, paddle_y)
@@ -51,8 +51,8 @@ class Pong:
             game = await self.get_game()
             self.update_positions(game)
 
-            self.ball.update(game, self.turn)
-            status = self.ball.update_velocity(game, self.turn)
+            self.ball.update_position()
+            status = self.ball.update_velocity(self.turn)
 
             await self.send_game_info()
             await self.save_game()
