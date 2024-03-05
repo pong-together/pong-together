@@ -1,5 +1,5 @@
 import Component from '../../../core/Component.js';
-import { navigate } from '../../../router/utils/navigate.js';
+import http from '../../../core/http.js';
 import RemoteSearch from './RemoteSearch.js';
 
 export default class extends Component {
@@ -9,7 +9,6 @@ export default class extends Component {
 			!localStorage.getItem('twoFA')
 		) {
 			window.location.pathname = '/login';
-			navigate('/login');
 		} else {
 			http.checkToken();
 		}
