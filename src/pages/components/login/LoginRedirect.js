@@ -1,7 +1,6 @@
 import Component from '../../../core/Component';
 import store from '../../../store/store';
 import http from '../../../core/http';
-import { navigate } from '../../../router/utils/navigate';
 import language from '../../../utils/language';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -54,7 +53,7 @@ export default class extends Component {
 				if (data?.login === 'success') {
 					localStorage.setItem('accessToken', data.access_token);
 					localStorage.setItem('refreshToken', data.refresh_token);
-					window.location.pathname('/login');
+					window.location.pathname = '/login';
 					//navigate('/login');
 				}
 			} catch (error) {
