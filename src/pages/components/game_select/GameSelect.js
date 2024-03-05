@@ -1,6 +1,7 @@
 import Component from '../../../core/Component.js';
 import language from '../../../utils/language.js';
 import store from '../../../store/index.js';
+import http from '../../../core/http.js';
 //import { navigate } from '../../../router/utils/navigate';
 
 export default class extends Component {
@@ -10,7 +11,10 @@ export default class extends Component {
 			!localStorage.getItem('twoFA')
 		) {
 			window.location.pathname = '/login';
+		} else {
+			http.checkToken();
 		}
+
 		if (localStorage.getItem('language')) {
 			store.dispatch('changeLanguage', localStorage.getItem('language'));
 		}
