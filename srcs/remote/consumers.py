@@ -19,6 +19,7 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
         self.user = None
         self.group_name = None
         self.channel_name = None
+        self.remote = None
 
     async def connect(self):
         try:
@@ -83,7 +84,8 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
             'type': 'find_opponent',
             'opponent': opponent_id,
 
-            'intra_id': intra_id
+            'intra_id': intra_id,
+            'id': self.remote.pk
         })
 
     async def find_opponent(self, event):
@@ -91,7 +93,8 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
             message = {
                 'type': 'find_opponent',
                 'opponent': event['opponent'],
-                'intra_id': event['intra_id']
+                'intra_id': event['intra_id'],
+                'id': event['id']
             }
             await self.send_json(message)
         except KeyError as e:
@@ -108,4 +111,4 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
 
     @database_sync_to_async
     def save_remote_model(self, first_id, second_id):
-        Remote.objects.create(player1_name=first_id, player2_name=second_id, game_mode=self.group_name)
+        self.remote = Remote.objects.create(player1_name=first_id, player2_name=second_id, game_mode=self.group_name)
