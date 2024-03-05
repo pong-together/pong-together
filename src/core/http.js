@@ -1,6 +1,3 @@
-import App from '../pages/components/App.js';
-import { navigate } from '../router/utils/navigate.js';
-
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const REFRESH_BASE_URL = `${BASE_URL}/api/auth/token/refresh/`;
 const CHECK_BASE_URL = `${BASE_URL}/api/auth/otp/`;
@@ -75,13 +72,11 @@ const refreshToken = async () => {
 					console.log('refreshToken has expired and requires re-login');
 					localStorage.clear();
 					window.location.pathname = '/login';
-					navigate('/login');
 				}
 			} else {
 				const data = await response.json();
 				localStorage.setItem('accessToken', data.access);
 				console.log('accessToken reissued');
-				// App.connectSocket();
 			}
 		} catch (error) {
 			console.log('refreshToken error');
@@ -94,7 +89,6 @@ const refreshToken = async () => {
 		console.log("refreshToken doesn't exist, so re-login is required");
 		localStorage.clear();
 		window.location.pathname = '/login';
-		navigate('/login');
 	}
 };
 
