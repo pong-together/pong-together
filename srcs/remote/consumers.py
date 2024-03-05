@@ -33,6 +33,7 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
 
             if len(self.waiting_list[self.group_name]) >= 2:
                 await self.start_matching()
+
         except Exception:
             await self.close()
 
@@ -66,27 +67,23 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
 
     async def start_matching(self):
 
-        #db생성. 매칭 된 사람들
-        await self.save_remote_model()
-        await self.send_channel() #한 그룹의 매칭 된 2개의 채널들에게 전송
-        self.waiting_list[self.group_name] = self.waiting_list[self.group_name][2:] #대기 리스트 수정
-
-    async def send_channel(self):
         first_channel, first_id = self.waiting_list[self.group_name][0]
         second_channel, second_id = self.waiting_list[self.group_name][1]
 
-        await self.channel_layer.send(first_channel, {
+        await self.save_remote_model(first_id, second_id)
+
+        await self.send_channel(first_channel, first_id, second_id)
+        await self.send_channel(second_channel, second_id, first_id)
+
+        self.waiting_list[self.group_name] = self.waiting_list[self.group_name][2:]
+
+    async def send_channel(self, channel, intra_id, opponent_id):
+
+        await self.channel_layer.send(channel, {
             'type': 'find_opponent',
-            'opponent': second_id,
+            'opponent': opponent_id,
 
-            'intra_id': first_id
-        })
-
-        await self.channel_layer.send(second_channel, {
-            'type': 'find_opponent',
-            'opponent': first_id,
-
-            'intra_id': second_id
+            'intra_id': intra_id
         })
 
     async def find_opponent(self, event):
@@ -110,7 +107,5 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
             pass
 
     @database_sync_to_async
-    def save_remote_model(self):
-        first_channel, first_id = self.waiting_list[self.group_name][0]
-        second_channel, second_id = self.waiting_list[self.group_name][1]
+    def save_remote_model(self, first_id, second_id):
         Remote.objects.create(player1_name=first_id, player2_name=second_id, game_mode=self.group_name)
