@@ -50,10 +50,10 @@ class Ball:
         right_limit = Pong.WIDTH + escape_degree
         if self.x < left_limit:
             self.go_off_screen((turn == 1) - (turn == 0))
-            return Score.PLAYER1
+            return Score.PLAYER2
         if self.x > right_limit:
             self.go_off_screen((turn == 1) - (turn == 0))
-            return Score.PLAYER2
+            return Score.PLAYER1
         return Score.NONE
 
     def go_off_screen(self, sign):
