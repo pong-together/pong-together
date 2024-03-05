@@ -35,13 +35,14 @@ class Ball:
         escape_degree = 15
         left_limit = -(self.WIDTH + escape_degree)
         right_limit = Pong.WIDTH + escape_degree
+        from games.pong import Score
         if self.x < left_limit:
             self.go_off_screen(game, (turn == 1) - (turn == 0))
-            return 0
+            return Score.PLAYER1
         if self.x > right_limit:
             self.go_off_screen(game, (turn == 1) - (turn == 0))
-            return 1
-        return -1
+            return Score.PLAYER2
+        return Score.NONE
 
     def go_off_screen(self, game, sign):
         self.velocity = [game.player1_y % 7, game.player2_y % 7]

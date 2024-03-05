@@ -1,3 +1,5 @@
+from enum import Enum
+
 from channels.db import database_sync_to_async
 
 from games.ball import Ball
@@ -6,6 +8,12 @@ from games.models import Game
 
 PLAYER1 = 0
 PLAYER2 = 1
+
+
+class Score(Enum):
+    PLAYER1 = 0
+    PLAYER2 = 1
+    NONE = -1
 
 
 class Pong:
@@ -38,9 +46,8 @@ class Pong:
             await self.consumer.send_json({'error': str(e)})
 
     async def play_round(self):
-        status = -1
-
-        while status == -1:
+        status = Score.NONE
+        while status == Score.NONE:
             game = await self.get_game()
             self.update_positions(game)
 
@@ -63,7 +70,6 @@ class Pong:
             'ball_x': self.ball.x,
             'ball_y': self.ball.y
         }
-        # await self.consumer.send_json(game_info)
         await self.consumer.channel_layer.group_send(self.consumer.GROUP_NAME, game_info)
 
     @database_sync_to_async
