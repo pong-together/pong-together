@@ -3,7 +3,10 @@ import json
 from datetime import datetime
 from urllib.parse import parse_qs
 
+from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
+
+from remote.models import Remote
 
 
 class RemoteConsumer(AsyncJsonWebsocketConsumer):
@@ -52,6 +55,7 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
             raise ValueError("게임 모드가 지정되지 않았습니다.")
         self.group_name = game_mode
 
+
     async def send_ping(self):
         while True:
             await asyncio.sleep(60)
@@ -63,6 +67,7 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
     async def start_matching(self):
 
         #db생성. 매칭 된 사람들
+        await self.save_remote_model()
         await self.send_channel() #한 그룹의 매칭 된 2개의 채널들에게 전송
         self.waiting_list[self.group_name] = self.waiting_list[self.group_name][2:] #대기 리스트 수정
 
@@ -103,3 +108,9 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
             await self.ping_task
         except asyncio.CancelledError:
             pass
+
+    @database_sync_to_async
+    def save_remote_model(self):
+        first_channel, first_id = self.waiting_list[self.group_name][0]
+        second_channel, second_id = self.waiting_list[self.group_name][1]
+        Remote.objects.create(player1_name=first_id, player2_name=second_id, game_mode=self.group_name)
