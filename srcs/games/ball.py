@@ -56,9 +56,9 @@ class Ball:
             return Score.PLAYER1
         return Score.NONE
 
-    def go_off_screen(self, sign):
+    def go_off_screen(self, vertical_direct):
         self.velocity = [randint(3, 5), randint(0, 4)]
-        self.velocity[0] *= sign
+        self.velocity[0] *= vertical_direct
         self.adjust_slope()
         self.adjust_speed()
         self.reset()
