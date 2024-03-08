@@ -1,12 +1,22 @@
 import math
 from random import randint
 
+from games.pong import Pong
+from games.score import Score
+
 
 class Ball:
     WIDTH = 20
     HEIGHT = 20
-    RESET_SPEED = 5
+
+    START_SPEED = 5
     MAXIMUM_SLOPE = 1
+    ESCAPE_DEGREE = 20
+
+    TOP_LIMIT = 0
+    BOTTOM_LIMIT = Pong.HEIGHT - HEIGHT
+    LEFT_LIMIT = -(WIDTH + ESCAPE_DEGREE)
+    RIGHT_LIMIT = Pong.WIDTH + ESCAPE_DEGREE
 
     def __init__(self, x, y):
         self.x = x
@@ -33,25 +43,16 @@ class Ball:
         return self.update_horizontal_velocity(turn)
 
     def update_vertical_velocity(self):
-        from games.pong import Pong
-
-        top_limit = 0
-        bottom_limit = Pong.HEIGHT - self.HEIGHT
-        if self.y <= top_limit:
+        if self.y <= self.TOP_LIMIT:
             self.velocity[1] *= -1
-        if self.y >= bottom_limit:
+        if self.y >= self.BOTTOM_LIMIT:
             self.velocity[1] *= -1
 
     def update_horizontal_velocity(self, turn):
-        from games.pong import Score, Pong
-
-        escape_degree = 15
-        left_limit = -(self.WIDTH + escape_degree)
-        right_limit = Pong.WIDTH + escape_degree
-        if self.x < left_limit:
+        if self.x < self.LEFT_LIMIT:
             self.go_off_screen((turn == 1) - (turn == 0))
             return Score.PLAYER2
-        if self.x > right_limit:
+        if self.x > self.RIGHT_LIMIT:
             self.go_off_screen((turn == 1) - (turn == 0))
             return Score.PLAYER1
         return Score.NONE
@@ -68,8 +69,8 @@ class Ball:
         if abs(slope) > self.MAXIMUM_SLOPE:
             self.velocity[1] = 0
 
-    def adjust_speed(self, speed=RESET_SPEED):
+    def adjust_speed(self, speed=START_SPEED):
         size = math.sqrt(self.velocity[0] ** 2 + self.velocity[1] ** 2)
-        if speed == self.RESET_SPEED or size < speed:
+        if speed == self.START_SPEED or size < speed:
             rate = speed / size
             self.velocity = [self.velocity[0] * rate, self.velocity[1] * rate]

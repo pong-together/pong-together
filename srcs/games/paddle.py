@@ -1,7 +1,14 @@
+from games.pong import Pong
+
+
 class Paddle:
     WIDTH = 19
     HEIGHT = 63
+
     MOVEMENT = 10
+
+    TOP_LIMIT = 0
+    BOTTOM_LIMIT = Pong.HEIGHT - HEIGHT
 
     def __init__(self, x, y):
         self.x = x
@@ -12,12 +19,10 @@ class Paddle:
 
     def move_up(self, movement=MOVEMENT):
         self.y += movement
-        if self.y < 0:
-            self.set_position(0)
+        if self.y < self.TOP_LIMIT:
+            self.set_position(self.TOP_LIMIT)
 
     def move_down(self, movement=MOVEMENT):
-        from games.pong import Pong
-
         self.y -= movement
-        if self.y > Pong.HEIGHT - self.HEIGHT:
-            self.set_position(Pong.HEIGHT - self.HEIGHT)
+        if self.y > self.BOTTOM_LIMIT:
+            self.set_position(self.BOTTOM_LIMIT)

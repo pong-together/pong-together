@@ -1,19 +1,10 @@
-from enum import Enum
-
 from channels.db import database_sync_to_async
 
+from games import constants
 from games.ball import Ball
 from games.paddle import Paddle
 from games.models import Game
-
-PLAYER1 = 0
-PLAYER2 = 1
-
-
-class Score(Enum):
-    PLAYER1 = 0
-    PLAYER2 = 1
-    NONE = -1
+from games.score import Score
 
 
 class Pong:
@@ -24,7 +15,7 @@ class Pong:
         self.id = game_id
         self.consumer = consumer
         self.scores = [0, 0]
-        self.turn = PLAYER1
+        self.turn = constants.PLAYER1
 
         paddle1_x = 10
         paddle2_x = self.WIDTH - paddle1_x - Paddle.WIDTH
@@ -83,8 +74,8 @@ class Pong:
     def save_game(self):
         try:
             game = Game.objects.get(id=self.id)
-            game.player1_score = self.scores[PLAYER1]
-            game.player2_score = self.scores[PLAYER2]
+            game.player1_score = self.scores[constants.PLAYER1]
+            game.player2_score = self.scores[constants.PLAYER2]
             game.player1_y = self.player1.y
             game.player2_y = self.player2.y
             game.ball_x = self.ball.x
