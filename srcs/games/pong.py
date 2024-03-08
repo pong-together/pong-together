@@ -48,6 +48,14 @@ class Pong:
             await self.send_game_info()
 
             await self.save_game()
+        self.update_score(status)
+
+    def update_score(self, status):
+        index = constants.PLAYER1
+        if status == Score.PLAYER2:
+            index = constants.PLAYER2
+        if status != Score.NONE:
+            self.scores[index] += 1
 
     def update_positions(self, game):
         self.player1.set_position(game.player1_y)
@@ -63,6 +71,14 @@ class Pong:
             'ball_y': self.ball.y
         }
         await self.consumer.channel_layer.group_send(self.consumer.GROUP_NAME, game_info)
+
+    async def send_scores(self):
+        data = {
+            'type': 'score',
+            'player1_score': self.scores[constants.PLAYER1],
+            'player2_score': self.scores[constants.PLAYER2]
+        }
+        await self.consumer.channel_layer.group_send(self.consumer.group_name, data)
 
     @database_sync_to_async
     def get_game(self):
