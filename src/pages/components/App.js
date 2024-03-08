@@ -1,14 +1,18 @@
 import Component from '../../core/Component.js';
 import Router from '../../router/router.js';
 import store from '../../store/index.js';
+import language from '../../utils/language.js';
 import { displayConnectionFailedModal } from '../../utils/modal';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
 export default class extends Component {
 	setup() {
+		if (localStorage.getItem('language')) {
+			store.dispatch('changeLanguage', localStorage.getItem('language'));
+		}
 		this.$state = {
-			region: 'kr',
+			region: store.state.language,
 		};
 		this.$store = this.$props;
 	}
@@ -82,7 +86,7 @@ export default class extends Component {
 
 						</div>
 						<div action="" id="chat-form">
-								<input id="m" autocomplete="off" /><button class="message-btn">전송</button>
+								<input id="m" autocomplete="off" /><button class="message-btn">${language.util[store.state.language].submit}</button>
 						</div>
 				</div>
 				</div>
@@ -135,7 +139,9 @@ export default class extends Component {
 
 		chatSocket.onclose = () => {
 			console.log('WebSocket closed.');
-			displayConnectionFailedModal('채팅 연결에 실패했습니다.');
+			displayConnectionFailedModal(
+				language.modal[this.$state.region].chatMessage,
+			);
 			localStorage.clear();
 			chatSocket.close();
 			return;
@@ -143,7 +149,9 @@ export default class extends Component {
 
 		chatSocket.onerror = function (e) {
 			console.log(e);
-			displayConnectionFailedModal('채팅 연결에 실패했습니다.');
+			displayConnectionFailedModal(
+				language.modal[this.$state.region].chatMessage,
+			);
 			localStorage.clear();
 			localStorage.setItem('chatConnection', true);
 			chatSocket.close();
