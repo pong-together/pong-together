@@ -16,7 +16,7 @@ function displayConnectionFailedModal() {
 	});
 }
 
-const showDuplicateLoginModal = () => {
+function showDuplicateLoginModal() {
 	const modalHTML = `
 		<div class="modal-overlay">
 			<div class="modal-content">
@@ -32,9 +32,6 @@ const showDuplicateLoginModal = () => {
 		modalOverlay.remove();
 		window.location.pathname = '/login';
 	});
-};
+}
 
-export default {
-	displayConnectionFailedModal,
-	showDuplicateLoginModal,
-};
+export { displayConnectionFailedModal, showDuplicateLoginModal };
