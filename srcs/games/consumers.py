@@ -72,9 +72,6 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             'winner': self.user.intra_id
         })
 
-    async def end(self, event):
-        await self.send_json(event)
-
     async def cancel_pong_task(self):
         self.pong_task.cancel()
         try:
@@ -108,6 +105,24 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             await self.send_json({'error': f'{str(e)} is required'})
 
     async def start(self, event):
+        try:
+            await self.send_json(event)
+        except Exception as e:
+            await self.send_json({'error': str(e)})
+
+    async def get_game_info(self, event):
+        try:
+            await self.send_json(event)
+        except Exception as e:
+            await self.send_json({'error': str(e)})
+
+    async def end(self, event):
+        try:
+            await self.send_json(event)
+        except Exception as e:
+            await self.send_json({'error': str(e)})
+
+    async def score(self, event):
         try:
             await self.send_json(event)
         except Exception as e:
