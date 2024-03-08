@@ -19,7 +19,7 @@ class Pong:
 
         ball_x = (constants.GAME_WIDTH - Ball.WIDTH) / 2
         ball_y = (constants.GAME_HEIGHT - Ball.HEIGHT) / 2
-        self.ball = Ball(ball_x, ball_y)
+        self.ball = Ball(ball_x, ball_y, self.consumer.mode)
 
     async def run(self):
         try:

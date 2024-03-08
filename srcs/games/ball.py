@@ -10,8 +10,11 @@ class Ball:
     HEIGHT = 20
 
     START_SPEED = 3
-    MINIMUM_SPEED = 5
-    MAXIMUM_SLOPE = 1.1
+    DEFAULT_MINIMUM_SPEED = 7
+    DEFAULT_MAXIMUM_SLOPE = 1.1
+    EXTREME_MINIMUM_SPEED = 9
+    EXTREME_MAXIMUM_SLOPE = 1.5
+
     ESCAPE_DEGREE = 20
 
     TOP_LIMIT = 0
@@ -19,10 +22,15 @@ class Ball:
     LEFT_LIMIT = -(WIDTH + ESCAPE_DEGREE)
     RIGHT_LIMIT = constants.GAME_WIDTH + ESCAPE_DEGREE
 
-    def __init__(self, x, y):
+    def __init__(self, x, y, mode):
         self.x = x
         self.y = y
         self.velocity = [self.START_SPEED, 0]
+        self.minimum_speed = self.DEFAULT_MINIMUM_SPEED
+        self.maximum_slope = self.DEFAULT_MAXIMUM_SLOPE
+        if mode == 'extreme':
+            self.minimum_speed = self.EXTREME_MINIMUM_SPEED
+            self.maximum_slope = self.EXTREME_MAXIMUM_SLOPE
 
     def set_position(self, x, y):
         self.x = x
@@ -37,7 +45,7 @@ class Ball:
         self.velocity[0] *= -1
         self.velocity[1] = int((self.y - paddle.y - (paddle.HEIGHT - self.HEIGHT) / 2))
         self.adjust_slope()
-        self.adjust_speed(self.MINIMUM_SPEED)
+        self.adjust_speed(self.minimum_speed)
 
     def update_position(self):
         self.x += self.velocity[0]
@@ -71,9 +79,9 @@ class Ball:
 
     def adjust_slope(self):
         slope = self.velocity[1] / self.velocity[0]
-        if abs(slope) > self.MAXIMUM_SLOPE:
+        if abs(slope) > self.maximum_slope:
             self.velocity[1] *= abs(self.velocity[0]) / abs(self.velocity[1])
-            self.velocity[0] *= self.MAXIMUM_SLOPE
+            self.velocity[0] *= self.maximum_slope
 
     def adjust_speed(self, speed=START_SPEED):
         size2 = self.velocity[0] ** 2 + self.velocity[1] ** 2
