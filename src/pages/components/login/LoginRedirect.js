@@ -35,8 +35,8 @@ export default class extends Component {
 		document.body.innerHTML += modalHTML;
 		document.getElementById('modal-close-btn').addEventListener('click', () => {
 			const modalOverlay = document.querySelector('.modal-overlay');
-			window.location.pathname = '/login';
 			modalOverlay.remove();
+			window.location.pathname = '/login';
 		});
 	};
 
@@ -71,7 +71,6 @@ export default class extends Component {
 				if (data?.chat_connection === true) {
 					this.showDuplicateLoginModal();
 					localStorage.clear();
-					window.location.pathname = '/login';
 					return;
 				}
 				if (data?.login === 'success') {
