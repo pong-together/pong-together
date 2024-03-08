@@ -1,4 +1,4 @@
-from games.pong import Pong
+from games import constants
 
 
 class Paddle:
@@ -8,7 +8,7 @@ class Paddle:
     MOVEMENT = 10
 
     TOP_LIMIT = 0
-    BOTTOM_LIMIT = Pong.HEIGHT - HEIGHT
+    BOTTOM_LIMIT = constants.GAME_HEIGHT - HEIGHT
 
     def __init__(self, x, y):
         self.x = x

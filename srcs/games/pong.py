@@ -8,9 +8,6 @@ from games.score import Score
 
 
 class Pong:
-    WIDTH = 637
-    HEIGHT = 446
-
     def __init__(self, game_id, consumer):
         self.id = game_id
         self.consumer = consumer
@@ -18,13 +15,13 @@ class Pong:
         self.turn = constants.PLAYER1
 
         paddle1_x = 10
-        paddle2_x = self.WIDTH - paddle1_x - Paddle.WIDTH
-        paddle_y = (self.HEIGHT - Paddle.HEIGHT) / 2
+        paddle2_x = constants.GAME_WIDTH - paddle1_x - Paddle.WIDTH
+        paddle_y = (constants.GAME_HEIGHT- Paddle.HEIGHT) / 2
         self.player1 = Paddle(paddle1_x, paddle_y)
         self.player2 = Paddle(paddle2_x, paddle_y)
 
-        ball_x = (self.WIDTH - Ball.WIDTH) / 2
-        ball_y = (self.HEIGHT - Ball.HEIGHT) / 2
+        ball_x = (constants.GAME_WIDTH - Ball.WIDTH) / 2
+        ball_y = (constants.GAME_HEIGHT - Ball.HEIGHT) / 2
         self.ball = Ball(ball_x, ball_y)
 
     async def run(self):

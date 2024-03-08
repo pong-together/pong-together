@@ -1,3 +1,6 @@
 # Pong Game
 PLAYER1 = 0
 PLAYER2 = 1
+
+GAME_WIDTH = 637
+GAME_HEIGHT = 446

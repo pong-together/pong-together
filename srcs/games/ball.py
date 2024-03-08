@@ -1,7 +1,7 @@
 import math
 from random import randint
 
-from games.pong import Pong
+from games import constants
 from games.score import Score
 
 
@@ -14,14 +14,14 @@ class Ball:
     ESCAPE_DEGREE = 20
 
     TOP_LIMIT = 0
-    BOTTOM_LIMIT = Pong.HEIGHT - HEIGHT
+    BOTTOM_LIMIT = constants.GAME_HEIGHT - HEIGHT
     LEFT_LIMIT = -(WIDTH + ESCAPE_DEGREE)
-    RIGHT_LIMIT = Pong.WIDTH + ESCAPE_DEGREE
+    RIGHT_LIMIT = constants.GAME_WIDTH + ESCAPE_DEGREE
 
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.velocity = [5, 0]
+        self.velocity = [self.START_SPEED, 0]
 
     def set_position(self, x, y):
         self.x = x
@@ -30,8 +30,8 @@ class Ball:
     def reset(self):
         from games.pong import Pong
 
-        x = (Pong.WIDTH - self.WIDTH) / 2
-        y = (Pong.HEIGHT - self.HEIGHT) / 2 + randint(-100, 100)
+        x = (constants.GAME_WIDTH - self.WIDTH) / 2
+        y = (constants.GAME_HEIGHT - self.HEIGHT) / 2 + randint(-100, 100)
         self.set_position(x, y)
 
     def update_position(self):
