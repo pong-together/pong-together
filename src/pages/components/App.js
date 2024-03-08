@@ -134,6 +134,7 @@ export default class extends Component {
 			displayConnectionFailedModal('채팅 연결에 실패했습니다.');
 			// localStorage.clear();
 			chatSocket.close();
+			return;
 		};
 
 		chatSocket.onerror = function (e) {
@@ -141,6 +142,7 @@ export default class extends Component {
 			displayConnectionFailedModal('채팅 연결에 실패했습니다.');
 			localStorage.setItem('chatConnection', true);
 			chatSocket.close();
+			return;
 		};
 
 		chatSocket.onmessage = (event) => {
