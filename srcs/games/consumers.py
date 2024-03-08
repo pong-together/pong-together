@@ -20,7 +20,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
     async def connect(self):
         try:
             connect_handler = ConnectHandler(self)
-            self.pong_task = await connect_handler.run()
+            await connect_handler.run()
         except Exception as e:
             await self.close()
             print(e)
