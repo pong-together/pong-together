@@ -67,7 +67,7 @@ class ConnectHandler:
         # tournament 경우 구현 필요
 
     async def start_pong_game(self):
-        self.consumer.pong = Pong(self)
+        self.consumer.pong = Pong(self.consumer)
         self.consumer.pong_task = asyncio.create_task(self.consumer.pong.run())
 
     @database_sync_to_async
@@ -78,6 +78,7 @@ class ConnectHandler:
             return Tournament.objects.get(id=self.type_id)
         if self.consumer.type == 'remote':
             return Remote.objects.get(id=self.type_id)
+
     @database_sync_to_async
     def get_players_image(self):
         player1 = User.objects.get(intra_id=self.consumer.player1_name)
