@@ -104,32 +104,27 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         except KeyError as e:
             await self.send_json({'error': f'{str(e)} is required'})
 
-    async def start(self, event):
-        try:
-            await self.send_json(event)
-        except Exception as e:
-            await self.send_json({'error': str(e)})
-
-    async def get_game_info(self, event):
-        try:
-            await self.send_json(event)
-        except Exception as e:
-            await self.send_json({'error': str(e)})
-
-    async def end(self, event):
-        try:
-            await self.send_json(event)
-        except Exception as e:
-            await self.send_json({'error': str(e)})
-
-    async def score(self, event):
-        try:
-            await self.send_json(event)
-        except Exception as e:
-            await self.send_json({'error': str(e)})
-
     def push_button(self, sender_player, button):
         player = self.pong.player1
         if sender_player == 'player2':
             player = self.pong.player2
         player.move(button)
+
+    # event
+    async def start(self, event):
+        await self.send_event(event)
+
+    async def get_game_info(self, event):
+        await self.send_event(event)
+
+    async def score(self, event):
+        await self.send_event(event)
+
+    async def end(self, event):
+        await self.send_event(event)
+
+    async def send_event(self, event):
+        try:
+            await self.send_json(event)
+        except Exception as e:
+            await self.send_json({'error': str(e)})
