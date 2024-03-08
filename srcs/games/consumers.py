@@ -5,6 +5,7 @@ from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 from rest_framework.generics import get_object_or_404
 
+from games.pong import Pong
 from local.models import Local
 from remote.models import Remote
 from tournaments.models import Tournament
@@ -121,20 +122,16 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             self.remote_game[self.group_name].remove(self.user)
 
     @database_sync_to_async
-    async def update_lose(self):
+    def update_lose(self):
         self.user.lose_count += 1
         self.user.game_count += 1
         self.user.save()
 
     @database_sync_to_async
-    async def update_win(self):
+    def update_win(self):
         self.user.win_count += 1
         self.user.game_count += 1
         self.user.save()
-
-    @database_sync_to_async
-    async def update_result(self):
-        winner = get_object_or_404(User, intra_id=self.pong.winner)
 
     async def send_end_abnormal(self):
         await self.channel_layer.group_send(self.group_name, {
