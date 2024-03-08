@@ -135,7 +135,7 @@ export default class extends Component {
 				if (!chatSocket || chatSocket.readyState === WebSocket.CLOSED) {
 					this.connectSocket();
 				} else {
-					displayConnectionFailedModal();
+					displayConnectionFailedModal('채팅 연결에 실패했습니다.');
 					localStorage.clear();
 				}
 			}, 1000);
@@ -143,7 +143,7 @@ export default class extends Component {
 
 		chatSocket.onerror = function (e) {
 			console.log(e);
-			displayConnectionFailedModal();
+			displayConnectionFailedModal('채팅 연결에 실패했습니다.');
 		};
 
 		chatSocket.onmessage = (event) => {
