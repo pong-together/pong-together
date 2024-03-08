@@ -3,7 +3,6 @@ from urllib.parse import parse_qs
 
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
-from rest_framework.generics import get_object_or_404
 
 from games.pong import Pong
 from local.models import Local
@@ -44,7 +43,8 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
                 })
                 await self.start_pong_game()
 
-        except Exception:
+        except Exception as e:
+            print(e)
             await self.close()
 
     async def init_connection(self):
@@ -54,16 +54,17 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         type_id = query_string.get('type_id', [None])[0]
         if self.type is None or type_id is None:
             raise ValueError("type or type_id가 지정되지 않았습니다.")
-        self.game = self.get_game(type_id)
+        self.game = await self.set_game(type_id)
         self.group_name = f'{self.type}_{type_id}'
 
-    async def get_game(self, type_id):
+    @database_sync_to_async
+    def set_game(self, type_id):
         if self.type == 'local':
-            return Local(id=type_id)
+            return Local.objects.get(id=type_id)
         if self.type == 'tournament':
-            return Tournament(id=type_id)
+            return Tournament.objects.get(id=type_id)
         if self.type == 'remote':
-            return Remote(id=type_id)
+            return Remote.objects.get(id=type_id)
 
     async def start_remote_game(self):
         if self.group_name not in self.remote_game:
@@ -72,20 +73,26 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
 
         if len(self.remote_game[self.group_name]) >= 2:
             await self.set_players_name()
-            player1 = get_object_or_404(User, intra_id=self.player1_name)
-            player2 = get_object_or_404(User, intra_id=self.player2_name)
+            images = await self.get_players_image()
             await self.channel_layer.group_send(self.group_name, {
                 'type': 'start',
                 'player1_name': self.player1_name,
-                'player1_image': player1.image,
+                'player1_image': images[0],
                 'player2_name': self.player2_name,
-                'player2_image': player2.image
+                'player2_image': images[1]
             })
             await self.start_pong_game()
 
     async def set_players_name(self):
-        self.player1_name = self.game.player1_name
-        self.player2_name = self.game.player2_name
+        if self.type != 'tournament':
+            self.player1_name = self.game.player1_name
+            self.player2_name = self.game.player2_name
+
+    @database_sync_to_async
+    def get_players_image(self):
+        player1 = User.objects.get(intra_id=self.player1_name)
+        player2 = User.objects.get(intra_id=self.player2_name)
+        return [player1.image, player2.image]
 
     async def start(self, event):
         try:
@@ -99,7 +106,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
 
     async def disconnect(self, code):
         try:
-            if type == 'remote':
+            if self.type == 'remote':
                 await self.disconnect_remote()
 
             #토너먼트, 로컬
