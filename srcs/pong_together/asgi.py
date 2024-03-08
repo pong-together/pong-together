@@ -19,8 +19,11 @@ from channels.security.websocket import AllowedHostsOriginValidator
 
 import chats.routing
 import remote.routing
+import games.routing
 
-websocket_urlpatterns = chats.routing.websocket_urlpatterns + remote.routing.websocket_urlpatterns
+websocket_urlpatterns = (chats.routing.websocket_urlpatterns
+                         + remote.routing.websocket_urlpatterns
+                         + games.routing.websocket_urlpatterns)
 
 application = ProtocolTypeRouter({
     'http': asgi_application,
