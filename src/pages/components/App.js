@@ -1,7 +1,6 @@
 import Component from '../../core/Component.js';
 import Router from '../../router/router.js';
 import store from '../../store/index.js';
-import { navigate } from '../../router/utils/navigate.js';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
