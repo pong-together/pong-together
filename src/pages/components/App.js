@@ -130,28 +130,20 @@ export default class extends Component {
 		};
 
 		chatSocket.onclose = () => {
-			console.log('WebSocket closed. Trying to reconnect...');
-			setTimeout(() => {
-				if (!chatSocket || chatSocket.readyState === WebSocket.CLOSED) {
-					this.connectSocket();
-				} else {
-					displayConnectionFailedModal('채팅 연결에 실패했습니다.');
-					localStorage.clear();
-					chatSocket.close();
-				}
-			}, 1000);
+			console.log('WebSocket closed.');
+			displayConnectionFailedModal('채팅 연결에 실패했습니다.');
+			// localStorage.clear();
+			chatSocket.close();
 		};
 
 		chatSocket.onerror = function (e) {
 			console.log(e);
 			displayConnectionFailedModal('채팅 연결에 실패했습니다.');
-			localStorage.clear();
 			localStorage.setItem('chatConnection', true);
 			chatSocket.close();
 		};
 
 		chatSocket.onmessage = (event) => {
-			// Changed to arrow function
 			console.log(event.data);
 			const data = JSON.parse(event.data);
 			if (data.type && data.type === 'chat_message') {
