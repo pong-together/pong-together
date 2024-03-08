@@ -10,13 +10,13 @@ function displayConnectionFailedModal(text) {
 		<div class="modal-overlay">
 			<div class="modal-content">
 				<p>${text}</p>
-				<button id="modal-close-btn">${language.modal[$state.language].ok}</button>
+				<button class="modal-close-btn">${language.modal[$state.language].ok}</button>
 			</div>
 		</div>
 	`;
 
 	document.body.innerHTML += modalHTML;
-	document.getElementById('modal-close-btn').addEventListener('click', () => {
+	document.querySelector('.modal-close-btn').addEventListener('click', () => {
 		const modalOverlay = document.querySelector('.modal-overlay');
 		modalOverlay.remove();
 		window.location.pathname = '/login';

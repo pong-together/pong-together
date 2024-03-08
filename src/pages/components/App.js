@@ -25,7 +25,7 @@ export default class extends Component {
 			window.location.pathname = '/select';
 		});
 
-		this.addEvent('click', '#modal-close-btn', () => {
+		this.addEvent('click', '.modal-close-btn', () => {
 			window.location.pathname = '/login';
 		});
 	}
