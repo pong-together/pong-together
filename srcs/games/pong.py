@@ -1,15 +1,11 @@
-from channels.db import database_sync_to_async
-
 from games import constants
 from games.ball import Ball
 from games.paddle import Paddle
-from games.models import Game
 from games.score import Score
 
 
 class Pong:
-    def __init__(self, game_id, consumer):
-        self.id = game_id
+    def __init__(self, consumer):
         self.consumer = consumer
         self.winner = None
         self.scores = [0, 0]
@@ -17,7 +13,7 @@ class Pong:
 
         paddle1_x = 10
         paddle2_x = constants.GAME_WIDTH - paddle1_x - Paddle.WIDTH
-        paddle_y = (constants.GAME_HEIGHT- Paddle.HEIGHT) / 2
+        paddle_y = (constants.GAME_HEIGHT - Paddle.HEIGHT) / 2
         self.player1 = Paddle(paddle1_x, paddle_y)
         self.player2 = Paddle(paddle2_x, paddle_y)
 
@@ -26,7 +22,6 @@ class Pong:
         self.ball = Ball(ball_x, ball_y)
 
     async def run(self):
-        await self.save_game()
         try:
             while self.finish():
                 await self.play_round()
@@ -39,9 +34,6 @@ class Pong:
     async def play_round(self):
         status = Score.NONE
         while status == Score.NONE:
-            game = await self.get_game()
-            self.update_positions(game)
-
             self.ball.update_position()
             status = self.ball.update_velocity(self.turn)
             if self.player1.hit_ball(self.ball):
@@ -49,8 +41,6 @@ class Pong:
             if self.player2.hit_ball(self.ball):
                 self.ball.bounce(self.player2)
             await self.send_game_info()
-
-            await self.save_game()
         self.update_score(status)
 
     def update_score(self, status):
@@ -98,24 +88,3 @@ class Pong:
             'winner': self.winner
         }
         await self.consumer.channel_layer.group_send(self.consumer.group_name, data)
-
-    @database_sync_to_async
-    def get_game(self):
-        try:
-            return Game.objects.get(id=self.id)
-        except Game.DoesNotExist as e:
-            raise ValueError(str(e))
-
-    @database_sync_to_async
-    def save_game(self):
-        try:
-            game = Game.objects.get(id=self.id)
-            game.player1_score = self.scores[constants.PLAYER1]
-            game.player2_score = self.scores[constants.PLAYER2]
-            game.player1_y = self.player1.y
-            game.player2_y = self.player2.y
-            game.ball_x = self.ball.x
-            game.ball_y = self.ball.y
-            game.save()
-        except Game.DoesNotExist as e:
-            raise ValueError(str(e))
