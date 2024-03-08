@@ -132,7 +132,7 @@ export default class extends Component {
 		chatSocket.onclose = () => {
 			console.log('WebSocket closed.');
 			displayConnectionFailedModal('채팅 연결에 실패했습니다.');
-			// localStorage.clear();
+			localStorage.clear();
 			chatSocket.close();
 			return;
 		};
@@ -140,6 +140,7 @@ export default class extends Component {
 		chatSocket.onerror = function (e) {
 			console.log(e);
 			displayConnectionFailedModal('채팅 연결에 실패했습니다.');
+			localStorage.clear();
 			localStorage.setItem('chatConnection', true);
 			chatSocket.close();
 			return;
