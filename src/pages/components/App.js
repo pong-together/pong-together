@@ -137,6 +137,7 @@ export default class extends Component {
 				} else {
 					displayConnectionFailedModal('채팅 연결에 실패했습니다.');
 					localStorage.clear();
+					return;
 				}
 			}, 1000);
 		};
