@@ -72,6 +72,7 @@ export default class extends Component {
 		document.body.innerHTML += modalHTML;
 		document.getElementById('modal-close-btn').addEventListener('click', () => {
 			const modalOverlay = document.querySelector('.modal-overlay');
+			window.location.pathname = '/login';
 			modalOverlay.remove();
 		});
 	};
