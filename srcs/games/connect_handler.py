@@ -84,4 +84,3 @@ class ConnectHandler:
         player1 = User.objects.get(intra_id=self.consumer.player1_name)
         player2 = User.objects.get(intra_id=self.consumer.player2_name)
         return [player1.image, player2.image]
-
