@@ -30,6 +30,12 @@ export default class extends Component {
 				});
 				console.log(data);
 				if (data) {
+					if (data.chat_connection === true) {
+						// 중복 접근을 제한하는 모달 띄워줌
+						showDuplicateLoginModal();
+						localStorage.clear();
+						return;
+					}
 					localStorage.setItem('intraId', data.intra_id);
 					store.dispatch('changeIntraId', data.intra_id);
 					localStorage.setItem('winCount', data.win_count);
@@ -52,6 +58,23 @@ export default class extends Component {
 			store.dispatch('changeLoginProgress', 'done');
 		});
 	}
+
+	showDuplicateLoginModal = () => {
+		const modalHTML = `
+			<div class="modal-overlay">
+				<div class="modal-content">
+					<p>이미 다른 곳에서 접속 중입니다.</p>
+					<button id="modal-close-btn">확인</button>
+				</div>
+			</div>
+		`;
+
+		document.body.innerHTML += modalHTML;
+		document.getElementById('modal-close-btn').addEventListener('click', () => {
+			const modalOverlay = document.querySelector('.modal-overlay');
+			modalOverlay.remove();
+		});
+	};
 
 	template() {
 		return `
