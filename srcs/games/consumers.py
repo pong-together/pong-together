@@ -1,14 +1,9 @@
 import asyncio
-from urllib.parse import parse_qs
 
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
-from games.pong import Pong
-from local.models import Local
-from remote.models import Remote
-from tournaments.models import Tournament
-from users.models import User
+from games.connect_handler import ConnectHandler
 
 
 class GameConsumer(AsyncJsonWebsocketConsumer):
@@ -16,93 +11,16 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(args, kwargs)
-        self.task = None
-        self.user = None
-        self.type = None
-        self.game = None
-        self.group_name = None
-        self.channel_name = None
-        self.player1_name = None
-        self.player2_name = None
+        self.pong_task = None
         self.pong = None
 
     async def connect(self):
         try:
-            await self.init_connection()
-            await self.channel_layer.group_add(self.group_name, self.channel_name)
-            await self.accept()
-
-            if self.type == 'remote':
-                await self.start_remote_game()
-            else:
-                await self.set_players_name()
-                await self.channel_layer.group_send(self.group_name, {
-                    'type': 'start',
-                    'player1_name': self.player1_name,
-                    'player2_name': self.player2_name,
-                })
-                await self.start_pong_game()
-
+            connect_handler = ConnectHandler(self)
+            self.pong_task = await connect_handler.run()
         except Exception as e:
-            print(e)
             await self.close()
-
-    async def init_connection(self):
-        self.user = self.scope['user']
-        query_string = parse_qs(self.scope['query_string'].strip().decode())
-        self.type = query_string.get('type', [None])[0]
-        type_id = query_string.get('type_id', [None])[0]
-        if self.type is None or type_id is None:
-            raise ValueError("type or type_id가 지정되지 않았습니다.")
-        self.game = await self.set_game(type_id)
-        self.group_name = f'{self.type}_{type_id}'
-
-    @database_sync_to_async
-    def set_game(self, type_id):
-        if self.type == 'local':
-            return Local.objects.get(id=type_id)
-        if self.type == 'tournament':
-            return Tournament.objects.get(id=type_id)
-        if self.type == 'remote':
-            return Remote.objects.get(id=type_id)
-
-    async def start_remote_game(self):
-        if self.group_name not in self.remote_game:
-            self.remote_game[self.group_name] = []
-        self.remote_game[self.group_name].append(self.user)
-
-        if len(self.remote_game[self.group_name]) >= 2:
-            await self.set_players_name()
-            images = await self.get_players_image()
-            await self.channel_layer.group_send(self.group_name, {
-                'type': 'start',
-                'player1_name': self.player1_name,
-                'player1_image': images[0],
-                'player2_name': self.player2_name,
-                'player2_image': images[1]
-            })
-            await self.start_pong_game()
-
-    async def set_players_name(self):
-        if self.type != 'tournament':
-            self.player1_name = self.game.player1_name
-            self.player2_name = self.game.player2_name
-
-    @database_sync_to_async
-    def get_players_image(self):
-        player1 = User.objects.get(intra_id=self.player1_name)
-        player2 = User.objects.get(intra_id=self.player2_name)
-        return [player1.image, player2.image]
-
-    async def start(self, event):
-        try:
-            await self.send_json(event)
-        except Exception as e:
-            await self.send_json({'error': str(e)})
-
-    async def start_pong_game(self):
-        self.pong = Pong(self)
-        self.task = asyncio.create_task(self.pong.run())
+            print(e)
 
     async def disconnect(self, code):
         try:
@@ -171,6 +89,12 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
                 self.push_button(content['sender_player'], content['button'])
         except KeyError as e:
             await self.send_json({'error': f'{str(e)} is required'})
+
+    async def start(self, event):
+        try:
+            await self.send_json(event)
+        except Exception as e:
+            await self.send_json({'error': str(e)})
 
     def push_button(self, sender_player, button):
         player = self.pong.player1
