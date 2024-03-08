@@ -17,6 +17,12 @@ class Paddle:
     def set_position(self, y):
         self.y = y
 
+    def move(self, button):
+        if button == 'up':
+            self.move_up()
+        if button == 'down':
+            self.move_down()
+
     def move_up(self, movement=MOVEMENT):
         self.y += movement
         if self.y < self.TOP_LIMIT:
