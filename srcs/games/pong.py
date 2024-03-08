@@ -11,6 +11,7 @@ class Pong:
     def __init__(self, game_id, consumer):
         self.id = game_id
         self.consumer = consumer
+        self.winner = None
         self.scores = [0, 0]
         self.turn = constants.PLAYER1
 
@@ -27,9 +28,11 @@ class Pong:
     async def run(self):
         await self.save_game()
         try:
-            while True:
+            while self.finish():
                 await self.play_round()
                 self.turn = (self.turn + 1) % 2
+            self.set_winner()
+            await self.send_game_finish()
         except ValueError as e:
             await self.consumer.send_json({'error': str(e)})
 
@@ -57,6 +60,15 @@ class Pong:
         if status != Score.NONE:
             self.scores[index] += 1
 
+    def finish(self):
+        return self.scores[constants.PLAYER1] == 10 \
+            or self.scores[constants.PLAYER2] == 10
+
+    def set_winner(self):
+        self.winner = self.consumer.player1.intra_id
+        if self.scores[constants.PLAYER2] == 10:
+            self.winner = self.consumer.player2.intra_id
+
     def update_positions(self, game):
         self.player1.set_position(game.player1_y)
         self.player2.set_position(game.player2_y)
@@ -77,6 +89,13 @@ class Pong:
             'type': 'score',
             'player1_score': self.scores[constants.PLAYER1],
             'player2_score': self.scores[constants.PLAYER2]
+        }
+        await self.consumer.channel_layer.group_send(self.consumer.group_name, data)
+
+    async def send_game_finish(self):
+        data = {
+            'type': 'finish',
+            'winner': self.winner
         }
         await self.consumer.channel_layer.group_send(self.consumer.group_name, data)
 
