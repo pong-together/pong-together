@@ -143,6 +143,7 @@ export default class extends Component {
 
 		chatSocket.onerror = function (e) {
 			console.log(e);
+			displayConnectionFailedModal();
 		};
 
 		chatSocket.onmessage = (event) => {
