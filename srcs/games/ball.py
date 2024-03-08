@@ -10,7 +10,7 @@ class Ball:
     HEIGHT = 20
 
     START_SPEED = 5
-    MAXIMUM_SLOPE = 1
+    MAXIMUM_SLOPE = 1.1
     ESCAPE_DEGREE = 20
 
     TOP_LIMIT = 0
@@ -28,8 +28,6 @@ class Ball:
         self.y = y
 
     def reset(self):
-        from games.pong import Pong
-
         x = (constants.GAME_WIDTH - self.WIDTH) / 2
         y = (constants.GAME_HEIGHT - self.HEIGHT) / 2 + randint(-100, 100)
         self.set_position(x, y)
@@ -67,7 +65,8 @@ class Ball:
     def adjust_slope(self):
         slope = self.velocity[1] / self.velocity[0]
         if abs(slope) > self.MAXIMUM_SLOPE:
-            self.velocity[1] = 0
+            self.velocity[1] *= abs(self.velocity[0]) / abs(self.velocity[1])
+            self.velocity[0] *= self.MAXIMUM_SLOPE
 
     def adjust_speed(self, speed=START_SPEED):
         size2 = self.velocity[0] ** 2 + self.velocity[1] ** 2
