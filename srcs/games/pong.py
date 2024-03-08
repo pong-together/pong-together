@@ -41,8 +41,12 @@ class Pong:
 
             self.ball.update_position()
             status = self.ball.update_velocity(self.turn)
-
+            if self.player1.hit_ball(self.ball):
+                self.ball.bounce(self.player1)
+            if self.player2.hit_ball(self.ball):
+                self.ball.bounce(self.player2)
             await self.send_game_info()
+
             await self.save_game()
 
     def update_positions(self, game):

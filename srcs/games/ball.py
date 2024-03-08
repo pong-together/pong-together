@@ -9,7 +9,8 @@ class Ball:
     WIDTH = 20
     HEIGHT = 20
 
-    START_SPEED = 5
+    START_SPEED = 3
+    MINIMUM_SPEED = 5
     MAXIMUM_SLOPE = 1.1
     ESCAPE_DEGREE = 20
 
@@ -31,6 +32,12 @@ class Ball:
         x = (constants.GAME_WIDTH - self.WIDTH) / 2
         y = (constants.GAME_HEIGHT - self.HEIGHT) / 2 + randint(-100, 100)
         self.set_position(x, y)
+
+    def bounce(self, paddle):
+        self.velocity[0] *= -1
+        self.velocity[1] = int((self.y - paddle.y - (paddle.HEIGHT - self.HEIGHT) / 2))
+        self.adjust_slope()
+        self.adjust_speed(self.MINIMUM_SPEED)
 
     def update_position(self):
         self.x += self.velocity[0]
