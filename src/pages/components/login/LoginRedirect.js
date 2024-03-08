@@ -2,7 +2,7 @@ import Component from '../../../core/Component';
 import store from '../../../store/store';
 import http from '../../../core/http';
 import language from '../../../utils/language';
-import { showDuplicateLoginModal } from '../../../utils/modal';
+import { displayConnectionFailedModal } from '../../../utils/modal';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -33,7 +33,7 @@ export default class extends Component {
 				btn.innerText = loadingText;
 				let dotCount = 0;
 
-				const loadingInterval = setInterval(() => {
+				setInterval(() => {
 					dotCount = (dotCount + 1) % 4;
 					btn.innerText = loadingText + '.'.repeat(dotCount);
 				}, 500);
@@ -52,7 +52,7 @@ export default class extends Component {
 				);
 
 				if (data?.chat_connection === true) {
-					showDuplicateLoginModal();
+					displayConnectionFailedModal('다른 사용자가 이미 접속중입니다.');
 					localStorage.clear();
 					return;
 				}

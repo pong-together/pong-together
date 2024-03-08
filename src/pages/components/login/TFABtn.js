@@ -80,7 +80,6 @@ export default class extends Component {
 			this.generateQRCode(data.qrcode_uri);
 		} catch (e) {
 			clearInterval(loadingInterval);
-			//console.error('QR 코드 생성 실패');
 		}
 	}
 }
