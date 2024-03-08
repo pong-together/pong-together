@@ -1,9 +1,7 @@
-import asyncio
-
-from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 from games.connect_handler import ConnectHandler
+from games.disconnect_handler import DisconnectHandler
 
 
 class GameConsumer(AsyncJsonWebsocketConsumer):
@@ -29,67 +27,10 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
 
     async def disconnect(self, code):
         try:
-            if self.type == 'remote':
-                await self.disconnect_remote()
-            await self.channel_layer.group_discard(self.group_name, self.channel_name)
-            await self.cancel_pong_task()
+            disconnect_handler = DisconnectHandler(self)
+            await disconnect_handler.run()
         except Exception as e:
             await self.send_json({'error': str(e)})
-
-    async def disconnect_remote(self):
-        if self.is_abnormal():  # 비정상 종료 처리
-            await self.disconnect_abnormal()
-        else:  # 정상 종료 처리
-            await self.disconnect_normal()
-
-        if self.user in self.remote_game[self.group_name]:
-            self.remote_game[self.group_name].remove(self.user)
-
-    async def is_abnormal(self):
-        return self.pong.winner is None
-
-    async def disconnect_normal(self):
-        if self.user.intra_id == self.pong.winner:
-            await self.update_win()
-        else:
-            await self.update_lose()
-
-    async def disconnect_abnormal(self):
-        await self.update_lose()
-        self.pong.winner = self.get_other_player()
-        await self.send_end()
-
-    def get_other_player(self):
-        other = self.player1_name
-        if self.user.intra_id == other:
-            other = self.player2_name
-        return other
-
-    async def send_end(self):
-        await self.channel_layer.group_send(self.group_name, {
-            'type': 'end',
-            'is_normal': False,
-            'winner': self.user.intra_id
-        })
-
-    async def cancel_pong_task(self):
-        self.pong_task.cancel()
-        try:
-            await self.pong_task
-        except asyncio.CancelledError:
-            pass
-
-    @database_sync_to_async
-    def update_lose(self):
-        self.user.lose_count += 1
-        self.user.game_count += 1
-        self.user.save()
-
-    @database_sync_to_async
-    def update_win(self):
-        self.user.win_count += 1
-        self.user.game_count += 1
-        self.user.save()
 
     async def receive(self, text_data=None, bytes_data=None, **kwargs):
         try:
