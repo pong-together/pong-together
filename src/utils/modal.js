@@ -10,7 +10,7 @@ function displayConnectionFailedModal(text) {
 		<div class="modal-overlay">
 			<div class="modal-content">
 				<p>${text}</p>
-				<button class="modal-close-btn">${language.modal[$state.language].ok}</button>
+				<button class="modal-close-btn">${language.util[$state.language].ok}</button>
 			</div>
 		</div>
 	`;
