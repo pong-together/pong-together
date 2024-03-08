@@ -32,7 +32,7 @@ export default class extends Component {
 				if (data) {
 					if (data.chat_connection === true) {
 						// 중복 접근을 제한하는 모달 띄워줌
-						showDuplicateLoginModal();
+						this.showDuplicateLoginModal();
 						localStorage.clear();
 						return;
 					}

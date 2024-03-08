@@ -22,6 +22,24 @@ export default class extends Component {
 			</div>`;
 	}
 
+	showDuplicateLoginModal = () => {
+		const modalHTML = `
+			<div class="modal-overlay">
+				<div class="modal-content">
+					<p>이미 다른 곳에서 접속 중입니다.</p>
+					<button id="modal-close-btn">확인</button>
+				</div>
+			</div>
+		`;
+
+		document.body.innerHTML += modalHTML;
+		document.getElementById('modal-close-btn').addEventListener('click', () => {
+			const modalOverlay = document.querySelector('.modal-overlay');
+			modalOverlay.remove();
+			window.location.pathname = '/login';
+		});
+	};
+
 	async mounted() {
 		const queryParams = new URLSearchParams(window.location.search);
 		const code = queryParams.get('code');
@@ -50,6 +68,11 @@ export default class extends Component {
 					{ 'Content-Type': 'application/json' },
 				);
 
+				if (data?.chat_connection === true) {
+					this.showDuplicateLoginModal();
+					localStorage.clear();
+					return;
+				}
 				if (data?.login === 'success') {
 					localStorage.setItem('accessToken', data.access_token);
 					localStorage.setItem('refreshToken', data.refresh_token);
