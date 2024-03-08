@@ -26,3 +26,11 @@ class Paddle:
         self.y -= movement
         if self.y > self.BOTTOM_LIMIT:
             self.set_position(self.BOTTOM_LIMIT)
+
+    def hit_ball(self, ball):
+        vertical_collision = self.y < ball.rect.y + ball.HEIGHT and self.y + self.HEIGHT > ball.rect.y
+        ball_x = ball.rect.x
+        if ball.velocity[0] > 0:
+            ball_x += ball.WIDTH
+        horizontal_collision = self.x <= ball_x <= self.x + self.WIDTH
+        return vertical_collision and horizontal_collision
