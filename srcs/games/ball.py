@@ -70,7 +70,7 @@ class Ball:
             self.velocity[1] = 0
 
     def adjust_speed(self, speed=START_SPEED):
-        size = math.sqrt(self.velocity[0] ** 2 + self.velocity[1] ** 2)
-        if speed == self.START_SPEED or size < speed:
-            rate = speed / size
+        size2 = self.velocity[0] ** 2 + self.velocity[1] ** 2
+        if speed == self.START_SPEED or size2 < speed ** 2:
+            rate = speed / math.sqrt(size2)
             self.velocity = [self.velocity[0] * rate, self.velocity[1] * rate]
