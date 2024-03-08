@@ -2,6 +2,7 @@ import Component from '../../../core/Component.js';
 import language from '../../../utils/language.js';
 import store from '../../../store/index.js';
 import http from '../../../core/http.js';
+import { showDuplicateLoginModal } from '../../../utils/chatModal';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -32,7 +33,8 @@ export default class extends Component {
 				if (data) {
 					if (data.chat_connection === true) {
 						// 중복 접근을 제한하는 모달 띄워줌
-						this.showDuplicateLoginModal();
+						showDuplicateLoginModal();
+						localStorage.clear();
 						return;
 					}
 					localStorage.setItem('intraId', data.intra_id);
@@ -57,24 +59,6 @@ export default class extends Component {
 			store.dispatch('changeLoginProgress', 'done');
 		});
 	}
-
-	showDuplicateLoginModal = () => {
-		const modalHTML = `
-			<div class="modal-overlay">
-				<div class="modal-content">
-					<p>이미 다른 곳에서 접속 중입니다.</p>
-					<button id="modal-close-btn">확인</button>
-				</div>
-			</div>
-		`;
-
-		document.body.innerHTML += modalHTML;
-		document.getElementById('modal-close-btn').addEventListener('click', () => {
-			const modalOverlay = document.querySelector('.modal-overlay');
-			window.location.pathname = '/login';
-			modalOverlay.remove();
-		});
-	};
 
 	template() {
 		return `

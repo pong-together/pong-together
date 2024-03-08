@@ -1,6 +1,7 @@
 import Component from '../../core/Component.js';
 import Router from '../../router/router.js';
 import store from '../../store/index.js';
+import { displayConnectionFailedModal } from '../../utils/modal';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
@@ -130,7 +131,14 @@ export default class extends Component {
 
 		chatSocket.onclose = () => {
 			console.log('WebSocket closed. Trying to reconnect...');
-			setTimeout(() => this.connectSocket(), 1000); // Try to reconnect every 5 seconds
+			setTimeout(() => {
+				if (!chatSocket || chatSocket.readyState === WebSocket.CLOSED) {
+					this.connectSocket();
+				} else {
+					displayConnectionFailedModal();
+					localStorage.clear();
+				}
+			}, 1000);
 		};
 
 		chatSocket.onerror = function (e) {

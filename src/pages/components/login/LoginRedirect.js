@@ -2,6 +2,7 @@ import Component from '../../../core/Component';
 import store from '../../../store/store';
 import http from '../../../core/http';
 import language from '../../../utils/language';
+import { showDuplicateLoginModal } from '../../../utils/chatModal';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -21,24 +22,6 @@ export default class extends Component {
 			</div>
 			</div>`;
 	}
-
-	showDuplicateLoginModal = () => {
-		const modalHTML = `
-			<div class="modal-overlay">
-				<div class="modal-content">
-					<p>이미 다른 곳에서 접속 중입니다.</p>
-					<button id="modal-close-btn">확인</button>
-				</div>
-			</div>
-		`;
-
-		document.body.innerHTML += modalHTML;
-		document.getElementById('modal-close-btn').addEventListener('click', () => {
-			const modalOverlay = document.querySelector('.modal-overlay');
-			modalOverlay.remove();
-			window.location.pathname = '/login';
-		});
-	};
 
 	async mounted() {
 		const queryParams = new URLSearchParams(window.location.search);
@@ -69,7 +52,7 @@ export default class extends Component {
 				);
 
 				if (data?.chat_connection === true) {
-					this.showDuplicateLoginModal();
+					showDuplicateLoginModal();
 					localStorage.clear();
 					return;
 				}
