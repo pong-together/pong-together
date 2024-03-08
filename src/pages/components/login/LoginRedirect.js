@@ -71,18 +71,15 @@ export default class extends Component {
 				if (data?.chat_connection === true) {
 					this.showDuplicateLoginModal();
 					localStorage.clear();
+					window.location.pathname = '/login';
 					return;
 				}
 				if (data?.login === 'success') {
 					localStorage.setItem('accessToken', data.access_token);
 					localStorage.setItem('refreshToken', data.refresh_token);
-					window.location.pathname = '/login';
-					//navigate('/login');
 				}
 			} catch (error) {
-				//clearInterval(loadingInterval);
 				console.log('error: ', error);
-				//navigate('/login');
 			}
 		}
 	}
