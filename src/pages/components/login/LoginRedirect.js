@@ -2,7 +2,7 @@ import Component from '../../../core/Component';
 import store from '../../../store/store';
 import http from '../../../core/http';
 import language from '../../../utils/language';
-import { showDuplicateLoginModal } from '../../../utils/chatModal';
+import { showDuplicateLoginModal } from '../../../utils/modal';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
