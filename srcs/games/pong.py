@@ -23,12 +23,12 @@ class Pong:
 
     async def run(self):
         try:
-            while self.finish():
+            while not self.finish():
                 await self.play_round()
                 self.turn = (self.turn + 1) % 2
             self.set_winner()
             await self.send_game_finish()
-        except ValueError as e:
+        except Exception as e:
             await self.consumer.send_json({'error': str(e)})
 
     async def play_round(self):
