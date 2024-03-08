@@ -146,6 +146,7 @@ export default class extends Component {
 			console.log(e);
 			displayConnectionFailedModal('채팅 연결에 실패했습니다.');
 			localStorage.clear();
+			localStorage.setItem('chatConnection', true);
 			chatSocket.close();
 		};
 
@@ -197,7 +198,9 @@ export default class extends Component {
 		this.calcRate();
 		if (
 			localStorage.getItem('accessToken') &&
-			localStorage.getItem('intraId')
+			localStorage.getItem('intraId') &&
+			(!localStorage.getItem('chatConnection') ||
+				localStorage.getItem('chatConnection') !== true)
 		) {
 			this.connectSocket();
 		}
