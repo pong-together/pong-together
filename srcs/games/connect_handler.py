@@ -61,10 +61,9 @@ class ConnectHandler:
 
     def set_players_name(self):
         game = self.consumer.game
-        if self.consumer.type == 'local':
+        if self.consumer.type == 'local' or 'remote':
             self.consumer.player1_name = game.player1_name
             self.consumer.player2_name = game.player2_name
-        # tournament 경우 구현 필요
         if self.consumer.type == 'tournament':
             self.set_players_tournament(game)
 
