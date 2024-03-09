@@ -19,6 +19,7 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
         self.user = None
         self.group_name = None
         self.channel_name = None
+        self.remote = None
 
     async def connect(self):
         try:
@@ -29,7 +30,7 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
 
             if self.group_name not in self.waiting_list:
                 self.waiting_list[self.group_name] = []
-            self.waiting_list[self.group_name].append((self.channel_name, self.user.intra_id))
+            self.waiting_list[self.group_name].append((self.channel_name, self.user))
 
             if len(self.waiting_list[self.group_name]) >= 2:
                 await self.start_matching()
@@ -56,7 +57,6 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
             raise ValueError("게임 모드가 지정되지 않았습니다.")
         self.group_name = game_mode
 
-
     async def send_ping(self):
         while True:
             await asyncio.sleep(60)
@@ -67,23 +67,25 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
 
     async def start_matching(self):
 
-        first_channel, first_id = self.waiting_list[self.group_name][0]
-        second_channel, second_id = self.waiting_list[self.group_name][1]
+        first_channel, first_user = self.waiting_list[self.group_name][0]
+        second_channel, second_user = self.waiting_list[self.group_name][1]
 
-        await self.save_remote_model(first_id, second_id)
+        await self.save_remote_model(first_user, second_user)
 
-        await self.send_channel(first_channel, first_id, second_id)
-        await self.send_channel(second_channel, second_id, first_id)
+        await self.send_channel(first_channel, first_user, second_user)
+        await self.send_channel(second_channel, second_user, first_user)
 
         self.waiting_list[self.group_name] = self.waiting_list[self.group_name][2:]
 
-    async def send_channel(self, channel, intra_id, opponent_id):
+    async def send_channel(self, channel, user, opponent_user):
 
         await self.channel_layer.send(channel, {
             'type': 'find_opponent',
-            'opponent': opponent_id,
+            'opponent': opponent_user.intra_id,
+            'opponent_image': opponent_user.image,
 
-            'intra_id': intra_id
+            'intra_id': user.intra_id,
+            'id': self.remote.pk
         })
 
     async def find_opponent(self, event):
@@ -91,7 +93,9 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
             message = {
                 'type': 'find_opponent',
                 'opponent': event['opponent'],
-                'intra_id': event['intra_id']
+                'opponent_image': event['opponent_image'],
+                'intra_id': event['intra_id'],
+                'id': event['id']
             }
             await self.send_json(message)
         except KeyError as e:
@@ -107,5 +111,5 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
             pass
 
     @database_sync_to_async
-    def save_remote_model(self, first_id, second_id):
-        Remote.objects.create(player1_name=first_id, player2_name=second_id, game_mode=self.group_name)
+    def save_remote_model(self, first_user, second_user):
+        self.remote = Remote.objects.create(player1_name=first_user.intra_id, player2_name=second_user.intra_id, game_mode=self.group_name)
