@@ -2,6 +2,9 @@ import Component from '../../../core/Component.js';
 import language from '../../../utils/language.js';
 
 export default class extends Component {
+	constructor() {
+		super($target, $props, remoteSocket);
+	}
 	setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
@@ -10,12 +13,7 @@ export default class extends Component {
 			window.location.pathname = '/login';
 		}
 
-		this.intra = {
-			intraPicture: 'static/images/intraPicture.png',
-			intraID: 'jonseo',
-		};
 		this.$state = this.$props;
-		this.setState(this.intra);
 	}
 
 	template() {
@@ -39,6 +37,7 @@ export default class extends Component {
 		function stopTimer() {
 			clearInterval(time);
 			bindUpdateTimer();
+			remoteSocket.onclose();
 			window.location.pathname = '/game';
 		}
 

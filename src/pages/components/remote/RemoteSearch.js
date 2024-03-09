@@ -11,7 +11,12 @@ export default class extends Component {
 			window.location.pathname = '/login';
 		}
 
+		this.intra = {
+			opponentIntraID: 'undefined',
+			opponentintraPic: 'undefined',
+		};
 		this.$state = this.$props;
+		this.setState(this.intra);
 	}
 
 	template() {
@@ -50,12 +55,15 @@ export default class extends Component {
 		}
 		this.stopCounter = stopCounter;
 
+		function nextLevel(remoteSocket) {
+			clearInterval(count);
+			updateCounter();
+			new RemoteReady(document.querySelector('.mainbox'), this.$state, remoteSocket);
+		}
+		this.nextLevel() = nextLevel;
+
 		const startCounter = () => {
 			count = setInterval(() => {
-				if (seconds === 4) {
-					clearInterval(count);
-					new RemoteReady(document.querySelector('.mainbox'), this.$state);
-				}
 				if (seconds === 60) {
 					minutes++;
 					seconds = 0;
@@ -69,7 +77,43 @@ export default class extends Component {
 		startCounter();
 	}
 
+	connectSocket() {
+		const remoteSocket = new WebSocket(
+			`${SOCKET_URL}/ws/matchings/?token=${localStorage.getItem('accessToken')}&mode=${localStorage.getItem('mode')}`,
+		);
+
+		remoteSocket.onopen = () => {
+			if (remoteSocket.readyState === WebSocket.OPEN) {
+				console.log('remoteSocket connected');
+			}
+		};
+
+		remoteSocket.onmessage = (e) => {
+			console.log('received msg from server');
+			const data = JSON.parse(e.data);
+			this.$state.type = data.type;
+			this.$state.opponentIntraID = data.opponent;
+			this.$state.intraID = data.intra_id;
+			this.$state.opponentintraPic = data.opponent_image;
+			this.$state.typeID = data.id;
+			localStorage.setItem('remoteState', JSON.stringify(this.$state));
+			this.nextLevel(remoteSocket);
+		};
+
+		remoteSocket.onerror = (e) => {
+			console.log('remoteSocker error');
+			remoteSocket.onclose();
+		};
+
+		remoteSocket.onclose = () => {
+			console.log('remoteSocker closed');
+			localStorage.removeItem('mode');
+			remoteSocket.close();
+		};
+	}
+
 	mounted() {
 		this.counter();
+		this.connectSocket();
 	}
 }
