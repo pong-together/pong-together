@@ -2,6 +2,8 @@ import Component from '../../../core/Component.js';
 import language from '../../../utils/language.js';
 import RemoteReady from './RemoteReady.js';
 
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
+
 export default class extends Component {
 	setup() {
 		if (
@@ -17,6 +19,7 @@ export default class extends Component {
 		};
 		this.$state = this.$props;
 		this.setState(this.intra);
+		this.remoteSocket = null;
 	}
 
 	template() {
@@ -51,16 +54,21 @@ export default class extends Component {
 		function stopCounter() {
 			clearInterval(count);
 			updateCounter();
+			this.remoteSocket.close();
 			window.location.pathname = '/select';
 		}
 		this.stopCounter = stopCounter;
 
-		function nextLevel(remoteSocket) {
+		const nextLevel = () => {
 			clearInterval(count);
 			updateCounter();
-			new RemoteReady(document.querySelector('.mainbox'), this.$state, remoteSocket);
-		}
-		this.nextLevel() = nextLevel;
+			new RemoteReady(
+				document.querySelector('.mainbox'),
+				this.$state,
+				this.remoteSocket,
+			);
+		};
+		this.nextLevel = nextLevel;
 
 		const startCounter = () => {
 			count = setInterval(() => {
@@ -78,17 +86,17 @@ export default class extends Component {
 	}
 
 	connectSocket() {
-		const remoteSocket = new WebSocket(
-			`${SOCKET_URL}/ws/matchings/?token=${localStorage.getItem('accessToken')}&mode=${localStorage.getItem('mode')}`,
+		this.remoteSocket = new WebSocket(
+			`${SOCKET_URL}/ws/remote/?token=${localStorage.getItem('accessToken')}&mode=${localStorage.getItem('mode')}`,
 		);
 
-		remoteSocket.onopen = () => {
+		this.remoteSocket.onopen = () => {
 			if (remoteSocket.readyState === WebSocket.OPEN) {
 				console.log('remoteSocket connected');
 			}
 		};
 
-		remoteSocket.onmessage = (e) => {
+		this.remoteSocket.onmessage = (e) => {
 			console.log('received msg from server');
 			const data = JSON.parse(e.data);
 			this.$state.type = data.type;
@@ -97,18 +105,19 @@ export default class extends Component {
 			this.$state.opponentintraPic = data.opponent_image;
 			this.$state.typeID = data.id;
 			localStorage.setItem('remoteState', JSON.stringify(this.$state));
-			this.nextLevel(remoteSocket);
+			this.nextLevel();
 		};
 
-		remoteSocket.onerror = (e) => {
+		this.remoteSocket.onerror = (e) => {
 			console.log('remoteSocker error');
-			remoteSocket.onclose();
+			console.log(e);
+			console.log(e.status);
+			remoteSocket.close();
 		};
 
-		remoteSocket.onclose = () => {
+		this.remoteSocket.onclose = () => {
 			console.log('remoteSocker closed');
 			localStorage.removeItem('mode');
-			remoteSocket.close();
 		};
 	}
 

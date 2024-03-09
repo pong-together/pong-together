@@ -2,7 +2,7 @@ import Component from '../../../core/Component.js';
 import language from '../../../utils/language.js';
 
 export default class extends Component {
-	constructor() {
+	constructor($target, $props, remoteSocket) {
 		super($target, $props, remoteSocket);
 	}
 	setup() {
@@ -37,7 +37,7 @@ export default class extends Component {
 		function stopTimer() {
 			clearInterval(time);
 			bindUpdateTimer();
-			remoteSocket.onclose();
+			remoteSocket.close();
 			window.location.pathname = '/game';
 		}
 
