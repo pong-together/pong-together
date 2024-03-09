@@ -61,10 +61,23 @@ class ConnectHandler:
 
     def set_players_name(self):
         game = self.consumer.game
-        if self.consumer.type != 'tournament':
+        if self.consumer.type == 'local':
             self.consumer.player1_name = game.player1_name
             self.consumer.player2_name = game.player2_name
         # tournament 경우 구현 필요
+        if self.consumer.type == 'tournament':
+            self.set_players_tournament(game)
+
+    def set_players_tournament(self, game):
+        if game.game_turn == 1:
+            self.consumer.player1_name = game.player1_name
+            self.consumer.player2_name = game.player2_name
+        elif game.game_turn == 2:
+            self.consumer.player1_name = game.player3_name
+            self.consumer.player2_name = game.player4_name
+        elif game.game_turn == 3:
+            self.consumer.player1_name = game.first_winner
+            self.consumer.player2_name = game.second_winner
 
     async def start_pong_game(self):
         self.consumer.pong = Pong(self.consumer)
