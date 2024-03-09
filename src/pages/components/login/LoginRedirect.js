@@ -2,6 +2,7 @@ import Component from '../../../core/Component';
 import store from '../../../store/store';
 import http from '../../../core/http';
 import language from '../../../utils/language';
+import { displayConnectionFailedModal } from '../../../utils/modal';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -32,7 +33,7 @@ export default class extends Component {
 				btn.innerText = loadingText;
 				let dotCount = 0;
 
-				const loadingInterval = setInterval(() => {
+				setInterval(() => {
 					dotCount = (dotCount + 1) % 4;
 					btn.innerText = loadingText + '.'.repeat(dotCount);
 				}, 500);
@@ -50,16 +51,18 @@ export default class extends Component {
 					{ 'Content-Type': 'application/json' },
 				);
 
+				if (data?.chat_connection === true) {
+					displayConnectionFailedModal('다른 사용자가 이미 접속중입니다.');
+					localStorage.clear();
+					return;
+				}
 				if (data?.login === 'success') {
 					localStorage.setItem('accessToken', data.access_token);
 					localStorage.setItem('refreshToken', data.refresh_token);
 					window.location.pathname = '/login';
-					//navigate('/login');
 				}
 			} catch (error) {
-				//clearInterval(loadingInterval);
 				console.log('error: ', error);
-				//navigate('/login');
 			}
 		}
 	}
