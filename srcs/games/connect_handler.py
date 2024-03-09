@@ -45,7 +45,7 @@ class ConnectHandler:
     async def start_remote_game(self):
         if self.consumer.group_name not in self.consumer.remote_game:
             self.consumer.remote_game[self.consumer.group_name] = []
-        self.consumer.remote_game[self.consumer.group_name].append(self.consumer.user)
+        self.consumer.remote_game[self.consumer.group_name].append(self.consumer.channel_name)
 
         if len(self.consumer.remote_game[self.consumer.group_name]) >= 2:
             self.set_players_name()
