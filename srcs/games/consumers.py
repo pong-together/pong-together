@@ -48,7 +48,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
     async def receive_push_button(self, content):
         if self.pong_task is None:
             await self.channel_layer.send(self.remote_game[self.group_name][1], {
-                'type': 'push_button_event',
+                'type': 'send_push_button_event',
                 'sender_player': content['sender_player'],
                 'button': content['button']
             })
@@ -60,6 +60,12 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         if sender_player == 'player2':
             player = self.pong.player2
         player.move(button)
+
+    async def send_push_button_event(self, event):
+        try:
+            self.push_button(event['sender_player'], event['button'])
+        except KeyError as e:
+            await self.send_json({'error': f'{str(e)} is required'})
 
     # event
     async def start(self, event):
@@ -79,6 +85,3 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             await self.send_json(event)
         except Exception as e:
             await self.send_json({'error': str(e)})
-
-    async def push_button_event(self, event):
-        await self.push_button(event['sender_player'], event['button'])
