@@ -1,14 +1,18 @@
 import Component from '../../core/Component.js';
 import Router from '../../router/router.js';
 import store from '../../store/index.js';
-import { navigate } from '../../router/utils/navigate.js';
+import language from '../../utils/language.js';
+import { displayConnectionFailedModal } from '../../utils/modal';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
 export default class extends Component {
 	setup() {
+		if (localStorage.getItem('language')) {
+			store.dispatch('changeLanguage', localStorage.getItem('language'));
+		}
 		this.$state = {
-			region: 'kr',
+			region: store.state.language,
 		};
 		this.$store = this.$props;
 	}
@@ -19,6 +23,10 @@ export default class extends Component {
 				localStorage.removeItem('tournament-id');
 			}
 			window.location.pathname = '/select';
+		});
+
+		this.addEvent('click', '.modal-close-btn', () => {
+			window.location.pathname = '/login';
 		});
 	}
 
@@ -78,7 +86,7 @@ export default class extends Component {
 
 						</div>
 						<div action="" id="chat-form">
-								<input id="m" autocomplete="off" /><button class="message-btn">전송</button>
+								<input id="m" autocomplete="off" /><button class="message-btn">${language.util[store.state.language].submit}</button>
 						</div>
 				</div>
 				</div>
@@ -130,16 +138,27 @@ export default class extends Component {
 		};
 
 		chatSocket.onclose = () => {
-			console.log('WebSocket closed. Trying to reconnect...');
-			setTimeout(() => this.connectSocket(), 1000); // Try to reconnect every 5 seconds
+			console.log('WebSocket closed.');
+			displayConnectionFailedModal(
+				language.util[this.$state.region].chatMessage,
+			);
+			localStorage.clear();
+			chatSocket.close();
+			return;
 		};
 
 		chatSocket.onerror = function (e) {
 			console.log(e);
+			displayConnectionFailedModal(
+				language.util[this.$state.region].chatMessage,
+			);
+			localStorage.clear();
+			localStorage.setItem('chatConnection', true);
+			chatSocket.close();
+			return;
 		};
 
 		chatSocket.onmessage = (event) => {
-			// Changed to arrow function
 			console.log(event.data);
 			const data = JSON.parse(event.data);
 			if (data.type && data.type === 'chat_message') {
@@ -184,7 +203,12 @@ export default class extends Component {
 		});
 
 		this.calcRate();
-		if (localStorage.getItem('accessToken')) {
+		if (
+			localStorage.getItem('accessToken') &&
+			localStorage.getItem('intraId') &&
+			(!localStorage.getItem('chatConnection') ||
+				localStorage.getItem('chatConnection') !== true)
+		) {
 			this.connectSocket();
 		}
 
