@@ -3,6 +3,8 @@ import language from '../../../utils/language.js';
 import store from '../../../store/index.js';
 import http from '../../../core/http.js';
 
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+
 export default class extends Component {
 	async setup() {
 		if (
