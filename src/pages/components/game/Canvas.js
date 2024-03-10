@@ -168,6 +168,11 @@ export default function Canvas() {
 		requestAnimationFrame(frame);
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+		player1.y = window.localStorage.getItem('player1_y');
+		player2.y = window.localStorage.getItem('player2_y');
+		ball.x = window.localStorage.getItem('ball_x');
+		ball.y = window.localStorage.getItem('ball_y');
+
 		move();
 		player1.draw();
 		player2.draw();

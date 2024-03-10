@@ -2,6 +2,8 @@ import Component from '../../../core/Component.js';
 import http from '../../../core/http.js';
 import GameReady from './GameReady.js';
 
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
+
 export default class extends Component {
 	setup() {
 		if (
@@ -46,7 +48,13 @@ export default class extends Component {
 		`;
 	}
 
+	setState(newState){
+		this.$state = { ...this.$state, ...newState };
+		// this.render();
+	}
+
 	connectGameSocket() {
+		// console.log("!!");
 		const gameSocket = new WebSocket(
 			`${SOCKET_URL}/ws/games/?token=${localStorage.getItem('accessToken')}&type=${localStorage.getItem('gameMode')}&type_id=${localStorage.getItem('local-id')}`,
 		)
@@ -93,7 +101,8 @@ export default class extends Component {
 
 		gameSocket.onclose = () => {
 			console.log('gamesocket disconnect... Trying to reconnect...');
-			setTimeout(() => this.connectGameSocket(), 1000);
+			return ;
+			// setTimeout(() => this.connectGameSocket(), 1000);
 		}
 
 		gameSocket.onerror = function (e) {
@@ -101,24 +110,27 @@ export default class extends Component {
 		}
 
 		gameSocket.onmessage = (event) => {
-			console.log(event.data);
+			// console.log('!!' + event.data);
 			const data = JSON.parse(event.data);
 			if (data.type && data.type === 'start') {
+				console.log("1");
 				this.setState({ player1: data.player1 });
 				this.setState({ player2: data.player2 });
 			}
 			else if (data.type && data.type === 'end') {
+				console.log('2');
 				this.setState ({winner: data.winner});
 				if (data.is_normal === false)
 					gameSocket.close();
 			}
 			else if (data.type && data.type === 'get_game_info') {
 				//전역으로 공좌표 관리하기?
-				store.dispatch('ball_xChange', data.ball_x);
-				console.log('ball_x = ' + store.state.ball_x);
-				store.dispatch('ball_yChange', data.ball_y);
-				store.dispatch('player1_yChange', data.player1_y);
-				store.dispatch('player2_yChange', data.player2_y);
+				console.log("x : " + data.ball_x + 'y : ' + data.ball_y + 'p1x: ' + data.player1_y + 'p2x: ' + data.player2_y);
+				window.localStorage.setItem('ball_x', data.ball_x);
+				window.localStorage.setItem('ball_y', data.ball_y);
+				window.localStorage.setItem('player1_y', data.player1_y);
+				window.localStorage.setItem('player2_y', data.player2_y);
+				console.log('x: ' + window.localStorage.getItem('ball_x'));
 			}
 		}
 	}
