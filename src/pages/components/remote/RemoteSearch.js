@@ -109,21 +109,22 @@ export default class extends Component {
 		};
 
 		this.remoteSocket.onmessage = (e) => {
-			console.log('received msg from server');
-			const data = JSON.parse(e.data);
-			this.$state.type = data.type;
-			this.$state.opponentIntraID = data.opponent;
-			console.log();
-			this.$state.intraID = data.intra_id;
-			this.$state.opponentIntraPic = data.opponent_image;
-			this.$state.typeID = data.id;
-			localStorage.setItem('remoteState', JSON.stringify(this.$state));
-			console.log(data.type);
 			if (data.type && data.type === 'ping') {
+				console.log(data.type);
 				console.log('pong');
 				this.remoteSocket.send(JSON.stringify({ type: 'pong' }));
+			} else {
+				console.log('received msg from server');
+				const data = JSON.parse(e.data);
+				this.$state.type = data.type;
+				this.$state.opponentIntraID = data.opponent;
+				console.log();
+				this.$state.intraID = data.intra_id;
+				this.$state.opponentIntraPic = data.opponent_image;
+				this.$state.typeID = data.id;
+				localStorage.setItem('remoteState', JSON.stringify(this.$state));
+				this.nextLevel();
 			}
-			this.nextLevel();
 		};
 
 		this.remoteSocket.onerror = () => {
