@@ -109,13 +109,13 @@ export default class extends Component {
 		};
 
 		this.remoteSocket.onmessage = (e) => {
+			const data = JSON.parse(e.data);
 			if (data.type && data.type === 'ping') {
 				console.log(data.type);
 				console.log('pong');
 				this.remoteSocket.send(JSON.stringify({ type: 'pong' }));
 			} else {
 				console.log('received msg from server');
-				const data = JSON.parse(e.data);
 				this.$state.type = data.type;
 				this.$state.opponentIntraID = data.opponent;
 				console.log();
