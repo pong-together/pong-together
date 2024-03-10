@@ -8,7 +8,6 @@ export default class extends Component {
 	constructor($target, $props) {
 		super($target, $props);
 		this.remoteSocket;
-		this.remo;
 	}
 
 	setup() {
@@ -40,14 +39,14 @@ export default class extends Component {
 		this.$state = { ...this.$state, ...newState };
 	}
 
-	setEvent() {
-		document.addEventListener('click', (e) => {
-			const target = e.target;
-			if (target.id === 'search') {
-				this.stopCounter();
-			}
-		});
-	}
+	// setEvent() {
+	// 	document.addEventListener('click', (e) => {
+	// 		const target = e.target;
+	// 		if (target.id === 'search') {
+	// 			this.stopCounter();
+	// 		}
+	// 	});
+	// }
 
 	counter() {
 		let minutes = 0;
@@ -60,22 +59,26 @@ export default class extends Component {
 			counterElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 		}
 
-		const stopCounter = () => {
-			clearInterval(count);
-			updateCounter();
-			if (this.remoteSocket) {
-				this.remoteSocket.close();
-			}
-			// window.location.pathname = '/select';
-		};
-		this.stopCounter = stopCounter;
+		// const stopCounter = () => {
+		// 	clearInterval(count);
+		// 	updateCounter();
+		// 	if (this.remoteSocket) {
+		// 		this.remoteSocket.close();
+		// 	}
+		// 	// window.location.pathname = '/select';
+		// };
+		// this.stopCounter = stopCounter;
 
 		const nextLevel = () => {
 			clearInterval(count);
 			updateCounter();
+			console.log('11111');
 			if (this.remoteSocket) {
+				console.log('22222');
+				console.log(this.remoteSocket);
 				this.remoteSocket.close();
 			}
+			console.log('33333');
 			new RemoteReady(document.querySelector('.mainbox'), this.$state);
 		};
 		this.nextLevel = nextLevel;
