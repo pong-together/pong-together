@@ -20,8 +20,6 @@ export default class extends Component {
 			typeID: 'undefined',
 			intraID: 'undefined',
 		};
-		localStorage.setItem('mode', store.state.gameLevel);
-		console.log(localStorage.getItem('mode'));
 
 		if (localStorage.getItem('language')) {
 			this.$state.region = localStorage.getItem('language');

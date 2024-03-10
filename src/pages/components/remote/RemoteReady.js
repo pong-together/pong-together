@@ -2,9 +2,6 @@ import Component from '../../../core/Component.js';
 import language from '../../../utils/language.js';
 
 export default class extends Component {
-	constructor($target, $props, remoteSocket) {
-		super($target, $props, remoteSocket);
-	}
 	setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
@@ -12,15 +9,14 @@ export default class extends Component {
 		) {
 			window.location.pathname = '/login';
 		}
-
 		this.$state = this.$props;
 	}
 
 	template() {
 		return `
 			<div class="top-text">${language.remote[this.$state.region].readyText}</div>
-			<img src="${this.$state.intraPicture}" id="picture">
-			<button id="match-intra">${this.$state.intraID}(5)</button>
+			<img src="${this.$state.opponentIntraPic}" id="picture">
+			<button id="match-intra">${this.$state.opponentIntraID}(5)</button>
 		`;
 	}
 
@@ -34,12 +30,11 @@ export default class extends Component {
 			buttonElement.textContent = `${this.$state.intraID}(${seconds})`;
 		}
 
-		function stopTimer() {
+		const stopTimer = () => {
 			clearInterval(time);
 			bindUpdateTimer();
-			remoteSocket.close();
 			window.location.pathname = '/game';
-		}
+		};
 
 		function startTimer() {
 			time = setInterval(() => {

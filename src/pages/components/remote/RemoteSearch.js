@@ -5,7 +5,7 @@ import RemoteReady from './RemoteReady.js';
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
 export default class extends Component {
-	remoteSocket = null;
+	remoteSocket;
 
 	setup() {
 		if (
@@ -17,7 +17,7 @@ export default class extends Component {
 
 		this.intra = {
 			opponentIntraID: 'undefined',
-			opponentintraPic: 'undefined',
+			opponentIntraPic: 'undefined',
 		};
 		this.$state = this.$props;
 		this.setState(this.intra);
@@ -52,22 +52,24 @@ export default class extends Component {
 			counterElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 		}
 
-		function stopCounter() {
+		const stopCounter = () => {
 			clearInterval(count);
 			updateCounter();
-			this.remoteSocket.close();
+			console.log(this.remoteSocket);
+			if (this.remoteSocket) {
+				this.remoteSocket.close();
+			}
 			window.location.pathname = '/select';
-		}
+		};
 		this.stopCounter = stopCounter;
 
 		const nextLevel = () => {
 			clearInterval(count);
 			updateCounter();
-			new RemoteReady(
-				document.querySelector('.mainbox'),
-				this.$state,
-				this.remoteSocket,
-			);
+			if (this.remoteSocket) {
+				this.remoteSocket.close();
+			}
+			new RemoteReady(document.querySelector('.mainbox'), this.$state);
 		};
 		this.nextLevel = nextLevel;
 
@@ -88,13 +90,11 @@ export default class extends Component {
 
 	connectSocket() {
 		this.remoteSocket = new WebSocket(
-			`${SOCKET_URL}/ws/remote/?token=${localStorage.getItem('accessToken')}&game_mode=${localStorage.getItem('mode')}`,
+			`${SOCKET_URL}/ws/remote/?token=${localStorage.getItem('accessToken')}&game_mode=${localStorage.getItem('gameLevel')}`,
 		);
 
 		this.remoteSocket.onopen = () => {
-			if (this.remoteSocket.readyState === WebSocket.OPEN) {
-				console.log('this.remoteSocket connected');
-			}
+			console.log('remoteSocket connected');
 		};
 
 		this.remoteSocket.onmessage = (e) => {
@@ -103,7 +103,7 @@ export default class extends Component {
 			this.$state.type = data.type;
 			this.$state.opponentIntraID = data.opponent;
 			this.$state.intraID = data.intra_id;
-			this.$state.opponentintraPic = data.opponent_image;
+			this.$state.opponentIntraPic = data.opponent_image;
 			this.$state.typeID = data.id;
 			localStorage.setItem('remoteState', JSON.stringify(this.$state));
 			this.nextLevel();
@@ -111,8 +111,6 @@ export default class extends Component {
 
 		this.remoteSocket.onerror = (e) => {
 			console.log('remoteSocker error');
-			console.log(e);
-			console.log(e.status);
 			this.remoteSocket.close();
 		};
 
