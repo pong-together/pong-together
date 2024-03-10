@@ -29,13 +29,13 @@ export default class extends Component {
 		};
 		if (
 			!localStorage.getItem('intraId') ||
-			localStorage.getItem('intraId') === undefined ||
+			localStorage.getItem('intraId') === 'undefined' ||
 			!localStorage.getItem('winCount') ||
-			localStorage.getItem('winCount') === undefined ||
+			localStorage.getItem('winCount') === 'undefined' ||
 			!localStorage.getItem('loseCount') ||
-			localStorage.getItem('loseCount') === undefined ||
+			localStorage.getItem('loseCount') === 'undefined' ||
 			!localStorage.getItem('intraImg') ||
-			localStorage.getItem('intraImg') === undefined
+			localStorage.getItem('intraImg') === 'undefined'
 		) {
 			const data = await http.get(`${BASE_URL}/api/userinfo/`, {
 				Authorization: accessToken,
