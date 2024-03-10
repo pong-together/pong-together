@@ -59,8 +59,9 @@ export default class extends Component {
 		const stopCounter = () => {
 			clearInterval(count);
 			updateCounter();
-			console.log(this.remoteSocket);
-			this.remoteSocket.close();
+			if (this.remoteSocket) {
+				this.remoteSocket.close();
+			}
 			// window.location.pathname = '/select';
 		};
 		this.stopCounter = stopCounter;
@@ -97,6 +98,7 @@ export default class extends Component {
 
 		this.remoteSocket.onopen = () => {
 			console.log('remoteSocket connected');
+			console.log(this.remoteSocket);
 		};
 
 		this.remoteSocket.onmessage = (e) => {
