@@ -25,7 +25,7 @@ export default class extends Component {
 			gamemodemessage: '',
 		};
 		window.localStorage.setItem('gameMode', 'local');
-		if (this.$state.gameMode == 'basic')
+		if (this.$state.gameMode == 'default')
 			this.$state.gamemodemessage =
 				language.local[this.$state.region].normalGameMode;
 		else
@@ -133,6 +133,5 @@ export default class extends Component {
 		return false;
 	}
 
-	mounted() {
-	}
+	mounted() {}
 }

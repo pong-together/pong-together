@@ -20,7 +20,7 @@ export default class extends Component {
 		this.$state = {
 			progress: 'main',
 			mode: 'local',
-			level: 'basic',
+			level: 'default',
 			localModal: 'none',
 			tournamentModal: 'none',
 			remoteModal: 'none',
