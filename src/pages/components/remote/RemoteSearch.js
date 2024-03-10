@@ -60,10 +60,8 @@ export default class extends Component {
 			clearInterval(count);
 			updateCounter();
 			console.log(this.remoteSocket);
-			if (this.remoteSocket) {
-				this.remoteSocket.close();
-			}
-			window.location.pathname = '/select';
+			this.remoteSocket.close();
+			// window.location.pathname = '/select';
 		};
 		this.stopCounter = stopCounter;
 
@@ -106,6 +104,7 @@ export default class extends Component {
 			const data = JSON.parse(e.data);
 			this.$state.type = data.type;
 			this.$state.opponentIntraID = data.opponent;
+			console.log();
 			this.$state.intraID = data.intra_id;
 			this.$state.opponentIntraPic = data.opponent_image;
 			this.$state.typeID = data.id;
