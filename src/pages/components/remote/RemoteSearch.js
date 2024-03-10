@@ -8,6 +8,7 @@ export default class extends Component {
 	constructor($target, $props) {
 		super($target, $props);
 		this.remoteSocket;
+		this.remo;
 	}
 
 	setup() {
