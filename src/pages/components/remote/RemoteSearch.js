@@ -5,7 +5,10 @@ import RemoteReady from './RemoteReady.js';
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
 export default class extends Component {
-	remoteSocket;
+	constructor($target, $props) {
+		super($target, $props);
+		this.remoteSocket;
+	}
 
 	setup() {
 		if (
@@ -97,7 +100,7 @@ export default class extends Component {
 		);
 
 		this.remoteSocket.onopen = () => {
-			console.log('remoteSocket connected');
+			console.log('this.remoteSocket connected');
 			console.log(this.remoteSocket);
 		};
 
@@ -114,7 +117,7 @@ export default class extends Component {
 			this.nextLevel();
 		};
 
-		this.remoteSocket.onerror = (e) => {
+		this.remoteSocket.onerror = () => {
 			console.log('remoteSocker error');
 			this.remoteSocket.close();
 		};
