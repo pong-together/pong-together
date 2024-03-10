@@ -4,7 +4,7 @@ import store from '../../../store/index.js';
 import http from '../../../core/http.js';
 
 export default class extends Component {
-	setup() {
+	async setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
 			!localStorage.getItem('twoFA')
@@ -14,18 +14,14 @@ export default class extends Component {
 			http.checkToken();
 		}
 
-		if (!localStorage.getItem('intraId'))
-			localStorage.setItem('intraId', 'Anonymous');
-		if (
-			!localStorage.getItem('winCount') ||
-			localStorage.getItem('winCount') === undefined
-		)
-			localStorage.setItem('winCount', 0);
-		if (
-			!localStorage.getItem('loseCount') ||
-			localStorage.getItem('loseCount') === undefined
-		)
-			localStorage.setItem('loseCount', 0);
+		const data = await http.get(`${BASE_URL}/api/userinfo/`, {
+			Authorization: accessToken,
+			'Content-Type': 'application/json',
+		});
+		localStorage.setItem('intraId', data?.intra_id || 'anonymous');
+		localStorage.setItem('winCount', data?.win_count || 0);
+		localStorage.setItem('loseCount', data?.lose_count || 0);
+		localStorage.setItem('intraImg', data?.image || '/static/images/user.png');
 
 		if (localStorage.getItem('language')) {
 			store.dispatch('changeLanguage', localStorage.getItem('language'));
