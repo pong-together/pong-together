@@ -32,6 +32,10 @@ export default class extends Component {
 		`;
 	}
 
+	setState(newState) {
+		this.$state = { ...this.$state, ...newState };
+	}
+
 	setEvent() {
 		document.addEventListener('click', (e) => {
 			const target = e.target;
