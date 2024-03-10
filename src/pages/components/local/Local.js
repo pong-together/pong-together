@@ -1,17 +1,36 @@
-import Component from '../../core/Component.js';
-import language from '../../utils/language.js';
+import Component from '../../../core/Component.js';
+import language from '../../../utils/language.js';
+import http from '../../../core/http.js';
+import store from '../../../store/index.js';
+import LocalApi from './LocalApi.js';
+import { navigate } from '../../../router/utils/navigate.js';
 
 export default class extends Component {
 	setup() {
+		if (
+			!localStorage.getItem('accessToken') ||
+			!localStorage.getItem('twoFA')
+		) {
+			window.location.pathname = '/login';
+		} else {
+			http.checkToken();
+		}
 		this.$state = {
 			participant: ['', ''],
 			checkError: '',
-			gameMode: '2인용 기본게임',
+			gameMode: store.state.gameLevel,
 			region: localStorage.getItem('language')
 				? localStorage.getItem('language')
 				: 'kr',
+			gamemodemessage: '',
 		};
-		console.log(this.$state.region);
+		window.localStorage.setItem('gameMode', 'local');
+		if (this.$state.gameMode == 'basic')
+			this.$state.gamemodemessage =
+				language.local[this.$state.region].normalGameMode;
+		else
+			this.$state.gamemodemessage =
+				language.local[this.$state.region].extreamGameMode;
 	}
 
 	template() {
@@ -31,10 +50,25 @@ export default class extends Component {
 		`;
 	}
 
+	async registLocalNickname(localNicknames) {
+		var gamemode = '';
+		if (this.$state.gameMode == 'basic') gamemode = 'default';
+		else gamemode = 'extreme';
+
+		const result = await LocalApi.create(localNicknames, gamemode);
+		console.log(result);
+		const { id } = result;
+		window.localStorage.setItem('local-id', id);
+	}
+
 	setEvent() {
-		this.addEvent('click', '.local-start', ({ target }) => {
+		this.addEvent('click', '.local-start', async ({ target }) => {
 			const localPrev = this.$state.checkDouble;
-			this.localInputNickname(target, localPrev);
+			const isDuplicate = await this.localInputNickname(target, localPrev);
+
+			if (!isDuplicate) {
+				window.location.pathname = '/game';
+			}
 		});
 	}
 
@@ -82,7 +116,7 @@ export default class extends Component {
 		return false;
 	}
 
-	localInputNickname(target, localPrev) {
+	async localInputNickname(target, localPrev) {
 		const localNicknames = [];
 		const localNickname1 = document.querySelector('.local-nick1').value;
 		const localNickname2 = document.querySelector('.local-nick2').value;
@@ -95,16 +129,10 @@ export default class extends Component {
 			this.localCheckLength(localNicknames)
 		)
 			return true;
+		await this.registLocalNickname(localNicknames);
 		return false;
 	}
 
 	mounted() {
-		if (
-			!localStorage.getItem('accessToken') ||
-			!localStorage.getItem('twoFA')
-		) {
-			window.location.pathname = '/login';
-			navigate('/login');
-		}
 	}
 }
