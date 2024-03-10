@@ -2,7 +2,11 @@ import Component from '../../../core/Component.js';
 import language from '../../../utils/language.js';
 import RemoteReady from './RemoteReady.js';
 
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
+
 export default class extends Component {
+	remoteSocket;
+
 	setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
@@ -11,7 +15,12 @@ export default class extends Component {
 			window.location.pathname = '/login';
 		}
 
+		this.intra = {
+			opponentIntraID: 'undefined',
+			opponentIntraPic: 'undefined',
+		};
 		this.$state = this.$props;
+		this.setState(this.intra);
 	}
 
 	template() {
@@ -43,19 +52,29 @@ export default class extends Component {
 			counterElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 		}
 
-		function stopCounter() {
+		const stopCounter = () => {
 			clearInterval(count);
 			updateCounter();
+			console.log(this.remoteSocket);
+			if (this.remoteSocket) {
+				this.remoteSocket.close();
+			}
 			window.location.pathname = '/select';
-		}
+		};
 		this.stopCounter = stopCounter;
+
+		const nextLevel = () => {
+			clearInterval(count);
+			updateCounter();
+			if (this.remoteSocket) {
+				this.remoteSocket.close();
+			}
+			new RemoteReady(document.querySelector('.mainbox'), this.$state);
+		};
+		this.nextLevel = nextLevel;
 
 		const startCounter = () => {
 			count = setInterval(() => {
-				if (seconds === 4) {
-					clearInterval(count);
-					new RemoteReady(document.querySelector('.mainbox'), this.$state);
-				}
 				if (seconds === 60) {
 					minutes++;
 					seconds = 0;
@@ -69,7 +88,40 @@ export default class extends Component {
 		startCounter();
 	}
 
+	connectSocket() {
+		this.remoteSocket = new WebSocket(
+			`${SOCKET_URL}/ws/remote/?token=${localStorage.getItem('accessToken')}&game_mode=${localStorage.getItem('gameLevel')}`,
+		);
+
+		this.remoteSocket.onopen = () => {
+			console.log('remoteSocket connected');
+		};
+
+		this.remoteSocket.onmessage = (e) => {
+			console.log('received msg from server');
+			const data = JSON.parse(e.data);
+			this.$state.type = data.type;
+			this.$state.opponentIntraID = data.opponent;
+			this.$state.intraID = data.intra_id;
+			this.$state.opponentIntraPic = data.opponent_image;
+			this.$state.typeID = data.id;
+			localStorage.setItem('remoteState', JSON.stringify(this.$state));
+			this.nextLevel();
+		};
+
+		this.remoteSocket.onerror = (e) => {
+			console.log('remoteSocker error');
+			this.remoteSocket.close();
+		};
+
+		this.remoteSocket.onclose = () => {
+			console.log('remoteSocker closed');
+			localStorage.removeItem('mode');
+		};
+	}
+
 	mounted() {
 		this.counter();
+		this.connectSocket();
 	}
 }
