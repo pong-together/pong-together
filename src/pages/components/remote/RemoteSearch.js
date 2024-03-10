@@ -120,7 +120,7 @@ export default class extends Component {
 			localStorage.setItem('remoteState', JSON.stringify(this.$state));
 			if (data.type && data.type === 'ping') {
 				console.log('pong');
-				chatSocket.send(JSON.stringify({ type: 'pong' }));
+				this.remoteSocket.send(JSON.stringify({ type: 'pong' }));
 			}
 			this.nextLevel();
 		};
