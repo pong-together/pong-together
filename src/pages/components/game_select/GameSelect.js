@@ -38,7 +38,7 @@ export default class extends Component {
 			localStorage.getItem('intraImg') === 'undefined'
 		) {
 			const data = await http.get(`${BASE_URL}/api/userinfo/`, {
-				Authorization: accessToken,
+				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
 				'Content-Type': 'application/json',
 			});
 			localStorage.setItem('intraId', data?.intra_id || 'anonymous');
