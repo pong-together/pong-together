@@ -5,10 +5,7 @@ import RemoteReady from './RemoteReady.js';
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
 export default class extends Component {
-	constructor($target, $props) {
-		super($target, $props);
-		this.remoteSocket;
-	}
+	remoteSocket;
 
 	setup() {
 		if (
@@ -39,14 +36,14 @@ export default class extends Component {
 		this.$state = { ...this.$state, ...newState };
 	}
 
-	setEvent() {
-		document.addEventListener('click', (e) => {
-			const target = e.target;
-			if (target.id === 'search') {
-				this.stopCounter();
-			}
-		});
-	}
+	// setEvent() {
+	// 	document.addEventListener('click', (e) => {
+	// 		const target = e.target;
+	// 		if (target.id === 'search') {
+	// 			this.stopCounter();
+	// 		}
+	// 	});
+	// }
 
 	counter() {
 		let minutes = 0;
@@ -59,20 +56,23 @@ export default class extends Component {
 			counterElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 		}
 
-		const stopCounter = () => {
-			clearInterval(count);
-			updateCounter();
-			if (this.remoteSocket) {
-				this.remoteSocket.close();
-			}
-			// window.location.pathname = '/select';
-		};
-		this.stopCounter = stopCounter;
+		// const stopCounter = () => {
+		// 	clearInterval(count);
+		// 	updateCounter();
+		// 	if (this.remoteSocket) {
+		// 		this.remoteSocket.close();
+		// 	}
+		// 	// window.location.pathname = '/select';
+		// };
+		// this.stopCounter = stopCounter;
 
 		const nextLevel = () => {
 			clearInterval(count);
 			updateCounter();
+			console.log('11111');
 			if (this.remoteSocket) {
+				console.log('22222');
+				console.log(remoteSocket);
 				this.remoteSocket.close();
 			}
 			new RemoteReady(document.querySelector('.mainbox'), this.$state);
@@ -100,7 +100,7 @@ export default class extends Component {
 		);
 
 		this.remoteSocket.onopen = () => {
-			console.log('this.remoteSocket connected');
+			console.log('remoteSocket connected');
 			console.log(this.remoteSocket);
 		};
 
@@ -117,7 +117,7 @@ export default class extends Component {
 			this.nextLevel();
 		};
 
-		this.remoteSocket.onerror = () => {
+		this.remoteSocket.onerror = (e) => {
 			console.log('remoteSocker error');
 			this.remoteSocket.close();
 		};
