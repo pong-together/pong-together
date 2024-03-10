@@ -5,6 +5,8 @@ import RemoteReady from './RemoteReady.js';
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
 export default class extends Component {
+	remoteSocket = null;
+
 	setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
@@ -19,7 +21,6 @@ export default class extends Component {
 		};
 		this.$state = this.$props;
 		this.setState(this.intra);
-		// this.remoteSocket = null;
 	}
 
 	template() {
@@ -54,7 +55,7 @@ export default class extends Component {
 		function stopCounter() {
 			clearInterval(count);
 			updateCounter();
-			remoteSocket.close();
+			this.remoteSocket.close();
 			window.location.pathname = '/select';
 		}
 		this.stopCounter = stopCounter;
@@ -65,7 +66,7 @@ export default class extends Component {
 			new RemoteReady(
 				document.querySelector('.mainbox'),
 				this.$state,
-				remoteSocket,
+				this.remoteSocket,
 			);
 		};
 		this.nextLevel = nextLevel;
@@ -86,17 +87,17 @@ export default class extends Component {
 	}
 
 	connectSocket() {
-		var remoteSocket = new WebSocket(
+		this.remoteSocket = new WebSocket(
 			`${SOCKET_URL}/ws/remote/?token=${localStorage.getItem('accessToken')}&game_mode=${localStorage.getItem('mode')}`,
 		);
 
-		remoteSocket.onopen = () => {
-			if (remoteSocket.readyState === WebSocket.OPEN) {
-				console.log('remoteSocket connected');
+		this.remoteSocket.onopen = () => {
+			if (this.remoteSocket.readyState === WebSocket.OPEN) {
+				console.log('this.remoteSocket connected');
 			}
 		};
 
-		remoteSocket.onmessage = (e) => {
+		this.remoteSocket.onmessage = (e) => {
 			console.log('received msg from server');
 			const data = JSON.parse(e.data);
 			this.$state.type = data.type;
@@ -108,14 +109,14 @@ export default class extends Component {
 			this.nextLevel();
 		};
 
-		remoteSocket.onerror = (e) => {
+		this.remoteSocket.onerror = (e) => {
 			console.log('remoteSocker error');
 			console.log(e);
 			console.log(e.status);
-			remoteSocket.close();
+			this.remoteSocket.close();
 		};
 
-		remoteSocket.onclose = () => {
+		this.remoteSocket.onclose = () => {
 			console.log('remoteSocker closed');
 			localStorage.removeItem('mode');
 		};
