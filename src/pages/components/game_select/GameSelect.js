@@ -14,6 +14,19 @@ export default class extends Component {
 			http.checkToken();
 		}
 
+		if (!localStorage.getItem('intraId'))
+			localStorage.setItem('intraId', 'Anonymous');
+		if (
+			!localStorage.getItem('winCount') ||
+			localStorage.getItem('winCount') === undefined
+		)
+			localStorage.setItem('winCount', 0);
+		if (
+			!localStorage.getItem('loseCount') ||
+			localStorage.getItem('loseCount') === undefined
+		)
+			localStorage.setItem('loseCount', 0);
+
 		if (localStorage.getItem('language')) {
 			store.dispatch('changeLanguage', localStorage.getItem('language'));
 		}

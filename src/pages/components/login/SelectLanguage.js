@@ -45,6 +45,12 @@ export default class extends Component {
 					store.dispatch('changeLoseCount', data.lose_count);
 					localStorage.setItem('intraImg', data.image);
 					store.dispatch('changeIntraImg', data.image);
+					if (!localStorage.getItem('intraId'))
+						localStorage.setItem('intraId', 'Anonymous');
+					if (localStorage.getItem('winCount') === null)
+						localStorage.setItem('winCount', 0);
+					if (localStorage.getItem('loseCount') === null)
+						localStorage.setItem('loseCount', 0);
 					if (data.win_count + data.lose_count !== 0) {
 						localStorage.setItem(
 							'rate',

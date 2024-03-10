@@ -218,16 +218,16 @@ export default class extends Component {
 			store.dispatch('changeLoginProgress', 'twoFA');
 		}
 
-		//if (
-		//	window.location.pathname !== '/login' &&
-		//	window.location.pathname !== '/'
-		//) {
-		//	if (!localStorage.getItem('intraId'))
-		//		localStorage.setItem('intraId', 'Anonymous');
-		//	if (localStorage.getItem('winCount') === null)
-		//		localStorage.setItem('winCount', 0);
-		//	if (localStorage.getItem('loseCount') === null)
-		//		localStorage.setItem('loseCount', 0);
-		//}
+		if (
+			window.location.pathname !== '/login' &&
+			window.location.pathname !== '/'
+		) {
+			if (!localStorage.getItem('intraId'))
+				localStorage.setItem('intraId', 'Anonymous');
+			if (localStorage.getItem('winCount') === null)
+				localStorage.setItem('winCount', 0);
+			if (localStorage.getItem('loseCount') === null)
+				localStorage.setItem('loseCount', 0);
+		}
 	}
 }
