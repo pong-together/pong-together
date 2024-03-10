@@ -21,7 +21,7 @@ export default class extends Component {
 	}
 
 	timer() {
-		let seconds = 60;
+		let seconds = 180;
 		let time;
 		const buttonElement = document.getElementById('match-intra');
 		const bindUpdateTimer = updateTimer.bind(this);
