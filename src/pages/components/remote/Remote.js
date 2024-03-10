@@ -1,9 +1,9 @@
 import Component from '../../../core/Component.js';
 import http from '../../../core/http.js';
 import RemoteSearch from './RemoteSearch.js';
+import store from '../../../store/index.js';
 
 export default class extends Component {
-	//check
 	setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
@@ -15,12 +15,14 @@ export default class extends Component {
 		}
 
 		this.$state = {
-			remoteState: 'none',
 			region: 'kr',
+			type: 'undefined',
+			typeID: 'undefined',
+			intraID: 'undefined',
 		};
 
-		if (window.localStorage.getItem('language')) {
-			this.$state.region = window.localStorage.getItem('language');
+		if (localStorage.getItem('language')) {
+			this.$state.region = localStorage.getItem('language');
 		}
 	}
 
