@@ -31,17 +31,17 @@ export default class extends Component {
 			<div class="game-container">
 				<div class="player1-container">
 					<div class="player1-image"></div>
-					<div class="player1-nickname">player1</div>
-					<div class="player1-gameresult">Win</div>
+					<div class="player1-nickname">${this.$state.player1}</div>
+					<div class="player1-gameresult">${this.$state.player1_result}</div>
 					<div class="player1-score-info">score</div>
-					<div class="player1-game-score">0</div>
+					<div class="player1-game-score">${this.$state.player1_score}</div>
 				</div>
 				<div class="game-display"></div>
 				<div class="player2-container">
-					<div class="player2-game-score">0</div>
+					<div class="player2-game-score">${this.$state.player2_score}</div>
 					<div class="player2-score-info">score</div>
-					<div class="player2-gameresult">Lose</div>
-					<div class="player2-nickname">player2</div>
+					<div class="player2-gameresult">${this.$state.player2_result}</div>
+					<div class="player2-nickname">${this.$state.player2}</div>
 					<div class="player2-image"></div>
 				</div>
 			</div>
