@@ -90,7 +90,6 @@ export default class extends Component {
 						</div>
 				</div>
 				</div>
-				<div>GitHub <a href="https://github.com/pong-together">PONG-TOGETHER</a></div>
 		</div>
 				`;
 		}
