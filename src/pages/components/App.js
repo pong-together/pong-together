@@ -201,6 +201,7 @@ export default class extends Component {
 			this.changeModule();
 			this.routerModule();
 		});
+<<<<<<< HEAD
 		
 		// if (!localStorage.getItem('intraId'))
 		// 	localStorage.setItem('intraId', 'Anonymous');
@@ -208,6 +209,8 @@ export default class extends Component {
 		// 	localStorage.setItem('winCount', 0);
 		// if (localStorage.getItem('loseCount') === null)
 		// 	localStorage.setItem('loseCount', 0);
+=======
+>>>>>>> main
 
 		this.calcRate();
 		if (
