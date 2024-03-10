@@ -3,8 +3,10 @@ import language from '../../../utils/language.js';
 import store from '../../../store/index.js';
 import http from '../../../core/http.js';
 
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+
 export default class extends Component {
-	setup() {
+	async setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
 			!localStorage.getItem('twoFA')
@@ -20,11 +22,33 @@ export default class extends Component {
 		this.$state = {
 			progress: 'main',
 			mode: 'local',
-			level: 'basic',
+			level: 'default',
 			localModal: 'none',
 			tournamentModal: 'none',
 			remoteModal: 'none',
 		};
+		if (
+			!localStorage.getItem('intraId') ||
+			localStorage.getItem('intraId') === 'undefined' ||
+			!localStorage.getItem('winCount') ||
+			localStorage.getItem('winCount') === 'undefined' ||
+			!localStorage.getItem('loseCount') ||
+			localStorage.getItem('loseCount') === 'undefined' ||
+			!localStorage.getItem('intraImg') ||
+			localStorage.getItem('intraImg') === 'undefined'
+		) {
+			const data = await http.get(`${BASE_URL}/api/userinfo/`, {
+				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+				'Content-Type': 'application/json',
+			});
+			localStorage.setItem('intraId', data?.intra_id || 'anonymous');
+			localStorage.setItem('winCount', data?.win_count || 0);
+			localStorage.setItem('loseCount', data?.lose_count || 0);
+			localStorage.setItem(
+				'intraImg',
+				data?.image || '/static/images/user.png',
+			);
+		}
 	}
 
 	setEvent() {
@@ -93,6 +117,8 @@ export default class extends Component {
 
 		this.addEvent('click', '#game-mode-button', (e) => {
 			e.stopPropagation();
+			localStorage.setItem('gameMode', this.$state.mode);
+			localStorage.setItem('gameLevel', this.$state.level);
 			if (this.$state.mode === 'local') {
 				window.location.pathname = '/local';
 			} else if (this.$state.mode === 'tournament') {
