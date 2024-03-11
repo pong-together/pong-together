@@ -1,3 +1,4 @@
+import logging
 import os
 from json import JSONDecodeError
 
@@ -17,6 +18,8 @@ from users.models import User
 
 # Create your views here.
 
+logger = logging.getLogger('auth.views')
+
 REDIRECT_URI = os.environ.get('REDIRECT_URI')
 STATE = os.environ.get('STATE')
 TOKEN_URI = 'https://api.intra.42.fr/oauth/token'
@@ -31,6 +34,7 @@ class LoginAPIView(APIView):
     image_url = None
 
     def post(self, request):
+        logger.debug('Login success')
         try:
             code = request.data['code']
             access_token = self.get_access_token(code)
