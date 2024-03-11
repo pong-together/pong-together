@@ -24,6 +24,7 @@ export default class extends Component {
 		};
 		this.$state = this.$props;
 		this.setState(this.intra);
+		console.log(this.$state, 'state 객체 내용 확인');
 	}
 
 	template() {
@@ -39,14 +40,14 @@ export default class extends Component {
 		this.$state = { ...this.$state, ...newState };
 	}
 
-	// setEvent() {
-	// 	document.addEventListener('click', (e) => {
-	// 		const target = e.target;
-	// 		if (target.id === 'search') {
-	// 			this.stopCounter();
-	// 		}
-	// 	});
-	// }
+	setEvent() {
+		document.addEventListener('click', (e) => {
+			const target = e.target;
+			if (target.id === 'search') {
+				this.stopCounter();
+			}
+		});
+	}
 
 	counter() {
 		let minutes = 0;
@@ -59,26 +60,28 @@ export default class extends Component {
 			counterElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 		}
 
-		// const stopCounter = () => {
-		// 	clearInterval(count);
-		// 	updateCounter();
-		// 	if (this.remoteSocket) {
-		// 		this.remoteSocket.close();
-		// 	}
-		// 	// window.location.pathname = '/select';
-		// };
-		// this.stopCounter = stopCounter;
+		const stopCounter = () => {
+			clearInterval(count);
+			updateCounter();
+			if (this.remoteSocket) {
+				this.remoteSocket.close();
+				console.log(
+					'원격 소켓이 정상적으로 닫히는지 테스트하는 로그(취소하기 버튼 눌렀을 때)',
+				);
+			}
+			window.location.pathname = '/select';
+		};
+		this.stopCounter = stopCounter;
 
 		const nextLevel = () => {
 			clearInterval(count);
 			updateCounter();
-			console.log('11111');
 			if (this.remoteSocket) {
-				console.log('22222');
-				console.log(this.remoteSocket);
 				this.remoteSocket.close();
+				console.log(
+					'원격 소켓이 정상적으로 닫히는지 테스트하는 로그(매칭됐을 때)',
+				);
 			}
-			console.log('33333');
 			new RemoteReady(document.querySelector('.mainbox'), this.$state);
 		};
 		this.nextLevel = nextLevel;
@@ -94,7 +97,6 @@ export default class extends Component {
 				updateCounter();
 			}, 1000);
 		};
-
 		startCounter();
 	}
 
@@ -104,41 +106,42 @@ export default class extends Component {
 		);
 
 		this.remoteSocket.onopen = () => {
-			console.log('this.remoteSocket connected');
-			console.log(this.remoteSocket);
+			console.log('원격 소켓이 서버에 연결되었습니다.');
 		};
 
 		this.remoteSocket.onmessage = (e) => {
 			const data = JSON.parse(e.data);
 			if (data.type && data.type === 'ping') {
 				console.log(data.type);
-				console.log('pong');
 				this.remoteSocket.send(JSON.stringify({ type: 'pong' }));
+				console.log('pong');
 			} else {
-				console.log('received msg from server');
+				console.log('원격 소켓이 서버로부터 메시지를 수신했습니다.');
 				this.$state.type = data.type;
-				this.$state.opponentIntraID = data.opponent;
-				console.log();
-				this.$state.intraID = data.intra_id;
-				this.$state.opponentIntraPic = data.opponent_image;
 				this.$state.typeID = data.id;
+				this.$state.intraID = data.intra_id;
+				this.$state.opponentIntraID = data.opponent;
+				this.$state.opponentIntraPic = data.opponent_image;
 				localStorage.setItem('remoteState', JSON.stringify(this.$state));
+				console.log(
+					'서버로부터 ping을 제외하고 메시지를 한번만 받는지 테스트하는 로그',
+				);
 				this.nextLevel();
 			}
 		};
 
 		this.remoteSocket.onerror = () => {
-			console.log('remoteSocker error');
+			console.log('원격 소켓 에러');
 			this.remoteSocket.close();
 		};
 
 		this.remoteSocket.onclose = () => {
-			console.log('remoteSocker closed');
-			localStorage.removeItem('mode');
+			console.log('원격 소켓 닫힘');
 		};
 	}
 
 	mounted() {
+		console.log('마운트가 한번만 되는지 확인하는 로그 : Search');
 		this.counter();
 		this.connectSocket();
 	}
