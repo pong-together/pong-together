@@ -31,15 +31,14 @@ const checkToken = async () => {
 			method: 'GET',
 			headers: new window.Headers(header),
 		});
-		console.log('status:', response.status);
 		if (!response.ok) {
 			if (response.status === 401) {
-				console.log('Unauthorized: 401, accessToken is expired');
+				console.log('access token이 만료되었습니다.');
 				await refreshToken();
 			}
 		}
 	} catch (error) {
-		console.log('checkToken error');
+		console.log('checkToken()에서 에러 catch');
 		return {
 			status: error.status,
 			message: error.message,
@@ -68,9 +67,10 @@ const refreshToken = async () => {
 			console.log('status:', response.status);
 			if (!response.ok) {
 				if (response.status === 401) {
-					console.log('Unauthorized: 401, refreshToken is expired');
-					console.log('refreshToken has expired and requires re-login');
+					console.log('refresh token이 만료되었습니다.');
+					console.log('다시 로그인을 시작하여 주세요.');
 					localStorage.clear();
+					setTimeout(() => {}, 3000);
 					window.location.pathname = '/login';
 				}
 			} else {
@@ -79,15 +79,17 @@ const refreshToken = async () => {
 				console.log('accessToken reissued');
 			}
 		} catch (error) {
-			console.log('refreshToken error');
+			console.log('refreshToken()에서 에러 catch');
 			return {
 				status: error.status,
 				message: error.message,
 			};
 		}
 	} else {
-		console.log("refreshToken doesn't exist, so re-login is required");
+		console.log('refresh token이 존재하지 않습니다.');
+		console.log('다시 로그인을 시작하여 주세요.');
 		localStorage.clear();
+		setTimeout(() => {}, 3000);
 		window.location.pathname = '/login';
 	}
 };
@@ -106,7 +108,6 @@ const request = async (params) => {
 
 	try {
 		response = await window.fetch(url, config);
-		console.log('status:', response.status);
 		if (!response.ok) {
 			if (response.status === 401) {
 				console.log('Unauthorized: 401, accessToken is expired');
