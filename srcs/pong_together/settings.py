@@ -206,5 +206,14 @@ LOGGING = {
         'auth.views': {
             'handlers': ['console'],
         },
+        'chats.consumers': {
+            'handlers': ['console'],
+        },
+        'remote.consumers': {
+            'handlers': ['console'],
+        },
+        'games.consumers': {
+            'handlers': ['console'],
+        },
     }
 }
