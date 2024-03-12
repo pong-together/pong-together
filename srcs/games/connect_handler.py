@@ -36,7 +36,7 @@ class ConnectHandler:
         else:
             self.set_players_name()
             await self.consumer.channel_layer.group_send(self.consumer.group_name, {
-                'type': 'start',
+                'type': 'get_user_info',
                 'player1_name': self.consumer.player1_name,
                 'player2_name': self.consumer.player2_name,
             })
@@ -51,7 +51,7 @@ class ConnectHandler:
             self.set_players_name()
             images = await self.get_players_image()
             await self.consumer.channel_layer.group_send(self.consumer.group_name, {
-                'type': 'start',
+                'type': 'get_user_info',
                 'player1_name': self.consumer.player1_name,
                 'player1_image': images[0],
                 'player2_name': self.consumer.player2_name,

@@ -68,7 +68,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             await self.send_json({'error': f'{str(e)} is required'})
 
     # event
-    async def start(self, event):
+    async def get_user_info(self, event):
         await self.send_event(event)
 
     async def get_game_info(self, event):
