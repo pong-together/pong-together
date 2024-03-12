@@ -1,9 +1,7 @@
-import asyncio
 from urllib.parse import parse_qs
 
 from channels.db import database_sync_to_async
 
-from games.pong import Pong
 from local.models import Local
 from remote.models import Remote
 from tournaments.models import Tournament
@@ -40,7 +38,6 @@ class ConnectHandler:
                 'player1_name': self.consumer.player1_name,
                 'player2_name': self.consumer.player2_name,
             })
-            await self.start_pong_game()
 
     async def start_remote_game(self):
         if self.consumer.group_name not in self.consumer.remote_game:
@@ -57,7 +54,6 @@ class ConnectHandler:
                 'player2_name': self.consumer.player2_name,
                 'player2_image': images[1]
             })
-            await self.start_pong_game()
 
     def set_players_name(self):
         game = self.consumer.game
@@ -77,10 +73,6 @@ class ConnectHandler:
         elif game.game_turn == 3:
             self.consumer.player1_name = game.first_winner
             self.consumer.player2_name = game.second_winner
-
-    async def start_pong_game(self):
-        self.consumer.pong = Pong(self.consumer)
-        self.consumer.pong_task = asyncio.create_task(self.consumer.pong.run())
 
     @database_sync_to_async
     def set_game(self):
