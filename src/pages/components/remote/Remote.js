@@ -142,7 +142,7 @@ export default class extends Component {
 
 				const mainboxElement = document.querySelector('.mainbox');
 				mainboxElement.innerHTML = this.templateReady();
-				this.mountedReady();
+				this.timer();
 			}
 		};
 
@@ -224,10 +224,5 @@ export default class extends Component {
 		console.log('마운트가 한번만 되는지 확인하는 로그 : Remote');
 		this.counter();
 		this.connectSocket();
-	}
-
-	mountedReady() {
-		console.log('마운트가 한번만 되는지 확인하는 로그 : Ready');
-		this.timer();
 	}
 }
