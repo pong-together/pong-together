@@ -21,6 +21,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
 
     async def connect(self):
         try:
+            logger.info('Try to connect chat websocket')
             await self.init_connection()
             await self.channel_layer.group_add(self.GROUP_NAME, self.channel_name)
             await self.accept()
@@ -32,6 +33,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
 
     async def disconnect(self, code):
         try:
+            logger.info('Try to disconnect chat websocket')
             await self.delete_chat_users()
             await self.channel_layer.group_discard(self.GROUP_NAME, self.channel_name)
             await self.cancel_ping_task()

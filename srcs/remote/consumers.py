@@ -26,6 +26,7 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
 
     async def connect(self):
         try:
+            logger.info('Try to connect remote websocket')
             await self.init_connection()
             await self.channel_layer.group_add(self.group_name, self.channel_name)
             await self.accept()
@@ -43,6 +44,7 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
 
     async def disconnect(self, code):
         try:
+            logger.info('Try to disconnect remote websocket')
             await self.channel_layer.group_discard(self.group_name, self.channel_name)
             await self.cancel_ping_task()
 

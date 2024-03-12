@@ -23,6 +23,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
 
     async def connect(self):
         try:
+            logger.info('Try to connect game websocket')
             connect_handler = ConnectHandler(self)
             await connect_handler.run()
             logger.info('Game websocket connect')
@@ -32,6 +33,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
 
     async def disconnect(self, code):
         try:
+            logger.info('Try to disconnect chat websocket')
             disconnect_handler = DisconnectHandler(self)
             await disconnect_handler.run()
             logger.info('Game websocket disconnect')
