@@ -190,30 +190,14 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
 
-    'formatters': {
-        'simple': {
-            'format': '[{levelname}] {message}',
-            'style': '{',
-        },
-    },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'simple',
-        },
-    },
     'loggers': {
         'auth.views': {
-            'handlers': ['console'],
         },
         'chats.consumers': {
-            'handlers': ['console'],
         },
         'remote.consumers': {
-            'handlers': ['console'],
         },
         'games.consumers': {
-            'handlers': ['console'],
         },
     }
 }

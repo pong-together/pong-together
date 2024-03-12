@@ -34,7 +34,6 @@ class LoginAPIView(APIView):
     image_url = None
 
     def post(self, request):
-        logger.debug('Login success')
         try:
             code = request.data['code']
             access_token = self.get_access_token(code)
@@ -62,6 +61,7 @@ class LoginAPIView(APIView):
             'access_token': str(refresh.access_token),
             'refresh_token': str(refresh)
         }
+        logger.info('Login success')
         return Response(data=data, status=status.HTTP_200_OK)
 
     def get_access_token(self, code):
