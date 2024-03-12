@@ -59,6 +59,8 @@ class ConnectHandler:
         game = self.consumer.game
         if self.consumer.type == 'tournament':
             self.set_players_tournament(game)
+        if self.consumer.type == 'remote':
+            self.set_remote_game_players(game)
         else:
             self.consumer.player1_name = game.player1_name
             self.consumer.player2_name = game.player2_name
@@ -73,6 +75,12 @@ class ConnectHandler:
         elif game.game_turn == 3:
             self.consumer.player1_name = game.first_winner
             self.consumer.player2_name = game.second_winner
+
+    def set_remote_game_players(self, game):
+        self.consumer.player2_name = self.consumer.user.intra_id
+        self.consumer.player1_name = game.player1_name
+        if self.consumer.player1_name == self.consumer.player2_name:
+            self.consumer.player1_name = game.player2_name
 
     @database_sync_to_async
     def set_game(self):
