@@ -68,6 +68,7 @@
 #exclamation {
 	width: 30px;
 	height: 130px;
+	animation: aniQ 2s ease-in-out infinite alternate;
 }
 
 #picture {

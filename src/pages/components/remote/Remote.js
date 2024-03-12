@@ -108,6 +108,12 @@ export default class extends Component {
 		this.timer();
 	}
 
+	exclamationMark() {
+		const imageElement = document.getElementById('question');
+		imageElement.src = 'static/images/exclamation-mark.png';
+		imageElement.id = 'exclamation';
+	}
+
 	connectSocket() {
 		this.remoteSocket = new WebSocket(
 			`${SOCKET_URL}/ws/remote/?token=${localStorage.getItem('accessToken')}&game_mode=${localStorage.getItem('gameLevel')}`,
@@ -129,6 +135,7 @@ export default class extends Component {
 				this.$state.opponentIntraPic = data.opponent_image;
 				localStorage.setItem('remote-id', data.id);
 				await this.stopCounter();
+				this.exclamationMark();
 				this.remoteReady();
 			}
 		};
