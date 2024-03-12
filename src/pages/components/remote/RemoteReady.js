@@ -27,7 +27,7 @@ export default class extends Component {
 		const bindUpdateTimer = updateTimer.bind(this);
 
 		function updateTimer() {
-			buttonElement.textContent = `${this.$state.intraID}(${seconds})`;
+			buttonElement.textContent = `${this.$state.opponentIntraID}(${seconds})`;
 		}
 
 		const stopTimer = () => {
@@ -46,11 +46,11 @@ export default class extends Component {
 				bindUpdateTimer();
 			}, 1000);
 		}
-
 		startTimer();
 	}
 
 	mounted() {
+		console.log('마운트가 한번만 되는지 확인하는 로그 : Ready');
 		this.timer();
 	}
 }
