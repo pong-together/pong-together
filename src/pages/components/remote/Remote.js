@@ -22,7 +22,6 @@ export default class extends Component {
 
 		this.$state = {
 			region: 'kr',
-			type: 'undefined',
 			opponentIntraID: 'undefined',
 			opponentIntraPic: 'undefined',
 		};
@@ -126,7 +125,6 @@ export default class extends Component {
 				console.log('remote pong');
 			} else if (data.type && data.type === 'find_opponent') {
 				console.log('원격 소켓이 서버로부터 메시지를 수신했습니다.');
-				this.$state.type = data.type;
 				this.$state.opponentIntraID = data.opponent;
 				this.$state.opponentIntraPic = data.opponent_image;
 				localStorage.setItem('remote-id', data.id);
