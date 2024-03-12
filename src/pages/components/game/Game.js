@@ -1,6 +1,5 @@
 import Component from '../../../core/Component.js';
 import http from '../../../core/http.js';
-import GameReady from './GameReady.js';
 
 export default class extends Component {
 	setup() {
@@ -12,16 +11,6 @@ export default class extends Component {
 		} else {
 			http.checkToken();
 		}
-		// this.$state = {
-		// 	player1: '',
-		// 	player2: '',
-		// 	gameMode: window.localStorage.getItem('gameMode'),
-		// 	player1_result: '',
-		// 	player1_score: '',
-		// 	player2_result: '',
-		// 	player2_score: '',
-		// 	winner: '',
-		// }
 	}
 
 	template() {
@@ -34,7 +23,11 @@ export default class extends Component {
 					<div class="player1-score-info">score</div>
 					<div class="player1-game-score">0</div>
 				</div>
-				<div class="game-display"></div>
+				<div class="game-display">
+					<div class="display-container">
+						<div class="game-count">3</div>
+					</div>
+				</div>
 				<div class="player2-container">
 					<div class="player2-game-score">0</div>
 					<div class="player2-score-info">score</div>
@@ -46,85 +39,127 @@ export default class extends Component {
 		`;
 	}
 
-	// connectGameSocket() {
-	// 	const gameSocket = new WebSocket(
-	// 		`${SOCKET_URL}/ws/games/?token=${localStorage.getItem('accessToken')}&type=${localStorage.getItem('gameMode')}&type_id=${localStorage.getItem('local-id')}`,
-	// 	)
-		
-	// 	gameSocket.onopen = () => {
-	// 		this.addEvent('keypress', '.game-display', (e) => {
-	// 			if (e.key === 'w') {
-	// 				const message = {
-	// 					type: `${localStorage.getItem('gameMode')}`,
-	// 					send_player: `${this.$state.player1}`,
-	// 					button: "up",
-	// 				};
+	templateStart() {
+		return `
+			<canvas id="canvas"></canvas>
+		`;
+	}
 
-	// 				gameSocket.send(JSON.stringify(message));
-	// 			}
-	// 			else if (e.key === 's'){
-	// 				const message = {
-	// 					type: `${localStorage.getItem('gameMode')}`,
-	// 					send_player: `${this.$state.player1}`,
-	// 					button: "down",
-	// 				};
+	templateEnd() {
+		return `
+			<div class="game-end"></div>
+		`;
+	}
 
-	// 				gameSocket.send(JSON.stringify(message));
-	// 			}
-	// 			else if (e.key === 'p') {
-	// 				const message = {
-	// 					type: `${localStorage.getItem('gameMode')}`,
-	// 					send_player: `${this.$state.player2}`,
-	// 					button: "up",
-	// 				};
+	gameStart() {
+		const displayElement = document.querySelector('.game-display');
+		displayElement.innerHTML = this.templateStart();
+		this.canvas();
+	}
 
-	// 				gameSocket.send(JSON.stringify(message));
-	// 			}
-	// 			else if (e.key === ';') {
-	// 				const message = {
-	// 					type: `${localStorage.getItem('gameMode')}`,
-	// 					send_player: `${this.$state.player2}`,
-	// 					button: "down",
-	// 				};
-	// 				gameSocket.send(JSON.stringify(message));
-	// 			}
-	// 		})
-	// 	}
+	timer() {
+		let seconds = 2;
+		let time;
+		const countdown = document.querySelector('.game-count');
 
-	// 	gameSocket.onclose = () => {
-	// 		console.log('gamesocket disconnect... Trying to reconnect...');
-	// 		setTimeout(() => this.connectGameSocket(), 1000);
-	// 	}
+		const updateTimer = () => {
+			countdown.textContent = `${seconds}`;
+		};
 
-	// 	gameSocket.onerror = function (e) {
-	// 		// console.log(e);
-	// 	}
+		const startTimer = () => {
+			time = setInterval(() => {
+				updateTimer();
+				if (seconds === 0) {
+					clearInterval(time);
+					this.gameStart();
+				} else {
+					seconds--;
+				}
+			}, 1000);
+		};
+		startTimer();
+	}
 
-	// 	gameSocket.onmessage = (event) => {
-	// 		console.log(event.data);
-	// 		const data = JSON.parse(event.data);
-	// 		if (data.type && data.type === 'start') {
-	// 			this.setState({ player1: data.player1 });
-	// 			this.setState({ player2: data.player2 });
-	// 		}
-	// 		else if (data.type && data.type === 'end') {
-	// 			this.setState ({winner: data.winner});
-	// 			if (data.is_normal === false)
-	// 				gameSocket.close();
-	// 		}
-	// 		else if (data.type && data.type === 'get_game_info') {
-	// 			//전역으로 공좌표 관리하기?
-	// 			store.dispatch('ball_xChange', data.ball_x);
-	// 			console.log('ball_x = ' + store.state.ball_x);
-	// 			store.dispatch('ball_yChange', data.ball_y);
-	// 			store.dispatch('player1_yChange', data.player1_y);
-	// 			store.dispatch('player2_yChange', data.player2_y);
-	// 		}
-	// 	}
-	// }
+	canvas() {
+		class Bar {
+			constructor(x, y, w, h, i) {
+				this.baseX = x;
+				this.baseY = y;
+				this.width = w;
+				this.height = h;
+				this.image = i;
+				this.x = this.baseX * (canvas.width / BASEWIDTH);
+				this.y = this.baseY * (canvas.height / BASEHEIGHT);
+			}
+			draw() {
+				ctx.drawImage(this.image, this.x, this.y);
+			}
+			reCoordinate() {
+				this.x = this.baseX * (canvas.width / BASEWIDTH);
+			}
+		}
+
+		class Sphere {
+			constructor(x, y, w, h) {
+				this.baseX = x;
+				this.baseY = y;
+				this.width = w;
+				this.height = h;
+				this.x = this.baseX * (canvas.width / BASEWIDTH);
+				this.y = this.baseY * (canvas.height / BASEHEIGHT);
+			}
+			draw() {
+				ctx.drawImage(img_ball, this.x, this.y);
+			}
+			reCoordinate() {
+				this.x = this.baseX * (canvas.width / BASEWIDTH);
+			}
+		}
+
+		const displayElement = document.querySelector('.game-display');
+		const canvas = document.getElementById('canvas');
+		const ctx = canvas.getContext('2d');
+		const BASEWIDTH = 637;
+		const BASEHEIGHT = 446;
+		canvas.width = displayElement.clientWidth;
+		canvas.height = displayElement.clientHeight;
+
+		let img_p1 = new Image();
+		let img_p2 = new Image();
+		let img_ball = new Image();
+		img_p1.src = '../../../../static/images/player1_bar.png';
+		img_p2.src = '../../../../static/images/player2_bar.png';
+		img_ball.src = '../../../../static/images/ball2.png';
+
+		let player1 = new Bar(10, 192, 19, 63, img_p1);
+		let player2 = new Bar(608, 192, 19, 63, img_p2);
+		let ball = new Sphere(309, 213, 20, 20);
+
+		window.addEventListener('resize', (e) => {
+			canvas.width = displayElement.clientWidth;
+			canvas.height = displayElement.clientHeight;
+			player1.reCoordinate();
+			player2.reCoordinate();
+			ball.reCoordinate();
+		});
+
+		function frame() {
+			requestAnimationFrame(frame);
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+			// player1.y = window.localStorage.getItem('player1_y');
+			// player2.y = window.localStorage.getItem('player2_y');
+			// ball.x = window.localStorage.getItem('ball_x');
+			// ball.y = window.localStorage.getItem('ball_y');
+
+			player1.draw();
+			player2.draw();
+			ball.draw();
+		}
+		frame();
+	}
 
 	mounted() {
-		new GameReady(document.querySelector('.game-display'));
-		// this.connectGameSocket();
+		this.timer();
 	}
 }
