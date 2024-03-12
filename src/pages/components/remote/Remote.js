@@ -109,6 +109,9 @@ export default class extends Component {
 	}
 
 	exclamationMark() {
+		const counterElement = document.getElementById('counter');
+		counterElement.parentNode.removeChild(counterElement);
+
 		const imageElement = document.getElementById('question');
 		imageElement.src = 'static/images/exclamation-mark.png';
 		imageElement.id = 'exclamation';
