@@ -191,13 +191,7 @@ LOGGING = {
     'disable_existing_loggers': False,
 
     'loggers': {
-        'auth.views': {
-        },
-        'chats.consumers': {
-        },
-        'remote.consumers': {
-        },
-        'games.consumers': {
-        },
+        'main': {
+        }
     }
 }

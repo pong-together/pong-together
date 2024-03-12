@@ -18,7 +18,7 @@ from users.models import User
 
 # Create your views here.
 
-logger = logging.getLogger('auth.views')
+logger = logging.getLogger('main')
 
 REDIRECT_URI = os.environ.get('REDIRECT_URI')
 STATE = os.environ.get('STATE')

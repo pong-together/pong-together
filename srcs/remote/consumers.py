@@ -1,5 +1,6 @@
 import asyncio
 import json
+import logging
 from datetime import datetime
 from urllib.parse import parse_qs
 
@@ -7,6 +8,8 @@ from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 from remote.models import Remote
+
+logger = logging.getLogger('main')
 
 
 class RemoteConsumer(AsyncJsonWebsocketConsumer):
@@ -34,7 +37,7 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
 
             if len(self.waiting_list[self.group_name]) >= 2:
                 await self.start_matching()
-
+            logger.info('Remote websocket connect')
         except Exception:
             await self.close()
 
@@ -45,7 +48,7 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
 
             if self.channel_name in self.waiting_list[self.group_name]:
                 self.waiting_list[self.group_name].remove(self.channel_name)
-
+            logger.info('Remote websocket disconnect')
         except Exception as e:
             await self.send_json({'error': str(e)})
 

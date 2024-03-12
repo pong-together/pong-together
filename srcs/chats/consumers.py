@@ -1,9 +1,12 @@
 import asyncio
 import json
+import logging
 from datetime import datetime
 
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
+
+logger = logging.getLogger('main')
 
 
 class ChatConsumer(AsyncJsonWebsocketConsumer):
@@ -23,6 +26,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             await self.accept()
             self.ping_task = asyncio.create_task(self.send_ping())
             await self.update_user_chat_connection(True)
+            logger.info('Chat websocket connect')
         except Exception:
             await self.close()
 
@@ -32,6 +36,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             await self.channel_layer.group_discard(self.GROUP_NAME, self.channel_name)
             await self.cancel_ping_task()
             await self.update_user_chat_connection(False)
+            logger.info('Chat websocket disconnect')
         except Exception as e:
             await self.send_json({'error': str(e)})
 
