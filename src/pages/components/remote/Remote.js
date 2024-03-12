@@ -79,7 +79,7 @@ export default class extends Component {
 
 	async sleep() {
 		const asleep = () => {
-			return new Promise((resolve) => setTimeout(resolve, 5000));
+			return new Promise((resolve) => setTimeout(resolve, 3000));
 		};
 		const wait = async () => {
 			console.log('sleep 시작');
@@ -136,6 +136,7 @@ export default class extends Component {
 				localStorage.setItem('remote-id', data.id);
 				await this.stopCounter();
 				this.exclamationMark();
+				await this.sleep();
 				this.remoteReady();
 			}
 		};
