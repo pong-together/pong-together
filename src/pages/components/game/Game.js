@@ -51,6 +51,12 @@ export default class extends Component {
 		`;
 	}
 
+	gameStart() {
+		const displayElement = document.querySelector('.game-display');
+		displayElement.innerHTML = this.templateStart();
+		this.canvas();
+	}
+
 	timer() {
 		let seconds = 2;
 		let time;
@@ -60,19 +66,17 @@ export default class extends Component {
 			countdown.textContent = `${seconds}`;
 		};
 
-		function startTimer() {
+		const startTimer = () => {
 			time = setInterval(() => {
 				updateTimer();
 				if (seconds === 0) {
 					clearInterval(time);
-					const displayElement = document.querySelector('.game-display');
-					displayElement.innerHTML = this.templateStart();
-					this.canvas();
+					this.gameStart();
 				} else {
 					seconds--;
 				}
 			}, 1000);
-		}
+		};
 		startTimer();
 	}
 
@@ -143,12 +147,11 @@ export default class extends Component {
 			requestAnimationFrame(frame);
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-			player1.y = window.localStorage.getItem('player1_y');
-			player2.y = window.localStorage.getItem('player2_y');
-			ball.x = window.localStorage.getItem('ball_x');
-			ball.y = window.localStorage.getItem('ball_y');
+			// player1.y = window.localStorage.getItem('player1_y');
+			// player2.y = window.localStorage.getItem('player2_y');
+			// ball.x = window.localStorage.getItem('ball_x');
+			// ball.y = window.localStorage.getItem('ball_y');
 
-			// move();
 			player1.draw();
 			player2.draw();
 			ball.draw();
