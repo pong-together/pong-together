@@ -100,29 +100,29 @@ export default function Canvas() {
 		Semicolon: false,
 	};
 
-	function move() {
-		const SPEED = 3;
-		if (key['KeyW'] && player1.y > 30) {
-			if ((player1.y -= SPEED) <= 30) {
-				player1.y = 30;
-			}
-		}
-		if (key['KeyS'] && player1.y < 353) {
-			if ((player1.y += SPEED) >= 353) {
-				player1.y = 353;
-			}
-		}
-		if (key['KeyP'] && player2.y > 30) {
-			if ((player2.y -= SPEED) <= 30) {
-				player2.y = 30;
-			}
-		}
-		if (key['Semicolon'] && player2.y < 353) {
-			if ((player2.y += SPEED) >= 353) {
-				player2.y = 353;
-			}
-		}
-	}
+	// function move() {
+	// 	const SPEED = 3;
+	// 	if (key['KeyW'] && player1.y > 30) {
+	// 		if ((player1.y -= SPEED) <= 30) {
+	// 			player1.y = 30;
+	// 		}
+	// 	}
+	// 	if (key['KeyS'] && player1.y < 353) {
+	// 		if ((player1.y += SPEED) >= 353) {
+	// 			player1.y = 353;
+	// 		}
+	// 	}
+	// 	if (key['KeyP'] && player2.y > 30) {
+	// 		if ((player2.y -= SPEED) <= 30) {
+	// 			player2.y = 30;
+	// 		}
+	// 	}
+	// 	if (key['Semicolon'] && player2.y < 353) {
+	// 		if ((player2.y += SPEED) >= 353) {
+	// 			player2.y = 353;
+	// 		}
+	// 	}
+	// }
 
 	// function move() {
 	// 	const SPEED = 3;
@@ -148,13 +148,13 @@ export default function Canvas() {
 	// 	}
 	// }
 
-	document.addEventListener('keydown', (e) => {
-		key[e.code] = true;
-	});
+	// document.addEventListener('keydown', (e) => {
+	// 	key[e.code] = true;
+	// });
 
-	document.addEventListener('keyup', (e) => {
-		key[e.code] = false;
-	});
+	// document.addEventListener('keyup', (e) => {
+	// 	key[e.code] = false;
+	// });
 
 	window.addEventListener('resize', (e) => {
 		canvas.width = displayElement.clientWidth;
@@ -173,7 +173,7 @@ export default function Canvas() {
 		ball.x = window.localStorage.getItem('ball_x');
 		ball.y = window.localStorage.getItem('ball_y');
 
-		move();
+		// move();
 		player1.draw();
 		player2.draw();
 		ball.draw();

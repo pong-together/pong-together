@@ -19,9 +19,9 @@ export default class extends Component {
 			player2: '',
 			gameMode: window.localStorage.getItem('gameMode'),
 			player1_result: '',
-			player1_score: '',
+			player1_score: 0,
 			player2_result: '',
-			player2_score: '',
+			player2_score: 0,
 			winner: '',
 		}
 	}
@@ -60,7 +60,7 @@ export default class extends Component {
 		)
 		
 		gameSocket.onopen = () => {
-			this.addEvent('keypress', '.game-display', (e) => {
+			this.addEvent('keypress', (e) => {
 				if (e.key === 'w') {
 					const message = {
 						type: `${localStorage.getItem('gameMode')}`,
@@ -68,6 +68,7 @@ export default class extends Component {
 						button: "up",
 					};
 
+					console.log('w');
 					gameSocket.send(JSON.stringify(message));
 				}
 				else if (e.key === 's'){
@@ -77,6 +78,7 @@ export default class extends Component {
 						button: "down",
 					};
 
+					console.log('s');
 					gameSocket.send(JSON.stringify(message));
 				}
 				else if (e.key === 'p') {
@@ -86,6 +88,7 @@ export default class extends Component {
 						button: "up",
 					};
 
+					console.log('s');
 					gameSocket.send(JSON.stringify(message));
 				}
 				else if (e.key === ';') {
@@ -94,6 +97,7 @@ export default class extends Component {
 						send_player: `${this.$state.player2}`,
 						button: "down",
 					};
+					console.log('s');
 					gameSocket.send(JSON.stringify(message));
 				}
 			})
@@ -110,27 +114,30 @@ export default class extends Component {
 		}
 
 		gameSocket.onmessage = (event) => {
-			// console.log('!!' + event.data);
 			const data = JSON.parse(event.data);
 			if (data.type && data.type === 'start') {
-				console.log("1");
-				this.setState({ player1: data.player1 });
-				this.setState({ player2: data.player2 });
+				this.setState({ player1: data.player1_name });
+				this.setState({ player2: data.player2_name });
+				console.log(data.player1_name, data.player2_name);
+				this.$target.innerHTML = this.template();
 			}
 			else if (data.type && data.type === 'end') {
-				console.log('2');
 				this.setState ({winner: data.winner});
+				this.$target.innerHTML = this.template();
 				if (data.is_normal === false)
 					gameSocket.close();
 			}
+			else if (data.type && data.type === 'score') {
+				this.setState ({player1_score: data.player1_score});
+				this.setState ({player2_score: data.player2_score});
+				this.$target.innerHTML = this.template();
+			}
 			else if (data.type && data.type === 'get_game_info') {
 				//전역으로 공좌표 관리하기?
-				console.log("x : " + data.ball_x + 'y : ' + data.ball_y + 'p1x: ' + data.player1_y + 'p2x: ' + data.player2_y);
 				window.localStorage.setItem('ball_x', data.ball_x);
 				window.localStorage.setItem('ball_y', data.ball_y);
 				window.localStorage.setItem('player1_y', data.player1_y);
 				window.localStorage.setItem('player2_y', data.player2_y);
-				console.log('x: ' + window.localStorage.getItem('ball_x'));
 			}
 		}
 	}
