@@ -40,9 +40,6 @@ export default class extends Component {
 			if (target.id === 'search') {
 				console.log('취소하기 버튼 동작 확인하는 로그');
 				await this.stopCounter();
-				// console.log('Socket close await 확인하는 로그');
-				// await this.sleep();
-				// console.log('sleep() 정상 작동 확인하는 로그 : Select');
 				window.location.pathname = '/select';
 			}
 		});
@@ -108,6 +105,12 @@ export default class extends Component {
 		});
 	}
 
+	remoteReady() {
+		const mainboxElement = document.querySelector('.mainbox');
+		mainboxElement.innerHTML = this.templateReady();
+		this.timer();
+	}
+
 	connectSocket() {
 		this.remoteSocket = new WebSocket(
 			`${SOCKET_URL}/ws/remote/?token=${localStorage.getItem('accessToken')}&game_mode=${localStorage.getItem('gameLevel')}`,
@@ -130,19 +133,8 @@ export default class extends Component {
 				this.$state.intraID = data.intra_id;
 				this.$state.opponentIntraID = data.opponent;
 				this.$state.opponentIntraPic = data.opponent_image;
-				localStorage.setItem('remoteState', JSON.stringify(this.$state));
 				await this.stopCounter();
-				// console.log('Socket close await 확인하는 로그');
-				// await this.sleep();
-				// console.log('sleep() 정상 작동 확인하는 로그 : Ready');
-				console.log(
-					'remoteState 객체 내용 확인',
-					localStorage.getItem('remoteState'),
-				);
-
-				const mainboxElement = document.querySelector('.mainbox');
-				mainboxElement.innerHTML = this.templateReady();
-				this.timer();
+				this.remoteReady();
 			}
 		};
 
@@ -171,8 +163,6 @@ export default class extends Component {
 				this.remoteSocket.readyState !== WebSocket.CLOSED
 			) {
 				await this.closeSocket();
-				// console.log(
-				// 	'원격 소켓이 정상적으로 닫히는지 확인하는 로그(stopCounter), readyState =', this.remoteSocket.readyState);
 			}
 		};
 		this.stopCounter = stopCounter;
