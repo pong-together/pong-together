@@ -41,12 +41,13 @@ class DisconnectHandler:
         await self.update_game_result(loser, winner)
 
     async def disconnect_abnormal(self):
-        other = self.get_other_player()
-        await self.update_game_result(self.consumer.user.intra_id, other)
+        loser = self.consumer.user.intra_id,
+        winner = self.get_other_player()
+        await self.update_game_result(loser, winner)
         await self.consumer.channel_layer.group_send(self.consumer.group_name, {
             'type': 'end',
             'is_normal': False,
-            'winner': other
+            'winner': winner
         })
 
     def get_other_player(self):
