@@ -77,6 +77,12 @@ export default class extends Component {
 		`;
 	}
 
+	setEvent() {
+		this.addEvent('click', '.game-start', ({target}) => {
+			window.location.pathname = '/game';
+		})
+	}
+
 	gameRoundOne(playerBox1, playerBox2, playerBox3) {
 		const rightline = document.querySelector('.game1-rightline');
 		rightline.style.width = '5px';

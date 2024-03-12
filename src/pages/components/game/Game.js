@@ -24,6 +24,8 @@ export default class extends Component {
 			player2_score: 0,
 			winner: '',
 		}
+
+		this.connectGameSocket();
 	}
 
 	template() {
@@ -60,48 +62,49 @@ export default class extends Component {
 		)
 		
 		gameSocket.onopen = () => {
-			this.addEvent('keypress', (e) => {
-				if (e.key === 'w') {
-					const message = {
-						type: `${localStorage.getItem('gameMode')}`,
-						send_player: `${this.$state.player1}`,
-						button: "up",
-					};
-
-					console.log('w');
-					gameSocket.send(JSON.stringify(message));
+			console.log("WebSocket connection opened.");
+	
+			// 여기에서 document에 직접 이벤트 리스너를 추가합니다.
+			document.addEventListener('keydown', (e) => {
+				let message = {};
+				switch(e.key) {
+					case 'w':
+						message = {
+							type: "push_button",
+							sender_player: 'player1',
+							button: "up",
+						};
+						break;
+					case 's':
+						message = {
+							type: "push_button",
+							sender_player: 'player1',
+							button: "down",
+						};
+						break;
+					case 'p':
+						message = {
+							type: "push_button",
+							sender_player: 'player2',
+							button: "up",
+						};
+						break;
+					case ';':
+						message = {
+							type: "push_button",
+							sender_player: 'player2',
+							button: "down",
+						};
+						break;
+					default:
+						// 키에 대응하는 조건이 없을 경우, 메시지를 보내지 않음
+						return;
 				}
-				else if (e.key === 's'){
-					const message = {
-						type: `${localStorage.getItem('gameMode')}`,
-						send_player: `${this.$state.player1}`,
-						button: "down",
-					};
-
-					console.log('s');
-					gameSocket.send(JSON.stringify(message));
-				}
-				else if (e.key === 'p') {
-					const message = {
-						type: `${localStorage.getItem('gameMode')}`,
-						send_player: `${this.$state.player2}`,
-						button: "up",
-					};
-
-					console.log('s');
-					gameSocket.send(JSON.stringify(message));
-				}
-				else if (e.key === ';') {
-					const message = {
-						type: `${localStorage.getItem('gameMode')}`,
-						send_player: `${this.$state.player2}`,
-						button: "down",
-					};
-					console.log('s');
-					gameSocket.send(JSON.stringify(message));
-				}
-			})
-		}
+				console.log(e.key);
+				gameSocket.send(JSON.stringify(message));
+				console.log(message);
+			});
+		};
 
 		gameSocket.onclose = () => {
 			console.log('gamesocket disconnect... Trying to reconnect...');
@@ -118,11 +121,18 @@ export default class extends Component {
 			if (data.type && data.type === 'start') {
 				this.setState({ player1: data.player1_name });
 				this.setState({ player2: data.player2_name });
-				console.log(data.player1_name, data.player2_name);
-				this.$target.innerHTML = this.template();
+				this.render();
 			}
 			else if (data.type && data.type === 'end') {
 				this.setState ({winner: data.winner});
+				if (data.winner === this.$state.player1) {
+					this.setState({player1_result: 'Win'});
+					this.setState({player2_result: 'Lose'});
+				}
+				else if (data.winner === this.$state.player2) {
+					this.setState({player1_result: 'Lose'});
+					this.setState({player2_result: 'Win'});
+				}
 				this.$target.innerHTML = this.template();
 				if (data.is_normal === false)
 					gameSocket.close();
@@ -130,7 +140,8 @@ export default class extends Component {
 			else if (data.type && data.type === 'score') {
 				this.setState ({player1_score: data.player1_score});
 				this.setState ({player2_score: data.player2_score});
-				this.$target.innerHTML = this.template();
+				document.querySelector('.player1-game-score').textContent = data.player1_score;
+				document.querySelector('.player2-game-score').textContent = data.player2_score;
 			}
 			else if (data.type && data.type === 'get_game_info') {
 				//전역으로 공좌표 관리하기?
@@ -144,6 +155,5 @@ export default class extends Component {
 
 	mounted() {
 		new GameReady(document.querySelector('.game-display'));
-		this.connectGameSocket();
 	}
 }
