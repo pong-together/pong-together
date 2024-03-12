@@ -1,6 +1,7 @@
 import Component from '../../../core/Component.js';
 import http from '../../../core/http.js';
 import GameReady from './GameReady.js';
+import TournamentBracket from '../tournament/Tournament-Bracket.js';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
@@ -18,12 +19,19 @@ export default class extends Component {
 			player1: '',
 			player2: '',
 			gameMode: window.localStorage.getItem('gameMode'),
+			game_id: 0,
 			player1_result: '',
 			player1_score: 0,
 			player2_result: '',
 			player2_score: 0,
 			winner: '',
 		}
+		if (this.$state.gameMode === 'local')
+			this.$state.game_id = window.localStorage.getItem('local-id');
+		else if (this.$state.gameMode === 'tournament')
+			this.$state.game_id = window.localStorage.getItem('tournament-id');
+		else if (this.$state.gameMode === 'remote')
+			this.$state.game_id = window.localStorage.getItem('remote-id');
 
 		this.connectGameSocket();
 	}
@@ -56,9 +64,8 @@ export default class extends Component {
 	}
 
 	connectGameSocket() {
-		// console.log("!!");
 		const gameSocket = new WebSocket(
-			`${SOCKET_URL}/ws/games/?token=${localStorage.getItem('accessToken')}&type=${localStorage.getItem('gameMode')}&type_id=${localStorage.getItem('local-id')}`,
+			`${SOCKET_URL}/ws/games/?token=${localStorage.getItem('accessToken')}&type=${this.$state.gameMode}&type_id=${this.$state.game_id}`,
 		)
 		
 		gameSocket.onopen = () => {
@@ -104,6 +111,13 @@ export default class extends Component {
 				gameSocket.send(JSON.stringify(message));
 				console.log(message);
 			});
+
+			setTimeout(() => {
+				let start = {
+					type : "start_game",
+				}
+				gameSocket.send(JSON.stringify(start));
+			}, 3000);
 		};
 
 		gameSocket.onclose = () => {
@@ -118,7 +132,7 @@ export default class extends Component {
 
 		gameSocket.onmessage = (event) => {
 			const data = JSON.parse(event.data);
-			if (data.type && data.type === 'start') {
+			if (data.type && data.type === 'get_user_info') {
 				this.setState({ player1: data.player1_name });
 				this.setState({ player2: data.player2_name });
 				this.render();
@@ -133,9 +147,18 @@ export default class extends Component {
 					this.setState({player1_result: 'Lose'});
 					this.setState({player2_result: 'Win'});
 				}
+				if (window.localStorage.getItem('gameMode') === 'tournament'){
+					//여기에 새로운 버튼을 넣기
+					new TournamentBracket(this.$target);
+				}
+				else if (window.localStorage.get('gameMode') === 'local') {
+					window.location.pathname('/select');
+				}
 				this.$target.innerHTML = this.template();
-				if (data.is_normal === false)
+				if (data.is_normal === false) {
 					gameSocket.close();
+					window.location.pathname('/select');
+				}
 			}
 			else if (data.type && data.type === 'score') {
 				this.setState ({player1_score: data.player1_score});

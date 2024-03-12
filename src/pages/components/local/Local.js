@@ -3,7 +3,7 @@ import language from '../../../utils/language.js';
 import http from '../../../core/http.js';
 import store from '../../../store/index.js';
 import LocalApi from './LocalApi.js';
-import { navigate } from '../../../router/utils/navigate.js';
+// import { navigate } from '../../../router/utils/navigate.js';
 
 export default class extends Component {
 	setup() {
