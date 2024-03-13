@@ -2,6 +2,7 @@ import Component from '../../../core/Component.js';
 import http from '../../../core/http.js';
 // import GameReady from './GameReady.js';
 import TournamentBracket from '../tournament/Tournament-Bracket.js';
+import language from '../../../utils/language.js';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
@@ -25,17 +26,27 @@ export default class extends Component {
 			player2_result: '',
 			player2_score: 0,
 			winner: '',
-			ball_x: 0,
-			ball_y: 0,
-			player1_y: 0,
-			player2_y: 0,
+			ball_x: 309,
+			ball_y: 213,
+			player1_y: 192,
+			player2_y: 192,
+			buttonMessage: '',
+			region: localStorage.getItem('language')
+				? localStorage.getItem('language')
+				: 'kr',
 		}
-		if (this.$state.gameMode === 'local')
+		if (this.$state.gameMode === 'local') {
 			this.$state.game_id = window.localStorage.getItem('local-id');
-		else if (this.$state.gameMode === 'tournament')
+			this.$state.buttonMessage = language.game[this.$state.region].localButton;
+		}
+		else if (this.$state.gameMode === 'tournament') {
 			this.$state.game_id = window.localStorage.getItem('tournament-id');
-		else if (this.$state.gameMode === 'remote')
+			this.$state.buttonMessage = language.game[this.$state.region].tournamentButton;
+		}
+		else if (this.$state.gameMode === 'remote') {
 			this.$state.game_id = window.localStorage.getItem('remote-id');
+			this.$state.buttonMessage = language.game[this.$state.region].localButton;
+		}
 
 		this.connectGameSocket();
 	}
@@ -155,14 +166,17 @@ export default class extends Component {
 					this.setState({player1_result: 'Lose'});
 					this.setState({player2_result: 'Win'});
 				}
+				this.$target.innerHTML = this.template();
 				if (window.localStorage.getItem('gameMode') === 'tournament'){
-					//여기에 새로운 버튼을 넣기
-					new TournamentBracket(this.$target);
+					const element = document.querySelector('.game-display');
+					element.innerHTML = this.templateEnd();
 				}
 				else if (window.localStorage.getItem('gameMode') === 'local') {
-					window.location.pathname= '/select';
+					const element2 = document.querySelector('.game-display');
+					console.log(element2);
+					element2.innerHTML = this.templateEnd();
+					console.log(element2.innerHTML);
 				}
-				this.$target.innerHTML = this.template();
 				if (data.is_normal === false) {
 					gameSocket.close();
 					window.location.pathname = '/select';
@@ -183,6 +197,17 @@ export default class extends Component {
 		}
 	}
 
+	setEvent() {
+		this.addEvent('click', '.game-end-button', ({target}) => {
+			if (window.localStorage.getItem('gameMode') === 'tournament') {
+				new TournamentBracket(this.$target);
+			}
+			else {
+				window.location.pathname = '/select';
+			}
+		})
+	}
+
 	templateStart() {
 		return `
 			<canvas id="canvas"></canvas>
@@ -191,7 +216,9 @@ export default class extends Component {
 
 	templateEnd() {
 		return `
-			<div class="game-end"></div>
+			<div class="game-end">
+				<button class="game-end-button">${this.$state.buttonMessage}</button>
+			</div>
 		`;
 	}
 

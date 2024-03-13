@@ -3,9 +3,18 @@ import Bracket from './Tournament-Bracket.js';
 import language from '../../../utils/language.js';
 import tourapi from '../tournament/TournamentApi.js';
 import store from '../../../store/index.js';
+import http from '../../../core/http.js';
 
 export default class extends Component {
 	setup() {
+		if (
+			!localStorage.getItem('accessToken') ||
+			!localStorage.getItem('twoFA')
+		) {
+			window.location.pathname = '/login';
+		} else {
+			http.checkToken();
+		}
 		this.$state = {
 			participant: [],
 			checkError: '',
@@ -13,13 +22,14 @@ export default class extends Component {
 			region: localStorage.getItem('language')
 				? localStorage.getItem('language')
 				: 'kr',
+			gamemodemessage: '',
 		};
-		this.$store = this.$props;
 
 		window.localStorage.setItem('gameMode', 'tournament');
-		if (window.localStorage.getItem('gameLevel') == 'basic')
+		if (window.localStorage.getItem('gameLevel') === 'basic') {
 			this.$state.gamemodemessage =
 				language.tournament[this.$state.region].normalGameMode;
+		}
 		else
 			this.$state.gamemodemessage =
 				language.tournament[this.$state.region].extreamGameMode;
