@@ -32,11 +32,9 @@ export default class extends Component {
 	}
 
 	setEvent() {
-		document.addEventListener('click', async (e) => {
+		document.addEventListener('click', (e) => {
 			const target = e.target;
 			if (target.id === 'search') {
-				console.log('취소하기 버튼 동작 확인하는 로그');
-				await this.stopCounter();
 				window.location.pathname = '/select';
 			}
 		});
@@ -125,7 +123,6 @@ export default class extends Component {
 				this.$state.opponentIntraID = data.opponent;
 				this.$state.opponentIntraPic = data.opponent_image;
 				localStorage.setItem('remote-id', data.id);
-				await this.stopCounter();
 				this.exclamationMark();
 				await this.sleep();
 				this.remoteReady();
