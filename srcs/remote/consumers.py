@@ -48,8 +48,10 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
             await self.channel_layer.group_discard(self.group_name, self.channel_name)
             await self.cancel_ping_task()
 
-            if self.channel_name in self.waiting_list[self.group_name]:
-                self.waiting_list[self.group_name].remove(self.channel_name)
+            for user in self.waiting_list[self.group_name]:
+                if user[0] == self.channel_name:
+                    self.waiting_list[self.group_name].remove(user)
+                    break
             logger.info('Websocket REMOTE DISCONNECT')
         except Exception as e:
             await self.send_json({'error': str(e)})
