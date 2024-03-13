@@ -17,7 +17,7 @@ export default class extends Component {
 		};
 		this.$store = this.$props;
 
-		if (this.$state.gameMode == 'default')
+		if (window.localStorage.getItem('gameLevel') == 'basic')
 			this.$state.gamemodemessage =
 				language.tournament[this.$state.region].normalGameMode;
 		else
@@ -75,6 +75,12 @@ export default class extends Component {
 			</div>
 		</div>
 		`;
+	}
+
+	setEvent() {
+		this.addEvent('click', '.game-start', ({target}) => {
+			window.location.pathname = '/game';
+		})
 	}
 
 	gameRoundOne(playerBox1, playerBox2, playerBox3) {
