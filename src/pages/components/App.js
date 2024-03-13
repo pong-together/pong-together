@@ -210,7 +210,6 @@ export default class extends Component {
 				localStorage.getItem('chatConnection') !== true)
 		) {
 			this.connectSocket();
-			console.log('chat connect');
 		}
 
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {
