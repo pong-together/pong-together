@@ -1,3 +1,4 @@
+import logging
 import os
 from json import JSONDecodeError
 
@@ -16,6 +17,8 @@ from auth.utils import get_user
 from users.models import User
 
 # Create your views here.
+
+logger = logging.getLogger('main')
 
 REDIRECT_URI = os.environ.get('REDIRECT_URI')
 STATE = os.environ.get('STATE')
@@ -58,6 +61,7 @@ class LoginAPIView(APIView):
             'access_token': str(refresh.access_token),
             'refresh_token': str(refresh)
         }
+        logger.info('Login success')
         return Response(data=data, status=status.HTTP_200_OK)
 
     def get_access_token(self, code):

@@ -1,7 +1,11 @@
+import logging
+
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 from games.connect_handler import ConnectHandler
 from games.disconnect_handler import DisconnectHandler
+
+logger = logging.getLogger('main')
 
 
 class GameConsumer(AsyncJsonWebsocketConsumer):
@@ -19,16 +23,20 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
 
     async def connect(self):
         try:
+            logger.info('Websocket GAME Try to connect')
             connect_handler = ConnectHandler(self)
             await connect_handler.run()
+            logger.info('Websocket GAME CONNECT')
         except Exception as e:
             await self.close()
             print(e)
 
     async def disconnect(self, code):
         try:
+            logger.info('Websocket GAME Try to disconnect')
             disconnect_handler = DisconnectHandler(self)
             await disconnect_handler.run()
+            logger.info('Websocket GAME DISCONNECT')
         except Exception as e:
             await self.send_json({'error': str(e)})
 
