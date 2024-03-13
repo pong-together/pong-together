@@ -25,7 +25,7 @@ export default class extends Component {
 			gamemodemessage: '',
 		};
 		window.localStorage.setItem('gameMode', 'local');
-		if (this.$state.gameMode == 'default')
+		if (window.localStorage.getItem('gameLevel') == 'default')
 			this.$state.gamemodemessage =
 				language.local[this.$state.region].normalGameMode;
 		else

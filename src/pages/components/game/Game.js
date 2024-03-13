@@ -29,7 +29,7 @@ export default class extends Component {
 			ball_y: 0,
 			player1_y: 0,
 			player2_y: 0,
-			gameSocket: null,
+			// gameSocket: null,
 		}
 		if (this.$state.gameMode === 'local')
 			this.$state.game_id = window.localStorage.getItem('local-id');
@@ -77,7 +77,7 @@ export default class extends Component {
 			`${SOCKET_URL}/ws/games/?token=${localStorage.getItem('accessToken')}&type=${this.$state.gameMode}&type_id=${this.$state.game_id}`,
 		)
 
-		this.setState({gameSocket: gameSocket});
+		// this.setState({gameSocket: gameSocket});
 		
 		gameSocket.onopen = () => {
 			console.log("WebSocket connection opened.");
@@ -297,7 +297,7 @@ export default class extends Component {
 			player1.y = this.$state.player1_y;
 			player2.y = this.$state.player2_y;
 			ball.x = this.$state.ball_x;
-			ball.y = this.$state.ball_y;
+			ball.y = this.$state.ball_y + 30;
 			// player1.y = window.localStorage.getItem('player1_y');
 			// player2.y = window.localStorage.getItem('player2_y');
 			// ball.x = window.localStorage.getItem('ball_x');

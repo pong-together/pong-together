@@ -117,6 +117,7 @@ export default class extends Component {
 		);
 
 		chatSocket.onopen = () => {
+			console.log('open!')
 			this.addEvent('click', '.message-btn', (e) => {
 				e.preventDefault();
 				var message = this.$target.querySelector('#m').value;
@@ -134,6 +135,10 @@ export default class extends Component {
 					e.preventDefault();
 					this.$target.querySelector('.message-btn').click();
 				}
+			});
+
+			window.addEventListener('popstate', (e) => {
+				chatSocket.close();
 			});
 		};
 
@@ -201,7 +206,7 @@ export default class extends Component {
 			this.changeModule();
 			this.routerModule();
 		});
-		
+
 		this.calcRate();
 		if (
 			localStorage.getItem('accessToken') &&
