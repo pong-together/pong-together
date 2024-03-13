@@ -117,6 +117,7 @@ export default class extends Component {
 		);
 
 		chatSocket.onopen = () => {
+			console.log(chatSocket);
 			this.addEvent('click', '.message-btn', (e) => {
 				e.preventDefault();
 				var message = this.$target.querySelector('#m').value;
@@ -137,11 +138,12 @@ export default class extends Component {
 			});
 		};
 
-		chatSocket.onclose = () => {
+		chatSocket.onclose = function(event) {
 			console.log('WebSocket closed.');
 			displayConnectionFailedModal(
 				language.util[this.$state.region].chatMessage,
 			);
+			console.log("Close event code:", event.code, "Reason:", event.reason);
 			localStorage.clear();
 			chatSocket.close();
 			return;
@@ -210,6 +212,7 @@ export default class extends Component {
 				localStorage.getItem('chatConnection') !== true)
 		) {
 			this.connectSocket();
+			console.log("chat connect");
 		}
 
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {

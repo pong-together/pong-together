@@ -3,7 +3,7 @@ import language from '../../../utils/language.js';
 import http from '../../../core/http.js';
 import store from '../../../store/index.js';
 import LocalApi from './LocalApi.js';
-import { navigate } from '../../../router/utils/navigate.js';
+// import { navigate } from '../../../router/utils/navigate.js';
 
 export default class extends Component {
 	setup() {
@@ -25,7 +25,7 @@ export default class extends Component {
 			gamemodemessage: '',
 		};
 		window.localStorage.setItem('gameMode', 'local');
-		if (this.$state.gameMode == 'default')
+		if (window.localStorage.getItem('gameLevel') == 'basic')
 			this.$state.gamemodemessage =
 				language.local[this.$state.region].normalGameMode;
 		else
