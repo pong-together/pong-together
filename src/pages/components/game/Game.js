@@ -163,12 +163,12 @@ export default class extends Component {
 					new TournamentBracket(this.$target);
 				}
 				else if (window.localStorage.getItem('gameMode') === 'local') {
-					window.location.pathname('/select');
+					window.location.pathname= '/select';
 				}
 				this.$target.innerHTML = this.template();
 				if (data.is_normal === false) {
 					gameSocket.close();
-					window.location.pathname('/select');
+					window.location.pathname = '/select';
 				}
 			}
 			else if (data.type && data.type === 'score') {
