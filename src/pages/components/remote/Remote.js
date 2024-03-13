@@ -207,3 +207,5 @@ export default class extends Component {
 		this.connectSocket();
 	}
 }
+
+//asd
