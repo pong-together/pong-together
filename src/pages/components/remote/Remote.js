@@ -35,7 +35,6 @@ export default class extends Component {
 		document.addEventListener('click', (e) => {
 			const target = e.target;
 			if (target.id === 'search') {
-				this.stopCounter();
 				window.location.pathname = '/select';
 			}
 		});
@@ -129,11 +128,6 @@ export default class extends Component {
 				this.remoteReady();
 			}
 		};
-
-		this.remoteSocket.onclose = () => {
-			console.log('remote socket closed');
-			this.remoteSocket.close();
-		}
 
 		this.remoteSocket.onerror = () => {
 			console.log('원격 소켓 에러');
