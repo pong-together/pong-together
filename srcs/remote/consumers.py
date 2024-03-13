@@ -45,6 +45,9 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
     async def disconnect(self, code):
         try:
             logger.info('Websocket REMOTE Try to disconnect')
+            await self.channel_layer.group_send(self.group_name, {
+                'type': 'send_disconnection',
+            })
             await self.channel_layer.group_discard(self.group_name, self.channel_name)
             await self.cancel_ping_task()
 
@@ -105,6 +108,14 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
                 'id': event['id']
             }
             await self.send_json(message)
+        except KeyError as e:
+            await self.send({'error': f'{str(e)} is required'})
+        except Exception as e:
+            await self.send_json({'error': str(e)})
+
+    async def send_disconnection(self, event):
+        try:
+            await self.send_json(event)
         except KeyError as e:
             await self.send({'error': f'{str(e)} is required'})
         except Exception as e:
