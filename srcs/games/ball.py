@@ -10,9 +10,10 @@ class Ball:
     HEIGHT = 20
 
     START_SPEED = 5
-    DEFAULT_MINIMUM_SPEED = 7
+    MAXIMUM_SPEED = 10
+    DEFAULT_MINIMUM_SPEED = 6
     DEFAULT_MAXIMUM_SLOPE = 1.1
-    EXTREME_MINIMUM_SPEED = 9
+    EXTREME_MINIMUM_SPEED = 8
     EXTREME_MAXIMUM_SLOPE = 1.5
 
     ESCAPE_DEGREE = 20
@@ -87,4 +88,8 @@ class Ball:
         size2 = self.velocity[0] ** 2 + self.velocity[1] ** 2
         if speed == self.START_SPEED or size2 < speed ** 2:
             rate = speed / math.sqrt(size2)
+            self.velocity = [self.velocity[0] * rate, self.velocity[1] * rate]
+        size2 = self.velocity[0] ** 2 + self.velocity[1] ** 2
+        if size2 > self.MAXIMUM_SPEED ** 2:
+            rate = math.sqrt(size2) / self.MAXIMUM_SPEED
             self.velocity = [self.velocity[0] * rate, self.velocity[1] * rate]
