@@ -1,6 +1,7 @@
 import Component from '../../../core/Component.js';
 import http from '../../../core/http.js';
 import language from '../../../utils/language.js';
+import { displayConnectionFailedModal as displayCanceledMatchingModal } from '../../../utils/modal';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
@@ -126,6 +127,12 @@ export default class extends Component {
 				this.exclamationMark();
 				await this.sleep();
 				this.remoteReady();
+			} else if (data.type && data.type === 'send_disconnection') {
+				console.log('상대방이 나갔습니다. 다시 매칭을 시작합니다.');
+				displayCanceledMatchingModal(
+					language.remote[this.$state.region].cancelMatch,
+				);
+				location.reload();
 			}
 		};
 

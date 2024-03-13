@@ -1,3 +1,6 @@
+import language from '../utils/language.js';
+import { displayConnectionFailedModal as displayExpiredTokenModal } from '../utils/modal';
+
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const REFRESH_BASE_URL = `${BASE_URL}/api/auth/token/refresh/`;
 const CHECK_BASE_URL = `${BASE_URL}/api/auth/otp/`;
@@ -69,8 +72,12 @@ const refreshToken = async () => {
 				if (response.status === 401) {
 					console.log('refresh token이 만료되었습니다.');
 					console.log('다시 로그인을 시작하여 주세요.');
+					let region = 'kr';
+					if (localStorage.getItem('language')) {
+						region = localStorage.getItem('language');
+					}
+					displayExpiredTokenModal(language.util[region].expiredTokenMessage);
 					localStorage.clear();
-					setTimeout(() => {}, 3000);
 					window.location.pathname = '/login';
 				}
 			} else {
@@ -89,7 +96,6 @@ const refreshToken = async () => {
 		console.log('refresh token이 존재하지 않습니다.');
 		console.log('다시 로그인을 시작하여 주세요.');
 		localStorage.clear();
-		setTimeout(() => {}, 3000);
 		window.location.pathname = '/login';
 	}
 };
