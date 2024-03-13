@@ -10,9 +10,9 @@ class Ball:
     HEIGHT = 20
 
     START_SPEED = 4
-    MAXIMUM_SPEED = 19
+    MAXIMUM_SPEED = 10
     DEFAULT_MINIMUM_SPEED = 6
-    DEFAULT_MAXIMUM_SLOPE = 1.1
+    DEFAULT_MAXIMUM_SLOPE = 1.2
     EXTREME_MINIMUM_SPEED = 8
     EXTREME_MAXIMUM_SLOPE = 1.5
 
@@ -44,7 +44,7 @@ class Ball:
 
     def bounce(self, paddle):
         self.velocity[0] *= -1
-        self.velocity[1] = int((self.y - paddle.y - (paddle.HEIGHT - self.HEIGHT) / 2))
+        self.velocity[1] = int((self.y - paddle.y - (paddle.HEIGHT - self.HEIGHT) / 2) / 3)
         self.adjust_slope()
         self.adjust_speed(self.minimum_speed)
 
@@ -89,6 +89,6 @@ class Ball:
         if speed == self.START_SPEED or size2 < speed ** 2:
             rate = speed / math.sqrt(size2)
             self.velocity = [self.velocity[0] * rate, self.velocity[1] * rate]
-        if size2 > self.MAXIMUM_SPEED ** 2:
-            rate = math.sqrt(size2) / self.MAXIMUM_SPEED
-            self.velocity = [self.velocity[0] * rate, self.velocity[1] * rate]
+        # if size2 > self.MAXIMUM_SPEED ** 2:
+        #     rate = math.sqrt(size2) / self.MAXIMUM_SPEED
+        #     self.velocity = [self.velocity[0] * rate, self.velocity[1] * rate]
