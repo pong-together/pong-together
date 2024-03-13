@@ -40,18 +40,15 @@ export default class extends Component {
 				window.location.pathname = '/select';
 			}
 		});
-		window.addEventListener('beforeunload', (e) => {
-			if (
-				this.remoteSocket &&
-				this.remoteSocket.readyState !== WebSocket.CLOSED
-			) {
-				e.preventDefault();
-				this.stopCounter();
-				// const confirmMessage = '새로고침을 하시겠습니까?';
-				// e.returnValue = confirmMessage;
-				// return confirmMessage;
-			}
-		});
+		// window.addEventListener('beforeunload', (e) => {
+		// 	if (
+		// 		this.remoteSocket &&
+		// 		this.remoteSocket.readyState !== WebSocket.CLOSED
+		// 	) {
+		// 		e.preventDefault();
+		// 		this.stopCounter();
+		// 	}
+		// });
 	}
 
 	template() {
