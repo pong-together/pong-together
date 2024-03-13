@@ -1,9 +1,7 @@
-import asyncio
 from urllib.parse import parse_qs
 
 from channels.db import database_sync_to_async
 
-from games.pong import Pong
 from local.models import Local
 from remote.models import Remote
 from tournaments.models import Tournament
@@ -36,11 +34,10 @@ class ConnectHandler:
         else:
             self.set_players_name()
             await self.consumer.channel_layer.group_send(self.consumer.group_name, {
-                'type': 'start',
+                'type': 'get_user_info',
                 'player1_name': self.consumer.player1_name,
                 'player2_name': self.consumer.player2_name,
             })
-            await self.start_pong_game()
 
     async def start_remote_game(self):
         if self.consumer.group_name not in self.consumer.remote_game:
@@ -51,18 +48,19 @@ class ConnectHandler:
             self.set_players_name()
             images = await self.get_players_image()
             await self.consumer.channel_layer.group_send(self.consumer.group_name, {
-                'type': 'start',
+                'type': 'get_user_info',
                 'player1_name': self.consumer.player1_name,
                 'player1_image': images[0],
                 'player2_name': self.consumer.player2_name,
                 'player2_image': images[1]
             })
-            await self.start_pong_game()
 
     def set_players_name(self):
         game = self.consumer.game
         if self.consumer.type == 'tournament':
             self.set_players_tournament(game)
+        if self.consumer.type == 'remote':
+            self.set_remote_game_players(game)
         else:
             self.consumer.player1_name = game.player1_name
             self.consumer.player2_name = game.player2_name
@@ -78,9 +76,11 @@ class ConnectHandler:
             self.consumer.player1_name = game.first_winner
             self.consumer.player2_name = game.second_winner
 
-    async def start_pong_game(self):
-        self.consumer.pong = Pong(self.consumer)
-        self.consumer.pong_task = asyncio.create_task(self.consumer.pong.run())
+    def set_remote_game_players(self, game):
+        self.consumer.player2_name = self.consumer.user.intra_id
+        self.consumer.player1_name = game.player1_name
+        if self.consumer.player1_name == self.consumer.player2_name:
+            self.consumer.player1_name = game.player2_name
 
     @database_sync_to_async
     def set_game(self):

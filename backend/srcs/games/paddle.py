@@ -24,14 +24,14 @@ class Paddle:
             self.move_down()
 
     def move_up(self, movement=MOVEMENT):
-        self.y += movement
-        if self.y < self.TOP_LIMIT:
-            self.set_position(self.TOP_LIMIT)
-
-    def move_down(self, movement=MOVEMENT):
         self.y -= movement
         if self.y > self.BOTTOM_LIMIT:
             self.set_position(self.BOTTOM_LIMIT)
+
+    def move_down(self, movement=MOVEMENT):
+        self.y += movement
+        if self.y < self.TOP_LIMIT:
+            self.set_position(self.TOP_LIMIT)
 
     def hit_ball(self, ball):
         vertical_collision = self.y < ball.y + ball.HEIGHT and self.y + self.HEIGHT > ball.y

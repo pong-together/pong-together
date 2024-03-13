@@ -1,7 +1,10 @@
+import asyncio
+
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 from games.connect_handler import ConnectHandler
 from games.disconnect_handler import DisconnectHandler
+from games.pong import Pong
 
 
 class GameConsumer(AsyncJsonWebsocketConsumer):
@@ -40,20 +43,32 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
 
     async def receive_json(self, content, **kwargs):
         try:
+            if content['type'] == 'start_game':
+                await self.start_pong_game()
             if content['type'] == 'push_button':
-                await self.receive_push_button(content)
+                await self.receive_push_button(content['sender_player'], content['button'])
         except KeyError as e:
             await self.send_json({'error': f'{str(e)} is required'})
+        except ValueError as e:
+            await self.send_json({'error': str(e)})
 
-    async def receive_push_button(self, content):
-        if self.pong_task is None:
-            await self.channel_layer.send(self.remote_game[self.group_name][1], {
-                'type': 'send_push_button_event',
-                'sender_player': content['sender_player'],
-                'button': content['button']
-            })
+    async def start_pong_game(self):
+        if not (self.type == 'remote' and self.user.intra_id == self.player2_name):
+            self.pong = Pong(self)
+            self.pong_task = asyncio.create_task(self.pong.run())
+
+    async def receive_push_button(self, sender_player, button):
+        if not (sender_player == 'player1' or sender_player == 'player2'):
+            raise ValueError('sender_player must be \'player1\' or \'player2\'')
+
+        if self.pong_task:
+            self.push_button(sender_player, button)
         else:
-            self.push_button(content['sender_player'], content['button'])
+            await self.channel_layer.send(self.remote_game[self.group_name][0], {
+                'type': 'send_push_button_event',
+                'sender_player': sender_player,
+                'button': button
+            })
 
     def push_button(self, sender_player, button):
         player = self.pong.player1
@@ -68,7 +83,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             await self.send_json({'error': f'{str(e)} is required'})
 
     # event
-    async def start(self, event):
+    async def get_user_info(self, event):
         await self.send_event(event)
 
     async def get_game_info(self, event):
