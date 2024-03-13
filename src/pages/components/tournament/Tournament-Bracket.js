@@ -17,7 +17,7 @@ export default class extends Component {
 		};
 		this.$store = this.$props;
 
-		if (this.$state.gameMode == 'default')
+		if (window.localStorage.getItem('gameLevel') == 'basic')
 			this.$state.gamemodemessage =
 				language.tournament[this.$state.region].normalGameMode;
 		else

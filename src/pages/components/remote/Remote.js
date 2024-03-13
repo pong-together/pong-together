@@ -32,11 +32,10 @@ export default class extends Component {
 	}
 
 	setEvent() {
-		document.addEventListener('click', async (e) => {
+		document.addEventListener('click', (e) => {
 			const target = e.target;
 			if (target.id === 'search') {
-				console.log('취소하기 버튼 동작 확인하는 로그');
-				await this.stopCounter();
+				this.stopCounter();
 				window.location.pathname = '/select';
 			}
 		});
@@ -132,6 +131,11 @@ export default class extends Component {
 				this.remoteReady();
 			}
 		};
+
+		this.remoteSocket.onclose = () => {
+			console.log('remote socket closed');
+			this.remoteSocket.close();
+		}
 
 		this.remoteSocket.onerror = () => {
 			console.log('원격 소켓 에러');
