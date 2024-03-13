@@ -40,15 +40,6 @@ export default class extends Component {
 				window.location.pathname = '/select';
 			}
 		});
-		// window.addEventListener('beforeunload', (e) => {
-		// 	if (
-		// 		this.remoteSocket &&
-		// 		this.remoteSocket.readyState !== WebSocket.CLOSED
-		// 	) {
-		// 		e.preventDefault();
-		// 		this.stopCounter();
-		// 	}
-		// });
 	}
 
 	template() {
