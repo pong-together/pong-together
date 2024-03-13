@@ -5,7 +5,7 @@ class Paddle:
     WIDTH = 19
     HEIGHT = 63
 
-    MOVEMENT = 10
+    MOVEMENT = 20
 
     TOP_LIMIT = 0
     BOTTOM_LIMIT = constants.GAME_HEIGHT - HEIGHT
