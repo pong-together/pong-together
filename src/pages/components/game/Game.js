@@ -1,6 +1,6 @@
 import Component from '../../../core/Component.js';
 import http from '../../../core/http.js';
-import GameReady from './GameReady.js';
+// import GameReady from './GameReady.js';
 import TournamentBracket from '../tournament/Tournament-Bracket.js';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
@@ -25,6 +25,11 @@ export default class extends Component {
 			player2_result: '',
 			player2_score: 0,
 			winner: '',
+			ball_x: 0,
+			ball_y: 0,
+			player1_y: 0,
+			player2_y: 0,
+			gameSocket: null,
 		}
 		if (this.$state.gameMode === 'local')
 			this.$state.game_id = window.localStorage.getItem('local-id');
@@ -46,7 +51,11 @@ export default class extends Component {
 					<div class="player1-score-info">score</div>
 					<div class="player1-game-score">${this.$state.player1_score}</div>
 				</div>
-				<div class="game-display"></div>
+				<div class="game-display">
+					<div class="display-container">
+						<div class="game-count">3</div>
+					</div>
+				</div>
 				<div class="player2-container">
 					<div class="player2-game-score">${this.$state.player2_score}</div>
 					<div class="player2-score-info">score</div>
@@ -67,6 +76,8 @@ export default class extends Component {
 		const gameSocket = new WebSocket(
 			`${SOCKET_URL}/ws/games/?token=${localStorage.getItem('accessToken')}&type=${this.$state.gameMode}&type_id=${this.$state.game_id}`,
 		)
+
+		this.setState({gameSocket: gameSocket});
 		
 		gameSocket.onopen = () => {
 			console.log("WebSocket connection opened.");
@@ -151,7 +162,7 @@ export default class extends Component {
 					//여기에 새로운 버튼을 넣기
 					new TournamentBracket(this.$target);
 				}
-				else if (window.localStorage.get('gameMode') === 'local') {
+				else if (window.localStorage.getItem('gameMode') === 'local') {
 					window.location.pathname('/select');
 				}
 				this.$target.innerHTML = this.template();
@@ -167,16 +178,143 @@ export default class extends Component {
 				document.querySelector('.player2-game-score').textContent = data.player2_score;
 			}
 			else if (data.type && data.type === 'get_game_info') {
-				//전역으로 공좌표 관리하기?
-				window.localStorage.setItem('ball_x', data.ball_x);
-				window.localStorage.setItem('ball_y', data.ball_y);
-				window.localStorage.setItem('player1_y', data.player1_y);
-				window.localStorage.setItem('player2_y', data.player2_y);
+				this.setState({ball_x: data.ball_x});
+				this.setState({ball_y: data.ball_y});
+				this.setState({player1_y: data.player1_y});
+				this.setState({player2_y: data.player2_y});
 			}
 		}
 	}
 
+	templateStart() {
+		return `
+			<canvas id="canvas"></canvas>
+		`;
+	}
+
+	templateEnd() {
+		return `
+			<div class="game-end"></div>
+		`;
+	}
+
+	gameStart() {
+		const displayElement = document.querySelector('.game-display');
+		displayElement.innerHTML = this.templateStart();
+		this.canvas();
+	}
+
+	timer() {
+		let seconds = 2;
+		let time;
+		const countdown = document.querySelector('.game-count');
+
+		const updateTimer = () => {
+			countdown.textContent = `${seconds}`;
+		};
+
+		const startTimer = () => {
+			time = setInterval(() => {
+				updateTimer();
+				if (seconds === 0) {
+					clearInterval(time);
+					this.gameStart();
+				} else {
+					seconds--;
+				}
+			}, 1000);
+		};
+		startTimer();
+	}
+
+	canvas() {
+		class Bar {
+			constructor(x, y, w, h, i) {
+				this.baseX = x;
+				this.baseY = y;
+				this.width = w;
+				this.height = h;
+				this.image = i;
+				this.x = this.baseX * (canvas.width / BASEWIDTH);
+				this.y = this.baseY * (canvas.height / BASEHEIGHT);
+			}
+			draw() {
+				ctx.drawImage(this.image, this.x, this.y);
+			}
+			reCoordinate() {
+				this.x = this.baseX * (canvas.width / BASEWIDTH);
+			}
+		}
+
+		class Sphere {
+			constructor(x, y, w, h) {
+				this.baseX = x;
+				this.baseY = y;
+				this.width = w;
+				this.height = h;
+				this.x = this.baseX * (canvas.width / BASEWIDTH);
+				this.y = this.baseY * (canvas.height / BASEHEIGHT);
+			}
+			draw() {
+				ctx.drawImage(img_ball, this.x, this.y);
+			}
+			reCoordinate() {
+				this.x = this.baseX * (canvas.width / BASEWIDTH);
+			}
+		}
+
+		const displayElement = document.querySelector('.game-display');
+		const canvas = document.getElementById('canvas');
+		const ctx = canvas.getContext('2d');
+		const BASEWIDTH = 637;
+		const BASEHEIGHT = 446;
+		canvas.width = displayElement.clientWidth;
+		canvas.height = displayElement.clientHeight;
+
+		let img_p1 = new Image();
+		let img_p2 = new Image();
+		let img_ball = new Image();
+		img_p1.src = '../../../../static/images/player1_bar.png';
+		img_p2.src = '../../../../static/images/player2_bar.png';
+		img_ball.src = '../../../../static/images/ball2.png';
+
+		let player1 = new Bar(10, 192, 19, 63, img_p1);
+		let player2 = new Bar(608, 192, 19, 63, img_p2);
+		let ball = new Sphere(309, 213, 20, 20);
+
+		window.addEventListener('resize', (e) => {
+			canvas.width = displayElement.clientWidth;
+			canvas.height = displayElement.clientHeight;
+			player1.reCoordinate();
+			player2.reCoordinate();
+			ball.reCoordinate();
+		});
+
+		function frame() {
+			requestAnimationFrame(frame.bind(this));
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+			player1.y = this.$state.player1_y;
+			player2.y = this.$state.player2_y;
+			ball.x = this.$state.ball_x;
+			ball.y = this.$state.ball_y;
+			// player1.y = window.localStorage.getItem('player1_y');
+			// player2.y = window.localStorage.getItem('player2_y');
+			// ball.x = window.localStorage.getItem('ball_x');
+			// ball.y = window.localStorage.getItem('ball_y');
+
+			player1.draw();
+			player2.draw();
+			ball.draw();
+		}
+		frame.call(this);
+	}
+
 	mounted() {
-		new GameReady(document.querySelector('.game-display'));
+		this.timer();
+		// let start = {
+		// 	type : "start_game",
+		// }
+		// this.$state.gameSocket.send(JSON.stringify(start));
 	}
 }
