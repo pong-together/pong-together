@@ -97,8 +97,12 @@ export default class extends Component {
 				if (window.localStorage.getItem('gameMode') === remote) {
 					if (e.key === 'w')
 						keyStates[e.key] = true;
+					else if (e.key === 'ㅈ')
+						keyStates['w'] = true;
 					else if (e.key === 's')
 						keyStates[e.key] = true;
+					else if (e.key === 'ㄴ')
+						keyStates['s'] = true;
 					updateBarPositionRemote();
 				}
 				else {
@@ -261,7 +265,7 @@ export default class extends Component {
 				new TournamentBracket(this.$target);
 			}
 			else {
-				navigate("/select", true);
+				// window.location.pathname = '/select';
 				if (window.localStorage.getItem('gameMode') === 'local') {
 					window.localStorage.removeItem('local-id');
 				}
@@ -269,7 +273,7 @@ export default class extends Component {
 					window.localStorage.removeItem('remote-id');
 				window.localStorage.removeItem('gameMode');
 				window.localStorage.removeItem('gameLevel');
-				// window.location.pathname = '/select';
+				window.location.pathname = '/select';
 			}
 		})
 	}
