@@ -23,8 +23,8 @@ export default class extends Component {
 			if (localStorage.getItem('tournament-id')) {
 				localStorage.removeItem('tournament-id');
 			}
-			// navigate("/select");
-			window.location.pathname = '/select';
+			navigate("/select", true);
+			// window.location.pathname = '/select';
 		});
 
 		this.addEvent('click', '.modal-close-btn', () => {
@@ -73,7 +73,7 @@ export default class extends Component {
 								<div class="chip-logo"></div>
 								<div class="intra-info">
 										<div class="intra-nickname">${localStorage.getItem('intraId')}</div>
-										<div class="record">${localStorage.getItem('winCount')}승 ${localStorage.getItem('loseCount')}패(${localStorage.getItem('rate')}%)</div>
+										<div class="record">${localStorage.getItem('winCount')}${language.util[store.state.language].winCount} ${localStorage.getItem('loseCount')}${language.util[store.state.language].loseCount}(${localStorage.getItem('rate')}%)</div>
 								</div>
 						</div>
 						<div class="intra-picture">
@@ -142,9 +142,9 @@ export default class extends Component {
 
 		chatSocket.onclose = function (event) {
 			console.log('WebSocket closed.');
-			// displayConnectionFailedModal(
-			// 	language.util[this.$state.region].chatMessage,
-			// );
+			displayConnectionFailedModal(
+				language.util[this.$state.region].chatMessage,
+			);
 			// console.log("Close event code:", event.code, "Reason:", event.reason);
 			// localStorage.clear();
 			// chatSocket.close();
@@ -156,7 +156,7 @@ export default class extends Component {
 				language.util[this.$state.region].chatMessage,
 			);
 			localStorage.clear();
-			localStorage.setItem('chatConnection', true);
+			// localStorage.setItem('chatConnection', true);
 			chatSocket.close();
 			return;
 		};

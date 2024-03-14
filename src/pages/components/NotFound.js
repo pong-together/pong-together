@@ -7,7 +7,7 @@ export default class extends Component {
 			if (localStorage.getItem('accessToken'))
 			 	navigate("/select", true);
 				// window.location.pathname = '/select';
-			else window.location.pathname = '/';
+			else navigate("/", true);
 		});
 	}
 	template() {
