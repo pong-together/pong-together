@@ -94,14 +94,63 @@ export default class extends Component {
 			console.log("WebSocket connection opened.");
 			const keyStates = {};
 			document.addEventListener('keydown', (e) => {
-				keyStates[e.key] = true;
-				updateBarPosition();
+				if (window.localStorage.getItem('gameMode') === remote) {
+					if (e.key === 'w')
+						keyStates[e.key] = true;
+					else if (e.key === 's')
+						keyStates[e.key] = true;
+					updateBarPositionRemote();
+				}
+				else {
+					keyStates[e.key] = true;
+					updateBarPosition();
+				}
 			});
 				
 			document.addEventListener('keyup', (e) => {
 				keyStates[e.key] = false;
 			});
-				
+
+			function updateBarPositionRemote() {
+				let messages = [];
+				if (window.localStorage.getItem('intraId') === this.$state.player1) {
+					if (keyStates['w']) {
+						messages.push({
+							type: "push_button",
+							sender_player: 'player1',
+							button: "up",
+						});
+					}
+					else if (keyStates['s']) {
+						messages.push({
+							type: "push_button",
+							sender_player: 'player1',
+							button: "down",
+						});
+					}
+				}
+				else if (window.localStorage.getItem('intraId') === this.$state.player2) {
+					if (keyStates['w']) {
+						messages.push({
+							type: "push_button",
+							sender_player: 'player2',
+							button: "up",
+						});
+					}
+					if (keyStates['s']) {
+						messages.push({
+							type: "push_button",
+							sender_player: 'player2',
+							button: "down",
+						});
+					}
+				}
+			
+				messages.forEach(message => {
+					gameSocket.send(JSON.stringify(message));
+				});	
+			}
+
 			function updateBarPosition() {
 				let messages = [];
 				if (keyStates['w']) {
@@ -161,8 +210,8 @@ export default class extends Component {
 				this.setState({ player1: data.player1_name });
 				this.setState({ player2: data.player2_name });
 				if (window.localStorage.getItem('gameMode') === 'remote' && (data.player1_image || data.player2_image)) {
-					var imageUrl1 = "url('data:image/png;base64," + data.player1_image + "')";
-					var imageUrl2 = "url('data:image/png;base64," + data.player2_image + "')";
+					var imageUrl1 = data.player1_image;
+					var imageUrl2 = data.player2_image;
 
 					this.setState({ player1_image: imageUrl1});
 					this.setState({ player2_image: imageUrl2});
@@ -187,7 +236,7 @@ export default class extends Component {
 					const element = document.querySelector('.game-display');
 					element.innerHTML = this.templateEnd();
 				}
-				else if (window.localStorage.getItem('gameMode') === 'local') {
+				else if (window.localStorage.getItem('gameMode') === 'local' || window.localStorage.getItem('gameMode') === 'remote') {
 					const element2 = document.querySelector('.game-display');
 					element2.innerHTML = this.templateEnd();
 				}
