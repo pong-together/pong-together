@@ -2,7 +2,7 @@ import Component from '../../../core/Component.js';
 import http from '../../../core/http.js';
 import { navigate } from '../../../router/utils/navigate.js';
 import language from '../../../utils/language.js';
-import { displayCanceledMatchingModal } from '../../../utils/modalModified';
+import { displayCanceledMatchingModal } from '../../../utils/modal';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 

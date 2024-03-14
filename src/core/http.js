@@ -1,5 +1,5 @@
 import language from '../utils/language.js';
-import { displayCanceledMatchingModal as displayExpiredTokenModal } from '../utils/modalModified';
+import { displayCanceledMatchingModal as displayExpiredTokenModal } from '../utils/modal';
 import { navigate } from '../router/utils/navigate';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
