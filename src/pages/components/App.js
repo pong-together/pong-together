@@ -139,12 +139,12 @@ export default class extends Component {
 
 		chatSocket.onclose = function (event) {
 			console.log('WebSocket closed.');
-			displayConnectionFailedModal(
-				language.util[this.$state.region].chatMessage,
-			);
-			console.log('Close event code:', event.code, 'Reason:', event.reason);
-			localStorage.clear();
-			chatSocket.close();
+			// displayConnectionFailedModal(
+			// 	language.util[this.$state.region].chatMessage,
+			// );
+			// console.log("Close event code:", event.code, "Reason:", event.reason);
+			// localStorage.clear();
+			// chatSocket.close();
 			return;
 		};
 
