@@ -18,18 +18,9 @@ class DisconnectHandler:
             await self.consumer.channel_layer.group_discard(self.consumer.group_name, self.consumer.channel_name)
             await self.cancel_pong_task()
 
-    @database_sync_to_async
     async def disconnect_tournament(self):
         game = self.consumer.game
-
-        game.game_turn += 1
-        if game.game_turn == 1:
-            game.first_winner = self.consumer.pong.winner
-        elif game.game_turn == 2:
-            game.second_winner = self.consumer.pong.winner
-        elif game.game_turn == 3:
-            game.final_winner = self.consumer.pong.winner
-        game.save()
+        self.tournament_update(game)
         await self.consumer.channel_layer.group_discard(self.consumer.group_name, self.consumer.channel_name)
         await self.cancel_pong_task()
 
@@ -103,3 +94,14 @@ class DisconnectHandler:
             user.save()
         except User.DoesNotExist as e:
             pass
+
+    @database_sync_to_async
+    def tournament_update(self, game):
+        game.game_turn += 1
+        if game.game_turn == 1:
+            game.first_winner = self.consumer.pong.winner
+        elif game.game_turn == 2:
+            game.second_winner = self.consumer.pong.winner
+        elif game.game_turn == 3:
+            game.final_winner = self.consumer.pong.winner
+        game.save()
