@@ -137,3 +137,35 @@
 	border-radius: 180px;
 	position: absolute;
 }
+
+.game-end {
+	width: 637px;
+	height: 446px;
+	background-image: url(../../images/game-background.png);
+	background-repeat: round;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.game-end-button {
+	width: 356px;
+	height: 84px;
+	background-color: #FFA6A6;
+	border-radius: 15px;
+	border-width: 0;
+	font-size: 28px;
+	color: white;
+	font-family: 'jua';
+	box-shadow: 3px 3px 3px black;
+}
+
+.game-end-button:active {
+	transform: translate(3px, 3px);
+	box-shadow: none;
+}
+
+.gmae-end-button:hover {
+	background-color: pink;
+}

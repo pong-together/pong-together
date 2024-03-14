@@ -3,9 +3,20 @@ import Bracket from './Tournament-Bracket.js';
 import language from '../../../utils/language.js';
 import tourapi from '../tournament/TournamentApi.js';
 import store from '../../../store/index.js';
+import http from '../../../core/http.js';
+import { navigate } from '../../../router/utils/navigate.js';
 
 export default class extends Component {
 	setup() {
+		if (
+			!localStorage.getItem('accessToken') ||
+			!localStorage.getItem('twoFA')
+		) {
+			// navigate("/login");
+			window.location.pathname = '/login';
+		} else {
+			http.checkToken();
+		}
 		this.$state = {
 			participant: [],
 			checkError: '',
@@ -13,17 +24,17 @@ export default class extends Component {
 			region: localStorage.getItem('language')
 				? localStorage.getItem('language')
 				: 'kr',
+			gamemodemessage: '',
 		};
-		this.$store = this.$props;
 
-		console.log(this.$state.gameMode);
-		if (this.$state.gameMode == 'default')
+		window.localStorage.setItem('gameMode', 'tournament');
+		if (window.localStorage.getItem('gameLevel') === 'default') {
 			this.$state.gamemodemessage =
 				language.tournament[this.$state.region].normalGameMode;
+		}
 		else
 			this.$state.gamemodemessage =
 				language.tournament[this.$state.region].extreamGameMode;
-		store.events.subscribe('tournamentIdChange', async () => this.render());
 	}
 
 	template() {
@@ -48,7 +59,7 @@ export default class extends Component {
 
 	async registNickname(nicknames) {
 		var gamemode = '';
-		if (this.$state.gameMode == 'basic') gamemode = 'default';
+		if (this.$state.gameMode == 'default') gamemode = 'default';
 		else gamemode = 'extreme';
 		//api부분
 		const result = await tourapi.create(nicknames, gamemode);
@@ -135,7 +146,7 @@ export default class extends Component {
 
 	mounted() {
 		if (!localStorage.getItem('accessToken')) {
-			window.location.pathname = '/login';
+			// window.location.pathname = '/login';
 			navigate('/login');
 		}
 	}

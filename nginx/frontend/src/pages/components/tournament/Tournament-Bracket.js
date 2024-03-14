@@ -2,6 +2,7 @@ import Component from '../../../core/Component.js';
 import language from '../../../utils/language.js';
 import tourapi from '../tournament/TournamentApi.js';
 import store from '../../../store/index.js';
+import { navigate } from '../../../router/utils/navigate.js';
 
 export default class extends Component {
 	setup() {
@@ -15,11 +16,11 @@ export default class extends Component {
 				? localStorage.getItem('language')
 				: 'kr',
 		};
-		this.$store = this.$props;
 
-		if (this.$state.gameMode == 'default')
+		if (window.localStorage.getItem('gameLevel') === 'default') {
 			this.$state.gamemodemessage =
 				language.tournament[this.$state.region].normalGameMode;
+		}
 		else
 			this.$state.gamemodemessage =
 				language.tournament[this.$state.region].extreamGameMode;
@@ -75,6 +76,13 @@ export default class extends Component {
 			</div>
 		</div>
 		`;
+	}
+
+	setEvent() {
+		this.addEvent('click', '.game-start', ({target}) => {
+			navigate("/game");
+			// window.location.pathname = '/game';
+		})
 	}
 
 	gameRoundOne(playerBox1, playerBox2, playerBox3) {

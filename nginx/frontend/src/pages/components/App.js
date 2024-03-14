@@ -1,5 +1,6 @@
 import Component from '../../core/Component.js';
 import Router from '../../router/router.js';
+import { navigate } from '../../router/utils/navigate.js';
 import store from '../../store/index.js';
 import language from '../../utils/language.js';
 import { displayConnectionFailedModal } from '../../utils/modal';
@@ -22,10 +23,12 @@ export default class extends Component {
 			if (localStorage.getItem('tournament-id')) {
 				localStorage.removeItem('tournament-id');
 			}
+			// navigate("/select");
 			window.location.pathname = '/select';
 		});
 
 		this.addEvent('click', '.modal-close-btn', () => {
+			// navigate("/login");
 			window.location.pathname = '/login';
 		});
 	}
@@ -117,6 +120,7 @@ export default class extends Component {
 		);
 
 		chatSocket.onopen = () => {
+			console.log(chatSocket);
 			this.addEvent('click', '.message-btn', (e) => {
 				e.preventDefault();
 				var message = this.$target.querySelector('#m').value;
@@ -137,13 +141,14 @@ export default class extends Component {
 			});
 		};
 
-		chatSocket.onclose = () => {
+		chatSocket.onclose = function(event) {
 			console.log('WebSocket closed.');
-			displayConnectionFailedModal(
-				language.util[this.$state.region].chatMessage,
-			);
-			localStorage.clear();
-			chatSocket.close();
+			// displayConnectionFailedModal(
+			// 	language.util[this.$state.region].chatMessage,
+			// );
+			// console.log("Close event code:", event.code, "Reason:", event.reason);
+			// localStorage.clear();
+			// chatSocket.close();
 			return;
 		};
 
@@ -210,6 +215,7 @@ export default class extends Component {
 				localStorage.getItem('chatConnection') !== true)
 		) {
 			this.connectSocket();
+			console.log("chat connect");
 		}
 
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {

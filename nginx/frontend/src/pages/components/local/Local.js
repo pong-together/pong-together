@@ -4,6 +4,7 @@ import http from '../../../core/http.js';
 import store from '../../../store/index.js';
 import LocalApi from './LocalApi.js';
 import { navigate } from '../../../router/utils/navigate.js';
+// import { navigate } from '../../../router/utils/navigate.js';
 
 export default class extends Component {
 	setup() {
@@ -11,6 +12,7 @@ export default class extends Component {
 			!localStorage.getItem('accessToken') ||
 			!localStorage.getItem('twoFA')
 		) {
+			// navigate("/login");
 			window.location.pathname = '/login';
 		} else {
 			http.checkToken();
@@ -25,18 +27,19 @@ export default class extends Component {
 			gamemodemessage: '',
 		};
 		window.localStorage.setItem('gameMode', 'local');
-		if (this.$state.gameMode == 'default')
+		if (window.localStorage.getItem('gameLevel') === 'default') {
 			this.$state.gamemodemessage =
 				language.local[this.$state.region].normalGameMode;
+		}
 		else
 			this.$state.gamemodemessage =
-				language.local[this.$state.region].extreamGameMode;
+				language.local[this.$state.region].exteamGameMode;
 	}
 
 	template() {
 		return `
 		<div class="main-container">
-				<div class="info">${language.local[this.$state.region].normalGameMode}</div>
+				<div class="info">${this.$state.gamemodemessage}</div>
 				<div class="contain">
 					<div class="explaination">${language.local[this.$state.region].localExplain}</div>
 					<div class="local-nick-container">
@@ -52,7 +55,7 @@ export default class extends Component {
 
 	async registLocalNickname(localNicknames) {
 		var gamemode = '';
-		if (this.$state.gameMode == 'basic') gamemode = 'default';
+		if (this.$state.gameMode == 'defualt') gamemode = 'default';
 		else gamemode = 'extreme';
 
 		const result = await LocalApi.create(localNicknames, gamemode);
@@ -67,7 +70,8 @@ export default class extends Component {
 			const isDuplicate = await this.localInputNickname(target, localPrev);
 
 			if (!isDuplicate) {
-				window.location.pathname = '/game';
+				navigate("/game");
+				// window.location.pathname = '/game';
 			}
 		});
 	}

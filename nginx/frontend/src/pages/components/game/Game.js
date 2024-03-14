@@ -1,5 +1,11 @@
 import Component from '../../../core/Component.js';
 import http from '../../../core/http.js';
+// import GameReady from './GameReady.js';
+import TournamentBracket from '../tournament/Tournament-Bracket.js';
+import language from '../../../utils/language.js';
+import { navigate } from '../../../router/utils/navigate.js';
+
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
 export default class extends Component {
 	setup() {
@@ -7,10 +13,44 @@ export default class extends Component {
 			!localStorage.getItem('accessToken') ||
 			!localStorage.getItem('twoFA')
 		) {
-			window.location.pathname = '/login';
+			navigate("/login", true);
+			// window.location.pathname = '/login';
 		} else {
 			http.checkToken();
 		}
+		this.$state = {
+			player1: '',
+			player2: '',
+			gameMode: window.localStorage.getItem('gameMode'),
+			game_id: 0,
+			player1_result: '',
+			player1_score: 0,
+			player2_result: '',
+			player2_score: 0,
+			winner: '',
+			ball_x: 309,
+			ball_y: 213,
+			player1_y: 192,
+			player2_y: 192,
+			buttonMessage: '',
+			region: localStorage.getItem('language')
+				? localStorage.getItem('language')
+				: 'kr',
+		}
+		if (this.$state.gameMode === 'local') {
+			this.$state.game_id = window.localStorage.getItem('local-id');
+			this.$state.buttonMessage = language.game[this.$state.region].localButton;
+		}
+		else if (this.$state.gameMode === 'tournament') {
+			this.$state.game_id = window.localStorage.getItem('tournament-id');
+			this.$state.buttonMessage = language.game[this.$state.region].tournamentButton;
+		}
+		else if (this.$state.gameMode === 'remote') {
+			this.$state.game_id = window.localStorage.getItem('remote-id');
+			this.$state.buttonMessage = language.game[this.$state.region].localButton;
+		}
+
+		this.connectGameSocket();
 	}
 
 	template() {
@@ -18,10 +58,10 @@ export default class extends Component {
 			<div class="game-container">
 				<div class="player1-container">
 					<div class="player1-image"></div>
-					<div class="player1-nickname">player1</div>
-					<div class="player1-gameresult">Win</div>
+					<div class="player1-nickname">${this.$state.player1}</div>
+					<div class="player1-gameresult">${this.$state.player1_result}</div>
 					<div class="player1-score-info">score</div>
-					<div class="player1-game-score">0</div>
+					<div class="player1-game-score">${this.$state.player1_score}</div>
 				</div>
 				<div class="game-display">
 					<div class="display-container">
@@ -29,14 +69,147 @@ export default class extends Component {
 					</div>
 				</div>
 				<div class="player2-container">
-					<div class="player2-game-score">0</div>
+					<div class="player2-game-score">${this.$state.player2_score}</div>
 					<div class="player2-score-info">score</div>
-					<div class="player2-gameresult">Lose</div>
-					<div class="player2-nickname">player2</div>
+					<div class="player2-gameresult">${this.$state.player2_result}</div>
+					<div class="player2-nickname">${this.$state.player2}</div>
 					<div class="player2-image"></div>
 				</div>
 			</div>
 		`;
+	}
+
+	setState(newState){
+		this.$state = { ...this.$state, ...newState };
+		// this.render();
+	}
+
+	connectGameSocket() {
+		const gameSocket = new WebSocket(
+			`${SOCKET_URL}/ws/games/?token=${localStorage.getItem('accessToken')}&type=${this.$state.gameMode}&type_id=${this.$state.game_id}`,
+		)
+
+
+		gameSocket.onopen = () => {
+			console.log("WebSocket connection opened.");
+
+			// 여기에서 document에 직접 이벤트 리스너를 추가합니다.
+			document.addEventListener('keydown', (e) => {
+				let message = {};
+				switch(e.key) {
+					case 'w':
+						message = {
+							type: "push_button",
+							sender_player: 'player1',
+							button: "up",
+						};
+						break;
+					case 's':
+						message = {
+							type: "push_button",
+							sender_player: 'player1',
+							button: "down",
+						};
+						break;
+					case 'p':
+						message = {
+							type: "push_button",
+							sender_player: 'player2',
+							button: "up",
+						};
+						break;
+					case ';':
+						message = {
+							type: "push_button",
+							sender_player: 'player2',
+							button: "down",
+						};
+						break;
+					default:
+						// 키에 대응하는 조건이 없을 경우, 메시지를 보내지 않음
+						return;
+				}
+				console.log(e.key);
+				gameSocket.send(JSON.stringify(message));
+				console.log(message);
+			});
+
+			setTimeout(() => {
+				let start = {
+					type : "start_game",
+				}
+				gameSocket.send(JSON.stringify(start));
+			}, 3000);
+		};
+
+		gameSocket.onclose = () => {
+			console.log('gamesocket disconnect... Trying to reconnect...');
+			return ;
+		}
+
+		gameSocket.onerror = function (e) {
+			// console.log(e);
+		}
+
+		gameSocket.onmessage = (event) => {
+			const data = JSON.parse(event.data);
+			if (data.type && data.type === 'get_user_info') {
+				this.setState({ player1: data.player1_name });
+				this.setState({ player2: data.player2_name });
+				this.render();
+			}
+			else if (data.type && data.type === 'end') {
+				this.setState ({winner: data.winner});
+				if (data.winner === this.$state.player1) {
+					this.setState({player1_result: 'Win'});
+					this.setState({player2_result: 'Lose'});
+				}
+				else if (data.winner === this.$state.player2) {
+					this.setState({player1_result: 'Lose'});
+					this.setState({player2_result: 'Win'});
+				}
+				this.$target.innerHTML = this.template();
+				if (window.localStorage.getItem('gameMode') === 'tournament'){
+					const element = document.querySelector('.game-display');
+					element.innerHTML = this.templateEnd();
+				}
+				else if (window.localStorage.getItem('gameMode') === 'local') {
+					const element2 = document.querySelector('.game-display');
+					console.log(element2);
+					element2.innerHTML = this.templateEnd();
+					console.log(element2.innerHTML);
+				}
+				if (data.is_normal === false) {
+					gameSocket.close();
+					navigate("/select", true);
+					// window.location.pathname = '/select';
+				}
+			}
+			else if (data.type && data.type === 'score') {
+				this.setState ({player1_score: data.player1_score});
+				this.setState ({player2_score: data.player2_score});
+				document.querySelector('.player1-game-score').textContent = data.player1_score;
+				document.querySelector('.player2-game-score').textContent = data.player2_score;
+			}
+			else if (data.type && data.type === 'get_game_info') {
+				this.setState({ball_x: data.ball_x});
+				this.setState({ball_y: data.ball_y});
+				this.setState({player1_y: data.player1_y});
+				this.setState({player2_y: data.player2_y});
+			}
+		}
+	}
+
+	setEvent() {
+		this.addEvent('click', '.game-end-button', ({target}) => {
+			if (window.localStorage.getItem('gameMode') === 'tournament') {
+				new TournamentBracket(this.$target);
+			}
+			else {
+				navigate("/select", true);
+				// window.location.pathname = '/select';
+			}
+		})
 	}
 
 	templateStart() {
@@ -47,7 +220,9 @@ export default class extends Component {
 
 	templateEnd() {
 		return `
-			<div class="game-end"></div>
+			<div class="game-end">
+				<button class="game-end-button">${this.$state.buttonMessage}</button>
+			</div>
 		`;
 	}
 
@@ -144,19 +319,19 @@ export default class extends Component {
 		});
 
 		function frame() {
-			requestAnimationFrame(frame);
+			requestAnimationFrame(frame.bind(this));
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-			// player1.y = window.localStorage.getItem('player1_y');
-			// player2.y = window.localStorage.getItem('player2_y');
-			// ball.x = window.localStorage.getItem('ball_x');
-			// ball.y = window.localStorage.getItem('ball_y');
 
 			player1.draw();
 			player2.draw();
 			ball.draw();
+
+			player1.y = this.$state.player1_y;
+			player2.y = this.$state.player2_y;
+			ball.x = this.$state.ball_x;
+			ball.y = this.$state.ball_y;
 		}
-		frame();
+		frame.call(this);
 	}
 
 	mounted() {

@@ -164,9 +164,18 @@ const tournament = {
 };
 
 const game = {
-	en: {},
-	kr: {},
-	jp: {},
+	en: {
+		tournamentButton: 'Go to next name',
+		localButton: 'Go out of the game',
+	},
+	kr: {
+		tournamentButton: '다음 게임으로',
+		localButton: '게임 나가기',
+	},
+	jp: {
+		tournamentButton: '次のゲームへ',
+		localButton: 'ゲームに出ること',
+	},
 };
 
 const remote = {

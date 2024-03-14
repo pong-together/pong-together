@@ -1,5 +1,6 @@
 import Component from '../../../core/Component.js';
 import http from '../../../core/http.js';
+import { navigate } from '../../../router/utils/navigate.js';
 import language from '../../../utils/language.js';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
@@ -15,6 +16,7 @@ export default class extends Component {
 			!localStorage.getItem('accessToken') ||
 			!localStorage.getItem('twoFA')
 		) {
+			// navigate("/login");
 			window.location.pathname = '/login';
 		} else {
 			http.checkToken();
@@ -32,24 +34,11 @@ export default class extends Component {
 	}
 
 	setEvent() {
-		document.addEventListener('click', async (e) => {
+		document.addEventListener('click', (e) => {
 			const target = e.target;
 			if (target.id === 'search') {
-				console.log('취소하기 버튼 동작 확인하는 로그');
-				await this.stopCounter();
-				window.location.pathname = '/select';
-			}
-		});
-		window.addEventListener('beforeunload', (e) => {
-			if (
-				this.remoteSocket &&
-				this.remoteSocket.readyState !== WebSocket.CLOSED
-			) {
-				e.preventDefault();
-				this.stopCounter();
-				// const confirmMessage = '새로고침을 하시겠습니까?';
-				// e.returnValue = confirmMessage;
-				// return confirmMessage;
+				navigate("/select");
+				// window.location.pathname = '/select';
 			}
 		});
 	}
@@ -79,7 +68,7 @@ export default class extends Component {
 
 	async sleep() {
 		const asleep = () => {
-			return new Promise((resolve) => setTimeout(resolve, 5000));
+			return new Promise((resolve) => setTimeout(resolve, 3000));
 		};
 		const wait = async () => {
 			console.log('sleep 시작');
@@ -108,6 +97,15 @@ export default class extends Component {
 		this.timer();
 	}
 
+	exclamationMark() {
+		const counterElement = document.getElementById('counter');
+		counterElement.parentNode.removeChild(counterElement);
+
+		const imageElement = document.getElementById('question');
+		imageElement.src = 'static/images/exclamation-mark.png';
+		imageElement.id = 'exclamation';
+	}
+
 	connectSocket() {
 		this.remoteSocket = new WebSocket(
 			`${SOCKET_URL}/ws/remote/?token=${localStorage.getItem('accessToken')}&game_mode=${localStorage.getItem('gameLevel')}`,
@@ -128,7 +126,8 @@ export default class extends Component {
 				this.$state.opponentIntraID = data.opponent;
 				this.$state.opponentIntraPic = data.opponent_image;
 				localStorage.setItem('remote-id', data.id);
-				await this.stopCounter();
+				this.exclamationMark();
+				await this.sleep();
 				this.remoteReady();
 			}
 		};
@@ -189,7 +188,8 @@ export default class extends Component {
 		const stopTimer = () => {
 			clearInterval(time);
 			bindUpdateTimer();
-			window.location.pathname = '/game';
+			navigate("/game");
+			// window.location.pathname = '/game';
 		};
 
 		function startTimer() {
