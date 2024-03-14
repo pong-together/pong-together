@@ -28,7 +28,7 @@ export default class extends Component {
 		};
 
 		window.localStorage.setItem('gameMode', 'tournament');
-		if (window.localStorage.getItem('gameLevel') === 'basic') {
+		if (window.localStorage.getItem('gameLevel') === 'default') {
 			this.$state.gamemodemessage =
 				language.tournament[this.$state.region].normalGameMode;
 		}
@@ -59,7 +59,7 @@ export default class extends Component {
 
 	async registNickname(nicknames) {
 		var gamemode = '';
-		if (this.$state.gameMode == 'basic') gamemode = 'default';
+		if (this.$state.gameMode == 'default') gamemode = 'default';
 		else gamemode = 'extreme';
 		//api부분
 		const result = await tourapi.create(nicknames, gamemode);

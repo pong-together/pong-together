@@ -17,7 +17,7 @@ export default class extends Component {
 				: 'kr',
 		};
 
-		if (window.localStorage.getItem('gameLevel') === 'basic') {
+		if (window.localStorage.getItem('gameLevel') === 'default') {
 			this.$state.gamemodemessage =
 				language.tournament[this.$state.region].normalGameMode;
 		}

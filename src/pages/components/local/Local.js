@@ -27,7 +27,7 @@ export default class extends Component {
 			gamemodemessage: '',
 		};
 		window.localStorage.setItem('gameMode', 'local');
-		if (window.localStorage.getItem('gameLevel') === 'basic') {
+		if (window.localStorage.getItem('gameLevel') === 'default') {
 			this.$state.gamemodemessage =
 				language.local[this.$state.region].normalGameMode;
 		}
@@ -55,7 +55,7 @@ export default class extends Component {
 
 	async registLocalNickname(localNicknames) {
 		var gamemode = '';
-		if (this.$state.gameMode == 'basic') gamemode = 'default';
+		if (this.$state.gameMode == 'defualt') gamemode = 'default';
 		else gamemode = 'extreme';
 
 		const result = await LocalApi.create(localNicknames, gamemode);
