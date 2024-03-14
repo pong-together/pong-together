@@ -66,10 +66,10 @@ class Pong:
     async def send_game_info(self):
         game_info = {
             'type': 'get_game_info',
-            'player1_y': self.player1.y,
-            'player2_y': self.player2.y,
+            'player1_y': self.player1.y + constants.GAME_DISTANCE,
+            'player2_y': self.player2.y + constants.GAME_DISTANCE,
             'ball_x': self.ball.x,
-            'ball_y': self.ball.y
+            'ball_y': self.ball.y + constants.GAME_DISTANCE
         }
         await self.consumer.channel_layer.group_send(self.consumer.group_name, game_info)
 
