@@ -23,8 +23,8 @@ export default class extends Component {
 			if (localStorage.getItem('tournament-id')) {
 				localStorage.removeItem('tournament-id');
 			}
-			// navigate("/select");
-			window.location.pathname = '/select';
+			navigate("/select", true);
+			// window.location.pathname = '/select';
 		});
 
 		this.addEvent('click', '.modal-close-btn', () => {

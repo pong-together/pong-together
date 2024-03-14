@@ -220,8 +220,8 @@ const util = {
 		submit: 'submit',
 		chatMessage: 'Chat connection failed.',
 		dupMessage: 'Another user is already connected.',
-		winCount: 'Win',
-		loseCount: 'Lose',
+		winCount: 'W',
+		loseCount: 'L',
 	},
 	kr: {
 		ok: '확인',
