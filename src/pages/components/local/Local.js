@@ -12,8 +12,8 @@ export default class extends Component {
 			!localStorage.getItem('accessToken') ||
 			!localStorage.getItem('twoFA')
 		) {
-			navigate("/login");
-			// window.location.pathname = '/login';
+			// navigate("/login");
+			window.location.pathname = '/login';
 		} else {
 			http.checkToken();
 		}

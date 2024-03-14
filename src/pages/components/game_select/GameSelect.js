@@ -12,8 +12,8 @@ export default class extends Component {
 			!localStorage.getItem('accessToken') ||
 			!localStorage.getItem('twoFA')
 		) {
-			// window.location.pathname = '/login';
-			navigate("/login", true);
+			window.location.pathname = '/login';
+			// navigate("/login", true);
 		} else {
 			http.checkToken();
 		}
@@ -186,7 +186,7 @@ export default class extends Component {
 			</div>
 			<div>
 				<label class="game-select-difficult">
-					<input type="checkbox" class="level" value="basic"> ${language.gameSelect[store.state.language].levelOne}
+					<input type="checkbox" class="level" value="default"> ${language.gameSelect[store.state.language].levelOne}
 				</label>
 				<label class="game-select-difficult">
 					<input type="checkbox" class="level" value="extreme"> ${language.gameSelect[store.state.language].levelTwo}
