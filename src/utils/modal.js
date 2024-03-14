@@ -23,4 +23,6 @@ function displayConnectionFailedModal(text) {
 	});
 }
 
+
+
 export { displayConnectionFailedModal };
