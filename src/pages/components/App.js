@@ -220,7 +220,7 @@ export default class extends Component {
 			(!localStorage.getItem('chatConnection') ||
 				localStorage.getItem('chatConnection') !== true)
 		) {
-			this.connectSocket();
+			this.connectSocket().bind(this);
 			console.log("chat connect");
 		}
 
