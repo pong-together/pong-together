@@ -143,7 +143,7 @@ export default class extends Component {
 
 		chatSocket.onclose = function(event) {
 			console.log('WebSocket closed.');
-			if(event.code === 3000){
+			if(event.code === 1000){
 				console.log('Try multiple connections');
 				displayConnectionFailedModal(
 					language.util[this.$state.region].chatMessage,
@@ -176,7 +176,7 @@ export default class extends Component {
 				console.log('pong');
 				chatSocket.send(JSON.stringify({ type: 'pong' }));
 			} else if (data.type && data.type === 'send_multiple_connection') {
-				chatSocket.close(3000, 'Try multiple connections');
+				chatSocket.close(1000, 'Try multiple connections');
 			}
 		};
 	}
