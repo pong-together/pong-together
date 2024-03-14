@@ -1,10 +1,12 @@
 import Component from '../../core/Component.js';
+import { navigate } from '../../router/utils/navigate.js';
 
 export default class extends Component {
 	setEvent() {
 		this.addEvent('click', '.not-found-btn', () => {
 			if (localStorage.getItem('accessToken'))
-				window.location.pathname = '/select';
+			 	navigate("/select", true);
+				// window.location.pathname = '/select';
 			else window.location.pathname = '/';
 		});
 	}

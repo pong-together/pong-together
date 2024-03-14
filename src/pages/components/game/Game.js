@@ -3,6 +3,7 @@ import http from '../../../core/http.js';
 // import GameReady from './GameReady.js';
 import TournamentBracket from '../tournament/Tournament-Bracket.js';
 import language from '../../../utils/language.js';
+import { navigate } from '../../../router/utils/navigate.js';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
@@ -12,7 +13,8 @@ export default class extends Component {
 			!localStorage.getItem('accessToken') ||
 			!localStorage.getItem('twoFA')
 		) {
-			window.location.pathname = '/login';
+			navigate("/login", true);
+			// window.location.pathname = '/login';
 		} else {
 			http.checkToken();
 		}
@@ -87,10 +89,10 @@ export default class extends Component {
 			`${SOCKET_URL}/ws/games/?token=${localStorage.getItem('accessToken')}&type=${this.$state.gameMode}&type_id=${this.$state.game_id}`,
 		)
 
-		
+
 		gameSocket.onopen = () => {
 			console.log("WebSocket connection opened.");
-	
+
 			// 여기에서 document에 직접 이벤트 리스너를 추가합니다.
 			document.addEventListener('keydown', (e) => {
 				let message = {};
@@ -179,7 +181,8 @@ export default class extends Component {
 				}
 				if (data.is_normal === false) {
 					gameSocket.close();
-					window.location.pathname = '/select';
+					navigate("/select", true);
+					// window.location.pathname = '/select';
 				}
 			}
 			else if (data.type && data.type === 'score') {
@@ -203,7 +206,8 @@ export default class extends Component {
 				new TournamentBracket(this.$target);
 			}
 			else {
-				window.location.pathname = '/select';
+				navigate("/select", true);
+				// window.location.pathname = '/select';
 			}
 		})
 	}

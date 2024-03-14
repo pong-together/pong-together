@@ -1,5 +1,6 @@
 import language from '../utils/language.js';
 import { displayCanceledMatchingModal as displayExpiredTokenModal } from '../utils/modalModified';
+import { navigate } from '../router/utils/navigate';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const REFRESH_BASE_URL = `${BASE_URL}/api/auth/token/refresh/`;
@@ -78,7 +79,8 @@ const refreshToken = async () => {
 					}
 					displayExpiredTokenModal(language.util[region].expiredTokenMessage);
 					localStorage.clear();
-					window.location.pathname = '/login';
+					navigate('/login');
+					// window.location.pathname = '/login';
 				}
 			} else {
 				const data = await response.json();
@@ -96,7 +98,8 @@ const refreshToken = async () => {
 		console.log('refresh token이 존재하지 않습니다.');
 		console.log('다시 로그인을 시작하여 주세요.');
 		localStorage.clear();
-		window.location.pathname = '/login';
+		navigate('/login');
+		// window.location.pathname = '/login';
 	}
 };
 
