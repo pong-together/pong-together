@@ -225,6 +225,13 @@ export default class extends Component {
 			}
 			else {
 				navigate("/select", true);
+				if (window.localStorage.getItem('gameMode') === 'local') {
+					window.localStorage.removeItem('local-id');
+				}
+				else
+					window.localStorage.removeItem('remote-id');
+				window.localStorage.removeItem('gameMode');
+				window.localStorage.removeItem('gameLevel');
 				// window.location.pathname = '/select';
 			}
 		})
