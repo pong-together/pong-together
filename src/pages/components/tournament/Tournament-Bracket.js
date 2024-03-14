@@ -79,7 +79,10 @@ export default class extends Component {
 
 	setEvent() {
 		this.addEvent('click', '.game-start', ({target}) => {
-			window.location.pathname = '/game';
+			if (this.$state.gameround !== 3)
+				window.location.pathname = '/game';
+			else
+				window.location.pathname = '/select';
 		})
 	}
 

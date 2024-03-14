@@ -330,6 +330,17 @@ export default class extends Component {
 	}
 
 	mounted() {
+		if (window.localStorage.getItem('gameMode') === 'local' || window.localStorage.getItem('gameMode') === 'tournament') {
+			var player1 = document.querySelector('.player1-image');
+			var player2 = document.querySelector('.player2-image');
+
+			console.log(player1, player2);
+
+			player1.style.backgroundImage = "url('../../../../static/images/player1_image2.png')";
+			player2.style.backgroundImage = "url('../../../../static/images/player2_image.png')";
+			player1.style.backgroundRepeat = 'round';
+			player2.style.backgroundRepeat = 'round';
+		}
 		this.timer();
 	}
 }
