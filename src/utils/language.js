@@ -165,15 +165,15 @@ const tournament = {
 
 const game = {
 	en: {
-		tournamentButton: 'Go to next name',
+		tournamentButton: 'Go to the match list',
 		localButton: 'Go out of the game',
 	},
 	kr: {
-		tournamentButton: '다음 게임으로',
+		tournamentButton: '대진표 보러가기',
 		localButton: '게임 나가기',
 	},
 	jp: {
-		tournamentButton: '次のゲームへ',
+		tournamentButton: '対戦表を見に行く',
 		localButton: 'ゲームに出ること',
 	},
 };
