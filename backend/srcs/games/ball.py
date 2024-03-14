@@ -1,4 +1,5 @@
 import math
+import random
 from random import randint
 
 from games import constants
@@ -9,10 +10,11 @@ class Ball:
     WIDTH = 20
     HEIGHT = 20
 
-    START_SPEED = 5
-    DEFAULT_MINIMUM_SPEED = 7
-    DEFAULT_MAXIMUM_SLOPE = 1.1
-    EXTREME_MINIMUM_SPEED = 9
+    DEFAULT_START_SPEED = 4
+    DEFAULT_MINIMUM_SPEED = 6
+    DEFAULT_MAXIMUM_SLOPE = 1.2
+    EXTREME_START_SPEED = 6
+    EXTREME_MINIMUM_SPEED = 8
     EXTREME_MAXIMUM_SLOPE = 1.5
 
     ESCAPE_DEGREE = 20
@@ -25,12 +27,16 @@ class Ball:
     def __init__(self, x, y, mode):
         self.x = x
         self.y = y
-        self.velocity = [self.START_SPEED, 0]
+        self.rely = -1
+
+        self.start_speed = self.DEFAULT_START_SPEED
         self.minimum_speed = self.DEFAULT_MINIMUM_SPEED
         self.maximum_slope = self.DEFAULT_MAXIMUM_SLOPE
         if mode == 'extreme':
+            self.start_speed = self.EXTREME_START_SPEED
             self.minimum_speed = self.EXTREME_MINIMUM_SPEED
             self.maximum_slope = self.EXTREME_MAXIMUM_SLOPE
+        self.velocity = [self.start_speed, 0]
 
     def set_position(self, x, y):
         self.x = x
@@ -43,9 +49,9 @@ class Ball:
 
     def bounce(self, paddle):
         self.velocity[0] *= -1
-        self.velocity[1] = int((self.y - paddle.y - (paddle.HEIGHT - self.HEIGHT) / 2))
+        self.velocity[1] = int((self.y - paddle.y - (paddle.HEIGHT - self.HEIGHT) / 2) / 3)
         self.adjust_slope()
-        self.adjust_speed(self.minimum_speed)
+        self.adjust_speed()
 
     def update_position(self):
         self.x += self.velocity[0]
@@ -74,17 +80,31 @@ class Ball:
         self.velocity = [randint(3, 5), randint(0, 4)]
         self.velocity[0] *= vertical_direct
         self.adjust_slope()
-        self.adjust_speed()
+        self.adjust_speed(start_turn=True)
         self.reset()
 
     def adjust_slope(self):
         slope = self.velocity[1] / self.velocity[0]
+        if self.velocity[1] == 0:
+            self.adjust_horizontal_slope()
         if abs(slope) > self.maximum_slope:
             self.velocity[1] *= abs(self.velocity[0]) / abs(self.velocity[1])
             self.velocity[0] *= self.maximum_slope
 
-    def adjust_speed(self, speed=START_SPEED):
+    def adjust_horizontal_slope(self):
+        self.rely += 1
+        if self.rely == 3:
+            self.velocity[1] = float(random.randint(1, 10) / 10)
+            self.rely = -1
+
+    def adjust_speed(self, start_turn=False):
         size2 = self.velocity[0] ** 2 + self.velocity[1] ** 2
-        if speed == self.START_SPEED or size2 < speed ** 2:
-            rate = speed / math.sqrt(size2)
-            self.velocity = [self.velocity[0] * rate, self.velocity[1] * rate]
+        if start_turn:
+            self.change_velocity_by_speed(self.start_speed, size2)
+            return
+        if size2 < self.minimum_speed ** 2:
+            self.change_velocity_by_speed(self.minimum_speed, size2)
+
+    def change_velocity_by_speed(self, speed, size2):
+        rate = speed / math.sqrt(size2)
+        self.velocity = [self.velocity[0] * rate, self.velocity[1] * rate]
