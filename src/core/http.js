@@ -5,6 +5,18 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 const REFRESH_BASE_URL = `${BASE_URL}/api/auth/token/refresh/`;
 const CHECK_BASE_URL = `${BASE_URL}/api/auth/otp/`;
 
+const sleep = async () => {
+	const asleep = () => {
+		return new Promise((resolve) => setTimeout(resolve, 3000));
+	};
+	const wait = async () => {
+		console.log('sleep 시작');
+		await asleep();
+		console.log('sleep 끝');
+	};
+	await wait();
+}
+
 const parseResponse = async (response) => {
 	const { status } = response;
 	let data = null; // 초기값을 null로 설정
@@ -77,6 +89,7 @@ const refreshToken = async () => {
 						region = localStorage.getItem('language');
 					}
 					displayExpiredTokenModal(language.util[region].expiredTokenMessage);
+					await sleep();
 					localStorage.clear();
 					window.location.pathname = '/login';
 				}

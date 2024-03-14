@@ -132,6 +132,7 @@ export default class extends Component {
 				displayCanceledMatchingModal(
 					language.remote[this.$state.region].cancelMatch,
 				);
+				await this.sleep();
 				location.reload();
 			}
 		};
