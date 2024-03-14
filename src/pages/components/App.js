@@ -146,7 +146,7 @@ export default class extends Component {
 			if(event.code === 1000){
 				console.log('Try multiple connections');
 				displayConnectionFailedModal(
-					language.util[this.$state.region].chatMessage,
+					language.util[localStorage.getItem('language')?localStorage.getItem('language'):'en'].chatMessage,
 				);
 				localStorage.clear();
 			}
