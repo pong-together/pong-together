@@ -35,7 +35,9 @@ const gameSelect = {
 	en: {
 		startBtn: 'Start Game',
 		roleBtn: 'How to Play',
-		roleBox: `Key Control Explanation\n In local mode, player1\n player2 use left and right keys\n In remote mode, use left and right keys\n`,
+		roleBox: `Controls: Player 1 controls (W, S) Player 2 controls (P, ;)`,
+		roleBox2: `Kick the soccer ball bouncing around in all directions into the goal! If the ball goes out of the field, it's a loss!`,
+		roleBox3: `The player who first scores 10 points wins the game.`,
 		localMode: '2 Players',
 		tournamentMode: 'Tournament',
 		remoteMode: 'Online',
@@ -48,7 +50,9 @@ const gameSelect = {
 	kr: {
 		startBtn: '게임 시작',
 		roleBtn: '게임 방법',
-		roleBox: `조작키 설명\n 로컬의 경우에 player1\n player2 좌우 방향키\n 원격은 좌우 방향키\n`,
+		roleBox: `조작키 설명: 1P 조작키 (W, S) 2P 조작키 (P, ;)`,
+		roleBox2: `사방으로 움직이는 축구공을 골대로 튕겨내세요! 축구장을 벗어나면 패배입니다! `,
+		roleBox3: `10점을 먼저 획득하는 플레이어가 게임에서 승리합니다.`,
 		localMode: '2인용',
 		tournamentMode: '토너먼트',
 		remoteMode: '온라인',
@@ -61,7 +65,9 @@ const gameSelect = {
 	jp: {
 		startBtn: 'ゲームスタート',
 		roleBtn: '遊び方',
-		roleBox: `操作キー説明\n ローカルモードでは、プレイヤー1\n プレイヤー2 左右のキー\n リモートでは、左右のキーを使用します\n`,
+		roleBox: `コントロール: プレイヤー1の操作キー (W、S) プレイヤー2の操作キー (P、;)`,
+		roleBox2: `あらゆる方向に跳ね回るサッカーボールをゴールに蹴ります！ ボールがフィールド外に出ると負けです！`,
+		roleBox3: `最初に10ポイントを獲得したプレイヤーがゲームに勝ちます。`,
 		localMode: '2人用',
 		tournamentMode: 'トーナメント',
 		remoteMode: 'オンライン',
