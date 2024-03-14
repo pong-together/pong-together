@@ -38,7 +38,7 @@ export default class extends Component {
 		document.addEventListener('click', async (e) => {
 			const target = e.target;
 			if (target.id === 'search') {
-				// await this.stopCounter();
+				await this.stopCounter();
 				navigate('/select');
 				// window.location.pathname = '/select';
 			}
@@ -120,6 +120,7 @@ export default class extends Component {
 				this.$state.opponentIntraID = data.opponent;
 				this.$state.opponentIntraPic = data.opponent_image;
 				localStorage.setItem('remote-id', data.id);
+				await this.stopCounter();
 				this.exclamationMark();
 				await this.sleep(3000);
 				this.remoteReady();
@@ -188,7 +189,6 @@ export default class extends Component {
 		const stopTimer = async () => {
 			clearInterval(time);
 			bindUpdateTimer();
-			// await this.stopCounter();
 			navigate('/game');
 			// window.location.pathname = '/game';
 		};
