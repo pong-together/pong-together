@@ -2,6 +2,7 @@ import Component from '../../../core/Component.js';
 import language from '../../../utils/language.js';
 import tourapi from '../tournament/TournamentApi.js';
 import store from '../../../store/index.js';
+import { navigate } from '../../../router/utils/navigate.js';
 
 export default class extends Component {
 	setup() {
@@ -79,7 +80,8 @@ export default class extends Component {
 
 	setEvent() {
 		this.addEvent('click', '.game-start', ({target}) => {
-			window.location.pathname = '/game';
+			navigate("/game");
+			// window.location.pathname = '/game';
 		})
 	}
 

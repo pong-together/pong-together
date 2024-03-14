@@ -3,6 +3,7 @@ import language from '../../../utils/language.js';
 import http from '../../../core/http.js';
 import store from '../../../store/index.js';
 import LocalApi from './LocalApi.js';
+import { navigate } from '../../../router/utils/navigate.js';
 // import { navigate } from '../../../router/utils/navigate.js';
 
 export default class extends Component {
@@ -11,7 +12,8 @@ export default class extends Component {
 			!localStorage.getItem('accessToken') ||
 			!localStorage.getItem('twoFA')
 		) {
-			window.location.pathname = '/login';
+			navigate("/login");
+			// window.location.pathname = '/login';
 		} else {
 			http.checkToken();
 		}
@@ -68,7 +70,8 @@ export default class extends Component {
 			const isDuplicate = await this.localInputNickname(target, localPrev);
 
 			if (!isDuplicate) {
-				window.location.pathname = '/game';
+				navigate("/game");
+				// window.location.pathname = '/game';
 			}
 		});
 	}

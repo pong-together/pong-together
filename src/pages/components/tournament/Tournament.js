@@ -4,6 +4,7 @@ import language from '../../../utils/language.js';
 import tourapi from '../tournament/TournamentApi.js';
 import store from '../../../store/index.js';
 import http from '../../../core/http.js';
+import { navigate } from '../../../router/utils/navigate.js';
 
 export default class extends Component {
 	setup() {
@@ -11,7 +12,8 @@ export default class extends Component {
 			!localStorage.getItem('accessToken') ||
 			!localStorage.getItem('twoFA')
 		) {
-			window.location.pathname = '/login';
+			navigate("/login");
+			// window.location.pathname = '/login';
 		} else {
 			http.checkToken();
 		}
@@ -144,7 +146,7 @@ export default class extends Component {
 
 	mounted() {
 		if (!localStorage.getItem('accessToken')) {
-			window.location.pathname = '/login';
+			// window.location.pathname = '/login';
 			navigate('/login');
 		}
 	}

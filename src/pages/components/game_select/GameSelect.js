@@ -2,6 +2,7 @@ import Component from '../../../core/Component.js';
 import language from '../../../utils/language.js';
 import store from '../../../store/index.js';
 import http from '../../../core/http.js';
+import navigate from '../../../router/utils/navigate.js';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -11,7 +12,8 @@ export default class extends Component {
 			!localStorage.getItem('accessToken') ||
 			!localStorage.getItem('twoFA')
 		) {
-			window.location.pathname = '/login';
+			// window.location.pathname = '/login';
+			navigate("/login");
 		} else {
 			http.checkToken();
 		}
@@ -120,11 +122,14 @@ export default class extends Component {
 			localStorage.setItem('gameMode', this.$state.mode);
 			localStorage.setItem('gameLevel', this.$state.level);
 			if (this.$state.mode === 'local') {
-				window.location.pathname = '/local';
+				navigate("/local");
+				// window.location.pathname = '/local';
 			} else if (this.$state.mode === 'tournament') {
-				window.location.pathname = '/tournament';
+				navigate("/tournament")
+				// window.location.pathname = '/tournament';
 			} else if (this.$state.mode === 'remote') {
-				window.location.pathname = '/remote';
+				navigate("/remote");
+				// window.location.pathname = '/remote';
 			}
 		});
 	}
