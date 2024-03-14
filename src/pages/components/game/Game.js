@@ -111,6 +111,8 @@ export default class extends Component {
 						keyStates['w'] = true;
 					else if (e.key === 'ㄴ')
 						keyStates['s'] = true;
+					else if (e.key === 'ㅔ')
+						keyStates['p'] = true;
 					keyStates[e.key] = true;
 					updateBarPosition();
 				}
