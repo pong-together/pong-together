@@ -73,7 +73,7 @@ export default class extends Component {
 								<div class="chip-logo"></div>
 								<div class="intra-info">
 										<div class="intra-nickname">${localStorage.getItem('intraId')}</div>
-										<div class="record">${localStorage.getItem('winCount')}승 ${localStorage.getItem('loseCount')}패(${localStorage.getItem('rate')}%)</div>
+										<div class="record">${localStorage.getItem('winCount')}${language.util[store.state.language].winCount} ${localStorage.getItem('loseCount')}${language.util[store.state.language].loseCount}(${localStorage.getItem('rate')}%)</div>
 								</div>
 						</div>
 						<div class="intra-picture">

@@ -220,18 +220,24 @@ const util = {
 		submit: 'submit',
 		chatMessage: 'Chat connection failed.',
 		dupMessage: 'Another user is already connected.',
+		winCount: 'Win',
+		loseCount: 'Lose',
 	},
 	kr: {
 		ok: '확인',
 		submit: '전송',
 		chatMessage: '채팅 연결에 실패했습니다.',
 		dupMessage: '다른 사용자가 이미 접속중입니다.',
+		winCount: '승',
+		loseCount: '패',
 	},
 	jp: {
 		ok: 'OK',
 		submit: '転送',
 		chatMessage: 'チャット接続に失敗しました。',
 		dupMessage: '他のユーザーはすでにアクセスしています。',
+		winCount: '勝',
+		loseCount: '負',
 	},
 };
 
