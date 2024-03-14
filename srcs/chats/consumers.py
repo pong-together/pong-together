@@ -21,24 +21,24 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
 
     async def connect(self):
         try:
-            logger.info('Websocket CHAT Try to connect')
+            logger.info(f'Websocket CHAT Try to connect {self.user.intra_id}')
             await self.init_connection()
             await self.channel_layer.group_add(self.GROUP_NAME, self.channel_name)
             await self.accept()
             self.ping_task = asyncio.create_task(self.send_ping())
             await self.update_user_chat_connection(True)
-            logger.info('Websocket CHAT CONNECT')
+            logger.info(f'Websocket CHAT CONNECT {self.user.intra_id}')
         except Exception:
             await self.close()
 
     async def disconnect(self, code):
         try:
-            logger.info('Websocket CHAT Try to disconnect')
+            logger.info(f'Websocket CHAT Try to disconnect {self.user.intra_id}')
             await self.delete_chat_users()
             await self.channel_layer.group_discard(self.GROUP_NAME, self.channel_name)
             await self.cancel_ping_task()
             await self.update_user_chat_connection(False)
-            logger.info('Websocket CHAT DISCONNECT')
+            logger.info(f'Websocket CHAT DISCONNECT {self.user.intra_id}')
         except Exception as e:
             await self.send_json({'error': str(e)})
 
@@ -113,5 +113,3 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
     def update_user_chat_connection(self, is_connected):
         self.user.chat_connection = is_connected
         self.user.save()
-
-

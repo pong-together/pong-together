@@ -26,7 +26,7 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
 
     async def connect(self):
         try:
-            logger.info('Websocket REMOTE Try to connect')
+            logger.info(f'Websocket REMOTE Try to connect {self.user.intra_id}')
             await self.init_connection()
             await self.channel_layer.group_add(self.group_name, self.channel_name)
             await self.accept()
@@ -38,13 +38,13 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
 
             if len(self.waiting_list[self.group_name]) >= 2:
                 await self.start_matching()
-            logger.info('Websocket REMOTE CONNECT')
+            logger.info(f'Websocket REMOTE CONNECT {self.user.intra_id}')
         except Exception:
             await self.close()
 
     async def disconnect(self, code):
         try:
-            logger.info('Websocket REMOTE Try to disconnect')
+            logger.info(f'Websocket REMOTE Try to disconnect {self.user.intra_id}')
             await self.channel_layer.group_send(self.group_name, {
                 'type': 'send_disconnection',
             })
@@ -55,7 +55,7 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
                 if user[0] == self.channel_name:
                     self.waiting_list[self.group_name].remove(user)
                     break
-            logger.info('Websocket REMOTE DISCONNECT')
+            logger.info(f'Websocket REMOTE DISCONNECT {self.user.intra_id}')
         except Exception as e:
             await self.send_json({'error': str(e)})
 
