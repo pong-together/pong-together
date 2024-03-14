@@ -13,7 +13,6 @@ export default class extends Component {
 			!localStorage.getItem('twoFA')
 		) {
 			navigate("/login", true);
-			// window.location.pathname = '/login';
 		} else {
 			http.checkToken();
 		}
@@ -175,37 +174,28 @@ export default class extends Component {
 			else if (data.type && data.type === 'end') {
 				if (data.is_normal === false) {
 					gameSocket.close();
-					window.location.pathname = '/select';
+					navigate("/select", true);
 				}
 				this.setState ({winner: data.winner});
 				if (data.winner === this.$state.player1) {
-					this.setState({player1_result: 'Win'});
-					this.setState({player2_result: 'Lose'});
+					document.querySelector('.player1-gameresult').textContent = 'Win';
+					document.querySelector('.player2-gameresult').textContent = 'Lose';
 				}
 				else if (data.winner === this.$state.player2) {
-					this.setState({player1_result: 'Lose'});
-					this.setState({player2_result: 'Win'});
+					document.querySelector('.player1-gameresult').textContent = 'Lose';
+					document.querySelector('.player2-gameresult').textContent = 'Win';
 				}
-				this.$target.innerHTML = this.template();
 				if (window.localStorage.getItem('gameMode') === 'tournament'){
 					const element = document.querySelector('.game-display');
 					element.innerHTML = this.templateEnd();
 				}
 				else if (window.localStorage.getItem('gameMode') === 'local') {
 					const element2 = document.querySelector('.game-display');
-					console.log(element2);
 					element2.innerHTML = this.templateEnd();
-					console.log(element2.innerHTML);
 				}
-				if (data.is_normal === false) {
-					gameSocket.close();
-					navigate("/select", true);
-					// window.location.pathname = '/select';
-				}
+				gameSocket.close();
 			}
 			else if (data.type && data.type === 'score') {
-				this.setState ({player1_score: data.player1_score});
-				this.setState ({player2_score: data.player2_score});
 				document.querySelector('.player1-game-score').textContent = data.player1_score;
 				document.querySelector('.player2-game-score').textContent = data.player2_score;
 			}
@@ -362,7 +352,6 @@ export default class extends Component {
 	mounted() {
 		var player1 = document.querySelector('.player1-image');
 		var player2 = document.querySelector('.player2-image');
-		console.log(player1, player2);
 		if (window.localStorage.getItem('gameMode') === 'local' || window.localStorage.getItem('gameMode') === 'tournament') {		
 			player1.style.backgroundImage = "url('../../../../static/images/player1_image2.png')";
 			player2.style.backgroundImage = "url('../../../../static/images/player2_image.png')";
