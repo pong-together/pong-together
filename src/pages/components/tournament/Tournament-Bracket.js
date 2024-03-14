@@ -218,7 +218,6 @@ export default class extends Component {
 		playerBox4,
 		winner,
 	) {
-		console.log("1,3");
 		const game1Winner = this.gameRoundTwoPlayerOneBorderLine(
 			playerBox1,
 			playerBox2,
@@ -246,7 +245,6 @@ export default class extends Component {
 		const leftline = document.querySelector('.game2-leftline');
 		leftline.style.display = 'none';
 
-		console.log(game1Winner);
 		if (winner[2] !== '' && winner[2] === game1Winner.textContent)
 			this.finalGameLineLeftBorder(game1Winner, game2Winner);
 		else if (winner[2] !== '' && winner[2] === game2Winner.textContent)
@@ -260,7 +258,6 @@ export default class extends Component {
 		playerBox4,
 		winner,
 	) {
-		console.log("1,4");
 		const game1Winner = this.gameRoundTwoPlayerOneBorderLine(
 			playerBox1,
 			playerBox2,
@@ -289,7 +286,6 @@ export default class extends Component {
 		const leftline = document.querySelector('.game2-rightline');
 		leftline.style.display = 'none';
 
-		console.log(game1Winner.textContent);
 		if (winner[2] !== '' && winner[2] === game1Winner.textContent)
 			this.finalGameLineLeftBorder(game1Winner, game2Winner);
 		else if (winner[2] !== '' && winner[2] === game2Winner.textContent)
@@ -303,7 +299,6 @@ export default class extends Component {
 		playerBox4,
 		winner,
 	) {
-		console.log("2,3");
 		const game1Winner = this.gameRoundTwoPlayerTwoBorderLine(
 			playerBox1,
 			playerBox2,
@@ -344,7 +339,6 @@ export default class extends Component {
 		playerBox4,
 		winner,
 	) {
-		console.log("2,4");
 		const game1Winner = this.gameRoundTwoPlayerTwoBorderLine(
 			playerBox1,
 			playerBox2,
@@ -417,7 +411,6 @@ export default class extends Component {
 	}
 	//api부분 함수
 	async getTournamentInfo() {
-		// console.log(window.localStorage.getItem('tournament-id'));
 		const result = await tourapi.list(
 			window.localStorage.getItem('tournament-id'),
 		);
@@ -452,11 +445,15 @@ export default class extends Component {
 				gameMode: game_mode,
 			});
 		}
-		console.log(this.$state.gameround, first_winner, second_winner, final_winner);
 	}
 
 	mounted() {
 		this.getTournamentInfo(); //api로 정보 받아옴.
+
+		if (this.$state.gameround >= 4) {
+			const button = document.querySelector('.game-start');
+			button.textContent = language.tournament[this.$state.region].gameEndButton;
+		}
 
 		const playerBox1 = document.querySelector('.player1');
 		const playerBox2 = document.querySelector('.player2');

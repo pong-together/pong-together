@@ -126,6 +126,7 @@ const tournament = {
 		player2: 'Player2',
 		player3: 'Player3',
 		player4: 'Player4',
+		gameEndButton: 'Go to main',
 	},
 	kr: {
 		normalGameMode: '토너먼트 노말 모드',
@@ -143,6 +144,7 @@ const tournament = {
 		player2: '플레이어2',
 		player3: '플레이어3',
 		player4: '플레이어4',
+		gameEndButton: '메인으로',
 	},
 	jp: {
 		normalGameMode: 'トーナメントノーマルモード',
@@ -160,6 +162,7 @@ const tournament = {
 		player2: 'プレーヤー2',
 		player3: 'プレーヤー3',
 		player4: 'プレーヤー4',
+		gameEndButton: 'メインに',
 	},
 };
 

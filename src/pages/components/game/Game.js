@@ -94,7 +94,6 @@ export default class extends Component {
 			console.log("WebSocket connection opened.");
 			const keyStates = {};
 			document.addEventListener('keydown', (e) => {
-				console.log(e.key);
 				keyStates[e.key] = true;
 				updateBarPosition();
 			});
@@ -136,7 +135,6 @@ export default class extends Component {
 			
 				messages.forEach(message => {
 					gameSocket.send(JSON.stringify(message));
-					console.log(message);
 				});			
 			}
 
@@ -162,7 +160,6 @@ export default class extends Component {
 			if (data.type && data.type === 'get_user_info') {
 				this.setState({ player1: data.player1_name });
 				this.setState({ player2: data.player2_name });
-				console.log(data.player1_name, data.player2_name);
 				if (window.localStorage.getItem('gameMode') === 'remote' && (data.player1_image || data.player2_image)) {
 					var imageUrl1 = "url('data:image/png;base64," + data.player1_image + "')";
 					var imageUrl2 = "url('data:image/png;base64," + data.player2_image + "')";
@@ -178,7 +175,6 @@ export default class extends Component {
 					navigate("/select", true);
 				}
 				this.setState ({winner: data.winner});
-				console.log(data.winner);
 				if (data.winner === this.$state.player1) {
 					document.querySelector('.player1-gameresult').textContent = 'Win';
 					document.querySelector('.player2-gameresult').textContent = 'Lose';
