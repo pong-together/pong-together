@@ -1,5 +1,6 @@
 import Component from '../../core/Component.js';
 import Router from '../../router/router.js';
+import { navigate } from '../../router/utils/navigate.js';
 import store from '../../store/index.js';
 import language from '../../utils/language.js';
 import { displayConnectionFailedModal } from '../../utils/modal';
@@ -22,10 +23,12 @@ export default class extends Component {
 			if (localStorage.getItem('tournament-id')) {
 				localStorage.removeItem('tournament-id');
 			}
+			// navigate("/select");
 			window.location.pathname = '/select';
 		});
 
 		this.addEvent('click', '.modal-close-btn', () => {
+			// navigate("/login");
 			window.location.pathname = '/login';
 		});
 	}
