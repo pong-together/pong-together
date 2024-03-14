@@ -224,8 +224,8 @@ export default class extends Component {
 			}
 			else if (data.type && data.type === 'end') {
 				if (data.is_normal === false) {
-					gameSocket.close();
-					navigate("/select", true);
+					const element3 = document.querySelector('.game-display');
+					element3.innerHTML = this.templateEnd();
 				}
 				this.setState ({winner: data.winner});
 				if (data.winner === this.$state.player1) {
@@ -410,8 +410,8 @@ export default class extends Component {
 			player2.style.backgroundRepeat = 'round';
 		}
 		else if (window.localStorage.getItem('gameMode') === 'remote') {
-			player1.style.backgroundImage = this.$state.player1_image;
-			player2.style.backgroundImage = this.$state.player2_image;
+			player1.style.backgroundImage = `url('${this.$state.player1_image}')`;
+			player2.style.backgroundImage = `url('${this.$state.player2_image}')`;
 			player1.style.backgroundRepeat = 'round';
 			player2.style.backgroundRepeat = 'round';
 		}
