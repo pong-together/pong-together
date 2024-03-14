@@ -145,7 +145,7 @@ export default class extends Component {
 			);
 			console.log("Close event code:", event.code, "Reason:", event.reason);
 			localStorage.clear();
-			chatSocket.close();
+			// chatSocket.close();
 			return;
 		};
 
@@ -156,7 +156,7 @@ export default class extends Component {
 			);
 			localStorage.clear();
 			localStorage.setItem('chatConnection', true);
-			chatSocket.close();
+			// chatSocket.close();
 			return;
 		};
 
