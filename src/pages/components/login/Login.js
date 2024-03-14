@@ -3,7 +3,6 @@ import OauthBtn from './OauthBtn.js';
 import SelectLanguage from './SelectLanguage.js';
 import TFABtn from './TFABtn.js';
 import store from '../../../store/index.js';
-import { navigate } from '../../../router/utils/navigate.js';
 
 export default class extends Component {
 	setup() {
@@ -24,8 +23,7 @@ export default class extends Component {
 		const $parent = this.$target.querySelector('.login-body-wrapper');
 
 		if (store.state.loginProgress === 'done') {
-			navigate("/select");
-			// window.location.pathname = '/select';
+			window.location.pathname = '/select';
 		}
 		if (store.state.loginProgress === 'oauth') {
 			if (
