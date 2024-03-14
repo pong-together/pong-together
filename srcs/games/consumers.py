@@ -19,6 +19,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         self.pong = None
         self.type = None
         self.user = None
+        self.game = None
         self.group_name = None
         self.player1_name = None
         self.player2_name = None
@@ -65,8 +66,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             self.pong_task = asyncio.create_task(self.pong.run())
 
     async def receive_push_button(self, sender_player, button):
-        if not (sender_player == self.player1_name or sender_player == self.player2_name):
-            raise ValueError('sender_player must be player name')
+        self.validate_push_button_event(sender_player)
 
         if self.pong_task:
             self.push_button(sender_player, button)
@@ -77,9 +77,18 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
                 'button': button
             })
 
+    def validate_push_button_event(self, sender_player):
+        if self.game.mode == 'remote' and \
+                not (sender_player == self.player1_name or sender_player == self.player2_name):
+            raise ValueError('sender_player must be player name')
+        if self.game.mode != 'remote' and \
+                not (sender_player == 'player1' or sender_player == 'player2'):
+            raise ValueError('sender_player must be \'player1\' or \'player2\'')
+
     def push_button(self, sender_player, button):
         player = self.pong.player1
-        if sender_player == self.player2_name:
+        if (self.game.mode == 'remote' and sender_player == self.player2_name) or \
+                (self.game.mode != 'remote' and sender_player == 'player2'):
             player = self.pong.player2
         player.move(button)
 
