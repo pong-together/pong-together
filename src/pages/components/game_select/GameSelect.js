@@ -2,7 +2,7 @@ import Component from '../../../core/Component.js';
 import language from '../../../utils/language.js';
 import store from '../../../store/index.js';
 import http from '../../../core/http.js';
-import navigate from '../../../router/utils/navigate.js';
+import { navigate } from '../../../router/utils/navigate.js';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
