@@ -10,10 +10,11 @@ class Ball:
     HEIGHT = 20
 
     START_SPEED = 4
-    MAXIMUM_SPEED = 10
     DEFAULT_MINIMUM_SPEED = 6
+    DEFAULT_MAXIMUM_SPEED = 12
     DEFAULT_MAXIMUM_SLOPE = 1.2
     EXTREME_MINIMUM_SPEED = 8
+    EXTREME_MAXIMUM_SPEED = 14
     EXTREME_MAXIMUM_SLOPE = 1.5
 
     ESCAPE_DEGREE = 20
@@ -27,10 +28,13 @@ class Ball:
         self.x = x
         self.y = y
         self.velocity = [self.START_SPEED, 0]
+
         self.minimum_speed = self.DEFAULT_MINIMUM_SPEED
+        self.maximum_speed = self.DEFAULT_MAXIMUM_SLOPE
         self.maximum_slope = self.DEFAULT_MAXIMUM_SLOPE
         if mode == 'extreme':
             self.minimum_speed = self.EXTREME_MINIMUM_SPEED
+            self.maximum_speed = self.EXTREME_MAXIMUM_SPEED
             self.maximum_slope = self.EXTREME_MAXIMUM_SLOPE
 
     def set_position(self, x, y):
@@ -46,7 +50,7 @@ class Ball:
         self.velocity[0] *= -1
         self.velocity[1] = int((self.y - paddle.y - (paddle.HEIGHT - self.HEIGHT) / 2) / 3)
         self.adjust_slope()
-        self.adjust_speed(self.minimum_speed)
+        self.adjust_speed()
 
     def update_position(self):
         self.x += self.velocity[0]
@@ -75,7 +79,7 @@ class Ball:
         self.velocity = [randint(3, 5), randint(0, 4)]
         self.velocity[0] *= vertical_direct
         self.adjust_slope()
-        self.adjust_speed()
+        self.adjust_speed(start_turn=True)
         self.reset()
 
     def adjust_slope(self):
@@ -84,11 +88,16 @@ class Ball:
             self.velocity[1] *= abs(self.velocity[0]) / abs(self.velocity[1])
             self.velocity[0] *= self.maximum_slope
 
-    def adjust_speed(self, speed=START_SPEED):
+    def adjust_speed(self, start_turn=False):
         size2 = self.velocity[0] ** 2 + self.velocity[1] ** 2
-        if speed == self.START_SPEED or size2 < speed ** 2:
-            rate = speed / math.sqrt(size2)
-            self.velocity = [self.velocity[0] * rate, self.velocity[1] * rate]
-        # if size2 > self.MAXIMUM_SPEED ** 2:
-        #     rate = math.sqrt(size2) / self.MAXIMUM_SPEED
-        #     self.velocity = [self.velocity[0] * rate, self.velocity[1] * rate]
+        if start_turn:
+            self.change_velocity(self.START_SPEED, size2)
+            return
+        if size2 < self.minimum_speed ** 2:
+            self.change_velocity(self.minimum_speed, size2)
+        if size2 > self.maximum_speed ** 2:
+            self.change_velocity(self.maximum_speed, size2)
+
+    def change_velocity(self, speed, size2):
+        rate = speed / math.sqrt(size2)
+        self.velocity = [self.velocity[0] * rate, self.velocity[1] * rate]
