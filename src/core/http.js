@@ -78,7 +78,9 @@ const refreshToken = async () => {
 					if (localStorage.getItem('language')) {
 						region = localStorage.getItem('language');
 					}
-					displayExpiredTokenModal(language.util[region].expiredTokenMessage);
+					await displayExpiredTokenModal(
+						language.util[region].expiredTokenMessage,
+					);
 					localStorage.clear();
 					navigate('/login');
 					// window.location.pathname = '/login';

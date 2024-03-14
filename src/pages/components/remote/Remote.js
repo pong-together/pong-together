@@ -39,7 +39,7 @@ export default class extends Component {
 			const target = e.target;
 			if (target.id === 'search') {
 				await this.stopCounter();
-				navigate("/select");
+				navigate('/select');
 				// window.location.pathname = '/select';
 			}
 		});
@@ -69,15 +69,7 @@ export default class extends Component {
 	}
 
 	async sleep(ms) {
-		const asleep = () => {
-			return new Promise((resolve) => setTimeout(resolve, ms));
-		};
-		const wait = async () => {
-			console.log('sleep 시작');
-			await asleep();
-			console.log('sleep 끝');
-		};
-		await wait();
+		await new Promise((resolve) => setTimeout(resolve, ms));
 	}
 
 	async closeSocket() {
@@ -133,7 +125,7 @@ export default class extends Component {
 				this.remoteReady();
 			} else if (data.type && data.type === 'send_disconnection') {
 				console.log('상대방이 나갔습니다. 다시 매칭을 시작합니다.');
-				displayCanceledMatchingModal(
+				await displayCanceledMatchingModal(
 					language.remote[this.$state.region].cancelMatch,
 				);
 				location.reload();
@@ -197,7 +189,7 @@ export default class extends Component {
 			clearInterval(time);
 			bindUpdateTimer();
 			await this.stopCounter();
-			navigate("/game");
+			navigate('/game');
 			// window.location.pathname = '/game';
 		};
 
