@@ -35,9 +35,10 @@ export default class extends Component {
 	}
 
 	setEvent() {
-		document.addEventListener('click', (e) => {
+		document.addEventListener('click', async (e) => {
 			const target = e.target;
 			if (target.id === 'search') {
+				await this.stopCounter();
 				navigate("/select");
 				// window.location.pathname = '/select';
 			}
@@ -192,9 +193,10 @@ export default class extends Component {
 			buttonElement.textContent = `${this.$state.opponentIntraID}(${seconds})`;
 		}
 
-		const stopTimer = () => {
+		const stopTimer = async () => {
 			clearInterval(time);
 			bindUpdateTimer();
+			await this.stopCounter();
 			navigate("/game");
 			// window.location.pathname = '/game';
 		};
