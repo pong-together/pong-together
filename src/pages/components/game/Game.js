@@ -93,6 +93,9 @@ export default class extends Component {
 		gameSocket.onopen = () => {
 			console.log("WebSocket connection opened.");
 			const keyStates = {};
+			var player1 = this.$state.player1;
+			var player2 = this.$state.player2;
+
 			document.addEventListener('keydown', (e) => {
 				if (window.localStorage.getItem('gameMode') === 'remote') {
 					if (e.key === 'w')
@@ -103,7 +106,7 @@ export default class extends Component {
 						keyStates[e.key] = true;
 					else if (e.key === 'ㄴ')
 						keyStates['s'] = true;
-					updateBarPositionRemote();
+					updateBarPositionRemote(player1, player2);
 				}
 				else {
 					keyStates[e.key] = true;
@@ -115,9 +118,9 @@ export default class extends Component {
 				keyStates[e.key] = false;
 			});
 
-			function updateBarPositionRemote() {
+			function updateBarPositionRemote(player1, player2) {
 				let messages = [];
-				if (window.localStorage.getItem('intraId') === this.$state.player1) {
+				if (window.localStorage.getItem('intraId') === player1) {
 					if (keyStates['w']) {
 						messages.push({
 							type: "push_button",
@@ -133,7 +136,7 @@ export default class extends Component {
 						});
 					}
 				}
-				else if (window.localStorage.getItem('intraId') === this.$state.player2) {
+				else if (window.localStorage.getItem('intraId') === player2) {
 					if (keyStates['w']) {
 						messages.push({
 							type: "push_button",
