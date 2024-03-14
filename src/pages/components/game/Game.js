@@ -93,8 +93,6 @@ export default class extends Component {
 		gameSocket.onopen = () => {
 			console.log("WebSocket connection opened.");
 			const keyStates = {};
-			var player1 = this.$state.player1;
-			var player2 = this.$state.player2;
 
 			document.addEventListener('keydown', (e) => {
 				if (window.localStorage.getItem('gameMode') === 'remote') {
@@ -106,51 +104,41 @@ export default class extends Component {
 						keyStates[e.key] = true;
 					else if (e.key === 'ㄴ')
 						keyStates['s'] = true;
-					updateBarPositionRemote(player1, player2);
+					updateBarPositionRemote();
 				}
 				else {
+					if (e.key === 'ㅈ')
+						keyStates['w'] = true;
+					else if (e.key === 'ㄴ')
+						keyStates['s'] = true;
 					keyStates[e.key] = true;
 					updateBarPosition();
 				}
 			});
 				
 			document.addEventListener('keyup', (e) => {
+				if (e.key === 'ㅈ')
+					keyStates['w'] = false;
+				else if (e.key === 'ㄴ')
+					keyStates['s'] = false;
 				keyStates[e.key] = false;
 			});
 
 			function updateBarPositionRemote(player1, player2) {
 				let messages = [];
-				if (window.localStorage.getItem('intraId') === player1) {
-					if (keyStates['w']) {
-						messages.push({
-							type: "push_button",
-							sender_player: 'player1',
-							button: "up",
-						});
-					}
-					else if (keyStates['s']) {
-						messages.push({
-							type: "push_button",
-							sender_player: 'player1',
-							button: "down",
-						});
-					}
+				if (keyStates['w']) {
+					messages.push({
+						type: "push_button",
+						sender_player: `${window.localStorage.getItem('intraId')}`,
+						button: "up",
+					});
 				}
-				else if (window.localStorage.getItem('intraId') === player2) {
-					if (keyStates['w']) {
-						messages.push({
-							type: "push_button",
-							sender_player: 'player2',
-							button: "up",
-						});
-					}
-					if (keyStates['s']) {
-						messages.push({
-							type: "push_button",
-							sender_player: 'player2',
-							button: "down",
-						});
-					}
+				else if (keyStates['s']) {
+					messages.push({
+						type: "push_button",
+						sender_player: `${window.localStorage.getItem('intraId')}`,
+						button: "down",
+					});
 				}
 			
 				messages.forEach(message => {
