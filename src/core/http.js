@@ -1,21 +1,9 @@
 import language from '../utils/language.js';
-import { displayConnectionFailedModal as displayExpiredTokenModal } from '../utils/modal';
+import { displayCanceledMatchingModal as displayExpiredTokenModal } from '../utils/modalModified';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const REFRESH_BASE_URL = `${BASE_URL}/api/auth/token/refresh/`;
 const CHECK_BASE_URL = `${BASE_URL}/api/auth/otp/`;
-
-const sleep = async () => {
-	const asleep = () => {
-		return new Promise((resolve) => setTimeout(resolve, 3000));
-	};
-	const wait = async () => {
-		console.log('sleep 시작');
-		await asleep();
-		console.log('sleep 끝');
-	};
-	await wait();
-}
 
 const parseResponse = async (response) => {
 	const { status } = response;
@@ -89,7 +77,6 @@ const refreshToken = async () => {
 						region = localStorage.getItem('language');
 					}
 					displayExpiredTokenModal(language.util[region].expiredTokenMessage);
-					await sleep();
 					localStorage.clear();
 					window.location.pathname = '/login';
 				}
@@ -129,7 +116,7 @@ const request = async (params) => {
 		response = await window.fetch(url, config);
 		if (!response.ok) {
 			if (response.status === 401) {
-				console.log('Unauthorized: 401, accessToken is expired');
+				console.log('access token이 만료되었습니다.');
 				await refreshToken();
 				response = await window.fetch(url, config);
 			}
