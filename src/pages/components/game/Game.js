@@ -94,7 +94,7 @@ export default class extends Component {
 			console.log("WebSocket connection opened.");
 			const keyStates = {};
 			document.addEventListener('keydown', (e) => {
-				if (window.localStorage.getItem('gameMode') === remote) {
+				if (window.localStorage.getItem('gameMode') === 'remote') {
 					if (e.key === 'w')
 						keyStates[e.key] = true;
 					else if (e.key === 'ㅈ')
