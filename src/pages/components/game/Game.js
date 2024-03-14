@@ -2,6 +2,7 @@ import Component from '../../../core/Component.js';
 import http from '../../../core/http.js';
 import TournamentBracket from '../tournament/Tournament-Bracket.js';
 import language from '../../../utils/language.js';
+import { navigate } from '../../../router/utils/navigate.js';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
@@ -11,7 +12,8 @@ export default class extends Component {
 			!localStorage.getItem('accessToken') ||
 			!localStorage.getItem('twoFA')
 		) {
-			window.location.pathname = '/login';
+			navigate("/login", true);
+			// window.location.pathname = '/login';
 		} else {
 			http.checkToken();
 		}
@@ -33,6 +35,8 @@ export default class extends Component {
 			region: localStorage.getItem('language')
 				? localStorage.getItem('language')
 				: 'kr',
+			player1_image: '',
+			player2_image: '',
 		}
 		if (this.$state.gameMode === 'local') {
 			this.$state.game_id = window.localStorage.getItem('local-id');
@@ -86,50 +90,56 @@ export default class extends Component {
 			`${SOCKET_URL}/ws/games/?token=${localStorage.getItem('accessToken')}&type=${this.$state.gameMode}&type_id=${this.$state.game_id}`,
 		)
 
-		
+
 		gameSocket.onopen = () => {
 			console.log("WebSocket connection opened.");
-	
-			// 여기에서 document에 직접 이벤트 리스너를 추가합니다.
+			const keyStates = {};
 			document.addEventListener('keydown', (e) => {
-				let message = {};
-				switch(e.key) {
-					case 'w':
-						message = {
-							type: "push_button",
-							sender_player: 'player1',
-							button: "up",
-						};
-						break;
-					case 's':
-						message = {
-							type: "push_button",
-							sender_player: 'player1',
-							button: "down",
-						};
-						break;
-					case 'p':
-						message = {
-							type: "push_button",
-							sender_player: 'player2',
-							button: "up",
-						};
-						break;
-					case ';':
-						message = {
-							type: "push_button",
-							sender_player: 'player2',
-							button: "down",
-						};
-						break;
-					default:
-						// 키에 대응하는 조건이 없을 경우, 메시지를 보내지 않음
-						return;
-				}
 				console.log(e.key);
-				gameSocket.send(JSON.stringify(message));
-				console.log(message);
+				keyStates[e.key] = true;
+				updateBarPosition();
 			});
+				
+			document.addEventListener('keyup', (e) => {
+				keyStates[e.key] = false;
+			});
+				
+			function updateBarPosition() {
+				let messages = [];
+				if (keyStates['w']) {
+					messages.push({
+						type: "push_button",
+						sender_player: 'player1',
+						button: "up",
+					});
+				}
+				if (keyStates['s']) {
+					messages.push({
+						type: "push_button",
+						sender_player: 'player1',
+						button: "down",
+					});
+				}
+				if (keyStates['p']) {
+					messages.push({
+						type: "push_button",
+						sender_player: 'player2',
+						button: "up",
+					});
+				}
+				if (keyStates[';']) {
+					messages.push({
+						type: "push_button",
+						sender_player: 'player2',
+						button: "down",
+					});
+				}
+			
+				messages.forEach(message => {
+					gameSocket.send(JSON.stringify(message));
+					console.log(message);
+				});			
+			}
 
 			setTimeout(() => {
 				let start = {
@@ -153,21 +163,12 @@ export default class extends Component {
 			if (data.type && data.type === 'get_user_info') {
 				this.setState({ player1: data.player1_name });
 				this.setState({ player2: data.player2_name });
-				var player1 = document.querySelector('.player1-image');
-				var player2 = document.querySelector('.player2-image');
-				if (window.localStorage.getItem('gameMode') === 'local' || window.localStorage.getItem('gameMode') === 'tournament') {		
-					player1.style.backgroundImage = "url('../../../../static/images/player1_image2.png')";
-					player2.style.backgroundImage = "url('../../../../static/images/player2_image.png')";
-					player1.style.backgroundRepeat = 'round';
-					player2.style.backgroundRepeat = 'round';
-				}
-				else if (window.localStorage.getItem('gameMode') === 'remote') {
+				if (window.localStorage.getItem('gameMode') === 'remote' && (data.player1_image || data.player2_image)) {
 					var imageUrl1 = "url('data:image/png;base64," + data.player1_image + "')";
 					var imageUrl2 = "url('data:image/png;base64," + data.player2_image + "')";
-					player1.style.backgroundImage = imageUrl1;
-					player2.style.backgroundImage = imageUrl2;
-					player1.style.backgroundRepeat = 'round';
-					player2.style.backgroundRepeat = 'round';
+
+					this.setState({ player1_image: imageUrl1});
+					this.setState({ player2_image: imageUrl2});
 				}
 				this.render();
 			}
@@ -196,6 +197,11 @@ export default class extends Component {
 					element2.innerHTML = this.templateEnd();
 					console.log(element2.innerHTML);
 				}
+				if (data.is_normal === false) {
+					gameSocket.close();
+					navigate("/select", true);
+					// window.location.pathname = '/select';
+				}
 			}
 			else if (data.type && data.type === 'score') {
 				this.setState ({player1_score: data.player1_score});
@@ -218,7 +224,8 @@ export default class extends Component {
 				new TournamentBracket(this.$target);
 			}
 			else {
-				window.location.pathname = '/select';
+				navigate("/select", true);
+				// window.location.pathname = '/select';
 			}
 		})
 	}
@@ -346,6 +353,21 @@ export default class extends Component {
 	}
 
 	mounted() {
+		var player1 = document.querySelector('.player1-image');
+		var player2 = document.querySelector('.player2-image');
+		console.log(player1, player2);
+		if (window.localStorage.getItem('gameMode') === 'local' || window.localStorage.getItem('gameMode') === 'tournament') {		
+			player1.style.backgroundImage = "url('../../../../static/images/player1_image2.png')";
+			player2.style.backgroundImage = "url('../../../../static/images/player2_image.png')";
+			player1.style.backgroundRepeat = 'round';
+			player2.style.backgroundRepeat = 'round';
+		}
+		else if (window.localStorage.getItem('gameMode') === 'remote') {
+			player1.style.backgroundImage = this.$state.player1_image;
+			player2.style.backgroundImage = this.$state.player2_image;
+			player1.style.backgroundRepeat = 'round';
+			player2.style.backgroundRepeat = 'round';
+		}
 		this.timer();
 	}
 }

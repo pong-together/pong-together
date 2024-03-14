@@ -1,5 +1,6 @@
 import Component from '../../../core/Component.js';
 import http from '../../../core/http.js';
+import { navigate } from '../../../router/utils/navigate.js';
 import language from '../../../utils/language.js';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
@@ -15,6 +16,7 @@ export default class extends Component {
 			!localStorage.getItem('accessToken') ||
 			!localStorage.getItem('twoFA')
 		) {
+			// navigate("/login");
 			window.location.pathname = '/login';
 		} else {
 			http.checkToken();
@@ -35,7 +37,8 @@ export default class extends Component {
 		document.addEventListener('click', (e) => {
 			const target = e.target;
 			if (target.id === 'search') {
-				window.location.pathname = '/select';
+				navigate("/select");
+				// window.location.pathname = '/select';
 			}
 		});
 	}
@@ -185,7 +188,8 @@ export default class extends Component {
 		const stopTimer = () => {
 			clearInterval(time);
 			bindUpdateTimer();
-			window.location.pathname = '/game';
+			navigate("/game");
+			// window.location.pathname = '/game';
 		};
 
 		function startTimer() {

@@ -2,6 +2,7 @@ import Component from '../../../core/Component.js';
 import language from '../../../utils/language.js';
 import store from '../../../store/index.js';
 import http from '../../../core/http.js';
+import { navigate } from '../../../router/utils/navigate.js';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -12,6 +13,7 @@ export default class extends Component {
 			!localStorage.getItem('twoFA')
 		) {
 			window.location.pathname = '/login';
+			// navigate("/login", true);
 		} else {
 			http.checkToken();
 		}
@@ -120,11 +122,14 @@ export default class extends Component {
 			localStorage.setItem('gameMode', this.$state.mode);
 			localStorage.setItem('gameLevel', this.$state.level);
 			if (this.$state.mode === 'local') {
-				window.location.pathname = '/local';
+				navigate("/local", true);
+				// window.location.pathname = '/local';
 			} else if (this.$state.mode === 'tournament') {
-				window.location.pathname = '/tournament';
+				navigate("/tournament", true)
+				// window.location.pathname = '/tournament';
 			} else if (this.$state.mode === 'remote') {
-				window.location.pathname = '/remote';
+				navigate("/remote", true);
+				// window.location.pathname = '/remote';
 			}
 		});
 	}
@@ -181,7 +186,7 @@ export default class extends Component {
 			</div>
 			<div>
 				<label class="game-select-difficult">
-					<input type="checkbox" class="level" value="basic"> ${language.gameSelect[store.state.language].levelOne}
+					<input type="checkbox" class="level" value="default"> ${language.gameSelect[store.state.language].levelOne}
 				</label>
 				<label class="game-select-difficult">
 					<input type="checkbox" class="level" value="extreme"> ${language.gameSelect[store.state.language].levelTwo}
