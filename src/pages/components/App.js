@@ -159,7 +159,7 @@ export default class extends Component {
 			);
 			localStorage.clear();
 			// localStorage.setItem('chatConnection', true);
-			chatSocket.close();
+			// chatSocket.close();
 			return;
 		};
 
@@ -171,6 +171,8 @@ export default class extends Component {
 			} else if (data.type && data.type === 'ping') {
 				console.log('pong');
 				chatSocket.send(JSON.stringify({ type: 'pong' }));
+			} else if (data.type && data.type === 'send_multiple_connection') {
+				chatSocket.close();
 			}
 		};
 	}
