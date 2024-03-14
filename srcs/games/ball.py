@@ -91,13 +91,13 @@ class Ball:
     def adjust_speed(self, start_turn=False):
         size2 = self.velocity[0] ** 2 + self.velocity[1] ** 2
         if start_turn:
-            self.change_velocity(self.START_SPEED, size2)
+            self.change_velocity_by_speed(self.START_SPEED, size2)
             return
         if size2 < self.minimum_speed ** 2:
-            self.change_velocity(self.minimum_speed, size2)
+            self.change_velocity_by_speed(self.minimum_speed, size2)
         if size2 > self.maximum_speed ** 2:
-            self.change_velocity(self.maximum_speed, size2)
+            self.change_velocity_by_speed(self.maximum_speed, size2)
 
-    def change_velocity(self, speed, size2):
+    def change_velocity_by_speed(self, speed, size2):
         rate = speed / math.sqrt(size2)
         self.velocity = [self.velocity[0] * rate, self.velocity[1] * rate]
