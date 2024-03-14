@@ -143,9 +143,13 @@ export default class extends Component {
 
 		chatSocket.onclose = function(event) {
 			console.log('WebSocket closed.');
-			displayConnectionFailedModal(
-				language.util[this.$state.region].chatMessage,
-			);
+			if(event.code === 1002){
+				console.log('Try multiple connections');
+				displayConnectionFailedModal(
+					language.util[this.$state.region].chatMessage,
+				);
+				localStorage.clear();
+			}
 			// console.log("Close event code:", event.code, "Reason:", event.reason);
 			// localStorage.clear();
 			// chatSocket.close();
@@ -172,7 +176,8 @@ export default class extends Component {
 				console.log('pong');
 				chatSocket.send(JSON.stringify({ type: 'pong' }));
 			} else if (data.type && data.type === 'send_multiple_connection') {
-				chatSocket.close();
+				chatSocket.close(1002, 'Try multiple connections');
+				chatSocket.onclose();
 			}
 		};
 	}
