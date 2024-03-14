@@ -25,18 +25,19 @@ export default class extends Component {
 			gamemodemessage: '',
 		};
 		window.localStorage.setItem('gameMode', 'local');
-		if (window.localStorage.getItem('gameLevel') == 'basic')
+		if (window.localStorage.getItem('gameLevel') === 'basic') {
 			this.$state.gamemodemessage =
 				language.local[this.$state.region].normalGameMode;
+		}
 		else
 			this.$state.gamemodemessage =
-				language.local[this.$state.region].extreamGameMode;
+				language.local[this.$state.region].exteamGameMode;
 	}
 
 	template() {
 		return `
 		<div class="main-container">
-				<div class="info">${language.local[this.$state.region].normalGameMode}</div>
+				<div class="info">${this.$state.gamemodemessage}</div>
 				<div class="contain">
 					<div class="explaination">${language.local[this.$state.region].localExplain}</div>
 					<div class="local-nick-container">
