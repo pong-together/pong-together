@@ -80,7 +80,7 @@ export default class extends Component {
 
 	setEvent() {
 		this.addEvent('click', '.game-start', ({target}) => {
-			if (this.$state.gameround < 4)
+			if (this.$state.gameround < 5)
 				window.location.pathname = '/game';
 				// navigate("/game");
 			else {
@@ -218,6 +218,7 @@ export default class extends Component {
 		playerBox4,
 		winner,
 	) {
+		console.log("1,3");
 		const game1Winner = this.gameRoundTwoPlayerOneBorderLine(
 			playerBox1,
 			playerBox2,
@@ -259,6 +260,7 @@ export default class extends Component {
 		playerBox4,
 		winner,
 	) {
+		console.log("1,4");
 		const game1Winner = this.gameRoundTwoPlayerOneBorderLine(
 			playerBox1,
 			playerBox2,
@@ -301,6 +303,7 @@ export default class extends Component {
 		playerBox4,
 		winner,
 	) {
+		console.log("2,3");
 		const game1Winner = this.gameRoundTwoPlayerTwoBorderLine(
 			playerBox1,
 			playerBox2,
@@ -341,6 +344,7 @@ export default class extends Component {
 		playerBox4,
 		winner,
 	) {
+		console.log("2,4");
 		const game1Winner = this.gameRoundTwoPlayerTwoBorderLine(
 			playerBox1,
 			playerBox2,
@@ -485,7 +489,7 @@ export default class extends Component {
 				this.$state.winner[0],
 			);
 		else if (
-			this.$state.gameround === 3 &&
+			this.$state.gameround >= 3 &&
 			this.$state.winner[0] === playerBox1.textContent &&
 			this.$state.winner[1] === playerBox3.textContent
 		)
@@ -497,7 +501,7 @@ export default class extends Component {
 				this.$state.winner,
 			);
 		else if (
-			this.$state.gameround === 3 &&
+			this.$state.gameround >= 3 &&
 			this.$state.winner[0] === playerBox1.textContent &&
 			this.$state.winner[1] === playerBox4.textContent
 		)
