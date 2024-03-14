@@ -153,6 +153,22 @@ export default class extends Component {
 			if (data.type && data.type === 'get_user_info') {
 				this.setState({ player1: data.player1_name });
 				this.setState({ player2: data.player2_name });
+				var player1 = document.querySelector('.player1-image');
+				var player2 = document.querySelector('.player2-image');
+				if (window.localStorage.getItem('gameMode') === 'local' || window.localStorage.getItem('gameMode') === 'tournament') {		
+					player1.style.backgroundImage = "url('../../../../static/images/player1_image2.png')";
+					player2.style.backgroundImage = "url('../../../../static/images/player2_image.png')";
+					player1.style.backgroundRepeat = 'round';
+					player2.style.backgroundRepeat = 'round';
+				}
+				else if (window.localStorage.getItem('gameMode') === 'remote') {
+					var imageUrl1 = "url('data:image/png;base64," + data.player1_image + "')";
+					var imageUrl2 = "url('data:image/png;base64," + data.player2_image + "')";
+					player1.style.backgroundImage = imageUrl1;
+					player2.style.backgroundImage = imageUrl2;
+					player1.style.backgroundRepeat = 'round';
+					player2.style.backgroundRepeat = 'round';
+				}
 				this.render();
 			}
 			else if (data.type && data.type === 'end') {
@@ -330,17 +346,6 @@ export default class extends Component {
 	}
 
 	mounted() {
-		if (window.localStorage.getItem('gameMode') === 'local' || window.localStorage.getItem('gameMode') === 'tournament') {
-			var player1 = document.querySelector('.player1-image');
-			var player2 = document.querySelector('.player2-image');
-
-			console.log(player1, player2);
-
-			player1.style.backgroundImage = "url('../../../../static/images/player1_image2.png')";
-			player2.style.backgroundImage = "url('../../../../static/images/player2_image.png')";
-			player1.style.backgroundRepeat = 'round';
-			player2.style.backgroundRepeat = 'round';
-		}
 		this.timer();
 	}
 }
