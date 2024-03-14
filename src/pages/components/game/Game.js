@@ -149,7 +149,7 @@ export default class extends Component {
 		};
 
 		gameSocket.onclose = () => {
-			console.log('gamesocket disconnect... Trying to reconnect...');
+			// console.log('gamesocket disconnect... Trying to reconnect...');
 			return ;
 		}
 
@@ -162,6 +162,7 @@ export default class extends Component {
 			if (data.type && data.type === 'get_user_info') {
 				this.setState({ player1: data.player1_name });
 				this.setState({ player2: data.player2_name });
+				// console.log(data.player1_name, data.player2_name);
 				if (window.localStorage.getItem('gameMode') === 'remote' && (data.player1_image || data.player2_image)) {
 					var imageUrl1 = "url('data:image/png;base64," + data.player1_image + "')";
 					var imageUrl2 = "url('data:image/png;base64," + data.player2_image + "')";
