@@ -13,7 +13,7 @@ export default class extends Component {
 			!localStorage.getItem('accessToken') ||
 			!localStorage.getItem('twoFA')
 		) {
-			navigate("/login");
+			navigate("/login", true);
 			// window.location.pathname = '/login';
 		} else {
 			http.checkToken();
@@ -181,7 +181,7 @@ export default class extends Component {
 				}
 				if (data.is_normal === false) {
 					gameSocket.close();
-					navigate("/select");
+					navigate("/select", true);
 					// window.location.pathname = '/select';
 				}
 			}
@@ -206,7 +206,7 @@ export default class extends Component {
 				new TournamentBracket(this.$target);
 			}
 			else {
-				navigate("/select");
+				navigate("/select", true);
 				// window.location.pathname = '/select';
 			}
 		})
