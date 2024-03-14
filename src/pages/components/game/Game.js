@@ -1,6 +1,5 @@
 import Component from '../../../core/Component.js';
 import http from '../../../core/http.js';
-// import GameReady from './GameReady.js';
 import TournamentBracket from '../tournament/Tournament-Bracket.js';
 import language from '../../../utils/language.js';
 
@@ -157,6 +156,10 @@ export default class extends Component {
 				this.render();
 			}
 			else if (data.type && data.type === 'end') {
+				if (data.is_normal === false) {
+					gameSocket.close();
+					window.location.pathname = '/select';
+				}
 				this.setState ({winner: data.winner});
 				if (data.winner === this.$state.player1) {
 					this.setState({player1_result: 'Win'});
@@ -176,10 +179,6 @@ export default class extends Component {
 					console.log(element2);
 					element2.innerHTML = this.templateEnd();
 					console.log(element2.innerHTML);
-				}
-				if (data.is_normal === false) {
-					gameSocket.close();
-					window.location.pathname = '/select';
 				}
 			}
 			else if (data.type && data.type === 'score') {
