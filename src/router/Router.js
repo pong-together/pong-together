@@ -75,9 +75,9 @@ export default class Router {
 			// const TargetPage = matchedRoute ? matchedRoute.element : NotFound;
 
 			this.currentPage = this.instanceStore.getInstance(routeName, this.$container);
-			if (typeof this.currentPage.init === 'function') {
-					this.currentPage.init(this.$container);
-			}
+			// if (typeof this.currentPage.init === 'function') {
+			// 		this.currentPage.init(this.$container);
+			// }
 
 			console.log('Current page:', this.currentPage);
 	}
