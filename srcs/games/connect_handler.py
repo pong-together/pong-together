@@ -26,10 +26,10 @@ class ConnectHandler:
         return type, type_id
 
     async def run(self):
-        self.consumer.game = await self.set_game()
+        self.consumer.game = await self.get_game()
         self.consumer.group_name = f'{self.consumer.type}_{self.type_id}'
 
-        await self.consumer.channel_layer.group_add(self.consumer.group_name, self.consumer.channel_name)
+        await self.add_channel_to_group()
         await self.consumer.accept()
 
         if self.consumer.type == 'remote':
@@ -42,12 +42,14 @@ class ConnectHandler:
                 'player2_name': self.player2_name,
             })
 
-    async def start_remote_game(self):
+    async def add_channel_to_group(self):
         if self.consumer.group_name not in self.consumer.common:
             self.consumer.common[self.consumer.group_name] = dict()
             self.consumer.common[self.consumer.group_name]['channels'] = list()
         self.consumer.common[self.consumer.group_name]['channels'].append(self.consumer.channel_name)
+        await self.consumer.channel_layer.group_add(self.consumer.group_name, self.consumer.channel_name)
 
+    async def start_remote_game(self):
         if len(self.consumer.common[self.consumer.group_name]['channels']) == 2:
             self.set_players_name()
             images = await self.get_players_image()
@@ -95,7 +97,7 @@ class ConnectHandler:
         self.consumer.set_player_name(PLAYER2, player2_name)
 
     @database_sync_to_async
-    def set_game(self):
+    def get_game(self):
         if self.consumer.type == 'local':
             return Local.objects.get(id=self.type_id)
         if self.consumer.type == 'tournament':
