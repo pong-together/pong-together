@@ -8,7 +8,7 @@ export default class {
 		console.log('component construct');
 		this.$target = $target;
 		this.$props = $props;
-		this.setup();
+		// this.setup();
 		// this.setEvent();
 		// this.render();
 	}
