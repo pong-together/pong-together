@@ -7,6 +7,7 @@ from games.connect_handler import ConnectHandler
 from games.constants import PLAYER1, PLAYER2
 from games.disconnect_handler import DisconnectHandler
 from games.pong import Pong
+from games.receive_handler import ReceiveHandler
 
 logger = logging.getLogger('main')
 
@@ -49,41 +50,12 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
 
     async def receive_json(self, content, **kwargs):
         try:
-            if content['type'] == 'start_game':
-                await self.start_pong_game()
-            if content['type'] == 'push_button':
-                await self.receive_push_button(content['sender_player'], content['button'])
+            receive_handler = ReceiveHandler()
+            await receive_handler.run(self, content)
         except KeyError as e:
             await self.send_json({'error': f'{str(e)} is required'})
         except ValueError as e:
             await self.send_json({'error': str(e)})
-
-    async def start_pong_game(self):
-        if not (self.type == 'remote'
-                and self.user.intra_id == self.get_player_name(PLAYER2)):
-            pong = Pong(self)
-            self.common[self.group_name]['pong'] = pong
-            self.common[self.group_name]['pong_task'] = asyncio.create_task(pong.run())
-
-    async def receive_push_button(self, sender_player, button):
-        self.validate_push_button_event(sender_player)
-
-        if self.common[self.group_name]['pong_task']:
-            self.push_button(sender_player, button)
-        else:
-            await self.channel_layer.send(self.remote_game[self.group_name][0], {
-                'type': 'send_push_button_event',
-                'sender_player': sender_player,
-                'button': button
-            })
-
-    def validate_push_button_event(self, sender_player):
-        if self.game.mode == 'remote' and \
-                 sender_player not in [self.get_player_name(PLAYER1), self.get_player_name(PLAYER2)]:
-            raise ValueError('sender_player must be player name')
-        if self.game.mode != 'remote' and \
-                sender_player not in ['player1', 'player2']:
-            raise ValueError('sender_player must be \'player1\' or \'player2\'')
 
     def push_button(self, sender_player, button):
         pong = self.common[self.group_name]['pong']
@@ -118,7 +90,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         except Exception as e:
             await self.send_json({'error': str(e)})
 
-    # get/setter
+    # getter/setter
     def get_player_name(self, player):
         key = 'player1_name'
         if player == PLAYER2:
