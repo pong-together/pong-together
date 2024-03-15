@@ -58,7 +58,7 @@ export default class Router {
 			this.route();
 	}
 
-	findMatchedRoute() {
+	 findMatchedRoute() {
 		return routes.find(route => route.path.test(window.location.pathname));
 	}
 
