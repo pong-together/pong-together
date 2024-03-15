@@ -10,14 +10,14 @@ function Router($container) {
 
 	const route = () => {
 		let previousPage = currentPage;
-		currentPage = null;
-		const TargetPage = findMatchedRoute()?.element || NotFound;
-		currentPage = TargetPage.getInstance(this.$container);
-		console.log('current page:',currentPage);
 		if (previousPage && typeof previousPage.destroy === 'function'){
 			previousPage.destroy();
 		}
 		previousPage = null;
+		currentPage = null;
+		const TargetPage = findMatchedRoute()?.element || NotFound;
+		currentPage = TargetPage.getInstance(this.$container);
+		console.log('current page:',currentPage);
 	};
 
 	const init = () => {
