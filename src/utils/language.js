@@ -193,6 +193,7 @@ const remote = {
 		waitText: 'Waiting for the other person.',
 		waitButton: 'Get ready',
 		readyText: 'Found a participant!',
+		cancelMatch: 'Match canceled.',
 	},
 	kr: {
 		searchText: '참가자 찾는 중...',
@@ -202,6 +203,7 @@ const remote = {
 		waitText: '상대방을 기다리는 중입니다.',
 		waitButton: '준비하기',
 		readyText: '참가자를 찾았습니다!',
+		cancelMatch: '매칭이 취소됐습니다.',
 	},
 	jp: {
 		searchText: '参加者募集中...',
@@ -211,6 +213,7 @@ const remote = {
 		waitText: '相手を待っています.',
 		waitButton: '準備する',
 		readyText: '参加者を見つけました!',
+		cancelMatch: 'マッチングがキャンセルされました。',
 	},
 };
 
@@ -220,6 +223,7 @@ const util = {
 		submit: 'submit',
 		chatMessage: 'Chat connection failed.',
 		dupMessage: 'Another user is already connected.',
+		expiredTokenMessage: 'The token has expired. Please sign in again.',
 		winCount: 'W',
 		loseCount: 'L',
 	},
@@ -228,6 +232,7 @@ const util = {
 		submit: '전송',
 		chatMessage: '채팅 연결에 실패했습니다.',
 		dupMessage: '다른 사용자가 이미 접속중입니다.',
+		expiredTokenMessage: '토큰이 만료됐습니다. 다시 로그인해 주세요.',
 		winCount: '승',
 		loseCount: '패',
 	},
@@ -236,6 +241,8 @@ const util = {
 		submit: '転送',
 		chatMessage: 'チャット接続に失敗しました。',
 		dupMessage: '他のユーザーはすでにアクセスしています。',
+		expiredTokenMessage:
+			'トークンの有効期限が切れました。再度ログインしてください。',
 		winCount: '勝',
 		loseCount: '負',
 	},
