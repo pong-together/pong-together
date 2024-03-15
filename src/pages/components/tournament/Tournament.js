@@ -6,15 +6,16 @@ import store from '../../../store/index.js';
 import http from '../../../core/http.js';
 import { navigate } from '../../../router/utils/navigate.js';
 
-export default class extends Component {
-	static instance = null;
+export default class Tournament extends Component {
+	// static instance = null;
 
-	static getInstance($container) {
-		if (!Local.instance) {
-			Local.instance = new Local($container);
-		}
-		return Local.instance;
-	}
+	// static getInstance($container) {
+	// 	if (!Tournament.instance) {
+	// 		Tournament.instance = new Tournament($container);
+	// 	}
+	// 	return Tournament.instance;
+	// }
+
 	setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
@@ -81,7 +82,7 @@ export default class extends Component {
 			const isDuplicate = await this.inputNickname(target, prev);
 
 			if (!isDuplicate) {
-				new Bracket(this.$target, this.$props);
+				new Bracket(this.$target, this.$props).init(this.$target);
 			}
 		});
 	}

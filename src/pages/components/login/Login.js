@@ -14,8 +14,6 @@ export default class Login extends Component {
 	// 	return Login.instance;
 	// }
 
-	init(){};
-
 	setup() {
 		if (localStorage.getItem('language')) {
 			store.dispatch('changeLanguage', localStorage.getItem('language'));
@@ -44,13 +42,13 @@ export default class Login extends Component {
 				store.dispatch('changeLoginProgress', 'twoFA');
 				return;
 			}
-			new OauthBtn($parent);
+			new OauthBtn($parent).init($parent);
 		}
 		if (store.state.loginProgress === 'twoFA') {
-			new TFABtn($parent);
+			new TFABtn($parent).init($parent);
 		}
 		if (store.state.loginProgress === 'language') {
-			new SelectLanguage($parent);
+			new SelectLanguage($parent).init($parent);
 		}
 	}
 }

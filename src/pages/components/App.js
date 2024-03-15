@@ -100,6 +100,7 @@ export default class extends Component {
 	}
 
 	routerModule() {
+		console.log('router create');
 		const $body = this.$target.querySelector('.body-wrapper');
 		new Router($body);
 	}

@@ -7,15 +7,15 @@ import { navigate } from '../../../router/utils/navigate.js';
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export default class GameSelect extends Component {
-	static instance = null;
+	// static instance = null;
 
-	static getInstance($container) {
-		if (GameSelect.instance === null) {
-			GameSelect.instance = new GameSelect($container);
-		}
-		console.log('game select',GameSelect.instance);
-		return GameSelect.instance;
-	}
+	// static getInstance($container) {
+	// 	if (GameSelect.instance === null) {
+	// 		GameSelect.instance = new GameSelect($container);
+	// 	}
+	// 	console.log('game select',GameSelect.instance);
+	// 	return GameSelect.instance;
+	// }
 
 	async setup() {
 		if (

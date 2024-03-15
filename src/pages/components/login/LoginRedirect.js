@@ -8,14 +8,14 @@ import { navigate } from '../../../router/utils/navigate';
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export default class LoginRedirect extends Component {
-	static instance = null;
+	// static instance = null;
 
-	static getInstance($container) {
-		if (!LoginRedirect.instance) {
-			LoginRedirect.instance = new LoginRedirect($container);
-		}
-		return LoginRedirect.instance;
-	}
+	// static getInstance($container) {
+	// 	if (!LoginRedirect.instance) {
+	// 		LoginRedirect.instance = new LoginRedirect($container);
+	// 	}
+	// 	return LoginRedirect.instance;
+	// }
 
 	setup() {
 		this.$state = {

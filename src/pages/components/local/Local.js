@@ -6,16 +6,7 @@ import LocalApi from './LocalApi.js';
 import { navigate } from '../../../router/utils/navigate.js';
 // import { navigate } from '../../../router/utils/navigate.js';
 
-export default class Local extends Component {
-	static instance = null;
-
-	static getInstance($container) {
-		if (!Local.instance) {
-			Local.instance = new Local($container);
-		}
-		return Local.instance;
-	}
-
+export default class extends Component {
 	setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
