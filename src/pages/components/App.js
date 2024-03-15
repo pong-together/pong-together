@@ -40,6 +40,12 @@ export default class extends Component {
 		`;
 	}
 
+	routerModule(){
+		const $body = this.$target.querySelector('#app');
+		new Router($body);
+	}
+
+
 	changeModule() {
 		if (
 			window.location.pathname === '/login' ||
@@ -204,7 +210,7 @@ export default class extends Component {
 	async mounted() {
 		window.addEventListener('load', () => {
 			this.changeModule();
-			// this.routerModule();
+			this.routerModule();
 		});
 
 		this.calcRate();
