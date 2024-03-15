@@ -6,7 +6,16 @@ import { displayCanceledMatchingModal } from '../../../utils/modal';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
-export default class extends Component {
+export default class Remote extends Component {
+	// static instance = null;
+
+	// static getInstance($container) {
+	// 	if (!Remote.instance) {
+	// 		Remote.instance = new Remote($container);
+	// 	}
+	// 	return Remote.instance;
+	// }
+
 	constructor($target, $props) {
 		super($target, $props);
 		this.remoteSocket;
@@ -35,16 +44,14 @@ export default class extends Component {
 	}
 
 	setEvent() {
-		const handleEvent = async (e) => {
+		document.addEventListener('click', async (e) => {
 			const target = e.target;
 			if (target.id === 'search') {
 				await this.stopCounter();
-				// document.removeEventListener('click', handleEvent);
-				navigate('/select');
+				navigate('/select', true);
 				// window.location.pathname = '/select';
 			}
-		}
-		document.addEventListener('click', handleEvent);
+		});
 	}
 
 	template() {
@@ -130,8 +137,8 @@ export default class extends Component {
 				await displayCanceledMatchingModal(
 					language.remote[this.$state.region].cancelMatch,
 				);
-				await this.stopCounter();
-				navigate('/select');
+				await this.stopTimer();
+				navigate('/select', true);
 			}
 		};
 
@@ -154,6 +161,7 @@ export default class extends Component {
 
 		const stopCounter = async () => {
 			clearInterval(count);
+			console.log('stop counter');
 			updateCounter();
 			if (
 				this.remoteSocket &&
@@ -190,16 +198,24 @@ export default class extends Component {
 
 		const stopTimer = async () => {
 			clearInterval(time);
+			console.log('cleart time');
 			bindUpdateTimer();
-			await this.stopCounter();
-			navigate('/game');
-			// window.location.pathname = '/game';
+			if (
+				this.remoteSocket &&
+				this.remoteSocket.readyState !== WebSocket.CLOSED
+			) {
+				await this.closeSocket();
+			}
 		};
+		this.stopTimer = stopTimer;
 
 		function startTimer() {
 			time = setInterval(() => {
 				if (seconds === 1) {
+					this.remoteSocket.send(JSON.stringify({ type: 'match_success' }));
 					stopTimer();
+					navigate('/game', true);
+					// window.location.pathname = '/game';
 				} else {
 					seconds--;
 				}
