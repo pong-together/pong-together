@@ -9,7 +9,7 @@ function Router($container) {
 		routes.find((route) => route.path.test(location.pathname));
 
 	const route = () => {
-		const previousPage = currentPage;
+		let previousPage = currentPage;
 		currentPage = null;
 		const TargetPage = findMatchedRoute()?.element || NotFound;
 		currentPage = TargetPage.getInstance(this.$container);
@@ -17,6 +17,7 @@ function Router($container) {
 		if (previousPage && typeof previousPage.destroy === 'function'){
 			previousPage.destroy();
 		}
+		previousPage = null;
 	};
 
 	const init = () => {

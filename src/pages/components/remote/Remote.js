@@ -48,7 +48,7 @@ export default class Remote extends Component {
 			const target = e.target;
 			if (target.id === 'search') {
 				await this.stopCounter();
-				navigate('/select', true);
+				navigate('/select');
 				// window.location.pathname = '/select';
 			}
 		});
@@ -199,7 +199,7 @@ export default class Remote extends Component {
 			clearInterval(time);
 			bindUpdateTimer();
 			await this.stopCounter();
-			navigate('/game', true);
+			navigate('/game');
 			// window.location.pathname = '/game';
 		};
 
