@@ -35,14 +35,23 @@ export default class extends Component {
 	}
 
 	setEvent() {
+<<<<<<< HEAD
 		document.addEventListener('click', (e) => {
 			const target = e.target;
 			if (target.id === 'search') {
 				this.stopCounter();
+=======
+		const handleEvent = async (e) => {
+			const target = e.target;
+			if (target.id === 'search') {
+				await this.stopCounter();
+				document.removeEventListener('click', handleEvent);
+>>>>>>> main
 				navigate('/select');
 				// window.location.pathname = '/select';
 			}
-		});
+		}
+		document.addEventListener('click', handleEvent);
 	}
 
 	template() {
@@ -120,7 +129,6 @@ export default class extends Component {
 				this.$state.opponentIntraID = data.opponent;
 				this.$state.opponentIntraPic = data.opponent_image;
 				localStorage.setItem('remote-id', data.id);
-				await this.stopCounter();
 				this.exclamationMark();
 				await this.sleep(3000);
 				this.remoteReady();
@@ -189,6 +197,7 @@ export default class extends Component {
 		const stopTimer = async () => {
 			clearInterval(time);
 			bindUpdateTimer();
+			await this.stopCounter();
 			navigate('/game');
 			// window.location.pathname = '/game';
 		};
