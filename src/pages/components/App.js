@@ -23,8 +23,9 @@ export default class extends Component {
 			if (localStorage.getItem('tournament-id')) {
 				localStorage.removeItem('tournament-id');
 			}
-			navigate("/select", true);
-			// window.location.pathname = '/select';
+			if (window.location.pathname !== 'remote' && window.location.pathname !== 'game'){
+				navigate("/select", true);
+			}
 		});
 
 		this.addEvent('click', '.modal-close-btn', () => {
