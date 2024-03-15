@@ -210,6 +210,8 @@ export default class Remote extends Component {
 			// window.location.pathname = '/game';
 		};
 
+		this.stopTimer = stopTimer;
+
 		function startTimer() {
 			time = setInterval(() => {
 				if (seconds === 1) {
