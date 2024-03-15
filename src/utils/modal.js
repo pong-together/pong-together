@@ -23,6 +23,31 @@ function displayConnectionFailedModal(text) {
 	});
 }
 
+const displayCanceledMatchingModal = async (text) => {
+	const modalHTML = `
+		<div class="modal-overlay">
+			<div class="modal-content">
+				<p>${text}</p>
+			</div>
+		</div>
+	`;
 
+	const sleep = async (ms) => {
+		const asleep = () => {
+			return new Promise((resolve) => setTimeout(resolve, ms));
+		};
+		const wait = async () => {
+			console.log('sleep 시작');
+			await asleep();
+			console.log('sleep 끝');
+		};
+		await wait();
+	};
 
-export { displayConnectionFailedModal };
+	document.body.innerHTML += modalHTML;
+	await sleep(3000);
+	const modalOverlay = document.querySelector('.modal-overlay');
+	modalOverlay.remove();
+};
+
+export { displayConnectionFailedModal, displayCanceledMatchingModal };
