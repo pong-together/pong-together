@@ -73,13 +73,14 @@ export default class Router {
 			this.currentPage = null;
 
 			const TargetPage = matchedRoute ? matchedRoute.element : NotFound;
+
 			if (!this.instanceStore.getInstance(routeName)) {
 					const newInstance = new TargetPage(this.$container);
 					this.instanceStore.setInstance(routeName, newInstance);
 			}
 
 			this.currentPage = this.instanceStore.getInstance(routeName);
-			if (typeof this.currentPage.init === 'function') {
+			if (typeof this.currentPage.render === 'function') {
 					this.currentPage.render();
 			}
 
