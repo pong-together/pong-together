@@ -1,4 +1,6 @@
-import { navigate } from "../router/utils/navigate";
+import language from '../utils/language.js';
+import { displayCanceledMatchingModal as displayExpiredTokenModal } from '../utils/modal';
+import { navigate } from '../router/utils/navigate';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const REFRESH_BASE_URL = `${BASE_URL}/api/auth/token/refresh/`;
@@ -37,6 +39,7 @@ const checkToken = async () => {
 			if (response.status === 401) {
 				console.log('access token이 만료되었습니다.');
 				await refreshToken();
+				location.reload();
 			}
 		}
 	} catch (error) {
@@ -71,9 +74,15 @@ const refreshToken = async () => {
 				if (response.status === 401) {
 					console.log('refresh token이 만료되었습니다.');
 					console.log('다시 로그인을 시작하여 주세요.');
+					let region = 'kr';
+					if (localStorage.getItem('language')) {
+						region = localStorage.getItem('language');
+					}
+					await displayExpiredTokenModal(
+						language.util[region].expiredTokenMessage,
+					);
 					localStorage.clear();
-					setTimeout(() => {}, 3000);
-					navigate("/login");
+					navigate('/login');
 					// window.location.pathname = '/login';
 				}
 			} else {
@@ -92,8 +101,7 @@ const refreshToken = async () => {
 		console.log('refresh token이 존재하지 않습니다.');
 		console.log('다시 로그인을 시작하여 주세요.');
 		localStorage.clear();
-		setTimeout(() => {}, 3000);
-		navigate("/login");
+		navigate('/login');
 		// window.location.pathname = '/login';
 	}
 };
@@ -114,7 +122,7 @@ const request = async (params) => {
 		response = await window.fetch(url, config);
 		if (!response.ok) {
 			if (response.status === 401) {
-				console.log('Unauthorized: 401, accessToken is expired');
+				console.log('access token이 만료되었습니다.');
 				await refreshToken();
 				response = await window.fetch(url, config);
 			}

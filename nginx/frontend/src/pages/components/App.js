@@ -23,8 +23,9 @@ export default class extends Component {
 			if (localStorage.getItem('tournament-id')) {
 				localStorage.removeItem('tournament-id');
 			}
-			// navigate("/select");
-			window.location.pathname = '/select';
+			if (window.location.pathname !== 'remote' && window.location.pathname !== 'game'){
+				navigate("/select", true);
+			}
 		});
 
 		this.addEvent('click', '.modal-close-btn', () => {
@@ -73,7 +74,7 @@ export default class extends Component {
 								<div class="chip-logo"></div>
 								<div class="intra-info">
 										<div class="intra-nickname">${localStorage.getItem('intraId')}</div>
-										<div class="record">${localStorage.getItem('winCount')}승 ${localStorage.getItem('loseCount')}패(${localStorage.getItem('rate')}%)</div>
+										<div class="record">${localStorage.getItem('winCount')}${language.util[store.state.language].winCount} ${localStorage.getItem('loseCount')}${language.util[store.state.language].loseCount}(${localStorage.getItem('rate')}%)</div>
 								</div>
 						</div>
 						<div class="intra-picture">
@@ -120,7 +121,6 @@ export default class extends Component {
 		);
 
 		chatSocket.onopen = () => {
-			console.log(chatSocket);
 			this.addEvent('click', '.message-btn', (e) => {
 				e.preventDefault();
 				var message = this.$target.querySelector('#m').value;
@@ -141,11 +141,15 @@ export default class extends Component {
 			});
 		};
 
-		chatSocket.onclose = function(event) {
+		chatSocket.onclose = function (event) {
 			console.log('WebSocket closed.');
-			// displayConnectionFailedModal(
-			// 	language.util[this.$state.region].chatMessage,
-			// );
+			if(event.code === 1000){
+				console.log('Try multiple connections');
+				displayConnectionFailedModal(
+					language.util[localStorage.getItem('language')?localStorage.getItem('language'):'en'].chatMessage,
+				);
+				localStorage.clear();
+			}
 			// console.log("Close event code:", event.code, "Reason:", event.reason);
 			// localStorage.clear();
 			// chatSocket.close();
@@ -153,13 +157,12 @@ export default class extends Component {
 		};
 
 		chatSocket.onerror = function (e) {
-			console.log(e);
 			displayConnectionFailedModal(
 				language.util[this.$state.region].chatMessage,
 			);
 			localStorage.clear();
-			localStorage.setItem('chatConnection', true);
-			chatSocket.close();
+			// localStorage.setItem('chatConnection', true);
+			// chatSocket.close();
 			return;
 		};
 
@@ -171,6 +174,8 @@ export default class extends Component {
 			} else if (data.type && data.type === 'ping') {
 				console.log('pong');
 				chatSocket.send(JSON.stringify({ type: 'pong' }));
+			} else if (data.type && data.type === 'send_multiple_connection') {
+				chatSocket.close(1000, 'Try multiple connections');
 			}
 		};
 	}
@@ -214,7 +219,7 @@ export default class extends Component {
 			(!localStorage.getItem('chatConnection') ||
 				localStorage.getItem('chatConnection') !== true)
 		) {
-			this.connectSocket();
+			this.connectSocket.bind(this)();
 			console.log("chat connect");
 		}
 

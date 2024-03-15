@@ -35,7 +35,9 @@ const gameSelect = {
 	en: {
 		startBtn: 'Start Game',
 		roleBtn: 'How to Play',
-		roleBox: `Key Control Explanation\n In local mode, player1\n player2 use left and right keys\n In remote mode, use left and right keys\n`,
+		roleBox: `Controls: Player 1 controls (W, S) Player 2 controls (P, ;)`,
+		roleBox2: `Kick the soccer ball bouncing around in all directions into the goal! If the ball goes out of the field, it's a loss!`,
+		roleBox3: `The player who first scores 10 points wins the game.`,
 		localMode: '2 Players',
 		tournamentMode: 'Tournament',
 		remoteMode: 'Online',
@@ -48,7 +50,9 @@ const gameSelect = {
 	kr: {
 		startBtn: '게임 시작',
 		roleBtn: '게임 방법',
-		roleBox: `조작키 설명\n 로컬의 경우에 player1\n player2 좌우 방향키\n 원격은 좌우 방향키\n`,
+		roleBox: `조작키 설명: 1P 조작키 (W, S) 2P 조작키 (P, ;)`,
+		roleBox2: `사방으로 움직이는 축구공을 골대로 튕겨내세요! 축구장을 벗어나면 패배입니다! `,
+		roleBox3: `10점을 먼저 획득하는 플레이어가 게임에서 승리합니다.`,
 		localMode: '2인용',
 		tournamentMode: '토너먼트',
 		remoteMode: '온라인',
@@ -61,7 +65,9 @@ const gameSelect = {
 	jp: {
 		startBtn: 'ゲームスタート',
 		roleBtn: '遊び方',
-		roleBox: `操作キー説明\n ローカルモードでは、プレイヤー1\n プレイヤー2 左右のキー\n リモートでは、左右のキーを使用します\n`,
+		roleBox: `コントロール: プレイヤー1の操作キー (W、S) プレイヤー2の操作キー (P、;)`,
+		roleBox2: `あらゆる方向に跳ね回るサッカーボールをゴールに蹴ります！ ボールがフィールド外に出ると負けです！`,
+		roleBox3: `最初に10ポイントを獲得したプレイヤーがゲームに勝ちます。`,
 		localMode: '2人用',
 		tournamentMode: 'トーナメント',
 		remoteMode: 'オンライン',
@@ -187,6 +193,7 @@ const remote = {
 		waitText: 'Waiting for the other person.',
 		waitButton: 'Get ready',
 		readyText: 'Found a participant!',
+		cancelMatch: 'Match canceled.',
 	},
 	kr: {
 		searchText: '참가자 찾는 중...',
@@ -196,6 +203,7 @@ const remote = {
 		waitText: '상대방을 기다리는 중입니다.',
 		waitButton: '준비하기',
 		readyText: '참가자를 찾았습니다!',
+		cancelMatch: '매칭이 취소됐습니다.',
 	},
 	jp: {
 		searchText: '参加者募集中...',
@@ -205,6 +213,7 @@ const remote = {
 		waitText: '相手を待っています.',
 		waitButton: '準備する',
 		readyText: '参加者を見つけました!',
+		cancelMatch: 'マッチングがキャンセルされました。',
 	},
 };
 
@@ -214,18 +223,28 @@ const util = {
 		submit: 'submit',
 		chatMessage: 'Chat connection failed.',
 		dupMessage: 'Another user is already connected.',
+		expiredTokenMessage: 'The token has expired. Please sign in again.',
+		winCount: 'W',
+		loseCount: 'L',
 	},
 	kr: {
 		ok: '확인',
 		submit: '전송',
 		chatMessage: '채팅 연결에 실패했습니다.',
 		dupMessage: '다른 사용자가 이미 접속중입니다.',
+		expiredTokenMessage: '토큰이 만료됐습니다. 다시 로그인해 주세요.',
+		winCount: '승',
+		loseCount: '패',
 	},
 	jp: {
 		ok: 'OK',
 		submit: '転送',
 		chatMessage: 'チャット接続に失敗しました。',
 		dupMessage: '他のユーザーはすでにアクセスしています。',
+		expiredTokenMessage:
+			'トークンの有効期限が切れました。再度ログインしてください。',
+		winCount: '勝',
+		loseCount: '負',
 	},
 };
 
