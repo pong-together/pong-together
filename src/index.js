@@ -3,4 +3,5 @@ import store from './store/index.js';
 
 new App(document.querySelector('#app'), store).init(document.querySelector('#app'));
 
-
+const $body = this.$target.querySelector('#app');
+new Router($body);

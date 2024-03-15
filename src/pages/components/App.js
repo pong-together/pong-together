@@ -24,7 +24,7 @@ export default class extends Component {
 				localStorage.removeItem('tournament-id');
 			}
 			// if (window.location.pathname !== 'remote' && window.location.pathname !== 'game'){
-				navigate("/select");
+				navigate("/select", true);
 			// }
 		});
 
@@ -100,7 +100,6 @@ export default class extends Component {
 	}
 
 	routerModule() {
-		console.log('router create');
 		const $body = this.$target.querySelector('.body-wrapper');
 		new Router($body);
 	}
