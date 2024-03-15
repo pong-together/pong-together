@@ -1,4 +1,4 @@
-
+import { routes } from "./pages";
 
 export default class RouterInstanceStore {
 	constructor() {
