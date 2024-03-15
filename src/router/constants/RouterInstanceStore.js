@@ -11,6 +11,7 @@ export default class RouterInstanceStore {
 
 	getInstance(routeName, $container) {
 			if (!this.instances[routeName]) {
+					console.log('instances', this.instances);
 					const TargetPage = this.findMatchedRoute(routeName)?.element || NotFound;
 					return this.instances[routeName] = new TargetPage($container);
 			}

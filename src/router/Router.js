@@ -1,5 +1,4 @@
 import { routes } from './constants/pages.js';
-import NotFound from '../pages/components/NotFound.js';
 import RouterInstanceStore from './constants/RouterInstanceStore.js';
 
 // function Router($container) {
