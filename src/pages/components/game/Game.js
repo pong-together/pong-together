@@ -94,6 +94,13 @@ export default class extends Component {
 			console.log("WebSocket connection opened.");
 			const keyStates = {};
 
+			window.addEventListener('beforeunload', function(event) {
+				console.log('before');
+				if (gameSocket && gameSocket.readyState === WebSocket.OPEN) {
+					gameSocket.close();
+				}
+			});
+			
 			document.addEventListener('keydown', (e) => {
 				if (window.localStorage.getItem('gameMode') === 'remote') {
 					if (e.key === 'w')

@@ -35,18 +35,11 @@ export default class extends Component {
 	}
 
 	setEvent() {
-<<<<<<< HEAD
-		document.addEventListener('click', (e) => {
-			const target = e.target;
-			if (target.id === 'search') {
-				this.stopCounter();
-=======
 		const handleEvent = async (e) => {
 			const target = e.target;
 			if (target.id === 'search') {
 				await this.stopCounter();
 				document.removeEventListener('click', handleEvent);
->>>>>>> main
 				navigate('/select');
 				// window.location.pathname = '/select';
 			}
