@@ -59,9 +59,9 @@ class Pong:
             or self.scores[constants.PLAYER2] == constants.END_POINT
 
     def set_winner(self):
-        self.winner = self.consumer.player1_name
+        self.winner = self.consumer.get_player_name(constants.PLAYER1)
         if self.scores[constants.PLAYER2] == constants.END_POINT:
-            self.winner = self.consumer.player2_name
+            self.winner = self.consumer.get_player_name(constants.PLAYER2)
 
     async def send_game_info(self):
         game_info = {
