@@ -4,7 +4,16 @@ import SelectLanguage from './SelectLanguage.js';
 import TFABtn from './TFABtn.js';
 import store from '../../../store/index.js';
 
-export default class extends Component {
+export default class Login extends Component {
+	static instance = null;
+
+	static getInstance($container) {
+		if (!Login.instance) {
+				Login.instance = new Login($container);
+		}
+		return Login.instance;
+	}
+
 	setup() {
 		if (localStorage.getItem('language')) {
 			store.dispatch('changeLanguage', localStorage.getItem('language'));

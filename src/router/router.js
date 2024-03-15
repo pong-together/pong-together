@@ -12,7 +12,7 @@ function Router($container) {
 		const previousPage = currentPage;
 		currentPage = null;
 		const TargetPage = findMatchedRoute()?.element || NotFound;
-		currentPage = new TargetPage(this.$container);
+		currentPage = TargetPage.getInstance(this.$container);
 		if (previousPage && typeof previousPage.destroy === 'function'){
 			previousPage.destroy();
 		}

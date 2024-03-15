@@ -7,7 +7,16 @@ import { navigate } from '../../../router/utils/navigate.js';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
-export default class extends Component {
+export default class Game extends Component {
+	static instance = null;
+
+	static getInstance($container) {
+		if (!Game.instance) {
+			Game.instance = new Game($container);
+		}
+		return Game.instance;
+	}
+
 	setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
