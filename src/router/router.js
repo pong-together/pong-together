@@ -1,43 +1,100 @@
-import { routes } from '../router/constants/pages.js';
+import { routes } from './constants/pages.js';
 import NotFound from '../pages/components/NotFound.js';
+import RouterInstanceStore from './constants/RouterInstanceStore.js';
 
-function Router($container) {
-	this.$container = $container;
-	let currentPage = undefined;
+// function Router($container) {
+// 	this.$container = $container;
+// 	let currentPage = undefined;
 
-	const findMatchedRoute = () =>
-		routes.find((route) => route.path.test(location.pathname));
+// 	const findMatchedRoute = () =>
+// 		routes.find((route) => route.path.test(location.pathname));
 
-	const route = () => {
-		let previousPage = currentPage;
-		if (previousPage && typeof previousPage.destroy === 'function'){
-			previousPage.destroy();
-		}
-		previousPage = null;
-		currentPage = null;
-		const TargetPage = findMatchedRoute()?.element || NotFound;
-		currentPage = TargetPage.getInstance(this.$container);
-		console.log('current page:',currentPage);
-	};
+// 	const instanceStore = new RouterInstanceStore();
 
-	const init = () => {
-		window.addEventListener('historychange', ({ detail }) => {
-			const { to, isReplace } = detail;
+// 	const route = () => {
+// 		if (currentPage && typeof currentPage.destroy === 'function'){
+// 			currentPage.destroy();
+// 		}
+// 		currentPage = null;
+// 		const TargetPage = findMatchedRoute()?.element || NotFound;
+// 		if (!instanceStore.getInstance(TargetPage)) {
+// 			instanceStore.setInstance(TargetPage, new TargetPage(this.$container));
+// 		}
+// 		currentPage = instanceStore.getInstance(TargetPage);
+// 		currentPage.init(this.$container);
 
-			if (isReplace || to === location.pathname)
-				history.replaceState(null, '', to);
-			else history.pushState(null, '', to);
+// 		console.log('current page:', currentPage);
+// 	};
 
-			route();
-		});
+// 	const init = () => {
+// 		window.addEventListener('historychange', ({ detail }) => {
+// 			const { to, isReplace } = detail;
 
-		window.addEventListener('popstate', () => {
-			route();
-		});
-	};
+// 			if (isReplace || to === location.pathname)
+// 				history.replaceState(null, '', to);
+// 			else history.pushState(null, '', to);
 
-	init();
-	route();
+// 			route();
+// 		});
+
+// 		window.addEventListener('popstate', () => {
+// 			route();
+// 		});
+// 	};
+
+// 	init();
+// 	route();
+// }
+
+// export default Router;
+
+
+function findMatchedRoute() {
+	return routes.find(route => route.path.test(window.location.pathname));
 }
 
-export default Router;
+export default class Router {
+	constructor($container) {
+			this.$container = $container;
+			this.currentPage = undefined;
+			this.instanceStore = new RouterInstanceStore();
+			this.init();
+			this.route();
+	}
+
+	route() {
+			const matchedRoute = findMatchedRoute();
+			const routeName = matchedRoute ? matchedRoute.element.name : 'NotFound';
+
+			if (this.currentPage && typeof this.currentPage.destroy === 'function') {
+					this.currentPage.destroy();
+			}
+			this.currentPage = null;
+
+			const TargetPage = matchedRoute ? matchedRoute.element : NotFound;
+			if (!this.instanceStore.getInstance(routeName)) {
+					const newInstance = new TargetPage(this.$container);
+					this.instanceStore.setInstance(routeName, newInstance);
+			}
+
+			this.currentPage = this.instanceStore.getInstance(routeName);
+			if (typeof this.currentPage.init === 'function') {
+					this.currentPage.init();
+			}
+
+			console.log('Current page:', this.currentPage);
+	}
+
+	init() {
+			window.addEventListener('popstate', () => this.route());
+			window.addEventListener('historychange', ({ detail }) => {
+					const { to, isReplace } = detail;
+					if (isReplace) {
+							history.replaceState(null, '', to);
+					} else {
+							history.pushState(null, '', to);
+					}
+					this.route();
+			});
+	}
+};
