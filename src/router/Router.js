@@ -49,10 +49,6 @@ import RouterInstanceStore from './constants/RouterInstanceStore.js';
 // export default Router;
 
 
-function findMatchedRoute() {
-	return routes.find(route => route.path.test(window.location.pathname));
-}
-
 export default class Router {
 	constructor($container) {
 			this.$container = $container;
@@ -62,8 +58,12 @@ export default class Router {
 			this.route();
 	}
 
+	findMatchedRoute() {
+		return routes.find(route => route.path.test(window.location.pathname));
+	}
+
 	route() {
-			const matchedRoute = findMatchedRoute();
+			const matchedRoute = this.findMatchedRoute();
 			const routeName = matchedRoute ? matchedRoute.element.name : 'NotFound';
 
 			if (this.currentPage && typeof this.currentPage.destroy === 'function') {
