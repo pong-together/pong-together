@@ -59,6 +59,10 @@ export default class Router {
 			this.route();
 	}
 
+	findMatchedRoute() {
+		return routes.find(route => route.path.test(window.location.pathname));
+	}
+
 	route() {
 			const matchedRoute = this.findMatchedRoute();
 			const routeName = matchedRoute ? matchedRoute.element.name : 'NotFound';
