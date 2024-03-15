@@ -137,7 +137,7 @@ export default class Remote extends Component {
 				await displayCanceledMatchingModal(
 					language.remote[this.$state.region].cancelMatch,
 				);
-				await this.stopCounter();
+				await this.stopTimer();
 				navigate('/select', true);
 			}
 		};
@@ -200,7 +200,12 @@ export default class Remote extends Component {
 			clearInterval(time);
 			console.log('cleart time');
 			bindUpdateTimer();
-			await this.stopCounter();
+			if (
+				this.remoteSocket &&
+				this.remoteSocket.readyState !== WebSocket.CLOSED
+			) {
+				await this.closeSocket();
+			}
 			navigate('/game', true);
 			// window.location.pathname = '/game';
 		};
