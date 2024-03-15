@@ -3,12 +3,13 @@
  * @param  { boolean } isReplace
  */
 export const navigate = (to, isReplace = false) => {
-	const historyChangeEvent = new CustomEvent('historychange', {
-		detail: {
-			to,
-			isReplace,
-		},
-	});
-
-	dispatchEvent(historyChangeEvent);
+	if (location.pathname !== to){
+		const historyChangeEvent = new CustomEvent('historychange', {
+			detail: {
+				to,
+				isReplace,
+			},
+		});
+		dispatchEvent(historyChangeEvent);
+	}
 };

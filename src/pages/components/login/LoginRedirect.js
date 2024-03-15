@@ -7,7 +7,16 @@ import { navigate } from '../../../router/utils/navigate';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-export default class extends Component {
+export default class LoginRedirect extends Component {
+	// static instance = null;
+
+	// static getInstance($container) {
+	// 	if (!LoginRedirect.instance) {
+	// 		LoginRedirect.instance = new LoginRedirect($container);
+	// 	}
+	// 	return LoginRedirect.instance;
+	// }
+
 	setup() {
 		this.$state = {
 			region: localStorage.getItem('language')
@@ -60,7 +69,7 @@ export default class extends Component {
 				if (data?.login === 'success') {
 					localStorage.setItem('accessToken', data.access_token);
 					localStorage.setItem('refreshToken', data.refresh_token);
-					navigate("/login");
+					navigate("/login",true);
 					// window.location.pathname = '/login';
 				}
 			} catch (error) {

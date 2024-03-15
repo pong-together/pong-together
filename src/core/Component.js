@@ -5,8 +5,17 @@ export default class {
 	$store;
 
 	constructor($target, $props) {
+		console.log('component construct');
 		this.$target = $target;
 		this.$props = $props;
+		// this.setup();
+		// this.setEvent();
+		// this.render();
+	}
+
+	init($target){
+		console.log('component init');
+		this.$target = $target;
 		this.setup();
 		this.setEvent();
 		this.render();

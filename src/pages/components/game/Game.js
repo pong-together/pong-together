@@ -6,7 +6,16 @@ import { navigate } from '../../../router/utils/navigate.js';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
-export default class extends Component {
+export default class Game extends Component {
+	// static instance = null;
+
+	// static getInstance($container) {
+	// 	if (!Game.instance) {
+	// 		Game.instance = new Game($container);
+	// 	}
+	// 	return Game.instance;
+	// }
+
 	setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
@@ -183,6 +192,7 @@ export default class extends Component {
 					navigate("/select", true);
 					// window.location.pathname = '/select';
 				}
+				gameSocket.close();
 			}
 			else if (data.type && data.type === 'score') {
 				this.setState ({player1_score: data.player1_score});
@@ -202,7 +212,7 @@ export default class extends Component {
 	setEvent() {
 		this.addEvent('click', '.game-end-button', ({target}) => {
 			if (window.localStorage.getItem('gameMode') === 'tournament') {
-				new TournamentBracket(this.$target);
+				new TournamentBracket(this.$target).init(this.$target);
 			}
 			else {
 				navigate("/select", true);
