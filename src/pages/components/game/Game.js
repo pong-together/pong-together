@@ -104,6 +104,7 @@ export default class extends Component {
 						keyStates[e.key] = true;
 					else if (e.key === 'ㄴ')
 						keyStates['s'] = true;
+					keyStates[e.key] = true;
 					updateBarPositionRemote();
 				}
 				else {
@@ -123,10 +124,12 @@ export default class extends Component {
 					keyStates['w'] = false;
 				else if (e.key === 'ㄴ')
 					keyStates['s'] = false;
+				else if (e.key === 'ㅔ')
+					keyStates['p'] = false;
 				keyStates[e.key] = false;
 			});
 
-			function updateBarPositionRemote(player1, player2) {
+			function updateBarPositionRemote() {
 				let messages = [];
 				if (keyStates['w']) {
 					messages.push({
@@ -151,6 +154,7 @@ export default class extends Component {
 			function updateBarPosition() {
 				let messages = [];
 				if (keyStates['w']) {
+					console.log('w');
 					messages.push({
 						type: "push_button",
 						sender_player: 'player1',
@@ -158,6 +162,7 @@ export default class extends Component {
 					});
 				}
 				if (keyStates['s']) {
+					console.log('s');
 					messages.push({
 						type: "push_button",
 						sender_player: 'player1',
@@ -165,6 +170,7 @@ export default class extends Component {
 					});
 				}
 				if (keyStates['p']) {
+					console.log('p');
 					messages.push({
 						type: "push_button",
 						sender_player: 'player2',
@@ -172,6 +178,7 @@ export default class extends Component {
 					});
 				}
 				if (keyStates[';']) {
+					console.log(';;;');
 					messages.push({
 						type: "push_button",
 						sender_player: 'player2',
