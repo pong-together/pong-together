@@ -75,9 +75,8 @@ export default class Router {
 			// const TargetPage = matchedRoute ? matchedRoute.element : NotFound;
 
 			this.currentPage = this.instanceStore.getInstance(routeName, this.$container);
-			// if (typeof this.currentPage.init === 'function') {
-			// 		this.currentPage.init(this.$container);
-			// }
+			// 생성자에서 자동으로 렌더링 실행하기 때문에 생성자 로직을 수정하고 init에게 렌더링 권한 위임해야 함
+			this.currentPage.init(this.$container);
 
 			console.log('Current page:', this.currentPage);
 	}

@@ -9,7 +9,7 @@ export default class {
 		this.$props = $props;
 		this.setup();
 		this.setEvent();
-		this.render();
+		// this.render();
 	}
 
 	init($target){
