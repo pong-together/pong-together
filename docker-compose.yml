@@ -35,5 +35,16 @@ services:
       - .env
     restart: always
   
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.9.3
+    platform: linux/amd64
+    ports:
+      - "5003:5003"
+    volumes:
+      - ./elk/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./elk/logstash/pipeline:/usr/share/logstash/pipeline
+    # depends_on:
+    #   - elasticsearch
+  
 volumes:
   postgres_data: {}
