@@ -135,11 +135,12 @@ export default class Remote extends Component {
 				await this.sleep(3000);
 				this.remoteReady();
 			} else if (data.type && data.type === 'send_disconnection') {
-				console.log('상대방이 나갔습니다. 다시 매칭을 시작합니다.');
+				console.log('상대방이 나갔습니다.');
 				await displayCanceledMatchingModal(
 					language.remote[this.$state.region].cancelMatch,
 				);
-				location.reload();
+				await this.stopCounter();
+				navigate('/select');
 			}
 		};
 

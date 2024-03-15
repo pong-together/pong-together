@@ -33,15 +33,7 @@ const displayCanceledMatchingModal = async (text) => {
 	`;
 
 	const sleep = async (ms) => {
-		const asleep = () => {
-			return new Promise((resolve) => setTimeout(resolve, ms));
-		};
-		const wait = async () => {
-			console.log('sleep 시작');
-			await asleep();
-			console.log('sleep 끝');
-		};
-		await wait();
+		await new Promise((resolve) => setTimeout(resolve, ms));
 	};
 
 	document.body.innerHTML += modalHTML;
