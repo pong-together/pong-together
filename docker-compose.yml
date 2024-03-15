@@ -3,6 +3,8 @@ version: "3.9"
 services:
   nginx:
     build: ./nginx
+    volumes:
+      - nginx_log:/log/nginx
     ports:
       - "80:80"
       - "443:443"
@@ -58,6 +60,7 @@ services:
       - ./elk/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
       - ./elk/logstash/pipeline:/usr/share/logstash/pipeline
       - backend_log:/log/backend
+      - nginx_log:/log/nginx
     depends_on:
       - elasticsearch
 
@@ -73,3 +76,4 @@ services:
 volumes:
   postgres_data: {}
   backend_log: {}
+  nginx_log: {}
