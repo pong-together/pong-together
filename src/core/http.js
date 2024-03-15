@@ -39,7 +39,7 @@ const checkToken = async () => {
 			if (response.status === 401) {
 				console.log('access token이 만료되었습니다.');
 				await refreshToken();
-				location.reload();
+				// location.reload();
 			}
 		}
 	} catch (error) {
