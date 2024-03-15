@@ -10,8 +10,7 @@ export default class extends Component {
 	async setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
-			!localStorage.getItem('twoFA')
-		) {
+			!localStorage.getItem('twoFA')) {
 			window.location.pathname = '/login';
 			// navigate("/login", true);
 		} else {
@@ -139,7 +138,9 @@ export default class extends Component {
 		<div class="main-container">
 		<div class="game-select-flex">
 			<div class="game-role-box">
-				${language.gameSelect[store.state.language].roleBox}
+			<p>${language.gameSelect[store.state.language].roleBox}</P>
+			<p>${language.gameSelect[store.state.language].roleBox2}</P>
+			<p>${language.gameSelect[store.state.language].roleBox3}</P>
 			</div>
 			<button data-button="mode-select" class="game-select-button">
 				${language.gameSelect[store.state.language].startBtn}

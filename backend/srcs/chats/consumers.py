@@ -22,9 +22,9 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
     async def connect(self):
         try:
             logger.info('Websocket CHAT Try to connect')
-            await self.init_connection()
             await self.channel_layer.group_add(self.GROUP_NAME, self.channel_name)
             await self.accept()
+            await self.init_connection()
             self.ping_task = asyncio.create_task(self.send_ping())
             await self.update_user_chat_connection(True)
             logger.info('Websocket CHAT CONNECT')
@@ -88,10 +88,15 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
 
     async def init_connection(self):
         self.user = self.scope['user']
-        intra_id = self.user.intra_id
-        if intra_id in self.chat_users:
-            raise ValueError()
-        self.chat_users[intra_id] = self.channel_name
+        await self.handle_multiple_connection()
+
+    async def handle_multiple_connection(self):
+        if self.user.intra_id in self.chat_users:
+            await self.send_json({
+                'type': 'send_multiple_connection'
+            })
+            return
+        self.chat_users[self.user.intra_id] = self.channel_name
 
     async def delete_chat_users(self):
         intra_id = self.user.intra_id
@@ -113,5 +118,3 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
     def update_user_chat_connection(self, is_connected):
         self.user.chat_connection = is_connected
         self.user.save()
-
-
