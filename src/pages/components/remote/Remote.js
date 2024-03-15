@@ -6,7 +6,16 @@ import { displayCanceledMatchingModal } from '../../../utils/modal';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
-export default class extends Component {
+export default class Remote extends Component {
+	static instance = null;
+
+	static getInstance() {
+		if (!Remote.instance) {
+			Remote.instance = new Remote();
+		}
+		return Remote.instance;
+	}
+
 	constructor($target, $props) {
 		super($target, $props);
 		this.remoteSocket;
