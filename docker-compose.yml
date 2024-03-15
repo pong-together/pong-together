@@ -35,7 +35,20 @@ services:
     env_file:
       - .env
     restart: always
-  
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.2
+    ports:
+      - "9200:9200"
+    environment:
+      - "discovery.type=single-node"
+      - "cluster.name=pongtogether-elasticsearch-cluster"
+      - "node.name=pongtogether-node"
+      # - "path.data=/var/lib/elasticsearch"
+      # - "path.logs=/var/log/elasticsearch"
+      - "network.host=0.0.0.0"
+      - "xpack.security.enabled=false"
+
   logstash:
     image: docker.elastic.co/logstash/logstash:7.9.3
     platform: linux/amd64
