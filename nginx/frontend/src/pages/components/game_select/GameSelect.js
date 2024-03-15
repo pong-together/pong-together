@@ -10,8 +10,7 @@ export default class extends Component {
 	async setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
-			!localStorage.getItem('twoFA')
-		) {
+			!localStorage.getItem('twoFA')) {
 			window.location.pathname = '/login';
 			// navigate("/login", true);
 		} else {

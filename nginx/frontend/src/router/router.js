@@ -9,7 +9,10 @@ function Router($container) {
 		routes.find((route) => route.path.test(location.pathname));
 
 	const route = () => {
-		currentPage = null;
+		if (currentPage){
+			currentPage.destroy();
+			currentPage = null;
+		}
 		const TargetPage = findMatchedRoute()?.element || NotFound;
 		currentPage = new TargetPage(this.$container);
 	};
