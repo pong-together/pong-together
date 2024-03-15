@@ -156,7 +156,7 @@ export default class Tournament extends Component {
 	mounted() {
 		if (!localStorage.getItem('accessToken')) {
 			// window.location.pathname = '/login';
-			navigate('/login');
+			navigate('/login',true);
 		}
 	}
 }

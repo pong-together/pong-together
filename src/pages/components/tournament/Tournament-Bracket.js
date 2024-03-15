@@ -80,7 +80,7 @@ export default class extends Component {
 
 	setEvent() {
 		this.addEvent('click', '.game-start', ({target}) => {
-			navigate("/game");
+			navigate("/game",true);
 			// window.location.pathname = '/game';
 		})
 	}

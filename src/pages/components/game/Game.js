@@ -22,7 +22,7 @@ export default class Game extends Component {
 			!localStorage.getItem('accessToken') ||
 			!localStorage.getItem('twoFA')
 		) {
-			navigate("/login");
+			navigate("/login", true);
 			// window.location.pathname = '/login';
 		} else {
 			http.checkToken();
@@ -190,9 +190,10 @@ export default class Game extends Component {
 				}
 				if (data.is_normal === false) {
 					gameSocket.close();
-					navigate("/select");
+					navigate("/select", true);
 					// window.location.pathname = '/select';
 				}
+				gameSocket.close();
 			}
 			else if (data.type && data.type === 'score') {
 				this.setState ({player1_score: data.player1_score});
@@ -215,7 +216,7 @@ export default class Game extends Component {
 				new TournamentBracket(this.$target).init(this.$target);
 			}
 			else {
-				navigate("/select");
+				navigate("/select", true);
 				// window.location.pathname = '/select';
 			}
 		})

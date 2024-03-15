@@ -69,7 +69,7 @@ export default class LoginRedirect extends Component {
 				if (data?.login === 'success') {
 					localStorage.setItem('accessToken', data.access_token);
 					localStorage.setItem('refreshToken', data.refresh_token);
-					navigate("/login");
+					navigate("/login",true);
 					// window.location.pathname = '/login';
 				}
 			} catch (error) {
