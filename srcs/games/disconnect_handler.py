@@ -2,6 +2,7 @@ import asyncio
 
 from channels.db import database_sync_to_async
 
+from games.constants import PLAYER1, PLAYER2
 from users.models import User
 
 
@@ -28,24 +29,20 @@ class DisconnectHandler:
         if self.is_abnormal():
             await self.disconnect_abnormal()
             await self.cancel_pong_task()
-
         if self.consumer.pong_task is not None and not self.is_abnormal():
             await self.disconnect_normal()
             await self.cancel_pong_task()
-
         await self.consumer.channel_layer.group_discard(self.consumer.group_name, self.consumer.channel_name)
-
-        if self.consumer.user in self.consumer.remote_game[self.consumer.group_name]:
-            self.consumer.remote_game[self.consumer.group_name].remove(self.consumer.user)
 
     def is_abnormal(self):
         return not self.consumer.pong.winner
 
     async def disconnect_normal(self):
-        winner = self.consumer.pong.winner
-        loser = self.consumer.player1_name
+        pong = self.consumer.common[self.consumer.group_name]['pong']
+        winner = pong.winner
+        loser = self.consumer.get_player_name(PLAYER1)
         if loser == winner:
-            loser = self.consumer.player2_name
+            loser = self.consumer.get_player_name(PLAYER2)
         await self.update_game_result(loser, winner)
 
     async def disconnect_abnormal(self):
@@ -59,15 +56,16 @@ class DisconnectHandler:
         })
 
     def get_other_player(self):
-        other = self.consumer.player1_name
+        other = self.consumer.get_player_name(PLAYER1)
         if self.consumer.user.intra_id == other:
-            other = self.consumer.player2_name
+            other = self.consumer.get_player_name(PLAYER2)
         return other
 
     async def cancel_pong_task(self):
-        self.consumer.pong_task.cancel()
+        pong_task = self.consumer.common[self.consumer.group_name]['pong_task']
+        pong_task.cancel()
         try:
-            await self.consumer.pong_task
+            await pong_task
         except asyncio.CancelledError:
             pass
 
@@ -92,16 +90,17 @@ class DisconnectHandler:
             user.win_count += 1
             user.game_count += 1
             user.save()
-        except User.DoesNotExist as e:
+        except User.DoesNotExist:
             pass
 
     @database_sync_to_async
     def tournament_update(self, game):
+        pong = self.consumer.common[self.consumer.group_name]['pong']
         if game.game_turn == 1:
-            game.first_winner = self.consumer.pong.winner
+            game.first_winner = pong.winner
         elif game.game_turn == 2:
-            game.second_winner = self.consumer.pong.winner
+            game.second_winner = pong.winner
         elif game.game_turn == 3:
-            game.final_winner = self.consumer.pong.winner
+            game.final_winner = pong.winner
         game.game_turn += 1
         game.save()

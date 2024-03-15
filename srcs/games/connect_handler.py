@@ -2,6 +2,7 @@ from urllib.parse import parse_qs
 
 from channels.db import database_sync_to_async
 
+from games.constants import PLAYER1, PLAYER2
 from local.models import Local
 from remote.models import Remote
 from tournaments.models import Tournament
@@ -13,6 +14,8 @@ class ConnectHandler:
         self.consumer = consumer
         self.consumer.user = self.consumer.scope['user']
         self.consumer.type, self.type_id = self.parse_query_string()
+        self.player1_name = None
+        self.player2_name = None
 
     def parse_query_string(self):
         query_string = parse_qs(self.consumer.scope['query_string'].strip().decode())
@@ -35,23 +38,24 @@ class ConnectHandler:
             self.set_players_name()
             await self.consumer.channel_layer.group_send(self.consumer.group_name, {
                 'type': 'get_user_info',
-                'player1_name': self.consumer.player1_name,
-                'player2_name': self.consumer.player2_name,
+                'player1_name': self.player1_name,
+                'player2_name': self.player2_name,
             })
 
     async def start_remote_game(self):
-        if self.consumer.group_name not in self.consumer.remote_game:
-            self.consumer.remote_game[self.consumer.group_name] = []
-        self.consumer.remote_game[self.consumer.group_name].append(self.consumer.channel_name)
+        if self.consumer.group_name not in self.consumer.common:
+            self.consumer.common[self.consumer.group_name] = dict()
+            self.consumer.common[self.consumer.group_name]['channels'] = list()
+        self.consumer.common[self.consumer.group_name]['channels'].append(self.consumer.channel_name)
 
-        if len(self.consumer.remote_game[self.consumer.group_name]) >= 2:
+        if len(self.consumer.common[self.consumer.group_name]['channels']) == 2:
             self.set_players_name()
             images = await self.get_players_image()
             await self.consumer.channel_layer.group_send(self.consumer.group_name, {
                 'type': 'get_user_info',
-                'player1_name': self.consumer.player1_name,
+                'player1_name': self.player1_name,
                 'player1_image': images[0],
-                'player2_name': self.consumer.player2_name,
+                'player2_name': self.player2_name,
                 'player2_image': images[1]
             })
 
@@ -62,25 +66,33 @@ class ConnectHandler:
         elif self.consumer.type == 'remote':
             self.set_remote_game_players(game)
         else:
-            self.consumer.player1_name = game.player1_name
-            self.consumer.player2_name = game.player2_name
+            self.consumer.set_player_name(PLAYER1, game.player1_name)
+            self.consumer.set_player_name(PLAYER2, game.player2_name)
+        self.player1_name = self.consumer.get_player_name(PLAYER1)
+        self.player2_name = self.consumer.get_player_name(PLAYER2)
 
     def set_players_tournament(self, game):
+        player1_name = None
+        player2_name = None
         if game.game_turn == 1:
-            self.consumer.player1_name = game.player1_name
-            self.consumer.player2_name = game.player2_name
+            player1_name = game.player1_name
+            player2_name = game.player2_name
         elif game.game_turn == 2:
-            self.consumer.player1_name = game.player3_name
-            self.consumer.player2_name = game.player4_name
+            player1_name = game.player3_name
+            player2_name = game.player4_name
         elif game.game_turn == 3:
-            self.consumer.player1_name = game.first_winner
-            self.consumer.player2_name = game.second_winner
+            player1_name = game.first_winner
+            player2_name = game.second_winner
+        self.consumer.set_player_name(PLAYER1, player1_name)
+        self.consumer.set_player_name(PLAYER2, player2_name)
 
     def set_remote_game_players(self, game):
-        self.consumer.player2_name = self.consumer.user.intra_id
-        self.consumer.player1_name = game.player1_name
-        if self.consumer.player1_name == self.consumer.player2_name:
-            self.consumer.player1_name = game.player2_name
+        player1_name = game.player1_name
+        player2_name = self.consumer.user.intra_id
+        if player1_name == player2_name:
+            player1_name = game.player2_name
+        self.consumer.set_player_name(PLAYER1, player1_name)
+        self.consumer.set_player_name(PLAYER2, player2_name)
 
     @database_sync_to_async
     def set_game(self):
@@ -93,6 +105,6 @@ class ConnectHandler:
 
     @database_sync_to_async
     def get_players_image(self):
-        player1 = User.objects.get(intra_id=self.consumer.player1_name)
-        player2 = User.objects.get(intra_id=self.consumer.player2_name)
+        player1 = User.objects.get(intra_id=self.player1_name)
+        player2 = User.objects.get(intra_id=self.player2_name)
         return [player1.image, player2.image]
