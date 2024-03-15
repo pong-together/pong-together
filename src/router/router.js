@@ -8,14 +8,15 @@ function Router($container) {
 	const findMatchedRoute = () =>
 		routes.find((route) => route.path.test(location.pathname));
 
-	const route = () => {
-		if (currentPage){
-			currentPage.destroy();
+		const route = () => {
+			const previousPage = currentPage;
 			currentPage = null;
-		}
-		const TargetPage = findMatchedRoute()?.element || NotFound;
-		currentPage = new TargetPage(this.$container);
-	};
+			const TargetPage = findMatchedRoute()?.element || NotFound;
+			currentPage = new TargetPage(this.$container);
+			if (previousPage && typeof previousPage.destroy === 'function'){
+				previousPage.destroy();
+			}
+		};
 
 	const init = () => {
 		window.addEventListener('historychange', ({ detail }) => {
