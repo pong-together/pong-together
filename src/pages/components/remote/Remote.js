@@ -208,10 +208,10 @@ export default class Remote extends Component {
 		this.stopTimer = stopTimer;
 
 		function startTimer() {
-			time = setInterval(() => {
+			time = setInterval(async () => {
 				if (seconds === 1) {
 					this.remoteSocket.send(JSON.stringify({ type: 'match_success' }));
-					this.stopTimer();
+					await this.stopTimer();
 					navigate('/game', true);
 					// window.location.pathname = '/game';
 				} else {
