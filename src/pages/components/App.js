@@ -25,7 +25,7 @@ export default class extends Component {
 			}
 			if (window.location.pathname !== 'remote' && window.location.pathname !== 'game'){
 				navigate("/select", true);
-			// }
+			}
 		});
 
 		this.addEvent('click', '.modal-close-btn', () => {
