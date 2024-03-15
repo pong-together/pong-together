@@ -99,11 +99,6 @@ export default class extends Component {
 		}
 	}
 
-	routerModule() {
-		const $body = this.$target.querySelector('.body-wrapper');
-		new Router($body);
-	}
-
 	calcRate() {
 		this.$state.rate =
 			store.state.winCount + store.state.loseCount !== 0
@@ -209,7 +204,7 @@ export default class extends Component {
 	async mounted() {
 		window.addEventListener('load', () => {
 			this.changeModule();
-			this.routerModule();
+			// this.routerModule();
 		});
 
 		this.calcRate();
