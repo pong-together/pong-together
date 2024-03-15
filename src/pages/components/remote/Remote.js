@@ -48,7 +48,7 @@ export default class Remote extends Component {
 			const target = e.target;
 			if (target.id === 'search') {
 				await this.stopCounter();
-				navigate('/select');
+				navigate('/select', true);
 				// window.location.pathname = '/select';
 			}
 		});
@@ -138,7 +138,7 @@ export default class Remote extends Component {
 					language.remote[this.$state.region].cancelMatch,
 				);
 				await this.stopCounter();
-				navigate('/select');
+				navigate('/select', true);
 			}
 		};
 
@@ -199,7 +199,7 @@ export default class Remote extends Component {
 			clearInterval(time);
 			bindUpdateTimer();
 			await this.stopCounter();
-			navigate('/game');
+			navigate('/game', true);
 			// window.location.pathname = '/game';
 		};
 
