@@ -35,10 +35,10 @@ export default class extends Component {
 	}
 
 	setEvent() {
-		document.addEventListener('click', async (e) => {
+		document.addEventListener('click', (e) => {
 			const target = e.target;
 			if (target.id === 'search') {
-				await this.stopCounter();
+				this.stopCounter();
 				navigate('/select');
 				// window.location.pathname = '/select';
 			}
