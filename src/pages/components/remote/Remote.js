@@ -2,6 +2,7 @@ import Component from '../../../core/Component.js';
 import http from '../../../core/http.js';
 import { navigate } from '../../../router/utils/navigate.js';
 import language from '../../../utils/language.js';
+import { displayCanceledMatchingModal } from '../../../utils/modal';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
@@ -34,10 +35,11 @@ export default class extends Component {
 	}
 
 	setEvent() {
-		document.addEventListener('click', (e) => {
+		document.addEventListener('click', async (e) => {
 			const target = e.target;
 			if (target.id === 'search') {
-				navigate("/select");
+				await this.stopCounter();
+				navigate('/select');
 				// window.location.pathname = '/select';
 			}
 		});
@@ -66,16 +68,8 @@ export default class extends Component {
 		`;
 	}
 
-	async sleep() {
-		const asleep = () => {
-			return new Promise((resolve) => setTimeout(resolve, 3000));
-		};
-		const wait = async () => {
-			console.log('sleep 시작');
-			await asleep();
-			console.log('sleep 끝');
-		};
-		await wait();
+	async sleep(ms) {
+		await new Promise((resolve) => setTimeout(resolve, ms));
 	}
 
 	async closeSocket() {
@@ -126,9 +120,16 @@ export default class extends Component {
 				this.$state.opponentIntraID = data.opponent;
 				this.$state.opponentIntraPic = data.opponent_image;
 				localStorage.setItem('remote-id', data.id);
+				await this.stopCounter();
 				this.exclamationMark();
-				await this.sleep();
+				await this.sleep(3000);
 				this.remoteReady();
+			} else if (data.type && data.type === 'send_disconnection') {
+				console.log('상대방이 나갔습니다. 다시 매칭을 시작합니다.');
+				await displayCanceledMatchingModal(
+					language.remote[this.$state.region].cancelMatch,
+				);
+				location.reload();
 			}
 		};
 
@@ -185,10 +186,10 @@ export default class extends Component {
 			buttonElement.textContent = `${this.$state.opponentIntraID}(${seconds})`;
 		}
 
-		const stopTimer = () => {
+		const stopTimer = async () => {
 			clearInterval(time);
 			bindUpdateTimer();
-			navigate("/game");
+			navigate('/game');
 			// window.location.pathname = '/game';
 		};
 
