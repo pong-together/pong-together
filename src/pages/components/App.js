@@ -23,8 +23,9 @@ export default class extends Component {
 			if (localStorage.getItem('tournament-id')) {
 				localStorage.removeItem('tournament-id');
 			}
-			navigate("/select", true);
-			// window.location.pathname = '/select';
+			if (window.location.pathname !== 'remote' && window.location.pathname !== 'game'){
+				navigate("/select", true);
+			}
 		});
 
 		this.addEvent('click', '.modal-close-btn', () => {
@@ -142,9 +143,13 @@ export default class extends Component {
 
 		chatSocket.onclose = function (event) {
 			console.log('WebSocket closed.');
-			displayConnectionFailedModal(
-				language.util[this.$state.region].chatMessage,
-			);
+			if(event.code === 1000){
+				console.log('Try multiple connections');
+				displayConnectionFailedModal(
+					language.util[localStorage.getItem('language')?localStorage.getItem('language'):'en'].chatMessage,
+				);
+				localStorage.clear();
+			}
 			// console.log("Close event code:", event.code, "Reason:", event.reason);
 			// localStorage.clear();
 			// chatSocket.close();
@@ -157,7 +162,7 @@ export default class extends Component {
 			);
 			localStorage.clear();
 			// localStorage.setItem('chatConnection', true);
-			chatSocket.close();
+			// chatSocket.close();
 			return;
 		};
 
@@ -169,6 +174,8 @@ export default class extends Component {
 			} else if (data.type && data.type === 'ping') {
 				console.log('pong');
 				chatSocket.send(JSON.stringify({ type: 'pong' }));
+			} else if (data.type && data.type === 'send_multiple_connection') {
+				chatSocket.close(1000, 'Try multiple connections');
 			}
 		};
 	}
@@ -212,7 +219,8 @@ export default class extends Component {
 			(!localStorage.getItem('chatConnection') ||
 				localStorage.getItem('chatConnection') !== true)
 		) {
-			this.connectSocket();
+			this.connectSocket.bind(this)();
+			console.log("chat connect");
 		}
 
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {
