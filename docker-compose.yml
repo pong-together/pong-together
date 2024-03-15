@@ -46,7 +46,7 @@ services:
       # - "path.data=/var/lib/elasticsearch"
       # - "path.logs=/var/log/elasticsearch"
       - "network.host=0.0.0.0"
-      - "xpack.security.enabled=true"
+      - "xpack.security.enabled=false"
 
 volumes:
   postgres_data: {}
