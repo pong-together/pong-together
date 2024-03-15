@@ -161,6 +161,7 @@ export default class Remote extends Component {
 
 		const stopCounter = async () => {
 			clearInterval(count);
+			console.log('stop counter');
 			updateCounter();
 			if (
 				this.remoteSocket &&
@@ -197,6 +198,7 @@ export default class Remote extends Component {
 
 		const stopTimer = async () => {
 			clearInterval(time);
+			console.log('cleart time');
 			bindUpdateTimer();
 			await this.stopCounter();
 			navigate('/game', true);
