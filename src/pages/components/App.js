@@ -41,7 +41,9 @@ export default class extends Component {
 	}
 
 	routerModule(){
-		const $body = this.$target.querySelector('#app');
+		// const $body = this.$target.querySelector('#app');
+		// new Router($body);
+		const $body = this.$target.querySelector('.body-wrapper');
 		new Router($body);
 	}
 
