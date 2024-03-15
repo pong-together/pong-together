@@ -10,10 +10,10 @@ export default class GameSelect extends Component {
 	static instance = null;
 
 	static getInstance($container) {
-		if (!GameSelect.instance) {
+		if (GameSelect.instance !== null) {
 			GameSelect.instance = new GameSelect($container);
 		}
-		console.log(GameSelect.instance);
+		console.log('game select',GameSelect.instance);
 		return GameSelect.instance;
 	}
 

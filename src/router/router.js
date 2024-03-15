@@ -13,6 +13,7 @@ function Router($container) {
 		currentPage = null;
 		const TargetPage = findMatchedRoute()?.element || NotFound;
 		currentPage = TargetPage.getInstance(this.$container);
+		console.log('current page:',currentPage);
 		if (previousPage && typeof previousPage.destroy === 'function'){
 			previousPage.destroy();
 		}
