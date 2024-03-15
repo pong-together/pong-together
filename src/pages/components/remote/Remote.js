@@ -39,7 +39,7 @@ export default class extends Component {
 			const target = e.target;
 			if (target.id === 'search') {
 				await this.stopCounter();
-				document.removeEventListener('click', handleEvent);
+				// document.removeEventListener('click', handleEvent);
 				navigate('/select');
 				// window.location.pathname = '/select';
 			}
@@ -126,11 +126,12 @@ export default class extends Component {
 				await this.sleep(3000);
 				this.remoteReady();
 			} else if (data.type && data.type === 'send_disconnection') {
-				console.log('상대방이 나갔습니다. 다시 매칭을 시작합니다.');
+				console.log('상대방이 나갔습니다.');
 				await displayCanceledMatchingModal(
 					language.remote[this.$state.region].cancelMatch,
 				);
-				location.reload();
+				await this.stopCounter();
+				navigate('/select');
 			}
 		};
 
