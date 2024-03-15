@@ -7,6 +7,14 @@ import http from '../../../core/http.js';
 import { navigate } from '../../../router/utils/navigate.js';
 
 export default class extends Component {
+	static instance = null;
+
+	static getInstance($container) {
+		if (!Local.instance) {
+			Local.instance = new Local($container);
+		}
+		return Local.instance;
+	}
 	setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
