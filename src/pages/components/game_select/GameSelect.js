@@ -13,6 +13,7 @@ export default class GameSelect extends Component {
 		if (!GameSelect.instance) {
 			GameSelect.instance = new GameSelect($container);
 		}
+		console.log(GameSelect.instance);
 		return GameSelect.instance;
 	}
 
