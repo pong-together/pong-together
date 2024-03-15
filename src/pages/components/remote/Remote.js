@@ -48,8 +48,8 @@ export default class Remote extends Component {
 			const target = e.target;
 			if (target.id === 'search') {
 				await this.stopCounter();
-				document.removeEventListener('click', handleEvent);
-				navigate('/select');
+				// document.removeEventListener('click', handleEvent);
+				navigate('/select', true);
 				// window.location.pathname = '/select';
 			}
 		}
@@ -200,7 +200,7 @@ export default class Remote extends Component {
 			clearInterval(time);
 			bindUpdateTimer();
 			await this.stopCounter();
-			navigate('/game');
+			navigate('/game', true);
 			// window.location.pathname = '/game';
 		};
 
