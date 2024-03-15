@@ -12,12 +12,6 @@ export default class {
 		this.render();
 	}
 
-	init($target) {
-		this.$target = $target;
-		this.setup();
-		this.setEvent();
-		this.render();
-	}
 	// component state 설정
 	setup() {}
 

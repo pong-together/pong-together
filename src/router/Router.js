@@ -49,6 +49,7 @@ import RouterInstanceStore from './constants/RouterInstanceStore.js';
 // export default Router;
 
 
+
 export default class Router {
 	constructor($container) {
 			this.$container = $container;
@@ -56,10 +57,6 @@ export default class Router {
 			this.instanceStore = new RouterInstanceStore();
 			this.init();
 			this.route();
-	}
-
-	 findMatchedRoute() {
-		return routes.find(route => route.path.test(window.location.pathname));
 	}
 
 	route() {
@@ -79,7 +76,7 @@ export default class Router {
 
 			this.currentPage = this.instanceStore.getInstance(routeName);
 			if (typeof this.currentPage.init === 'function') {
-					this.currentPage.init();
+					this.currentPage.render();
 			}
 
 			console.log('Current page:', this.currentPage);
