@@ -26,9 +26,7 @@ function displayConnectionFailedModal(text) {
 const displayCanceledMatchingModal = async (text) => {
 	const modalHTML = `
 		<div class="modal-overlay">
-			<div class="modal-content">
-				<p>${text}</p>
-			</div>
+			<div class="modal-content">${text}</div>
 		</div>
 	`;
 
