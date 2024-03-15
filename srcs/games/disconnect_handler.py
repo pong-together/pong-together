@@ -3,6 +3,7 @@ import asyncio
 from channels.db import database_sync_to_async
 
 from games.constants import PLAYER1, PLAYER2
+from games.score import Score
 from users.models import User
 
 
@@ -26,38 +27,39 @@ class DisconnectHandler:
         await self.cancel_pong_task()
 
     async def disconnect_remote(self):
-        if self.is_abnormal():
-            await self.disconnect_abnormal()
-            await self.cancel_pong_task()
-        if self.consumer.pong_task is not None and not self.is_abnormal():
+        pong = self.consumer.common[self.consumer.group_name]['pong']
+        if Score.end_normal(pong.end_status) and \
+                self.consumer.user.intra_id == self.consumer.get_player_name(PLAYER1):
             await self.disconnect_normal()
+            await self.cancel_pong_task()
+        if Score.end_abnormal(pong.end_status):
+            await self.disconnect_abnormal()
             await self.cancel_pong_task()
         await self.consumer.channel_layer.group_discard(self.consumer.group_name, self.consumer.channel_name)
 
-    def is_abnormal(self):
-        return not self.consumer.pong.winner
-
     async def disconnect_normal(self):
         pong = self.consumer.common[self.consumer.group_name]['pong']
-        winner = pong.winner
-        loser = self.consumer.get_player_name(PLAYER1)
-        if loser == winner:
-            loser = self.consumer.get_player_name(PLAYER2)
-        await self.update_game_result(loser, winner)
+        winner = pong.get_winner()
+        loser = self.get_other_player(winner)
+        # await self.update_game_result(loser, winner)
+        await self.update_win(winner)
+        await self.update_lose(loser)
 
     async def disconnect_abnormal(self):
-        loser = self.consumer.user.intra_id,
-        winner = self.get_other_player()
-        await self.update_game_result(loser, winner)
+        loser = self.consumer.user.intra_id
+        winner = self.get_other_player(loser)
+        # await self.update_game_result(loser, winner)
+        await self.update_win(winner)
+        await self.update_lose(loser)
         await self.consumer.channel_layer.group_send(self.consumer.group_name, {
             'type': 'end',
             'is_normal': False,
             'winner': winner
         })
 
-    def get_other_player(self):
+    def get_other_player(self, name):
         other = self.consumer.get_player_name(PLAYER1)
-        if self.consumer.user.intra_id == other:
+        if name == other:
             other = self.consumer.get_player_name(PLAYER2)
         return other
 
@@ -69,9 +71,9 @@ class DisconnectHandler:
         except asyncio.CancelledError:
             pass
 
-    async def update_game_result(self, lose_player, win_player):
-        await self.update_lose(lose_player)
-        await self.update_win(win_player)
+    async def update_game_result(self, winner, loser):
+        await self.update_win(winner)
+        await self.update_lose(loser)
 
     @database_sync_to_async
     def update_lose(self, intra_id):
@@ -80,7 +82,7 @@ class DisconnectHandler:
             user.lose_count += 1
             user.game_count += 1
             user.save()
-        except User.DoesNotExist as e:
+        except User.DoesNotExist:
             pass
 
     @database_sync_to_async
