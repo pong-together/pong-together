@@ -57,20 +57,6 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         except ValueError as e:
             await self.send_json({'error': str(e)})
 
-    def push_button(self, sender_player, button):
-        pong = self.common[self.group_name]['pong']
-        player = pong.player1
-        if (self.game.mode == 'remote' and sender_player == self.get_player_name(PLAYER2)) or \
-                (self.game.mode != 'remote' and sender_player == 'player2'):
-            player = pong.player2
-        player.move(button)
-
-    async def send_push_button_event(self, event):
-        try:
-            self.push_button(event['sender_player'], event['button'])
-        except KeyError as e:
-            await self.send_json({'error': f'{str(e)} is required'})
-
     # event
     async def get_user_info(self, event):
         await self.send_event(event)

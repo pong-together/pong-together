@@ -9,7 +9,10 @@ class ReceiveHandler:
         if content['type'] == 'start_game':
             await self.start_pong_game(consumer)
         if content['type'] == 'push_button':
-            await self.receive_push_button(content['sender_player'], content['button'])
+            sender_player = content['sender_player']
+            button = content['button']
+            self.validate_push_button_event(consumer, sender_player)
+            self.push_button(consumer, sender_player, button)
 
     # start_game
     @staticmethod
@@ -21,21 +24,17 @@ class ReceiveHandler:
             consumer.common[consumer.group_name]['pong_task'] = asyncio.create_task(pong.run())
 
     # push_button
-    async def receive_push_button(self, consumer, sender_player, button):
-        if self.is_valid_push_button_event(consumer, sender_player):
-            raise ValueError('sender_player is invalid')
-
-        if consumer.common[consumer.group_name]['pong_task']:
-            consumer.push_button(sender_player, button)
-        else:
-            await consumer.channel_layer.send(consumer.common[consumer.group_name]['channels'], {
-                'type': 'send_push_button_event',
-                'sender_player': sender_player,
-                'button': button
-            })
+    @staticmethod
+    def push_button(consumer, sender_player, button):
+        pong = consumer.common[consumer.group_name]['pong']
+        player = pong.player1
+        if (consumer.type == 'remote' and sender_player == consumer.get_player_name(PLAYER2)) or \
+                (consumer.type != 'remote' and sender_player == 'player2'):
+            player = pong.player2
+        player.move(button)
 
     @staticmethod
-    def is_valid_push_button_event(consumer, sender_player):
+    def validate_push_button_event(consumer, sender_player):
         if consumer.type == 'remote' and \
                 sender_player not in [consumer.get_player_name(PLAYER1), consumer.get_player_name(PLAYER2)]:
             raise ValueError('sender_player must be player name')
