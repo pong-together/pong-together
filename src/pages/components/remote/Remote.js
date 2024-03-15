@@ -44,16 +44,14 @@ export default class Remote extends Component {
 	}
 
 	setEvent() {
-		const handleEvent = async (e) => {
+		document.addEventListener('click', async (e) => {
 			const target = e.target;
 			if (target.id === 'search') {
 				await this.stopCounter();
-				// document.removeEventListener('click', handleEvent);
 				navigate('/select', true);
 				// window.location.pathname = '/select';
 			}
-		}
-		document.addEventListener('click', handleEvent);
+		});
 	}
 
 	template() {
