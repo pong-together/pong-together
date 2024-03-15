@@ -5,14 +5,16 @@ import TFABtn from './TFABtn.js';
 import store from '../../../store/index.js';
 
 export default class Login extends Component {
-	static instance = null;
+	// static instance = null;
 
-	static getInstance($container) {
-		if (!Login.instance) {
-				Login.instance = new Login($container);
-		}
-		return Login.instance;
-	}
+	// static getInstance($container) {
+	// 	if (!Login.instance) {
+	// 			Login.instance = new Login($container);
+	// 	}
+	// 	return Login.instance;
+	// }
+
+	init(){};
 
 	setup() {
 		if (localStorage.getItem('language')) {
