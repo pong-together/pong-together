@@ -118,14 +118,12 @@ export default class Game extends Component {
 			
 			this.event1 = (e) => {
 				if (window.localStorage.getItem('gameMode') === 'remote') {
-					if (e.key === 'w')
-						keyStates[e.key] = true;
-					else if (e.key === 'ㅈ')
+					if (e.key === 'ㅈ')
 						keyStates['w'] = true;
-					else if (e.key === 's')
-						keyStates[e.key] = true;
 					else if (e.key === 'ㄴ')
 						keyStates['s'] = true;
+					else if (e.key === 'ㅔ')
+						keyStates['p'] = true;
 					keyStates[e.key] = true;
 					updateBarPositionRemote();
 				}
@@ -158,6 +156,7 @@ export default class Game extends Component {
 			function updateBarPositionRemote() {
 				let messages = [];
 				if (keyStates['w']) {
+					console.log('remote W');
 					messages.push({
 						type: "push_button",
 						sender_player: `${window.localStorage.getItem('intraId')}`,
@@ -165,6 +164,7 @@ export default class Game extends Component {
 					});
 				}
 				else if (keyStates['s']) {
+					console.log('remote S');
 					messages.push({
 						type: "push_button",
 						sender_player: `${window.localStorage.getItem('intraId')}`,
@@ -286,7 +286,8 @@ export default class Game extends Component {
 	setEvent() {
 		this.addEvent('click', '.game-end-button', ({target}) => {
 			if (window.localStorage.getItem('gameMode') === 'tournament') {
-				new TournamentBracket(this.$target).init(this.$target);
+				// new TournamentBracket(this.$target).init(this.$target);
+				navigate('/tournamentBracket');
 			}
 			else {
 				// window.location.pathname = '/select';

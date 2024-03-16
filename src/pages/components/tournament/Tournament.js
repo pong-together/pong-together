@@ -85,7 +85,8 @@ export default class Tournament extends Component {
 			const isDuplicate = await this.inputNickname(target, prev);
 
 			if (!isDuplicate) {
-				new Bracket(this.$target, this.$props).init(this.$target);
+				// new Bracket(this.$target, this.$props).init(this.$target);
+				navigate('/tournamentBracket');
 			}
 		});
 	}

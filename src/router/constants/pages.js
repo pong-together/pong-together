@@ -5,6 +5,7 @@ import Remote from '../../pages/components/remote/Remote.js';
 import Local from '../../pages/components/local/Local.js';
 import Game from '../../pages/components/game/Game.js';
 import LoginRedirect from '../../pages/components/login/LoginRedirect';
+import tournamentBracket from '../../pages/components/tournament/Tournament-Bracket.js';
 
 export const routes = [
 	{ path: /^\/$/, element: Login },
@@ -13,6 +14,7 @@ export const routes = [
 	{ path: /^\/select$/, element: GameSelect },
 	{ path: /^\/local$/, element: Local },
 	{ path: /^\/tournament$/, element: Tournament },
+	{ path: /^\/tournamentBracket$/, element: tournamentBracket},
 	{ path: /^\/remote$/, element: Remote },
 	{ path: /^\/game$/, element: Game },
 ];
