@@ -30,8 +30,8 @@ export default class extends Component {
 		});
 
 		this.addEvent('click', '.modal-close-btn', () => {
-			// navigate("/login");
-			window.location.pathname = '/login';
+			navigate("/login", true);
+			// window.location.pathname = '/login';
 		});
 	}
 

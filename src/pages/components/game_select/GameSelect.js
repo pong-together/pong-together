@@ -21,8 +21,8 @@ export default class GameSelect extends Component {
 		if (
 			!localStorage.getItem('accessToken') ||
 			!localStorage.getItem('twoFA')) {
-			window.location.pathname = '/login';
-			// navigate("/login", true);
+			// window.location.pathname = '/login';
+			navigate("/login", true);
 		} else {
 			http.checkToken();
 		}
@@ -132,13 +132,10 @@ export default class GameSelect extends Component {
 			localStorage.setItem('gameLevel', this.$state.level);
 			if (this.$state.mode === 'local') {
 				navigate("/local");
-				// window.location.pathname = '/local';
 			} else if (this.$state.mode === 'tournament') {
 				navigate("/tournament")
-				// window.location.pathname = '/tournament';
 			} else if (this.$state.mode === 'remote') {
 				navigate("/remote");
-				// window.location.pathname = '/remote';
 			}
 		});
 	}
