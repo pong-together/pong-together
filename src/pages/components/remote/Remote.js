@@ -130,6 +130,7 @@ export default class Remote extends Component {
 					language.remote[this.$state.region].cancelMatch,
 				);
 				await this.stopTimer();
+				console.log('매칭 취소 : 선택화면으로 이동');
 				navigate('/select');
 			}
 		};
@@ -218,6 +219,7 @@ export default class Remote extends Component {
 			time = setInterval(async () => {
 				if (seconds === 0) {
 					this.remoteSocket.send(JSON.stringify({ type: 'match_success' }));
+					console.log('매칭 성공 메시지 보냄');
 					await stopTimer();
 					navigate('/game');
 				} else {
