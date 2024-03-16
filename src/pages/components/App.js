@@ -1,5 +1,5 @@
 import Component from '../../core/Component.js';
-import Router from '../../router/router.js';
+import Router from '../../router/Router.js';
 import { navigate } from '../../router/utils/navigate.js';
 import store from '../../store/index.js';
 import language from '../../utils/language.js';
