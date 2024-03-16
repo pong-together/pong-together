@@ -82,7 +82,7 @@ const refreshToken = async () => {
 						language.util[region].expiredTokenMessage,
 					);
 					localStorage.clear();
-					navigate('/login', true);
+					navigate('/login');
 					// window.location.pathname = '/login';
 				}
 			} else {
@@ -101,7 +101,7 @@ const refreshToken = async () => {
 		console.log('refresh token이 존재하지 않습니다.');
 		console.log('다시 로그인을 시작하여 주세요.');
 		localStorage.clear();
-		navigate('/login', true);
+		navigate('/login');
 		// window.location.pathname = '/login';
 	}
 };

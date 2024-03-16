@@ -131,13 +131,13 @@ export default class GameSelect extends Component {
 			localStorage.setItem('gameMode', this.$state.mode);
 			localStorage.setItem('gameLevel', this.$state.level);
 			if (this.$state.mode === 'local') {
-				navigate("/local", true);
+				navigate("/local");
 				// window.location.pathname = '/local';
 			} else if (this.$state.mode === 'tournament') {
-				navigate("/tournament", true)
+				navigate("/tournament")
 				// window.location.pathname = '/tournament';
 			} else if (this.$state.mode === 'remote') {
-				navigate("/remote", true);
+				navigate("/remote");
 				// window.location.pathname = '/remote';
 			}
 		});

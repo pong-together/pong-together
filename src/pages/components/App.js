@@ -19,12 +19,13 @@ export default class extends Component {
 	}
 
 	setEvent() {
-		this.addEvent('click', '.back-logo', () => {
+		this.addEvent('click', '.back-logo', (e) => {
+			e.stopPropagation();
 			if (localStorage.getItem('tournament-id')) {
 				localStorage.removeItem('tournament-id');
 			}
-			if (window.location.pathname !== 'remote' && window.location.pathname !== 'game'){
-				navigate("/select", true);
+			if (window.location.pathname !== '/remote' && window.location.pathname !== '/game'){
+				navigate("/select");
 			}
 		});
 
