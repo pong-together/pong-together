@@ -10,6 +10,8 @@ export default class Remote extends Component {
 	constructor($target, $props) {
 		super($target, $props);
 		this.remoteSocket;
+		this.count;
+		this.time;
 	}
 
 	setup() {
@@ -133,14 +135,28 @@ export default class Remote extends Component {
 
 		this.remoteSocket.onerror = () => {
 			console.log('원격 소켓 에러');
-			this.stopCounter();
+			this.stopInterval();
 		};
+	}
+
+	async stopInterval() {
+		if (this.count) {
+			clearInterval(this.count);
+		} else if (this.timer) {
+			clearInterval(this.timer);
+		}
+
+		if (
+			this.remoteSocket &&
+			this.remoteSocket.readyState !== WebSocket.CLOSED
+		) {
+			await this.closeSocket();
+		}
 	}
 
 	counter() {
 		let minutes = 0;
 		let seconds = 0;
-		let count;
 		const counterElement = document.getElementById('counter');
 		counterElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
@@ -149,7 +165,7 @@ export default class Remote extends Component {
 		}
 
 		const stopCounter = async () => {
-			clearInterval(count);
+			clearInterval(this.count);
 			updateCounter();
 			if (
 				this.remoteSocket &&
@@ -161,7 +177,7 @@ export default class Remote extends Component {
 		this.stopCounter = stopCounter;
 
 		const startCounter = () => {
-			count = setInterval(() => {
+			this.count = setInterval(() => {
 				if (seconds === 59) {
 					minutes++;
 					seconds = 0;
@@ -185,7 +201,7 @@ export default class Remote extends Component {
 		}
 
 		const stopTimer = async () => {
-			clearInterval(time);
+			clearInterval(this.time);
 			bindUpdateTimer();
 			if (
 				this.remoteSocket &&
@@ -197,8 +213,8 @@ export default class Remote extends Component {
 		this.stopTimer = stopTimer;
 
 		function startTimer() {
-			time = setInterval(async () => {
-				if (seconds === 1) {
+			this.time = setInterval(async () => {
+				if (seconds === 0) {
 					this.remoteSocket.send(JSON.stringify({ type: 'match_success' }));
 					await this.stopTimer();
 					navigate('/game');
