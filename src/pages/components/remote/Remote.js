@@ -124,36 +124,37 @@ export default class Remote extends Component {
 				this.exclamationMark();
 				await this.sleep(3000);
 				this.remoteReady();
-			} else if (data.type && data.type === 'send_disconnection') {
-				console.log('상대방이 나갔습니다.');
-				await displayCanceledMatchingModal(
-					language.remote[this.$state.region].cancelMatch,
-				);
-				await this.stopTimer();
-				navigate('/select');
-			}
+			} 
+			// else if (data.type && data.type === 'send_disconnection') {
+			// 	console.log('상대방이 나갔습니다.');
+			// 	await displayCanceledMatchingModal(
+			// 		language.remote[this.$state.region].cancelMatch,
+			// 	);
+			// 	await this.stopTimer();
+			// 	navigate('/select');
+			// }
 		};
 
 		this.remoteSocket.onerror = () => {
 			console.log('원격 소켓 에러');
-			this.stopInterval();
+			// this.stopInterval();
 		};
 	}
 
-	async stopInterval() {
-		if (this.count) {
-			clearInterval(this.count);
-		} else if (this.timer) {
-			clearInterval(this.timer);
-		}
+	// async stopInterval() {
+	// 	if (this.count) {
+	// 		clearInterval(this.count);
+	// 	} else if (this.timer) {
+	// 		clearInterval(this.timer);
+	// 	}
 
-		if (
-			this.remoteSocket &&
-			this.remoteSocket.readyState !== WebSocket.CLOSED
-		) {
-			await this.closeSocket();
-		}
-	}
+	// 	if (
+	// 		this.remoteSocket &&
+	// 		this.remoteSocket.readyState !== WebSocket.CLOSED
+	// 	) {
+	// 		await this.closeSocket();
+	// 	}
+	// }
 
 	counter() {
 		let minutes = 0;
