@@ -59,7 +59,6 @@ export default class extends Component {
 		else gamemode = 'extreme';
 
 		const result = await LocalApi.create(localNicknames, gamemode);
-		console.log(result);
 		const { id } = result;
 		window.localStorage.setItem('local-id', id);
 	}
@@ -70,7 +69,7 @@ export default class extends Component {
 			const isDuplicate = await this.localInputNickname(target, localPrev);
 
 			if (!isDuplicate) {
-				navigate("/game",true);
+				navigate("/game");
 				// window.location.pathname = '/game';
 			}
 		});

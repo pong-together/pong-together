@@ -26,7 +26,6 @@ export default class Remote extends Component {
 			!localStorage.getItem('accessToken') ||
 			!localStorage.getItem('twoFA')
 		) {
-			// navigate("/login");
 			window.location.pathname = '/login';
 		} else {
 			http.checkToken();
@@ -48,8 +47,7 @@ export default class Remote extends Component {
 			const target = e.target;
 			if (target.id === 'search') {
 				await this.stopCounter();
-				navigate('/select', true);
-				// window.location.pathname = '/select';
+				navigate('/select');
 			}
 		});
 	}
@@ -138,7 +136,7 @@ export default class Remote extends Component {
 					language.remote[this.$state.region].cancelMatch,
 				);
 				await this.stopTimer();
-				navigate('/select', true);
+				navigate('/select');
 			}
 		};
 
@@ -212,8 +210,7 @@ export default class Remote extends Component {
 				if (seconds === 1) {
 					this.remoteSocket.send(JSON.stringify({ type: 'match_success' }));
 					await this.stopTimer();
-					navigate('/game', true);
-					// window.location.pathname = '/game';
+					navigate('/game');
 				} else {
 					seconds--;
 				}
