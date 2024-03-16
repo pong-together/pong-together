@@ -10,8 +10,8 @@ export default class Remote extends Component {
 	constructor($target, $props) {
 		super($target, $props);
 		this.remoteSocket;
-		// this.count;
-		// this.time;
+		this.count;
+		this.time;
 	}
 
 	setup() {
@@ -179,7 +179,7 @@ export default class Remote extends Component {
 		this.stopCounter = stopCounter;
 
 		const startCounter = () => {
-			count = setInterval(() => {
+			this.count = setInterval(() => {
 				if (seconds === 59) {
 					minutes++;
 					seconds = 0;
@@ -215,7 +215,7 @@ export default class Remote extends Component {
 		this.stopTimer = stopTimer;
 
 		function startTimer() {
-			time = setInterval(async () => {
+			this.time = setInterval(async () => {
 				if (seconds === 0) {
 					this.remoteSocket.send(JSON.stringify({ type: 'match_success' }));
 					await this.stopTimer();
