@@ -10,8 +10,8 @@ export default class Remote extends Component {
 	constructor($target, $props) {
 		super($target, $props);
 		this.remoteSocket;
-		// this.count;
-		// this.time;
+		this.count;
+		this.time;
 	}
 
 	setup() {
@@ -126,40 +126,38 @@ export default class Remote extends Component {
 				this.remoteReady();
 			} else if (data.type && data.type === 'send_disconnection') {
 				console.log('상대방이 나갔습니다.');
-				await displayCanceledMatchingModal(
+				displayCanceledMatchingModal(
 					language.remote[this.$state.region].cancelMatch,
 				);
 				await this.stopTimer();
-				console.log('매칭 취소 : 선택화면으로 이동');
 				navigate('/select');
 			}
 		};
 
 		this.remoteSocket.onerror = () => {
 			console.log('원격 소켓 에러');
-			// this.stopInterval();
+			this.stopInterval();
 		};
 	}
 
-	// async stopInterval() {
-	// 	if (this.count) {
-	// 		clearInterval(this.count);
-	// 	} else if (this.timer) {
-	// 		clearInterval(this.timer);
-	// 	}
+	async stopInterval() {
+		if (this.count) {
+			clearInterval(this.count);
+		} else if (this.time) {
+			clearInterval(this.time);
+		}
 
-	// 	if (
-	// 		this.remoteSocket &&
-	// 		this.remoteSocket.readyState !== WebSocket.CLOSED
-	// 	) {
-	// 		await this.closeSocket();
-	// 	}
-	// }
+		if (
+			this.remoteSocket &&
+			this.remoteSocket.readyState !== WebSocket.CLOSED
+		) {
+			await this.closeSocket();
+		}
+	}
 
 	counter() {
 		let minutes = 0;
 		let seconds = 0;
-		let count;
 		const counterElement = document.getElementById('counter');
 		counterElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
@@ -168,8 +166,7 @@ export default class Remote extends Component {
 		}
 
 		const stopCounter = async () => {
-			clearInterval(count);
-			updateCounter();
+			clearInterval(this.count);
 			if (
 				this.remoteSocket &&
 				this.remoteSocket.readyState !== WebSocket.CLOSED
@@ -180,7 +177,7 @@ export default class Remote extends Component {
 		this.stopCounter = stopCounter;
 
 		const startCounter = () => {
-			count = setInterval(() => {
+			this.count = setInterval(() => {
 				if (seconds === 59) {
 					minutes++;
 					seconds = 0;
@@ -190,12 +187,12 @@ export default class Remote extends Component {
 				updateCounter();
 			}, 1000);
 		};
-		startCounter();
+		this.startCounter = startCounter;
+		this.startCounter();
 	}
 
 	timer() {
 		let seconds = 5;
-		let time;
 		const buttonElement = document.getElementById('match-intra');
 		const bindUpdateTimer = updateTimer.bind(this);
 
@@ -204,8 +201,7 @@ export default class Remote extends Component {
 		}
 
 		const stopTimer = async () => {
-			clearInterval(time);
-			bindUpdateTimer();
+			clearInterval(this.time);
 			if (
 				this.remoteSocket &&
 				this.remoteSocket.readyState !== WebSocket.CLOSED
@@ -216,10 +212,9 @@ export default class Remote extends Component {
 		this.stopTimer = stopTimer;
 
 		function startTimer() {
-			time = setInterval(async () => {
-				if (seconds === 0) {
+			this.time = setInterval(async () => {
+				if (seconds === 1) {
 					this.remoteSocket.send(JSON.stringify({ type: 'match_success' }));
-					console.log('매칭 성공 메시지 보냄');
 					await stopTimer();
 					navigate('/game');
 				} else {
