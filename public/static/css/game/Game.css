@@ -58,7 +58,9 @@
 }
 
 .player1-image {
-	background-color: white;
+	/* background-color: white; */
+	/* background-image: url("../../images/player1_image.png"); */
+	background-repeat: round;
 	width: 106px;
 	height: 106px;
 
@@ -129,7 +131,7 @@
 }
 
 .player2-image {
-	background-color: white;
+	/* background-color: white; */
 	width: 106px;
 	height: 106px;
 

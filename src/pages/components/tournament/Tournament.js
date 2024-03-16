@@ -7,6 +7,10 @@ import http from '../../../core/http.js';
 import { navigate } from '../../../router/utils/navigate.js';
 
 export default class Tournament extends Component {
+	constructor($target, $props) {
+		super($target, $props);
+		this.bracket;
+	}
 	// static instance = null;
 
 	// static getInstance($container) {
@@ -15,7 +19,6 @@ export default class Tournament extends Component {
 	// 	}
 	// 	return Tournament.instance;
 	// }
-
 	setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
