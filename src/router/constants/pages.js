@@ -7,12 +7,12 @@ import Game from '../../pages/components/game/Game.js';
 import LoginRedirect from '../../pages/components/login/LoginRedirect';
 
 export const routes = [
-	{ path: /^\/$/, element: Login },
-	{ path: /^\/login$/, element: Login },
-	{ path: /^\/auth$/, element: LoginRedirect },
-	{ path: /^\/select$/, element: GameSelect },
-	{ path: /^\/local$/, element: Local },
-	{ path: /^\/tournament$/, element: Tournament },
-	{ path: /^\/remote$/, element: Remote },
-	{ path: /^\/game$/, element: Game },
+	{ path: /^\/$/, element: Login, key: 'Login'},
+	{ path: /^\/login$/, element: Login, key: 'Login'},
+	{ path: /^\/auth$/, element: LoginRedirect, key: 'LoginRedirect'},
+	{ path: /^\/select$/, element: GameSelect, key: 'GameSelect'},
+	{ path: /^\/local$/, element: Local, key: 'Local'},
+	{ path: /^\/tournament$/, element: Tournament, key: 'Tournament'},
+	{ path: /^\/remote$/, element: Remote, key: 'Remote'},
+	{ path: /^\/game$/, element: Game, key: 'Game'},
 ];

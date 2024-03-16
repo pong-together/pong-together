@@ -7,12 +7,17 @@ import { navigate } from '../../../router/utils/navigate.js';
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
 export default class extends Component {
+	constructor($target, $props) {
+		super($target, $props);
+		this.gameSocket;
+		this.bracket;
+	}
 	setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
 			!localStorage.getItem('twoFA')
 		) {
-			navigate("/login", true);
+			navigate("/login");
 		} else {
 			http.checkToken();
 		}
@@ -89,6 +94,7 @@ export default class extends Component {
 			`${SOCKET_URL}/ws/games/?token=${localStorage.getItem('accessToken')}&type=${this.$state.gameMode}&type_id=${this.$state.game_id}`,
 		)
 
+		this.gameSocket = gameSocket;
 
 		gameSocket.onopen = () => {
 			console.log("WebSocket connection opened.");
@@ -269,7 +275,7 @@ export default class extends Component {
 	setEvent() {
 		this.addEvent('click', '.game-end-button', ({target}) => {
 			if (window.localStorage.getItem('gameMode') === 'tournament') {
-				new TournamentBracket(this.$target);
+				this.bracket = new TournamentBracket(this.$target);
 			}
 			else {
 				// window.location.pathname = '/select';
@@ -280,7 +286,8 @@ export default class extends Component {
 					window.localStorage.removeItem('remote-id');
 				window.localStorage.removeItem('gameMode');
 				window.localStorage.removeItem('gameLevel');
-				window.location.pathname = '/select';
+				// window.location.pathname = '/select';
+				navigate('/select');
 			}
 		})
 	}

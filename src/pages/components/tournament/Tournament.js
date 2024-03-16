@@ -7,6 +7,10 @@ import http from '../../../core/http.js';
 import { navigate } from '../../../router/utils/navigate.js';
 
 export default class extends Component {
+	constructor($target, $props) {
+		super($target, $props);
+		this.bracket;
+	}
 	setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
@@ -73,7 +77,7 @@ export default class extends Component {
 			const isDuplicate = await this.inputNickname(target, prev);
 
 			if (!isDuplicate) {
-				new Bracket(this.$target, this.$props);
+				this.bracket = new Bracket(this.$target, this.$props);
 			}
 		});
 	}

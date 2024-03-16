@@ -81,16 +81,13 @@ export default class extends Component {
 	setEvent() {
 		this.addEvent('click', '.game-start', ({target}) => {
 			if (this.$state.gameround < 4)
-				window.location.pathname = '/game';
-				// navigate("/game");
+				navigate("/game", true);
 			else {
 				window.localStorage.removeItem('gameMode');
 				window.localStorage.removeItem('tournament-id');
 				window.localStorage.removeItem('gameLevel');
-				navigate("/select");
-				// window.location.pathname = '/select';
+				navigate("/select", true);
 			}
-			// window.location.pathname = '/game';
 		})
 	}
 

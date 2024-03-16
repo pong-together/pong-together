@@ -1,41 +1,55 @@
 import { routes } from '../router/constants/pages.js';
 import NotFound from '../pages/components/NotFound.js';
+import Manager from '../utils/componentManager.js';
 
 function Router($container) {
-	this.$container = $container;
-	let currentPage = undefined;
+    console.log('!!router');
+    this.$container = $container;
+    let currentPage = undefined;
+    const ManagerC = new Manager();
 
-	const findMatchedRoute = () =>
-		routes.find((route) => route.path.test(location.pathname));
+    const findMatchedRoute = () =>
+        routes.find((route) => route.path.test(location.pathname));
 
-	const route = () => {
-		const previousPage = currentPage;
-		currentPage = null;
-		const TargetPage = findMatchedRoute()?.element || NotFound;
-		currentPage = new TargetPage(this.$container);
-		if (previousPage && typeof previousPage.destroy === 'function'){
-			previousPage.destroy();
-		}
-	};
+    const route = () => {
+        console.log("function route")
+        const previousPage = currentPage;
+        const matchedRoute = findMatchedRoute();
+        const TargetPage = matchedRoute?.element || NotFound;
+        const TargetPageKey = matchedRoute?.key || 'NotFound';
 
-	const init = () => {
-		window.addEventListener('historychange', ({ detail }) => {
-			const { to, isReplace } = detail;
+        if (currentPage === TargetPage) return; // 이미 렌더링된 페이지인 경우 무시
 
-			if (isReplace || to === location.pathname)
-				history.replaceState(null, '', to);
-			else history.pushState(null, '', to);
+        currentPage = ManagerC.getComponent(TargetPageKey, TargetPage, this.$container);
 
-			route();
-		});
+        if (previousPage && typeof previousPage.destroy === 'function') {
+            console.log('destroy previous')
+            // previousPage.destroy();
+        }
+    };
 
-		window.addEventListener('popstate', () => {
-			route();
-		});
-	};
+    const init = () => {
+        if (!window.routerInitialized) {
+            window.routerInitialized = true;
+            window.addEventListener('historychange', ({ detail }) => {
+                const { to, isReplace } = detail;
 
-	init();
-	route();
+                if (isReplace || to === location.pathname) {
+                    history.replaceState(null, '', to);
+                    console.log('!!');
+                } else {
+                    history.pushState(null, '', to);
+                }
+
+                route();
+            });
+
+            window.addEventListener('popstate', route);
+        }
+    };
+
+    init();
+    route();
 }
 
 export default Router;

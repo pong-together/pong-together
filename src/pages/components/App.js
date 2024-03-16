@@ -25,12 +25,13 @@ export default class extends Component {
 			}
 			if (window.location.pathname !== 'remote' && window.location.pathname !== 'game'){
 				navigate("/select", true);
+				// window.location.pathname = '/select';
 			}
 		});
 
 		this.addEvent('click', '.modal-close-btn', () => {
-			// navigate("/login");
-			window.location.pathname = '/login';
+			navigate("/login", true);
+			// window.location.pathname = '/login';
 		});
 	}
 

@@ -137,4 +137,11 @@ export default class extends Component {
 	}
 
 	mounted() {}
+
+	// destroy() {
+	// 	console.log('destory!');
+	// 	this.removeEvent('click', '.local-start');
+	// 	this.$target.innerHTML = '';
+	// 	// this.bracket = null;
+	// }
 }
