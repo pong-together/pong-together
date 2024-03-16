@@ -1,5 +1,5 @@
 import Component from '../../core/Component.js';
-import Router from '../../router/router.js';
+import Router from '../../router/Router.js';
 import { navigate } from '../../router/utils/navigate.js';
 import store from '../../store/index.js';
 import language from '../../utils/language.js';
@@ -19,18 +19,19 @@ export default class extends Component {
 	}
 
 	setEvent() {
-		this.addEvent('click', '.back-logo', () => {
+		this.addEvent('click', '.back-logo', (e) => {
+			e.stopPropagation();
 			if (localStorage.getItem('tournament-id')) {
 				localStorage.removeItem('tournament-id');
 			}
-			if (window.location.pathname !== 'remote' && window.location.pathname !== 'game'){
-				navigate("/select", true);
+			if (window.location.pathname !== '/remote' && window.location.pathname !== '/game'){
+				navigate("/select");
 			}
 		});
 
 		this.addEvent('click', '.modal-close-btn', () => {
-			// navigate("/login");
-			window.location.pathname = '/login';
+			navigate("/login", true);
+			// window.location.pathname = '/login';
 		});
 	}
 
@@ -39,6 +40,14 @@ export default class extends Component {
 		<div class="body-wrapper"></div>
 		`;
 	}
+
+	routerModule(){
+		// const $body = this.$target.querySelector('#app');
+		// new Router($body);
+		const $body = this.$target.querySelector('.body-wrapper');
+		new Router($body);
+	}
+
 
 	changeModule() {
 		if (
@@ -99,11 +108,6 @@ export default class extends Component {
 		}
 	}
 
-	routerModule() {
-		const $body = this.$target.querySelector('.body-wrapper');
-		new Router($body);
-	}
-
 	calcRate() {
 		this.$state.rate =
 			store.state.winCount + store.state.loseCount !== 0
@@ -121,6 +125,7 @@ export default class extends Component {
 		);
 
 		chatSocket.onopen = () => {
+			console.log("chat connect");
 			this.addEvent('click', '.message-btn', (e) => {
 				e.preventDefault();
 				var message = this.$target.querySelector('#m').value;
@@ -128,7 +133,7 @@ export default class extends Component {
 					// 여기에 조건 추가
 					if (message.trim() !== '') {
 						chatSocket.send(JSON.stringify({ message }));
-						console.log('Message sent: ' + message);
+						// console.log('Message sent: ' + message);
 						this.$target.querySelector('#m').value = '';
 					}
 				}
@@ -167,12 +172,12 @@ export default class extends Component {
 		};
 
 		chatSocket.onmessage = (event) => {
-			console.log(event.data);
+			// console.log(event.data);
 			const data = JSON.parse(event.data);
 			if (data.type && data.type === 'chat_message') {
 				this.displayMessage(data);
 			} else if (data.type && data.type === 'ping') {
-				console.log('pong');
+				// console.log('pong');
 				chatSocket.send(JSON.stringify({ type: 'pong' }));
 			} else if (data.type && data.type === 'send_multiple_connection') {
 				chatSocket.close(1000, 'Try multiple connections');
@@ -182,7 +187,7 @@ export default class extends Component {
 
 	displayMessage(data) {
 		// Moved outside and made a class method
-		console.log(data);
+		// console.log(data);
 		const messageContainer = this.$target.querySelector('.message-container');
 		const messageElement = document.createElement('div');
 		messageElement.classList.add('messages');
@@ -220,7 +225,6 @@ export default class extends Component {
 				localStorage.getItem('chatConnection') !== true)
 		) {
 			this.connectSocket.bind(this)();
-			console.log("chat connect");
 		}
 
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {

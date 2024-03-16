@@ -80,8 +80,14 @@ export default class extends Component {
 
 	setEvent() {
 		this.addEvent('click', '.game-start', ({target}) => {
-			navigate("/game");
-			// window.location.pathname = '/game';
+			if (this.$state.gameround < 4)
+				navigate("/game", true);
+			else {
+				window.localStorage.removeItem('gameMode');
+				window.localStorage.removeItem('tournament-id');
+				window.localStorage.removeItem('gameLevel');
+				navigate("/select", true);
+			}
 		})
 	}
 
@@ -236,7 +242,6 @@ export default class extends Component {
 		const leftline = document.querySelector('.game2-leftline');
 		leftline.style.display = 'none';
 
-		console.log(game1Winner);
 		if (winner[2] !== '' && winner[2] === game1Winner.textContent)
 			this.finalGameLineLeftBorder(game1Winner, game2Winner);
 		else if (winner[2] !== '' && winner[2] === game2Winner.textContent)
@@ -278,7 +283,6 @@ export default class extends Component {
 		const leftline = document.querySelector('.game2-rightline');
 		leftline.style.display = 'none';
 
-		console.log(game1Winner.textContent);
 		if (winner[2] !== '' && winner[2] === game1Winner.textContent)
 			this.finalGameLineLeftBorder(game1Winner, game2Winner);
 		else if (winner[2] !== '' && winner[2] === game2Winner.textContent)
@@ -404,7 +408,6 @@ export default class extends Component {
 	}
 	//api부분 함수
 	async getTournamentInfo() {
-		// console.log(window.localStorage.getItem('tournament-id'));
 		const result = await tourapi.list(
 			window.localStorage.getItem('tournament-id'),
 		);
@@ -444,6 +447,11 @@ export default class extends Component {
 	mounted() {
 		this.getTournamentInfo(); //api로 정보 받아옴.
 
+		if (this.$state.gameround >= 4) {
+			const button = document.querySelector('.game-start');
+			button.textContent = language.tournament[this.$state.region].gameEndButton;
+		}
+
 		const playerBox1 = document.querySelector('.player1');
 		const playerBox2 = document.querySelector('.player2');
 		const playerBox3 = document.querySelector('.player3');
@@ -475,7 +483,7 @@ export default class extends Component {
 				this.$state.winner[0],
 			);
 		else if (
-			this.$state.gameround === 3 &&
+			this.$state.gameround >= 3 &&
 			this.$state.winner[0] === playerBox1.textContent &&
 			this.$state.winner[1] === playerBox3.textContent
 		)
@@ -487,7 +495,7 @@ export default class extends Component {
 				this.$state.winner,
 			);
 		else if (
-			this.$state.gameround === 3 &&
+			this.$state.gameround >= 3 &&
 			this.$state.winner[0] === playerBox1.textContent &&
 			this.$state.winner[1] === playerBox4.textContent
 		)

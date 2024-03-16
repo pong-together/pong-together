@@ -29,7 +29,7 @@ export default class extends Component {
 					Authorization: accessToken,
 					'Content-Type': 'application/json',
 				});
-				console.log(data);
+				// console.log(data);
 				if (data) {
 					// if (data.chat_connection === true) {
 					// 	// 중복 접근을 제한하는 모달 띄워줌

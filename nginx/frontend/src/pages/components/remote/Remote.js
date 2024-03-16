@@ -6,7 +6,16 @@ import { displayCanceledMatchingModal } from '../../../utils/modal';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
-export default class extends Component {
+export default class Remote extends Component {
+	// static instance = null;
+
+	// static getInstance($container) {
+	// 	if (!Remote.instance) {
+	// 		Remote.instance = new Remote($container);
+	// 	}
+	// 	return Remote.instance;
+	// }
+
 	constructor($target, $props) {
 		super($target, $props);
 		this.remoteSocket;
@@ -120,16 +129,16 @@ export default class extends Component {
 				this.$state.opponentIntraID = data.opponent;
 				this.$state.opponentIntraPic = data.opponent_image;
 				localStorage.setItem('remote-id', data.id);
-				await this.stopCounter();
 				this.exclamationMark();
 				await this.sleep(3000);
 				this.remoteReady();
 			} else if (data.type && data.type === 'send_disconnection') {
-				console.log('상대방이 나갔습니다. 다시 매칭을 시작합니다.');
+				console.log('상대방이 나갔습니다.');
 				await displayCanceledMatchingModal(
 					language.remote[this.$state.region].cancelMatch,
 				);
-				location.reload();
+				await this.stopTimer();
+				navigate('/select');
 			}
 		};
 
@@ -152,6 +161,7 @@ export default class extends Component {
 
 		const stopCounter = async () => {
 			clearInterval(count);
+			console.log('stop counter');
 			updateCounter();
 			if (
 				this.remoteSocket &&
@@ -188,15 +198,23 @@ export default class extends Component {
 
 		const stopTimer = async () => {
 			clearInterval(time);
+			console.log('cleart time');
 			bindUpdateTimer();
-			navigate('/game');
-			// window.location.pathname = '/game';
+			if (
+				this.remoteSocket &&
+				this.remoteSocket.readyState !== WebSocket.CLOSED
+			) {
+				await this.closeSocket();
+			}
 		};
+		this.stopTimer = stopTimer;
 
 		function startTimer() {
 			time = setInterval(() => {
 				if (seconds === 1) {
 					stopTimer();
+					navigate('/game');
+					// window.location.pathname = '/game';
 				} else {
 					seconds--;
 				}
