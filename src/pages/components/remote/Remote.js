@@ -190,7 +190,8 @@ export default class Remote extends Component {
 				updateCounter();
 			}, 1000);
 		};
-		startCounter();
+		this.startCounter = startCounter;
+		this.startCounter();
 	}
 
 	timer() {
@@ -227,7 +228,8 @@ export default class Remote extends Component {
 				bindUpdateTimer();
 			}, 1000);
 		}
-		startTimer();
+		this.startTimer = startTimer;
+		this.startTimer();
 	}
 
 	mounted() {
