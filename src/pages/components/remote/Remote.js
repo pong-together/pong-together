@@ -167,7 +167,7 @@ export default class Remote extends Component {
 		}
 
 		const stopCounter = async () => {
-			clearInterval(this.count);
+			clearInterval(count);
 			updateCounter();
 			if (
 				this.remoteSocket &&
@@ -203,7 +203,7 @@ export default class Remote extends Component {
 		}
 
 		const stopTimer = async () => {
-			clearInterval(this.time);
+			clearInterval(time);
 			bindUpdateTimer();
 			if (
 				this.remoteSocket &&
