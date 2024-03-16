@@ -35,7 +35,7 @@ const displayCanceledMatchingModal = async (text) => {
 	};
 
 	document.body.innerHTML += modalHTML;
-	await sleep(3000);
+	await sleep(1000);
 	const modalOverlay = document.querySelector('.modal-overlay');
 	modalOverlay.remove();
 };
