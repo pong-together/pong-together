@@ -1,7 +1,16 @@
 import Component from '../../core/Component.js';
 import { navigate } from '../../router/utils/navigate.js';
 
-export default class extends Component {
+export default class NotFound extends Component {
+	// static instance = null;
+
+	// static getInstance($container) {
+	// 	if (!NotFound.instance) {
+	// 		NotFound.instance = new NotFound($container);
+	// 	}
+	// 	return NotFound.instance;
+	// }
+
 	setEvent() {
 		this.addEvent('click', '.not-found-btn', () => {
 			if (localStorage.getItem('accessToken'))

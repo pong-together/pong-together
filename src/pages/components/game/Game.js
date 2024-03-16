@@ -5,13 +5,21 @@ import language from '../../../utils/language.js';
 import { navigate } from '../../../router/utils/navigate.js';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
-
-export default class extends Component {
+	
+export default class Game extends Component {
 	constructor($target, $props) {
 		super($target, $props);
 		this.gameSocket;
 		this.bracket;
 	}
+	// static instance = null;
+
+	// static getInstance($container) {
+	// 	if (!Game.instance) {
+	// 		Game.instance = new Game($container);
+	// 	}
+	// 	return Game.instance;
+	// }
 	setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
@@ -101,7 +109,6 @@ export default class extends Component {
 			const keyStates = {};
 
 			window.addEventListener('beforeunload', function(event) {
-				console.log('before');
 				if (gameSocket && gameSocket.readyState === WebSocket.OPEN) {
 					gameSocket.close();
 				}
@@ -167,7 +174,6 @@ export default class extends Component {
 			function updateBarPosition() {
 				let messages = [];
 				if (keyStates['w']) {
-					console.log('w');
 					messages.push({
 						type: "push_button",
 						sender_player: 'player1',
@@ -175,7 +181,6 @@ export default class extends Component {
 					});
 				}
 				if (keyStates['s']) {
-					console.log('s');
 					messages.push({
 						type: "push_button",
 						sender_player: 'player1',
@@ -183,7 +188,6 @@ export default class extends Component {
 					});
 				}
 				if (keyStates['p']) {
-					console.log('p');
 					messages.push({
 						type: "push_button",
 						sender_player: 'player2',
@@ -191,7 +195,6 @@ export default class extends Component {
 					});
 				}
 				if (keyStates[';']) {
-					console.log(';;;');
 					messages.push({
 						type: "push_button",
 						sender_player: 'player2',
@@ -275,7 +278,7 @@ export default class extends Component {
 	setEvent() {
 		this.addEvent('click', '.game-end-button', ({target}) => {
 			if (window.localStorage.getItem('gameMode') === 'tournament') {
-				this.bracket = new TournamentBracket(this.$target);
+				new TournamentBracket(this.$target).init(this.$target);
 			}
 			else {
 				// window.location.pathname = '/select';

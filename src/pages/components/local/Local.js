@@ -69,7 +69,7 @@ export default class extends Component {
 			const isDuplicate = await this.localInputNickname(target, localPrev);
 
 			if (!isDuplicate) {
-				navigate("/game");
+				navigate("/game",true);
 				// window.location.pathname = '/game';
 			}
 		});
@@ -137,11 +137,4 @@ export default class extends Component {
 	}
 
 	mounted() {}
-
-	// destroy() {
-	// 	console.log('destory!');
-	// 	this.removeEvent('click', '.local-start');
-	// 	this.$target.innerHTML = '';
-	// 	// this.bracket = null;
-	// }
 }
