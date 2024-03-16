@@ -217,7 +217,7 @@ export default class Remote extends Component {
 		function startTimer() {
 			time = setInterval(async () => {
 				if (seconds === 0) {
-					this.remoteSocket.send(JSON.stringify({ type: 'match_success' }));
+					// this.remoteSocket.send(JSON.stringify({ type: 'match_success' }));
 					await this.stopTimer();
 					navigate('/game');
 				} else {
