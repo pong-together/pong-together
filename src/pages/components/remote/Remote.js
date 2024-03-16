@@ -120,19 +120,18 @@ export default class Remote extends Component {
 				this.$state.opponentIntraID = data.opponent;
 				this.$state.opponentIntraPic = data.opponent_image;
 				localStorage.setItem('remote-id', data.id);
-				// clearInterval(this.count);
+				clearInterval(this.count);
 				this.exclamationMark();
 				await this.sleep(3000);
 				this.remoteReady();
-			} 
-			// else if (data.type && data.type === 'send_disconnection') {
-			// 	console.log('상대방이 나갔습니다.');
-			// 	await displayCanceledMatchingModal(
-			// 		language.remote[this.$state.region].cancelMatch,
-			// 	);
-			// 	await this.stopTimer();
-			// 	navigate('/select');
-			// }
+			} else if (data.type && data.type === 'send_disconnection') {
+				console.log('상대방이 나갔습니다.');
+				await displayCanceledMatchingModal(
+					language.remote[this.$state.region].cancelMatch,
+				);
+				await this.stopTimer();
+				navigate('/select');
+			}
 		};
 
 		this.remoteSocket.onerror = () => {
@@ -190,8 +189,7 @@ export default class Remote extends Component {
 				updateCounter();
 			}, 1000);
 		};
-		this.startCounter = startCounter;
-		this.startCounter();
+		startCounter();
 	}
 
 	timer() {
@@ -219,8 +217,8 @@ export default class Remote extends Component {
 		function startTimer() {
 			time = setInterval(async () => {
 				if (seconds === 0) {
-					// this.remoteSocket.send(JSON.stringify({ type: 'match_success' }));
-					await this.stopTimer();
+					this.remoteSocket.send(JSON.stringify({ type: 'match_success' }));
+					await stopTimer();
 					navigate('/game');
 				} else {
 					seconds--;
