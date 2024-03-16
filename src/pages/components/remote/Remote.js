@@ -120,7 +120,7 @@ export default class Remote extends Component {
 				this.$state.opponentIntraID = data.opponent;
 				this.$state.opponentIntraPic = data.opponent_image;
 				localStorage.setItem('remote-id', data.id);
-				clearInterval(this.count);
+				// clearInterval(this.count);
 				this.exclamationMark();
 				await this.sleep(3000);
 				this.remoteReady();
