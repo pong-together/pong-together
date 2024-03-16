@@ -11,6 +11,8 @@ export default class Game extends Component {
 		super($target, $props);
 		this.gameSocket;
 		this.bracket;
+		this.event1;
+		this.event2;
 	}
 	// static instance = null;
 
@@ -114,7 +116,7 @@ export default class Game extends Component {
 				}
 			});
 			
-			document.addEventListener('keydown', (e) => {
+			this.event1 = (e) => {
 				if (window.localStorage.getItem('gameMode') === 'remote') {
 					if (e.key === 'w')
 						keyStates[e.key] = true;
@@ -137,9 +139,11 @@ export default class Game extends Component {
 					keyStates[e.key] = true;
 					updateBarPosition();
 				}
-			});
+			};
+
+			document.addEventListener('keydown', this.event1);
 				
-			document.addEventListener('keyup', (e) => {
+			this.event2 = (e) => {
 				if (e.key === 'ㅈ')
 					keyStates['w'] = false;
 				else if (e.key === 'ㄴ')
@@ -147,7 +151,9 @@ export default class Game extends Component {
 				else if (e.key === 'ㅔ')
 					keyStates['p'] = false;
 				keyStates[e.key] = false;
-			});
+			};
+			
+			document.addEventListener('keyup', this.event2);
 
 			function updateBarPositionRemote() {
 				let messages = [];
@@ -260,6 +266,8 @@ export default class Game extends Component {
 					const element2 = document.querySelector('.game-display');
 					element2.innerHTML = this.templateEnd();
 				}
+				document.removeEventListener('keydown', this.event1);
+				document.removeEventListener('keyup', this.event2);
 				gameSocket.close();
 			}
 			else if (data.type && data.type === 'score') {
@@ -290,6 +298,7 @@ export default class Game extends Component {
 				window.localStorage.removeItem('gameMode');
 				window.localStorage.removeItem('gameLevel');
 				// window.location.pathname = '/select';
+				
 				navigate('/select');
 			}
 		})
