@@ -69,7 +69,7 @@ export default class extends Component {
 			const isDuplicate = await this.localInputNickname(target, localPrev);
 
 			if (!isDuplicate) {
-				navigate("/game",true);
+				navigate("/game", true);
 				// window.location.pathname = '/game';
 			}
 		});
