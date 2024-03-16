@@ -19,7 +19,7 @@ services:
     command: sh /scripts/top-entrypoint.sh
     volumes:
       - ./backend/srcs/:/code
-      - backend_log:/var/log/djangolog
+      - django_log:/log/django
     ports:
       - "8000:8000"
     env_file:
@@ -53,14 +53,13 @@ services:
 
   logstash:
     image: docker.elastic.co/logstash/logstash:8.12.2
-    platform: linux/amd64
     ports:
       - "5003:5003"
     volumes:
-      - ./elk/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./elk/logstash/config/:/usr/share/logstash/config/
       - ./elk/logstash/pipeline:/usr/share/logstash/pipeline
-      - backend_log:/log/backend
       - nginx_log:/log/nginx
+      - django_log:/log/django
     depends_on:
       - elasticsearch
 
@@ -75,5 +74,5 @@ services:
   
 volumes:
   postgres_data: {}
-  backend_log: {}
   nginx_log: {}
+  django_log: {}
