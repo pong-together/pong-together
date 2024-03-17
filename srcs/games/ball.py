@@ -8,6 +8,7 @@ from games.score import Score
 
 logger = logging.getLogger('main')
 
+
 class Ball:
     WIDTH = 20
     HEIGHT = 20
@@ -88,17 +89,9 @@ class Ball:
 
     def adjust_slope(self):
         slope = self.velocity[1] / self.velocity[0]
-        # if self.velocity[1] == 0:
-        #     self.adjust_horizontal_slope()
         if abs(slope) > self.maximum_slope:
             self.velocity[1] *= abs(self.velocity[0]) / abs(self.velocity[1])
             self.velocity[0] *= self.maximum_slope
-
-    # def adjust_horizontal_slope(self):
-    #     self.rely += 1
-    #     if self.rely == 3:
-    #         self.velocity[1] = float(random.randint(1, 10) / 10)
-    #         self.rely = -1
 
     def adjust_speed(self, start_turn=False):
         size2 = self.velocity[0] ** 2 + self.velocity[1] ** 2
