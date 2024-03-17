@@ -31,7 +31,8 @@ class ConnectHandler:
 
         await self.add_channel_to_group()
         await self.consumer.accept()
-        if self.check_reconnection():
+
+        if await self.check_reconnection():
             return
 
         if self.consumer.type == 'remote':
@@ -53,7 +54,7 @@ class ConnectHandler:
 
     async def check_reconnection(self):
         if len(self.consumer.common[self.consumer.group_name]['channels']) > 2:
-            self.consumer.send_json({
+            await self.consumer.send_json({
                 'type': 'send_reconnection'
             })
             return True
