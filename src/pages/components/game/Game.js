@@ -221,6 +221,7 @@ export default class Game extends Component {
 				let start = {
 					type : "start_game",
 				}
+				console.log(start);
 				gameSocket.send(JSON.stringify(start));
 			}, 3000);
 		};
