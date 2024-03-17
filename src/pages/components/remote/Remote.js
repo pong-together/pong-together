@@ -44,6 +44,7 @@ export default class Remote extends Component {
 			}
 		});
 		window.addEventListener('popstate', (e) => {
+			console.log('뒤로가기');
 			this.stopInterval();
 		});
 	}
