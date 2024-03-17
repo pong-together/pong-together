@@ -148,7 +148,9 @@ export default class Remote extends Component {
 
 	async stopInterval() {
 		if (this.count) {
+			console.log(this.count);
 			clearInterval(this.count);
+			console.log(this.count);
 			console.log('Counter 중지');
 		} else if (this.time) {
 			clearInterval(this.time);
