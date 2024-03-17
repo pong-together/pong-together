@@ -236,6 +236,7 @@ export default class Game extends Component {
 
 		gameSocket.onmessage = (event) => {
 			const data = JSON.parse(event.data);
+			console.log(data);
 			if (data.type && data.type === 'get_user_info') {
 				this.setState({ player1: data.player1_name });
 				this.setState({ player2: data.player2_name });
