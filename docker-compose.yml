@@ -56,7 +56,7 @@ services:
     ports:
       - "5003:5003"
     volumes:
-      - ./elk/logstash/config/:/usr/share/logstash/config/
+      - ./elk/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
       - ./elk/logstash/pipeline:/usr/share/logstash/pipeline
       - nginx_log:/log/nginx
       - django_log:/log/django
