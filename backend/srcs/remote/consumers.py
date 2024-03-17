@@ -23,6 +23,8 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
         self.group_name = None
         self.channel_name = None
         self.remote = None
+        self.opponent_channel = None
+        self.is_normal = False
 
     async def connect(self):
         try:
@@ -36,7 +38,7 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
                 self.waiting_list[self.group_name] = []
             self.waiting_list[self.group_name].append((self.channel_name, self.user))
 
-            if len(self.waiting_list[self.group_name]) >= 2:
+            if len(self.waiting_list[self.group_name]) == 2:
                 await self.start_matching()
             logger.info('Websocket REMOTE CONNECT')
         except Exception:
@@ -45,9 +47,9 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
     async def disconnect(self, code):
         try:
             logger.info('Websocket REMOTE Try to disconnect')
-            await self.channel_layer.group_send(self.group_name, {
-                'type': 'send_disconnection',
-            })
+            if self.is_normal is not True and self.opponent_channel is not None:
+                await self.disconnect_abnormal()
+
             await self.channel_layer.group_discard(self.group_name, self.channel_name)
             await self.cancel_ping_task()
 
@@ -79,13 +81,16 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
 
         first_channel, first_user = self.waiting_list[self.group_name][0]
         second_channel, second_user = self.waiting_list[self.group_name][1]
+        self.waiting_list[self.group_name] = self.waiting_list[self.group_name][2:]
 
         await self.save_remote_model(first_user, second_user)
-
         await self.send_channel(first_channel, first_user, second_user)
         await self.send_channel(second_channel, second_user, first_user)
 
-        self.waiting_list[self.group_name] = self.waiting_list[self.group_name][2:]
+        if self.channel_name == first_channel:
+            self.opponent_channel = second_channel
+        else:
+            self.opponent_channel = first_channel
 
     async def send_channel(self, channel, user, opponent_user):
 
@@ -112,6 +117,26 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
             await self.send({'error': f'{str(e)} is required'})
         except Exception as e:
             await self.send_json({'error': str(e)})
+
+    async def receive(self, text_data=None, bytes_data=None, **kwargs):
+        try:
+            await super().receive(text_data, bytes_data, **kwargs)
+        except Exception as e:
+            await self.send_json({'error': str(e)})
+
+    async def receive_json(self, content, **kwargs):
+        try:
+            if content['type'] == 'match_success':
+                self.is_normal = True
+        except KeyError as e:
+            await self.send({'error': f'{str(e)} is required'})
+        except Exception as e:
+            await self.send_json({'error': str(e)})
+
+    async def disconnect_abnormal(self):
+        await self.channel_layer.send(self.opponent_channel, {
+            'type': 'send_disconnection',
+        })
 
     async def send_disconnection(self, event):
         try:
