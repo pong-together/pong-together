@@ -25,8 +25,8 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
 
     async def connect(self):
         try:
-            logger.info(f'Websocket GAME Try to connect {self.user.intra_id}')
             connect_handler = ConnectHandler(self)
+            logger.info(f'Websocket GAME Try to connect {self.user.intra_id}')
             await connect_handler.run()
             logger.info(f'Websocket GAME CONNECT {self.user.intra_id}')
         except Exception as e:
