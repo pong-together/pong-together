@@ -14,14 +14,6 @@ export default class Game extends Component {
 		this.event1;
 		this.event2;
 	}
-	// static instance = null;
-
-	// static getInstance($container) {
-	// 	if (!Game.instance) {
-	// 		Game.instance = new Game($container);
-	// 	}
-	// 	return Game.instance;
-	// }
 	setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
@@ -237,7 +229,7 @@ export default class Game extends Component {
 
 		gameSocket.onmessage = (event) => {
 			const data = JSON.parse(event.data);
-			console.log(data);
+			// console.log(data);
 			if (data.type && data.type === 'get_user_info') {
 				this.setState({ player1: data.player1_name });
 				this.setState({ player2: data.player2_name });
@@ -251,6 +243,7 @@ export default class Game extends Component {
 				this.render();
 			}
 			else if (data.type && data.type === 'send_reconnection') {
+				console.log(data);
 				gameSocket.close();
 				navigate('/select');
 			}
