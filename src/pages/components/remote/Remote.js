@@ -117,6 +117,8 @@ export default class Remote extends Component {
 				console.log('remote pong');
 			} else if (data.type && data.type === 'find_opponent') {
 				console.log('원격 소켓이 서버로부터 메시지를 수신했습니다.');
+				const cancelElement = document.getElementById('search');
+				cancelElement.parentNode.removeChild(cancelElement);
 				this.$state.opponentIntraID = data.opponent;
 				this.$state.opponentIntraPic = data.opponent_image;
 				localStorage.setItem('remote-id', data.id);
