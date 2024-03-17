@@ -1,3 +1,4 @@
+import logging
 import math
 import random
 from random import randint
@@ -5,6 +6,7 @@ from random import randint
 from games import constants
 from games.score import Score
 
+logger = logging.getLogger('main')
 
 class Ball:
     WIDTH = 20
@@ -36,6 +38,7 @@ class Ball:
             self.start_speed = self.EXTREME_START_SPEED
             self.minimum_speed = self.EXTREME_MINIMUM_SPEED
             self.maximum_slope = self.EXTREME_MAXIMUM_SLOPE
+        logger.info(f'mode: {mode}, start_speed: {self.start_speed}')
         self.velocity = [self.start_speed, 0]
 
     def set_position(self, x, y):
