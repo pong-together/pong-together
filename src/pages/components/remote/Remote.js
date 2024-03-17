@@ -39,6 +39,7 @@ export default class Remote extends Component {
 		document.addEventListener('click', async (e) => {
 			const target = e.target;
 			if (target.id === 'search') {
+				console.log('취소하기 실행');
 				await this.stopCounter();
 				navigate('/select');
 			}
