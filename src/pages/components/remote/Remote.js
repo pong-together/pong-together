@@ -127,7 +127,6 @@ export default class Remote extends Component {
 				this.$state.opponentIntraPic = data.opponent_image;
 				localStorage.setItem('remote-id', data.id);
 				clearInterval(this.count);
-				console.log(this.count);
 				this.exclamationMark();
 				await this.sleep(3000);
 				this.remoteReady();
@@ -149,15 +148,11 @@ export default class Remote extends Component {
 
 	async stopInterval() {
 		if (this.count) {
-			console.log(this.count);
 			clearInterval(this.count);
 			console.log('Counter 중지');
-			console.log(this.count);
 		} else if (this.time) {
-			console.log(this.time);
 			clearInterval(this.time);
 			console.log('Timer 중지');
-			console.log(this.time);
 		}
 
 		if (
@@ -180,7 +175,6 @@ export default class Remote extends Component {
 
 		const stopCounter = async () => {
 			clearInterval(this.count);
-			console.log(this.count);
 			if (
 				this.remoteSocket &&
 				this.remoteSocket.readyState !== WebSocket.CLOSED
@@ -191,7 +185,9 @@ export default class Remote extends Component {
 		this.stopCounter = stopCounter;
 
 		const startCounter = () => {
+			console.log(this.count);
 			clearInterval(this.count);
+			console.log(this.count);
 			this.count = setInterval(() => {
 				if (seconds === 59) {
 					minutes++;
@@ -217,7 +213,7 @@ export default class Remote extends Component {
 
 		const stopTimer = async () => {
 			clearInterval(this.time);
-			console.log(this.time);
+
 			if (
 				this.remoteSocket &&
 				this.remoteSocket.readyState !== WebSocket.CLOSED
