@@ -164,6 +164,9 @@ export default class Remote extends Component {
 	}
 
 	counter() {
+		clearInterval(this.count);
+		this.count = null;
+
 		let minutes = 0;
 		let seconds = 0;
 		const counterElement = document.getElementById('counter');
@@ -186,9 +189,6 @@ export default class Remote extends Component {
 
 		const startCounter = () => {
 			this.count = setInterval(() => {
-				console.log(this.count);
-				clearInterval(this.count);
-				console.log(this.count);
 				if (seconds === 59) {
 					minutes++;
 					seconds = 0;
