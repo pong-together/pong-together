@@ -189,6 +189,7 @@ export default class Remote extends Component {
 		this.stopCounter = stopCounter;
 
 		const startCounter = () => {
+			clearInterval(this.count);
 			this.count = setInterval(() => {
 				if (seconds === 59) {
 					minutes++;
@@ -225,6 +226,7 @@ export default class Remote extends Component {
 		this.stopTimer = stopTimer;
 
 		function startTimer() {
+			clearInterval(this.time);
 			this.time = setInterval(async () => {
 				if (seconds === 1) {
 					this.remoteSocket.send(JSON.stringify({ type: 'match_success' }));
