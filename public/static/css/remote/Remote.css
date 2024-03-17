@@ -69,6 +69,8 @@
 	width: 30px;
 	height: 130px;
 	animation: ani 2s ease-in-out infinite alternate;
+
+	margin-bottom: 35px;
 }
 
 #picture {

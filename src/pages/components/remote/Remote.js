@@ -36,7 +36,13 @@ export default class Remote extends Component {
 	}
 
 	setEvent() {
-		document.addEventListener('click', this.cancelButtonEvent);
+		document.addEventListener('click', async (e) => {
+			const target = e.target;
+			if (target.id === 'search') {
+				await this.stopCounter();
+				navigate('/select');
+			}
+		});
 	}
 
 	template() {
@@ -61,14 +67,6 @@ export default class Remote extends Component {
 			<button id="match-intra">${this.$state.opponentIntraID}(5)</button>
 		`;
 	}
-
-	cancelButtonEvent = async (e) => {
-		const target = e.target;
-		if (target.id === 'search') {
-			await this.stopCounter();
-			navigate('/select');
-		}
-	};
 
 	async sleep(ms) {
 		await new Promise((resolve) => setTimeout(resolve, ms));
@@ -97,6 +95,9 @@ export default class Remote extends Component {
 		const counterElement = document.getElementById('counter');
 		counterElement.parentNode.removeChild(counterElement);
 
+		const cancelElement = document.getElementById('search');
+		cancelElement.parentNode.removeChild(cancelElement);
+
 		const imageElement = document.getElementById('question');
 		imageElement.src = 'static/images/exclamation-mark.png';
 		imageElement.id = 'exclamation';
@@ -119,11 +120,6 @@ export default class Remote extends Component {
 				console.log('remote pong');
 			} else if (data.type && data.type === 'find_opponent') {
 				console.log('원격 소켓이 서버로부터 메시지를 수신했습니다.');
-				document
-					.getElementById('search')
-					.removeEventListener('click', this.cancelButtonEvent);
-				// const cancelElement = document.getElementById('search');
-				// cancelElement.parentNode.removeChild(cancelElement);
 				this.$state.opponentIntraID = data.opponent;
 				this.$state.opponentIntraPic = data.opponent_image;
 				localStorage.setItem('remote-id', data.id);
