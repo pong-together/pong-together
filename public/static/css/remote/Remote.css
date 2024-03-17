@@ -68,7 +68,7 @@
 	height: 130px;
 	animation: ani 2s ease-in-out infinite alternate;
 	position: absolute;
-	bottom: 50px;
+	top: 300px;
 }
 
 #picture {
