@@ -34,7 +34,7 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	justify-content: space-between;
+	justify-content: center;
 }
 
 .top-text {
@@ -70,6 +70,7 @@
 	height: 130px;
 	animation: ani 2s ease-in-out infinite alternate;
 
+	margin-top: 0px;
 	margin-bottom: 35px;
 }
 
