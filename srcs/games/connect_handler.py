@@ -52,7 +52,7 @@ class ConnectHandler:
         await self.consumer.channel_layer.group_add(self.consumer.group_name, self.consumer.channel_name)
 
     async def check_reconnection(self):
-        if self.consumer.common[self.consumer.group_name]['channels'] > 2:
+        if len(self.consumer.common[self.consumer.group_name]['channels']) > 2:
             self.consumer.send_json({
                 'type': 'send_reconnection'
             })
