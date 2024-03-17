@@ -148,15 +148,13 @@ export default class Remote extends Component {
 
 	async stopInterval() {
 		if (this.count) {
-			console.log(this.count);
 			clearInterval(this.count);
-			console.log(this.count);
 			console.log('Counter 중지');
-		} else if (this.time) {
+		}
+		if (this.time) {
 			clearInterval(this.time);
 			console.log('Timer 중지');
 		}
-
 		if (
 			this.remoteSocket &&
 			this.remoteSocket.readyState !== WebSocket.CLOSED
@@ -166,9 +164,6 @@ export default class Remote extends Component {
 	}
 
 	counter() {
-		clearInterval(this.count);
-		this.count = null;
-
 		let minutes = 0;
 		let seconds = 0;
 		const counterElement = document.getElementById('counter');
@@ -215,7 +210,6 @@ export default class Remote extends Component {
 
 		const stopTimer = async () => {
 			clearInterval(this.time);
-
 			if (
 				this.remoteSocket &&
 				this.remoteSocket.readyState !== WebSocket.CLOSED
@@ -226,7 +220,6 @@ export default class Remote extends Component {
 		this.stopTimer = stopTimer;
 
 		function startTimer() {
-			clearInterval(this.time);
 			this.time = setInterval(async () => {
 				if (seconds === 1) {
 					this.remoteSocket.send(JSON.stringify({ type: 'match_success' }));
