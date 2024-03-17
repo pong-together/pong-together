@@ -62,13 +62,13 @@ export default class Remote extends Component {
 		`;
 	}
 
-	async cancelButtonEvent(e) {
+	cancelButtonEvent = async (e) => {
 		const target = e.target;
 		if (target.id === 'search') {
 			await this.stopCounter();
 			navigate('/select');
 		}
-	}
+	};
 
 	async sleep(ms) {
 		await new Promise((resolve) => setTimeout(resolve, ms));
