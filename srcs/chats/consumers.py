@@ -21,10 +21,10 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
 
     async def connect(self):
         try:
+            await self.init_connection()
             logger.info(f'Websocket CHAT Try to connect {self.user.intra_id}')
             await self.channel_layer.group_add(self.GROUP_NAME, self.channel_name)
             await self.accept()
-            await self.init_connection()
             self.ping_task = asyncio.create_task(self.send_ping())
             await self.update_user_chat_connection(True)
             logger.info(f'Websocket CHAT CONNECT {self.user.intra_id}')
