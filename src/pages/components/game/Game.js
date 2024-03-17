@@ -223,7 +223,6 @@ export default class Game extends Component {
 				}
 				
 				gameSocket.send(JSON.stringify(start));
-				console.log(start);
 			}, 3000);
 		};
 
