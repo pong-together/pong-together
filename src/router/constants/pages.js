@@ -8,13 +8,13 @@ import LoginRedirect from '../../pages/components/login/LoginRedirect';
 import tournamentBracket from '../../pages/components/tournament/Tournament-Bracket.js';
 
 export const routes = [
-	{ path: /^\/$/, element: Login },
-	{ path: /^\/login$/, element: Login },
-	{ path: /^\/auth$/, element: LoginRedirect },
-	{ path: /^\/select$/, element: GameSelect },
-	{ path: /^\/local$/, element: Local },
-	{ path: /^\/tournament$/, element: Tournament },
-	{ path: /^\/tournamentBracket$/, element: tournamentBracket},
-	{ path: /^\/remote$/, element: Remote },
-	{ path: /^\/game$/, element: Game },
+	{ path: /^\/$/, element: Login, key: 'login' },
+	{ path: /^\/login$/, element: Login, key: 'login'},
+	{ path: /^\/auth$/, element: LoginRedirect, key: 'auth'},
+	{ path: /^\/select$/, element: GameSelect, key: 'select'},
+	{ path: /^\/local$/, element: Local, key: 'local'},
+	{ path: /^\/tournament$/, element: Tournament, key: 'tournament'},
+	{ path: /^\/tournamentBracket$/, element: tournamentBracket, key: 'tournamentBracket'},
+	{ path: /^\/remote$/, element: Remote, key: 'remote'},
+	{ path: /^\/game$/, element: Game, key: 'game'},
 ];

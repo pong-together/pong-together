@@ -55,7 +55,7 @@ export default class extends Component {
 
 	async registLocalNickname(localNicknames) {
 		var gamemode = '';
-		if (this.$state.gameMode == 'defualt') gamemode = 'default';
+		if (this.$state.gameMode == 'default') gamemode = 'default';
 		else gamemode = 'extreme';
 
 		const result = await LocalApi.create(localNicknames, gamemode);
