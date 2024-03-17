@@ -10,8 +10,8 @@ export default class Remote extends Component {
 	constructor($target, $props) {
 		super($target, $props);
 		this.remoteSocket;
-		this.count;
-		this.time;
+		this.count = null;
+		this.time = null;
 	}
 
 	setup() {
