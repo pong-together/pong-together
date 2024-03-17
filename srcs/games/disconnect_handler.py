@@ -46,6 +46,8 @@ class DisconnectHandler:
         await self.update_lose(loser)
 
     async def disconnect_abnormal(self):
+        pong = self.consumer.common[self.consumer.group_name]['pong']
+        pong.end_status = Score.RUNNER_UP
         loser = self.consumer.user.intra_id
         winner = self.get_other_player(loser)
         # await self.update_game_result(loser, winner)
