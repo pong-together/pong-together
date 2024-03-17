@@ -14,6 +14,7 @@ class ConnectHandler:
         self.consumer = consumer
         self.consumer.user = self.consumer.scope['user']
         self.consumer.type, self.type_id = self.parse_query_string()
+        self.consumer.group_name = f'{self.consumer.type}_{self.type_id}'
         self.player1_name = None
         self.player2_name = None
 
@@ -27,7 +28,6 @@ class ConnectHandler:
 
     async def run(self):
         self.consumer.game = await self.get_game()
-        self.consumer.group_name = f'{self.consumer.type}_{self.type_id}'
 
         await self.add_channel_to_group()
         await self.consumer.accept()
