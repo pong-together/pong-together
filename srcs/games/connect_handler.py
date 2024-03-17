@@ -31,6 +31,8 @@ class ConnectHandler:
 
         await self.add_channel_to_group()
         await self.consumer.accept()
+        if self.check_reconnection():
+            return
 
         if self.consumer.type == 'remote':
             await self.start_remote_game()
@@ -48,6 +50,14 @@ class ConnectHandler:
             self.consumer.common[self.consumer.group_name]['channels'] = list()
         self.consumer.common[self.consumer.group_name]['channels'].append(self.consumer.channel_name)
         await self.consumer.channel_layer.group_add(self.consumer.group_name, self.consumer.channel_name)
+
+    async def check_reconnection(self):
+        if self.consumer.common[self.consumer.group_name]['channels'] > 2:
+            self.consumer.send_json({
+                'type': 'send_reconnection'
+            })
+            return True
+        return False
 
     async def start_remote_game(self):
         if len(self.consumer.common[self.consumer.group_name]['channels']) == 2:
