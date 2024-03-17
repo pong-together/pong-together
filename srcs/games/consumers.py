@@ -25,20 +25,20 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
 
     async def connect(self):
         try:
-            logger.info('Websocket GAME Try to connect')
+            logger.info(f'Websocket GAME Try to connect {self.user.intra_id}')
             connect_handler = ConnectHandler(self)
             await connect_handler.run()
-            logger.info('Websocket GAME CONNECT')
+            logger.info(f'Websocket GAME CONNECT {self.user.intra_id}')
         except Exception as e:
             await self.close()
             print(e)
 
     async def disconnect(self, code):
         try:
-            logger.info('Websocket GAME Try to disconnect')
+            logger.info(f'Websocket GAME Try to disconnect {self.user.intra_id}')
             disconnect_handler = DisconnectHandler(self)
             await disconnect_handler.run()
-            logger.info('Websocket GAME DISCONNECT')
+            logger.info(f'Websocket GAME DISCONNECT {self.user.intra_id}')
         except Exception as e:
             await self.send_json({'error': str(e)})
 
