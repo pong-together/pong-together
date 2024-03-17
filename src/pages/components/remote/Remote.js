@@ -43,6 +43,9 @@ export default class Remote extends Component {
 				navigate('/select');
 			}
 		});
+		window.addEventListener('popstate', (e) => {
+			this.stopInterval();
+		});
 	}
 
 	template() {
