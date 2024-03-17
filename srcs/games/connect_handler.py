@@ -59,7 +59,7 @@ class ConnectHandler:
         game = self.consumer.game
         if self.consumer.type == 'tournament':
             self.set_players_tournament(game)
-        if self.consumer.type == 'remote':
+        elif self.consumer.type == 'remote':
             self.set_remote_game_players(game)
         else:
             self.consumer.player1_name = game.player1_name

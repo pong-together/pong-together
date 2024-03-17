@@ -185,13 +185,32 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Log
+LOG_DIR = os.environ.get('LOG_DIR', './log')
+if not os.path.exists(LOG_DIR):
+    os.makedirs(LOG_DIR)
 
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': f'{LOG_DIR}/django.log',
+            'formatter': 'verbose',
+        },
+    },
+    'formatters': {
+        'verbose': {
+            'format': '[{asctime}] {levelname}: {message}',
+            'style': '{',
+        },
+    },
     'loggers': {
-        'main': {
-        }
-    }
+        '': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
 }
