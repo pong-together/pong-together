@@ -180,6 +180,7 @@ export default class Game extends Component {
 			function updateBarPosition() {
 				let messages = [];
 				if (keyStates['w']) {
+					console.log("w");
 					messages.push({
 						type: "push_button",
 						sender_player: 'player1',
@@ -187,6 +188,7 @@ export default class Game extends Component {
 					});
 				}
 				if (keyStates['s']) {
+					console.log("s");
 					messages.push({
 						type: "push_button",
 						sender_player: 'player1',
@@ -194,6 +196,7 @@ export default class Game extends Component {
 					});
 				}
 				if (keyStates['p']) {
+					console.log("p");
 					messages.push({
 						type: "push_button",
 						sender_player: 'player2',
@@ -201,6 +204,7 @@ export default class Game extends Component {
 					});
 				}
 				if (keyStates[';']) {
+					console.log(";");
 					messages.push({
 						type: "push_button",
 						sender_player: 'player2',
@@ -244,7 +248,12 @@ export default class Game extends Component {
 				}
 				this.render();
 			}
+			else if (data.type && data.type === 'send_reconnection') {
+				gameSocket.close();
+				navigate('/select');
+			}
 			else if (data.type && data.type === 'end') {
+				console.log(data);
 				if (data.is_normal === false) {
 					const element3 = document.querySelector('.game-display');
 					element3.innerHTML = this.templateEnd();
