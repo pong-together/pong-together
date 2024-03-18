@@ -7,18 +7,11 @@ import { displayCanceledMatchingModal } from '../../../utils/modal';
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
 export default class Remote extends Component {
-	// static instance = null;
-
-	// static getInstance($container) {
-	// 	if (!Remote.instance) {
-	// 		Remote.instance = new Remote($container);
-	// 	}
-	// 	return Remote.instance;
-	// }
-
 	constructor($target, $props) {
 		super($target, $props);
 		this.remoteSocket;
+		this.count;
+		this.time;
 	}
 
 	setup() {
@@ -26,7 +19,6 @@ export default class Remote extends Component {
 			!localStorage.getItem('accessToken') ||
 			!localStorage.getItem('twoFA')
 		) {
-			// navigate("/login");
 			window.location.pathname = '/login';
 		} else {
 			http.checkToken();
@@ -49,7 +41,6 @@ export default class Remote extends Component {
 			if (target.id === 'search') {
 				await this.stopCounter();
 				navigate('/select');
-				// window.location.pathname = '/select';
 			}
 		});
 	}
@@ -104,6 +95,9 @@ export default class Remote extends Component {
 		const counterElement = document.getElementById('counter');
 		counterElement.parentNode.removeChild(counterElement);
 
+		const cancelElement = document.getElementById('search');
+		cancelElement.parentNode.removeChild(cancelElement);
+
 		const imageElement = document.getElementById('question');
 		imageElement.src = 'static/images/exclamation-mark.png';
 		imageElement.id = 'exclamation';
@@ -129,12 +123,13 @@ export default class Remote extends Component {
 				this.$state.opponentIntraID = data.opponent;
 				this.$state.opponentIntraPic = data.opponent_image;
 				localStorage.setItem('remote-id', data.id);
+				clearInterval(this.count);
 				this.exclamationMark();
 				await this.sleep(3000);
 				this.remoteReady();
 			} else if (data.type && data.type === 'send_disconnection') {
 				console.log('상대방이 나갔습니다.');
-				await displayCanceledMatchingModal(
+				displayCanceledMatchingModal(
 					language.remote[this.$state.region].cancelMatch,
 				);
 				await this.stopTimer();
@@ -144,14 +139,30 @@ export default class Remote extends Component {
 
 		this.remoteSocket.onerror = () => {
 			console.log('원격 소켓 에러');
-			this.stopCounter();
+			this.stopInterval();
 		};
+	}
+
+	async stopInterval() {
+		if (this.count) {
+			clearInterval(this.count);
+			console.log('Counter 중지');
+		} else if (this.time) {
+			clearInterval(this.time);
+			console.log('Timer 중지');
+		}
+
+		if (
+			this.remoteSocket &&
+			this.remoteSocket.readyState !== WebSocket.CLOSED
+		) {
+			await this.closeSocket();
+		}
 	}
 
 	counter() {
 		let minutes = 0;
 		let seconds = 0;
-		let count;
 		const counterElement = document.getElementById('counter');
 		counterElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
@@ -160,9 +171,7 @@ export default class Remote extends Component {
 		}
 
 		const stopCounter = async () => {
-			clearInterval(count);
-			console.log('stop counter');
-			updateCounter();
+			clearInterval(this.count);
 			if (
 				this.remoteSocket &&
 				this.remoteSocket.readyState !== WebSocket.CLOSED
@@ -173,7 +182,7 @@ export default class Remote extends Component {
 		this.stopCounter = stopCounter;
 
 		const startCounter = () => {
-			count = setInterval(() => {
+			this.count = setInterval(() => {
 				if (seconds === 59) {
 					minutes++;
 					seconds = 0;
@@ -183,12 +192,12 @@ export default class Remote extends Component {
 				updateCounter();
 			}, 1000);
 		};
-		startCounter();
+		this.startCounter = startCounter;
+		this.startCounter();
 	}
 
 	timer() {
 		let seconds = 5;
-		let time;
 		const buttonElement = document.getElementById('match-intra');
 		const bindUpdateTimer = updateTimer.bind(this);
 
@@ -197,9 +206,7 @@ export default class Remote extends Component {
 		}
 
 		const stopTimer = async () => {
-			clearInterval(time);
-			console.log('cleart time');
-			bindUpdateTimer();
+			clearInterval(this.time);
 			if (
 				this.remoteSocket &&
 				this.remoteSocket.readyState !== WebSocket.CLOSED
@@ -210,18 +217,19 @@ export default class Remote extends Component {
 		this.stopTimer = stopTimer;
 
 		function startTimer() {
-			time = setInterval(() => {
+			this.time = setInterval(async () => {
 				if (seconds === 1) {
-					stopTimer();
+					this.remoteSocket.send(JSON.stringify({ type: 'match_success' }));
+					await stopTimer();
 					navigate('/game');
-					// window.location.pathname = '/game';
 				} else {
 					seconds--;
 				}
 				bindUpdateTimer();
 			}, 1000);
 		}
-		startTimer();
+		this.startTimer = startTimer;
+		this.startTimer();
 	}
 
 	mounted() {
