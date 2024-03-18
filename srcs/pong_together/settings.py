@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+import logging
 from pathlib import Path
 from datetime import timedelta
 import os
@@ -185,6 +185,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Log
+
 LOG_DIR = os.environ.get('LOG_DIR', './log')
 if not os.path.exists(LOG_DIR):
     os.makedirs(LOG_DIR)
@@ -202,7 +203,7 @@ LOGGING = {
     },
     'formatters': {
         'verbose': {
-            'format': '[{asctime}] {levelname}: {message}',
+            'format': '[{asctime}] {levelname}: {username} - {message}',
             'style': '{',
         },
     },
@@ -214,3 +215,7 @@ LOGGING = {
         },
     },
 }
+
+logging.basicConfig(level=logging.INFO, format='[{asctime}] {levelname}: {username} - {message}', style='{', force=True)
+
+logger = logging.getLogger('main')
