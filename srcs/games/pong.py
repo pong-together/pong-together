@@ -9,9 +9,9 @@ from games.score import Score
 class Pong:
     def __init__(self, consumer):
         self.consumer = consumer
-        self.winner = None
-        self.scores = [0, 0]
         self.turn = constants.PLAYER1
+        self.scores = [0, 0]
+        self.end_status = Score.NONE
 
         paddle1_x = 10
         paddle2_x = constants.GAME_WIDTH - paddle1_x - Paddle.WIDTH
@@ -29,7 +29,7 @@ class Pong:
                 await self.play_round()
                 await self.send_scores()
                 self.turn = (self.turn + 1) % 2
-            self.set_winner()
+            self.set_end_status()
             await self.send_game_finish()
         except Exception as e:
             await self.consumer.send_json({'error': str(e)})
@@ -58,11 +58,18 @@ class Pong:
         return self.scores[constants.PLAYER1] == constants.END_POINT \
             or self.scores[constants.PLAYER2] == constants.END_POINT
 
-    def set_winner(self):
-        self.winner = self.consumer.player1_name
+    def set_end_status(self):
+        self.end_status = Score.PLAYER1
         if self.scores[constants.PLAYER2] == constants.END_POINT:
-            self.winner = self.consumer.player2_name
+            self.end_status = Score.PLAYER2
 
+    def get_winner(self):
+        winner = self.consumer.common[self.consumer.group_name]['player1_name']
+        if self.end_status == Score.PLAYER2:
+            winner = self.consumer.common[self.consumer.group_name]['player2_name']
+        return winner
+
+    # send event
     async def send_game_info(self):
         game_info = {
             'type': 'get_game_info',
@@ -84,6 +91,6 @@ class Pong:
     async def send_game_finish(self):
         data = {
             'type': 'end',
-            'winner': self.winner
+            'winner': self.get_winner()
         }
         await self.consumer.channel_layer.group_send(self.consumer.group_name, data)

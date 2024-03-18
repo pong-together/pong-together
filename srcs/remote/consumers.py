@@ -28,8 +28,8 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
 
     async def connect(self):
         try:
-            logger.info(f'Websocket REMOTE Try to connect {self.user.intra_id}')
             await self.init_connection()
+            logger.info(f'Websocket REMOTE Try to connect {self.user.intra_id}')
             await self.channel_layer.group_add(self.group_name, self.channel_name)
             await self.accept()
             self.ping_task = asyncio.create_task(self.send_ping())
