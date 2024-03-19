@@ -1,12 +1,10 @@
-import asyncio
 import logging
 
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 from games.connect_handler import ConnectHandler
-from games.constants import PLAYER1, PLAYER2
+from games.constants import PLAYER2
 from games.disconnect_handler import DisconnectHandler
-from games.pong import Pong
 from games.receive_handler import ReceiveHandler
 
 logger = logging.getLogger('main')
@@ -26,19 +24,19 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
     async def connect(self):
         try:
             connect_handler = ConnectHandler(self)
-            logger.info(f'Websocket GAME Try to connect {self.user.intra_id}')
+            logger.info(f'Websocket GAME Try to connect {self.user.intra_id} {self.group_name}')
             await connect_handler.run()
-            logger.info(f'Websocket GAME CONNECT {self.user.intra_id}')
+            logger.info(f'Websocket GAME CONNECT {self.user.intra_id} {self.group_name}')
         except Exception as e:
             await self.close()
             print(e)
 
     async def disconnect(self, code):
         try:
-            logger.info(f'Websocket GAME Try to disconnect {self.user.intra_id}')
+            logger.info(f'Websocket GAME Try to disconnect {self.user.intra_id} {self.group_name}')
             disconnect_handler = DisconnectHandler(self)
             await disconnect_handler.run()
-            logger.info(f'Websocket GAME DISCONNECT {self.user.intra_id}')
+            logger.info(f'Websocket GAME DISCONNECT {self.user.intra_id} {self.group_name}')
         except Exception as e:
             await self.send_json({'error': str(e)})
 
@@ -50,6 +48,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
 
     async def receive_json(self, content, **kwargs):
         try:
+            logger.info(f'Websocket GAME evnet {content['type']}')
             receive_handler = ReceiveHandler()
             await receive_handler.run(self, content)
         except KeyError as e:
