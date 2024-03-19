@@ -203,7 +203,7 @@ LOGGING = {
     },
     'formatters': {
         'verbose': {
-            'format': '[{asctime}] {levelname}: {username} - {message}',
+            'format': '[{asctime}] {levelname}: {message}',
             'style': '{',
         },
     },
@@ -216,6 +216,4 @@ LOGGING = {
     },
 }
 
-logging.basicConfig(level=logging.INFO, format='[{asctime}] {levelname}: {username} - {message}', style='{', force=True)
-
-logger = logging.getLogger('main')
+logger = logging.getLogger('')

@@ -59,7 +59,7 @@ class LoginAPIView(APIView):
             'access_token': str(refresh.access_token),
             'refresh_token': str(refresh)
         }
-        logger.info('LOGIN SUCCESS', extra={'username': self.intra_id})
+        logger.info(f'LOGIN SUCCESS {self.intra_id}')
         return Response(data=data, status=status.HTTP_200_OK)
 
     def get_access_token(self, code):
