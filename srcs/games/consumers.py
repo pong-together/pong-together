@@ -48,7 +48,6 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
 
     async def receive_json(self, content, **kwargs):
         try:
-            logger.info(f'Websocket GAME evnet {content['type']}')
             receive_handler = ReceiveHandler()
             await receive_handler.run(self, content)
         except KeyError as e:
