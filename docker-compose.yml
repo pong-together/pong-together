@@ -17,8 +17,8 @@ services:
     command: sh /scripts/top-entrypoint.sh
     volumes:
       - ./backend/srcs/:/code
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"
     env_file:
       - .env
     depends_on:
@@ -29,8 +29,8 @@ services:
     image: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+    expose:
+      - "5432"
     env_file:
       - .env
     restart: always
