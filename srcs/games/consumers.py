@@ -1,13 +1,10 @@
-import logging
-
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 from games.connect_handler import ConnectHandler
 from games.constants import PLAYER2
 from games.disconnect_handler import DisconnectHandler
 from games.receive_handler import ReceiveHandler
-
-logger = logging.getLogger('main')
+from pong_together.settings import logger
 
 
 class GameConsumer(AsyncJsonWebsocketConsumer):
