@@ -1,15 +1,13 @@
 import asyncio
 import json
-import logging
 from datetime import datetime
 from urllib.parse import parse_qs
 
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
+from pong_together.settings import logger
 from remote.models import Remote
-
-logger = logging.getLogger('main')
 
 
 class RemoteConsumer(AsyncJsonWebsocketConsumer):
