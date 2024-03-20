@@ -41,18 +41,14 @@ class DisconnectHandler:
         pong = self.consumer.common[self.consumer.group_name]['pong']
         winner = pong.get_winner()
         loser = self.get_other_player(winner)
-        # await self.update_game_result(loser, winner)
-        await self.update_win(winner)
-        await self.update_lose(loser)
+        await self.update_game_result(loser, winner)
 
     async def disconnect_abnormal(self):
         pong = self.consumer.common[self.consumer.group_name]['pong']
         pong.end_status = Score.RUNNER_UP
         loser = self.consumer.user.intra_id
         winner = self.get_other_player(loser)
-        # await self.update_game_result(loser, winner)
-        await self.update_win(winner)
-        await self.update_lose(loser)
+        await self.update_game_result(loser, winner)
         await self.consumer.channel_layer.group_send(self.consumer.group_name, {
             'type': 'end',
             'is_normal': False,
