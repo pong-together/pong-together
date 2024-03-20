@@ -65,7 +65,8 @@ export default class extends Component {
 			window.location.pathname === '/local' ||
 			window.location.pathname === '/remote' ||
 			window.location.pathname === '/tournament' ||
-			window.location.pathname === '/game'
+			window.location.pathname === '/game' ||
+			window.location.pathname === '/tournamentBracket'
 		) {
 			this.$target.innerHTML = '';
 			this.$target.innerHTML = `
@@ -212,6 +213,7 @@ export default class extends Component {
 	}
 
 	async mounted() {
+		console.log("mount!");
 		window.addEventListener('load', async () => {
 			this.changeModule();
 			this.routerModule();

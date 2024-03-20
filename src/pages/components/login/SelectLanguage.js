@@ -24,6 +24,7 @@ export default class extends Component {
 
 		this.addEvent('click', '#login-to-start', async () => {
 			try {
+				console.log('!!!');
 				const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
 				const data = await http.get(`${BASE_URL}/api/userinfo/`, {
 					Authorization: accessToken,

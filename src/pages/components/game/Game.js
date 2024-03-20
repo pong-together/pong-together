@@ -1,6 +1,6 @@
 import Component from '../../../core/Component.js';
 import http from '../../../core/http.js';
-import TournamentBracket from '../tournament/Tournament-Bracket.js';
+// import TournamentBracket from '../tournament/Tournament-Bracket.js';
 import language from '../../../utils/language.js';
 import { navigate } from '../../../router/utils/navigate.js';
 
@@ -210,11 +210,12 @@ export default class Game extends Component {
 			}
 
 			setTimeout(() => {
-				let start = {
-					type : "start_game",
+				if (gameSocket.readyState === WebSocket.OPEN) {
+					let start = {
+						type: "start_game",
+					};
+					gameSocket.send(JSON.stringify(start));
 				}
-				
-				gameSocket.send(JSON.stringify(start));
 			}, 3000);
 		};
 
@@ -243,11 +244,13 @@ export default class Game extends Component {
 				this.render();
 			}
 			else if (data.type && data.type === 'send_reconnection') {
-				console.log(data);
-				gameSocket.close();
-				document.removeEventListener('keydown', this.event1);
-				document.removeEventListener('keyup', this.event2);
-				navigate('/select');
+				if (window.localStorage.getItem('gameMode') !== 'tournament') {
+					console.log(data);
+					gameSocket.close();
+					document.removeEventListener('keydown', this.event1);
+					document.removeEventListener('keyup', this.event2);
+					navigate('/select');
+				}
 			}
 			else if (data.type && data.type === 'end') {
 				console.log(data);
@@ -326,8 +329,10 @@ export default class Game extends Component {
 
 	gameStart() {
 		const displayElement = document.querySelector('.game-display');
-		displayElement.innerHTML = this.templateStart();
-		this.canvas();
+		if (displayElement) {
+			displayElement.innerHTML = this.templateStart();
+			this.canvas();
+		}
 	}
 
 	timer() {

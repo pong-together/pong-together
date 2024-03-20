@@ -430,6 +430,7 @@ export default class extends Component {
 			player4_name,
 		];
 		const winners = [first_winner, second_winner, final_winner];
+		console.log(winners);
 		if (
 			JSON.stringify(this.$state.participant) !==
 				JSON.stringify(participants) ||
@@ -445,8 +446,9 @@ export default class extends Component {
 		}
 	}
 
-	mounted() {
-		this.getTournamentInfo(); //api로 정보 받아옴.
+	async mounted() {
+		console.log('bracket mount!')
+		await this.getTournamentInfo(); //api로 정보 받아옴.
 
 		if (this.$state.gameround >= 4) {
 			const button = document.querySelector('.game-start');
