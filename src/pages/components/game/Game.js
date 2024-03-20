@@ -247,13 +247,13 @@ export default class Game extends Component {
 				}
 				this.render();
 			}
-			// else if (data.type && data.type === 'send_reconnection') {
-			// 	console.log('send_reconnection:' + data);
-			// 	gameSocket.close();
-			// 	document.removeEventListener('keydown', this.event1);
-			// 	document.removeEventListener('keyup', this.event2);
-			// 	navigate('/select');
-			// }
+			else if (data.type && data.type === 'send_reconnection') {
+				console.log('send_reconnection:' + data);
+				gameSocket.close();
+				document.removeEventListener('keydown', this.event1);
+				document.removeEventListener('keyup', this.event2);
+				navigate('/select');
+			}
 			else if (data.type && data.type === 'end') {
 				console.log(data);
 				if (data.is_normal === false) {

@@ -38,28 +38,19 @@ export default class GameSelect extends Component {
 			tournamentModal: 'none',
 			remoteModal: 'none',
 		};
-		if (
-			!localStorage.getItem('intraId') ||
-			localStorage.getItem('intraId') === 'undefined' ||
-			!localStorage.getItem('winCount') ||
-			localStorage.getItem('winCount') === 'undefined' ||
-			!localStorage.getItem('loseCount') ||
-			localStorage.getItem('loseCount') === 'undefined' ||
-			!localStorage.getItem('intraImg') ||
-			localStorage.getItem('intraImg') === 'undefined'
-		) {
-			const data = await http.get(`${BASE_URL}/api/userinfo/`, {
-				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-				'Content-Type': 'application/json',
-			});
-			localStorage.setItem('intraId', data?.intra_id || 'anonymous');
-			localStorage.setItem('winCount', data?.win_count || 0);
-			localStorage.setItem('loseCount', data?.lose_count || 0);
-			localStorage.setItem(
-				'intraImg',
-				data?.image || '/static/images/user.png',
-			);
-		}
+		const data = await http.get(`${BASE_URL}/api/userinfo/`, {
+			Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+			'Content-Type': 'application/json',
+		});
+		console.log('data'+ data);
+		localStorage.setItem('intraId', data?.intra_id || 'anonymous');
+		localStorage.setItem('winCount', data?.win_count || 0);
+		localStorage.setItem('loseCount', data?.lose_count || 0);
+		localStorage.setItem(
+			'intraImg',
+			data?.image || '/static/images/user.png',
+		);
+		// }
 	}
 
 	setEvent() {
