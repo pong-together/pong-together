@@ -28,6 +28,8 @@ class ConnectHandler:
 
     async def run(self):
         self.consumer.game = await self.get_game()
+        if self.consumer.type == 'tournament':
+            self.consumer.group_name += f'_turn{str(self.consumer.game.game_turn)}'
 
         await self.add_channel_to_group()
         await self.consumer.accept()
