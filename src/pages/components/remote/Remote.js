@@ -42,6 +42,7 @@ export default class Remote extends Component {
 				console.log('취소하기 실행');
 				await this.stopCounter();
 				document.removeEventListener('click', cancelEvent);
+				window.removeEventListener('popstate', popEvent);
 				navigate('/select');
 			}
 		};
@@ -51,6 +52,7 @@ export default class Remote extends Component {
 			console.log('뒤로가기 실행');
 			this.stopInterval();
 			window.removeEventListener('popstate', popEvent);
+			document.removeEventListener('click', cancelEvent);
 		};
 		window.addEventListener('popstate', popEvent);
 	}
