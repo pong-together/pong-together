@@ -85,7 +85,11 @@
 
 .progress-custom {
 	margin-top: 0px;
-	margin-bottom: 35px;
+	margin-bottom: 60px;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .match-button {

@@ -40,9 +40,9 @@ export default class Remote extends Component {
 			const target = e.target;
 			if (target.id === 'search') {
 				console.log('취소하기 실행');
-				await this.stopCounter();
-				document.removeEventListener('click', cancelEvent);
-				window.removeEventListener('popstate', popEvent);
+				// await this.stopCounter();
+				// document.removeEventListener('click', cancelEvent);
+				// window.removeEventListener('popstate', popEvent);
 				navigate('/select');
 			}
 		};
@@ -50,9 +50,9 @@ export default class Remote extends Component {
 
 		const popEvent = (e) => {
 			console.log('뒤로가기 실행');
-			this.stopInterval();
-			window.removeEventListener('popstate', popEvent);
-			document.removeEventListener('click', cancelEvent);
+			// this.stopInterval();
+			// window.removeEventListener('popstate', popEvent);
+			// document.removeEventListener('click', cancelEvent);
 		};
 		window.addEventListener('popstate', popEvent);
 	}
@@ -83,8 +83,8 @@ export default class Remote extends Component {
 	templateProgress() {
 		return `
 			<div class="progress progress-custom">
-				<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
-					100%
+				<div class="progress-bar bg-danger progress-bar-striped progress-bar-animated" style="width:200px ; height:30px">
+					<span>100%</span>
 				</div>
 			</div>
 		`;
