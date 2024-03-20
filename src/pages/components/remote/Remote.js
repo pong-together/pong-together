@@ -80,16 +80,6 @@ export default class Remote extends Component {
 		`;
 	}
 
-	templateProgress() {
-		return `
-			<div class="progress progress-custom">
-				<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
-					100%
-				</div>
-			</div>
-		`;
-	}
-
 	async sleep(ms) {
 		await new Promise((resolve) => setTimeout(resolve, ms));
 	}
@@ -131,13 +121,11 @@ export default class Remote extends Component {
 	}
 
 	exclamationMark() {
-		const mainboxElement = document.querySelector('.mainbox');
 		const counterElement = document.getElementById('counter');
-		const cancelElement = document.getElementById('search');
 		counterElement.parentNode.removeChild(counterElement);
-		cancelElement.parentNode.removeChild(cancelElement);
 
-		mainboxElement.innerHTML += this.templateProgress();
+		const cancelElement = document.getElementById('search');
+		cancelElement.parentNode.removeChild(cancelElement);
 
 		const imageElement = document.getElementById('question');
 		imageElement.src = 'static/images/exclamation-mark.png';
