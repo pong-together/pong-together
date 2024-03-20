@@ -100,11 +100,12 @@ class DisconnectHandler:
     @database_sync_to_async
     def tournament_update(self, game):
         pong = self.consumer.common[self.consumer.group_name]['pong']
+        winner = pong.get_winner()
         if game.game_turn == 1:
-            game.first_winner = pong.winner
+            game.first_winner = winner
         elif game.game_turn == 2:
-            game.second_winner = pong.winner
+            game.second_winner = winner
         elif game.game_turn == 3:
-            game.final_winner = pong.winner
+            game.final_winner = winner
         game.game_turn += 1
         game.save()
