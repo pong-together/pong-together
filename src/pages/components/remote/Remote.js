@@ -10,8 +10,8 @@ export default class Remote extends Component {
 	constructor($target, $props) {
 		super($target, $props);
 		this.remoteSocket;
-		this.count = null;
-		this.time = null;
+		this.count;
+		this.time;
 	}
 
 	setup() {
@@ -36,18 +36,31 @@ export default class Remote extends Component {
 	}
 
 	setEvent() {
-		document.addEventListener('click', async (e) => {
+		const cancelEvent = async (e) => {
 			const target = e.target;
 			if (target.id === 'search') {
 				console.log('취소하기 실행');
 				await this.stopCounter();
+				document.removeEventListener('click', cancelEvent(e));
 				navigate('/select');
 			}
-		});
-		window.addEventListener('popstate', (e) => {
-			console.log('뒤로가기 실행');
-			this.stopInterval();
-		});
+		};
+		document.addEventListener('click', cancelEvent);
+
+		const popEvent = (e) => {
+			const currentURL = window.location.href;
+			const previousURL = e.state ? e.state.url : null;
+			if (previousURL && previousURL === currentURL) {
+				console.log('뒤로가기 실행');
+				this.stopInterval();
+				window.removeEventListener('popstate', popEvent);
+			} else if (previousURL && previousURL !== currentURL) {
+				console.log('앞으로가기 실행');
+				this.stopInterval();
+				window.removeEventListener('popstate', popEvent);
+			}
+		};
+		window.addEventListener('popstate', popEvent);
 	}
 
 	template() {
@@ -88,6 +101,23 @@ export default class Remote extends Component {
 			};
 			this.remoteSocket.close();
 		});
+	}
+
+	async stopInterval() {
+		if (this.count) {
+			clearInterval(this.count);
+			console.log('Counter 중지');
+		}
+		if (this.time) {
+			clearInterval(this.time);
+			console.log('Timer 중지');
+		}
+		if (
+			this.remoteSocket &&
+			this.remoteSocket.readyState !== WebSocket.CLOSED
+		) {
+			await this.closeSocket();
+		}
 	}
 
 	remoteReady() {
@@ -146,23 +176,6 @@ export default class Remote extends Component {
 			console.log('원격 소켓 에러');
 			this.stopInterval();
 		};
-	}
-
-	async stopInterval() {
-		if (this.count) {
-			clearInterval(this.count);
-			console.log('Counter 중지');
-		}
-		if (this.time) {
-			clearInterval(this.time);
-			console.log('Timer 중지');
-		}
-		if (
-			this.remoteSocket &&
-			this.remoteSocket.readyState !== WebSocket.CLOSED
-		) {
-			await this.closeSocket();
-		}
 	}
 
 	counter() {
