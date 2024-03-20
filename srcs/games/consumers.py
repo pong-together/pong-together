@@ -1,13 +1,10 @@
-import logging
-
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 from games.connect_handler import ConnectHandler
 from games.constants import PLAYER2
 from games.disconnect_handler import DisconnectHandler
 from games.receive_handler import ReceiveHandler
-
-logger = logging.getLogger('main')
+from pong_together.settings import logger
 
 
 class GameConsumer(AsyncJsonWebsocketConsumer):
@@ -48,7 +45,6 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
 
     async def receive_json(self, content, **kwargs):
         try:
-            logger.info(f'Websocket GAME evnet {content['type']}')
             receive_handler = ReceiveHandler()
             await receive_handler.run(self, content)
         except KeyError as e:
