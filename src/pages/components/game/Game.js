@@ -245,6 +245,8 @@ export default class Game extends Component {
 			else if (data.type && data.type === 'send_reconnection') {
 				console.log(data);
 				gameSocket.close();
+				document.removeEventListener('keydown', this.event1);
+				document.removeEventListener('keyup', this.event2);
 				navigate('/select');
 			}
 			else if (data.type && data.type === 'end') {
@@ -290,7 +292,6 @@ export default class Game extends Component {
 	setEvent() {
 		this.addEvent('click', '.game-end-button', ({target}) => {
 			if (window.localStorage.getItem('gameMode') === 'tournament') {
-				// new TournamentBracket(this.$target).init(this.$target);
 				navigate('/tournamentBracket');
 			}
 			else {

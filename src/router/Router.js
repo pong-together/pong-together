@@ -66,7 +66,8 @@ export default class Router {
 
 		console.log('route');
 			const matchedRoute = this.findMatchedRoute();
-			const routeName = matchedRoute ? matchedRoute.element.name : 'NotFound';
+			const routeName = matchedRoute ? matchedRoute.key : 'NotFound';
+			console.log(routeName);
 
 			if (this.currentPage && typeof this.currentPage.destroy === 'function') {
 					this.currentPage.destroy();
