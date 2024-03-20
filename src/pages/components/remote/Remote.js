@@ -14,6 +14,15 @@ export default class Remote extends Component {
 		this.time;
 	}
 
+	static instance = null;
+
+	static getInstance($container) {
+		if (!Remote.instance) {
+			Remote.instance = new Remote($container);
+		}
+		return Remote.instance;
+	}
+
 	setup() {
 		if (
 			!localStorage.getItem('accessToken') ||

@@ -7,6 +7,15 @@ import { navigate } from '../../../router/utils/navigate.js';
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
 export default class Game extends Component {
+	static instance = null;
+
+	static getInstance($container) {
+		if (!Game.instance) {
+				Game.instance = new Game($container);
+		}
+		return Game.instance;
+	}
+
 	constructor($target, $props) {
 		super($target, $props);
 		this.gameSocket;
@@ -238,13 +247,13 @@ export default class Game extends Component {
 				}
 				this.render();
 			}
-			else if (data.type && data.type === 'send_reconnection') {
-				console.log('send_reconnection:' + data);
-				gameSocket.close();
-				document.removeEventListener('keydown', this.event1);
-				document.removeEventListener('keyup', this.event2);
-				navigate('/select');
-			}
+			// else if (data.type && data.type === 'send_reconnection') {
+			// 	console.log('send_reconnection:' + data);
+			// 	gameSocket.close();
+			// 	document.removeEventListener('keydown', this.event1);
+			// 	document.removeEventListener('keyup', this.event2);
+			// 	navigate('/select');
+			// }
 			else if (data.type && data.type === 'end') {
 				console.log(data);
 				if (data.is_normal === false) {
@@ -278,6 +287,7 @@ export default class Game extends Component {
 				document.querySelector('.player2-game-score').textContent =
 					data.player2_score;
 			} else if (data.type && data.type === 'get_game_info') {
+				console.log(data);
 				this.setState({ ball_x: data.ball_x });
 				this.setState({ ball_y: data.ball_y });
 				this.setState({ player1_y: data.player1_y });

@@ -63,7 +63,6 @@ export default class Router {
 	}
 
 	route() {
-
 		console.log('route');
 			const matchedRoute = this.findMatchedRoute();
 			const routeName = matchedRoute ? matchedRoute.key : 'NotFound';
@@ -74,14 +73,15 @@ export default class Router {
 			}
 			this.currentPage = null;
 
-			// const TargetPage = matchedRoute ? matchedRoute.element : NotFound;
+			const TargetPage = matchedRoute ? matchedRoute.element : NotFound;
 
-			this.currentPage = this.instanceStore.getInstance(routeName, this.$container);
+			// this.currentPage = this.instanceStore.getInstance(routeName, this.$container);
+			this.currentPage = TargetPage.getInstance(this.$container)
 			// 생성자에서 자동으로 렌더링 실행하기 때문에 생성자 로직을 수정하고 init에게 렌더링 권한 위임해야 함
 			console.log('init!');
 			this.currentPage.init(this.$container);
 
-			console.log('Current page:', this.currentPage);
+			console.log('Current page:', this.currentPage); 
 	}
 
 	init() {

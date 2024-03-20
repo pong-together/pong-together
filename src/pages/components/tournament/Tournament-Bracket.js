@@ -4,7 +4,16 @@ import tourapi from '../tournament/TournamentApi.js';
 import store from '../../../store/index.js';
 import { navigate } from '../../../router/utils/navigate.js';
 
-export default class extends Component {
+export default class tournamentBracket extends Component {
+	static instance = null;
+
+	static getInstance($container) {
+		if (!tournamentBracket.instance) {
+			tournamentBracket.instance = new tournamentBracket($container);
+		}
+		return tournamentBracket.instance;
+	}
+	
 	setup() {
 		this.$state = {
 			participant: [],

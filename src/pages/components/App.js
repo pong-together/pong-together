@@ -7,7 +7,7 @@ import { displayConnectionFailedModal } from '../../utils/modal';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
-export default class extends Component {
+export default class App extends Component {
 	setup() {
 		if (localStorage.getItem('language')) {
 			store.dispatch('changeLanguage', localStorage.getItem('language'));
@@ -16,6 +16,15 @@ export default class extends Component {
 			region: store.state.language,
 		};
 		this.$store = this.$props;
+	}
+
+	static instance = null;
+
+	static getInstance($container) {
+		if (!App.instance) {
+			App.instance = new App($container);
+		}
+		return App.instance;
 	}
 
 	setEvent() {

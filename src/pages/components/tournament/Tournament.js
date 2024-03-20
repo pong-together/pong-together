@@ -11,14 +11,15 @@ export default class Tournament extends Component {
 		super($target, $props);
 		this.bracket;
 	}
-	// static instance = null;
+	static instance = null;
 
-	// static getInstance($container) {
-	// 	if (!Tournament.instance) {
-	// 		Tournament.instance = new Tournament($container);
-	// 	}
-	// 	return Tournament.instance;
-	// }
+	static getInstance($container) {
+		if (!Tournament.instance) {
+			Tournament.instance = new Tournament($container);
+		}
+		return Tournament.instance;
+	}
+	
 	setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
