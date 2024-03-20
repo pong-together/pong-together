@@ -40,9 +40,9 @@ export default class Remote extends Component {
 			const target = e.target;
 			if (target.id === 'search') {
 				console.log('취소하기 실행');
-				await this.stopCounter();
-				document.removeEventListener('click', cancelEvent);
-				window.removeEventListener('popstate', popEvent);
+				// await this.stopCounter();
+				// document.removeEventListener('click', cancelEvent);
+				// window.removeEventListener('popstate', popEvent);
 				navigate('/select');
 			}
 		};
@@ -50,9 +50,9 @@ export default class Remote extends Component {
 
 		const popEvent = (e) => {
 			console.log('뒤로가기 실행');
-			this.stopInterval();
-			window.removeEventListener('popstate', popEvent);
-			document.removeEventListener('click', cancelEvent);
+			// this.stopInterval();
+			// window.removeEventListener('popstate', popEvent);
+			// document.removeEventListener('click', cancelEvent);
 		};
 		window.addEventListener('popstate', popEvent);
 	}
@@ -77,6 +77,16 @@ export default class Remote extends Component {
 			<div class="top-text">${language.remote[this.$state.region].readyText}</div>
 			<img src="${this.$state.opponentIntraPic}" id="picture">
 			<button id="match-intra">${this.$state.opponentIntraID}(5)</button>
+		`;
+	}
+
+	templateProgress() {
+		return `
+			<div class="progress progress-custom">
+				<div class="progress-bar bg-danger progress-bar-striped progress-bar-animated" style="width:200px ; height:30px">
+					<span>100%</span>
+				</div>
+			</div>
 		`;
 	}
 
@@ -121,11 +131,13 @@ export default class Remote extends Component {
 	}
 
 	exclamationMark() {
+		const mainboxElement = document.querySelector('.mainbox');
 		const counterElement = document.getElementById('counter');
-		counterElement.parentNode.removeChild(counterElement);
-
 		const cancelElement = document.getElementById('search');
+		counterElement.parentNode.removeChild(counterElement);
 		cancelElement.parentNode.removeChild(cancelElement);
+
+		mainboxElement.innerHTML += this.templateProgress();
 
 		const imageElement = document.getElementById('question');
 		imageElement.src = 'static/images/exclamation-mark.png';
