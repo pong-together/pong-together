@@ -88,11 +88,6 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
         await self.send_channel(first_channel, first_user, second_user)
         await self.send_channel(second_channel, second_user, first_user)
 
-        # if self.channel_name == first_channel:
-        #     self.opponent_channel = second_channel
-        # else:
-        #     self.opponent_channel = first_channel
-
     async def send_channel(self, channel, user, opponent_user):
 
         await self.channel_layer.send(channel, {
