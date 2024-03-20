@@ -1,9 +1,12 @@
+import logging
 import math
 import random
 from random import randint
 
 from games import constants
 from games.score import Score
+
+logger = logging.getLogger('main')
 
 
 class Ball:
@@ -36,6 +39,7 @@ class Ball:
             self.start_speed = self.EXTREME_START_SPEED
             self.minimum_speed = self.EXTREME_MINIMUM_SPEED
             self.maximum_slope = self.EXTREME_MAXIMUM_SLOPE
+        logger.info(f'mode: {mode}, start_speed: {self.start_speed}')
         self.velocity = [self.start_speed, 0]
 
     def set_position(self, x, y):
@@ -49,7 +53,7 @@ class Ball:
 
     def bounce(self, paddle):
         self.velocity[0] *= -1
-        self.velocity[1] = int((self.y - paddle.y - (paddle.HEIGHT - self.HEIGHT) / 2) / 3)
+        self.velocity[1] = (self.y - paddle.y - (paddle.HEIGHT - self.HEIGHT) / 2) / 3 + random.randint(-10,10) / 10
         self.adjust_slope()
         self.adjust_speed()
 
@@ -85,17 +89,9 @@ class Ball:
 
     def adjust_slope(self):
         slope = self.velocity[1] / self.velocity[0]
-        if self.velocity[1] == 0:
-            self.adjust_horizontal_slope()
         if abs(slope) > self.maximum_slope:
             self.velocity[1] *= abs(self.velocity[0]) / abs(self.velocity[1])
             self.velocity[0] *= self.maximum_slope
-
-    def adjust_horizontal_slope(self):
-        self.rely += 1
-        if self.rely == 3:
-            self.velocity[1] = float(random.randint(1, 10) / 10)
-            self.rely = -1
 
     def adjust_speed(self, start_turn=False):
         size2 = self.velocity[0] ** 2 + self.velocity[1] ** 2
