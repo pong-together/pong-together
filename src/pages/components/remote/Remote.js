@@ -48,17 +48,20 @@ export default class Remote extends Component {
 		document.addEventListener('click', cancelEvent);
 
 		const popEvent = (e) => {
-			const currentURL = window.location.href;
-			const previousURL = e.state ? e.state.url : null;
-			if (previousURL && previousURL === currentURL) {
-				console.log('뒤로가기 실행');
-				this.stopInterval();
-				window.removeEventListener('popstate', popEvent);
-			} else if (previousURL && previousURL !== currentURL) {
-				console.log('앞으로가기 실행');
-				this.stopInterval();
-				window.removeEventListener('popstate', popEvent);
-			}
+			// const currentURL = window.location.href;
+			// const previousURL = e.state ? e.state.url : null;
+			// if (previousURL && previousURL === currentURL) {
+			// 	console.log('뒤로가기 실행');
+			// 	this.stopInterval();
+			// 	window.removeEventListener('popstate', popEvent);
+			// } else if (previousURL && previousURL !== currentURL) {
+			// 	console.log('앞으로가기 실행');
+			// 	this.stopInterval();
+			// 	window.removeEventListener('popstate', popEvent);
+			// }
+			console.log('뒤로가기 실행');
+			this.stopInterval();
+			window.removeEventListener('popstate', popEvent);
 		};
 		window.addEventListener('popstate', popEvent);
 	}
