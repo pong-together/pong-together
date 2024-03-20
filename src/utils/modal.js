@@ -26,9 +26,7 @@ function displayConnectionFailedModal(text) {
 const displayCanceledMatchingModal = async (text) => {
 	const modalHTML = `
 		<div class="modal-overlay">
-			<div class="modal-content">
-				<p>${text}</p>
-			</div>
+			<div class="modal-content">${text}</div>
 		</div>
 	`;
 
@@ -37,7 +35,7 @@ const displayCanceledMatchingModal = async (text) => {
 	};
 
 	document.body.innerHTML += modalHTML;
-	await sleep(3000);
+	await sleep(500);
 	const modalOverlay = document.querySelector('.modal-overlay');
 	modalOverlay.remove();
 };
