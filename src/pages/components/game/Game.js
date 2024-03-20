@@ -239,13 +239,11 @@ export default class Game extends Component {
 				this.render();
 			}
 			else if (data.type && data.type === 'send_reconnection') {
-				if (window.localStorage.getItem('gameMode') !== 'tournament') {
-					console.log(data);
-					gameSocket.close();
-					document.removeEventListener('keydown', this.event1);
-					document.removeEventListener('keyup', this.event2);
-					navigate('/select');
-				}
+				console.log('send_reconnection:' + data);
+				gameSocket.close();
+				document.removeEventListener('keydown', this.event1);
+				document.removeEventListener('keyup', this.event2);
+				navigate('/select');
 			}
 			else if (data.type && data.type === 'end') {
 				console.log(data);
