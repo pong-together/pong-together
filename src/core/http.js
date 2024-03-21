@@ -4,7 +4,7 @@ import { navigate } from '../router/utils/navigate';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const REFRESH_BASE_URL = `${BASE_URL}/api/auth/token/refresh/`;
-const CHECK_BASE_URL = `${BASE_URL}/api/auth/token/verify`;
+const CHECK_BASE_URL = `${BASE_URL}/api/auth/otp/`;
 
 const parseResponse = async (response) => {
 	const { status } = response;
@@ -29,16 +29,11 @@ const checkToken = async () => {
 		'Content-Type': 'application/json',
 		Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
 	};
-	let checkBody = {
-		refresh: localStorage.getItem('refreshToken'),
-	};
-	checkBody = JSON.stringify(checkBody);
 
 	try {
 		const response = await window.fetch(CHECK_BASE_URL, {
-			method: 'POST',
+			method: 'GET',
 			headers: new window.Headers(header),
-			body: checkBody,
 		});
 		if (!response.ok) {
 			if (response.status === 401) {
