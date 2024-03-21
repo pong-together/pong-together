@@ -173,8 +173,9 @@ export default class Remote extends Component {
 				console.log('상대방이 나갔습니다.');
 				await displayCanceledMatchingModal(
 					language.remote[this.$state.region].cancelMatch,
+					document.querySelector('.mainbox'),
 				);
-				await navigate('/select');
+				navigate('/select');
 			}
 		};
 
