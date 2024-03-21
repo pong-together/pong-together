@@ -28,20 +28,23 @@ class DisconnectHandler:
 
     async def disconnect_remote(self):
         pong = self.consumer.common[self.consumer.group_name]['pong']
-        if Score.end_normal(pong.end_status) and \
-                self.consumer.user.intra_id == self.consumer.get_player_name(PLAYER2):
+        if Score.end_normal(pong.end_status):
             await self.disconnect_normal()
-            await self.cancel_pong_task()
         if Score.end_abnormal(pong.end_status):
             await self.disconnect_abnormal()
-            await self.cancel_pong_task()
         await self.consumer.channel_layer.group_discard(self.consumer.group_name, self.consumer.channel_name)
 
     async def disconnect_normal(self):
-        pong = self.consumer.common[self.consumer.group_name]['pong']
-        winner = pong.get_winner()
-        loser = self.get_other_player(winner)
-        await self.update_game_result(winner, loser)
+        await self.update_result()
+        if self.consumer.user.intra_id == self.consumer.get_player_name(PLAYER2):
+            await self.cancel_pong_task()
+
+    async def update_result(self):
+        winner = self.consumer.common[self.consumer.group_name]['pong'].get_winner()
+        if winner == self.consumer.user.intra_id:
+            await self.update_win()
+        else:
+            await self.update_lose()
 
     async def disconnect_abnormal(self):
         pong = self.consumer.common[self.consumer.group_name]['pong']
@@ -54,6 +57,7 @@ class DisconnectHandler:
             'is_normal': False,
             'winner': winner
         })
+        await self.cancel_pong_task()
 
     def get_other_player(self, name):
         other = self.consumer.get_player_name(PLAYER1)
@@ -74,9 +78,9 @@ class DisconnectHandler:
         await self.update_lose(loser)
 
     @database_sync_to_async
-    def update_lose(self, intra_id):
+    def update_lose(self):
         try:
-            user = User.objects.get(intra_id=intra_id)
+            user = User.objects.get(intra_id=self.consumer.user.intra_id)
             user.lose_count += 1
             user.game_count += 1
             user.save()
@@ -84,9 +88,9 @@ class DisconnectHandler:
             pass
 
     @database_sync_to_async
-    def update_win(self, intra_id):
+    def update_win(self):
         try:
-            user = User.objects.get(intra_id=intra_id)
+            user = User.objects.get(intra_id=self.consumer.user.intra_id)
             user.win_count += 1
             user.game_count += 1
             user.save()
