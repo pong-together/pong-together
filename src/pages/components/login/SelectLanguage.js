@@ -88,7 +88,7 @@ export default class extends Component {
 	mounted() {
 		const $select = this.$target.querySelector('#language-select');
 		const selectedRegion = this.$state.region;
-
+		
 		$select.querySelectorAll('option').forEach((option) => {
 			if (option.value === selectedRegion) {
 				option.selected = true;

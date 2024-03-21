@@ -64,7 +64,7 @@ export default class Game extends Component {
 			this.$state.game_id = window.localStorage.getItem('remote-id');
 			this.$state.buttonMessage = language.game[this.$state.region].localButton;
 		}
-
+		// console.log("game!!!!!!!!!!!!!!" + this.$state.game_id)
 		this.connectGameSocket();
 	}
 
@@ -440,6 +440,10 @@ export default class Game extends Component {
 	}
 
 	mounted() {
+		if (!this.$state.game_id || this.$state.game_id === 0) {
+			console.log('navigate');
+			navigate('/select');
+		}
 		var player1 = document.querySelector('.player1-image');
 		var player2 = document.querySelector('.player2-image');
 		if (

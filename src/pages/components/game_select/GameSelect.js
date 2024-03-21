@@ -42,14 +42,17 @@ export default class GameSelect extends Component {
 			Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
 			'Content-Type': 'application/json',
 		});
-		console.log('data'+ data);
-		localStorage.setItem('intraId', data?.intra_id || 'anonymous');
-		localStorage.setItem('winCount', data?.win_count || 0);
-		localStorage.setItem('loseCount', data?.lose_count || 0);
-		localStorage.setItem(
-			'intraImg',
-			data?.image || '/static/images/user.png',
-		);
+		if (data) {
+			console.log(data.intra_id, data.win_count, data.lose_count);
+			localStorage.setItem('intraId', data?.intra_id || 'anonymous');
+			// localStorage.setItem('winCount', data?.win_count || 0);
+			localStorage.setItem('winCount', 11);
+			localStorage.setItem('loseCount', data?.lose_count || 0);
+			localStorage.setItem(
+				'intraImg',
+				data?.image || '/static/images/user.png',
+			);
+		}
 		// }
 	}
 
@@ -243,6 +246,12 @@ export default class GameSelect extends Component {
 				}
 			});
 		}
+
+		// const win = 
+		// console.log(win);
+		// win.textContent = window.localStorage.getItem('intraId');
+		// const lose = window.querySelector('.record')
+	
 
 		document
 			.querySelectorAll('.game-select-difficult .level')

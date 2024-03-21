@@ -237,41 +237,6 @@ export default class App extends Component {
 		) {
 			this.connectSocket.bind(this)();
 		}
-
-		try {
-			const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
-			const data = await http.get(`${BASE_URL}/api/userinfo/`, {
-				Authorization: accessToken,
-				'Content-Type': 'application/json',
-			});
-			console.log('api!!', data);
-			// console.log(data);
-			if (data) {
-				// if (data.chat_connection === true) {
-				// 	// 중복 접근을 제한하는 모달 띄워줌
-				// 	displayConnectionFailedModal('다른 사용자가 이미 접속중입니다.');
-				// 	localStorage.clear();
-				// 	return;
-				// }
-				localStorage.setItem('intraId', data?.intra_id);
-				store.dispatch('changeIntraId', data?.intra_id);
-				localStorage.setItem('winCount', data?.win_count);
-				store.dispatch('changeWinCount', data?.win_count);
-				localStorage.setItem('loseCount', data?.lose_count);
-				store.dispatch('changeLoseCount', data?.lose_count);
-				localStorage.setItem('intraImg', data?.image);
-				store.dispatch('changeIntraImg', data?.image);
-				if (data?.win_count + data?.lose_count !== 0) {
-					localStorage.setItem(
-						'rate',
-						(data?.win_count / (data?.lose_count + data?.win_count)) * 100,
-					);
-				} else {
-					localStorage.setItem('rate', 0);
-				}
-			}
-		} catch (e) {}
-
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {
 			store.dispatch('changeLoginProgress', 'done');
 		} else if (localStorage.getItem('accessToken')) {
