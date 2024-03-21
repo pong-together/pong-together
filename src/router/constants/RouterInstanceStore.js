@@ -1,8 +1,11 @@
+import store from "../../store";
 import { routes } from "./pages";
 
 export default class RouterInstanceStore {
 	constructor() {
 			this.instances = {};
+			this.key = [];
+			window.localStorage.setItem('instance_key', JSON.stringify(this.key));
 	}
 
 	findMatchedRoute() {
@@ -10,13 +13,21 @@ export default class RouterInstanceStore {
 	}
 
 	getInstance(routeName, $container) {
-			if (!this.instances[routeName]) {
-					// console.log('instances', this.instances);
-					const TargetPage = this.findMatchedRoute(routeName)?.element || NotFound;
-					return this.instances[routeName] = new TargetPage($container);
+		const storedArray = JSON.parse(window.localStorage.getItem('instance_key')) || [];
+	
+		if (!storedArray.includes(routeName)) {
+			const route = this.findMatchedRoute(routeName);
+			if (!route) {
+				this.instances[routeName] = new NotFound($container);
+			} else {
+				this.instances[routeName] = new route.element($container);
+				storedArray.push(routeName);
+				window.localStorage.setItem('instance_key', JSON.stringify(storedArray));
 			}
-			return this.instances[routeName];
+		}
+		return this.instances[routeName];
 	}
+	
 
 	destroyInstance(routeName) {
 			if (this.instances[routeName] && typeof this.instances[routeName].destroy === 'function') {
