@@ -64,8 +64,9 @@ export default class Game extends Component {
 			this.$state.game_id = window.localStorage.getItem('remote-id');
 			this.$state.buttonMessage = language.game[this.$state.region].localButton;
 		}
-		// console.log("game!!!!!!!!!!!!!!" + this.$state.game_id)
-		this.connectGameSocket();
+		if (this.$state.game_id) {
+			this.connectGameSocket();
+		}
 	}
 
 	template() {
@@ -442,26 +443,31 @@ export default class Game extends Component {
 	mounted() {
 		if (!this.$state.game_id || this.$state.game_id === 0) {
 			console.log('navigate');
+			// this.gameSocket.close();
+			document.removeEventListener('keydown', this.event1);
+			document.removeEventListener('keyup', this.event2);
 			navigate('/select');
 		}
-		var player1 = document.querySelector('.player1-image');
-		var player2 = document.querySelector('.player2-image');
-		if (
-			window.localStorage.getItem('gameMode') === 'local' ||
-			window.localStorage.getItem('gameMode') === 'tournament'
-		) {
-			player1.style.backgroundImage =
-				"url('../../../../static/images/player1_image2.png')";
-			player2.style.backgroundImage =
-				"url('../../../../static/images/player2_image.png')";
-			player1.style.backgroundRepeat = 'round';
-			player2.style.backgroundRepeat = 'round';
-		} else if (window.localStorage.getItem('gameMode') === 'remote') {
-			player1.style.backgroundImage = `url('${this.$state.player1_image}')`;
-			player2.style.backgroundImage = `url('${this.$state.player2_image}')`;
-			player1.style.backgroundRepeat = 'round';
-			player2.style.backgroundRepeat = 'round';
+		else {
+			var player1 = document.querySelector('.player1-image');
+			var player2 = document.querySelector('.player2-image');
+			if (
+				window.localStorage.getItem('gameMode') === 'local' ||
+				window.localStorage.getItem('gameMode') === 'tournament'
+			) {
+				player1.style.backgroundImage =
+					"url('../../../../static/images/player1_image2.png')";
+				player2.style.backgroundImage =
+					"url('../../../../static/images/player2_image.png')";
+				player1.style.backgroundRepeat = 'round';
+				player2.style.backgroundRepeat = 'round';
+			} else if (window.localStorage.getItem('gameMode') === 'remote') {
+				player1.style.backgroundImage = `url('${this.$state.player1_image}')`;
+				player2.style.backgroundImage = `url('${this.$state.player2_image}')`;
+				player1.style.backgroundRepeat = 'round';
+				player2.style.backgroundRepeat = 'round';
+			}
+			this.timer();
 		}
-		this.timer();
 	}
 }

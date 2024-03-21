@@ -18,15 +18,6 @@ export default class GameSelect extends Component {
 	}
 
 	async setup() {
-		if (
-			!localStorage.getItem('accessToken') ||
-			!localStorage.getItem('twoFA')) {
-			// window.location.pathname = '/login';
-			navigate("/login", true);
-		} else {
-			http.checkToken();
-		}
-
 		if (localStorage.getItem('language')) {
 			store.dispatch('changeLanguage', localStorage.getItem('language'));
 		}
@@ -218,6 +209,14 @@ export default class GameSelect extends Component {
 	}
 
 	async mounted() {
+		if (
+			!localStorage.getItem('accessToken') ||
+			!localStorage.getItem('twoFA')) {
+			// window.location.pathname = '/login';
+			navigate("/login", true);
+		} else {
+			http.checkToken();
+		}
 		if (this.$state.progress === 'mode') {
 			const localModal = document.getElementById('select-modal-local-info');
 			const tournamentModal = document.getElementById(
