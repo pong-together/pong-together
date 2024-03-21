@@ -35,9 +35,9 @@ const displayCanceledMatchingModal = async (text) => {
 	};
 
 	document.body.innerHTML += modalHTML;
-	await sleep(500);
+	await sleep(3000);
 	const modalOverlay = document.querySelector('.modal-overlay');
-	modalOverlay.remove();
+	modalOverlay.parentNode.removeChild(modalOverlay);
 };
 
 export { displayConnectionFailedModal, displayCanceledMatchingModal };

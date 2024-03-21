@@ -169,12 +169,12 @@ export default class Remote extends Component {
 				await this.sleep(3000);
 				this.remoteReady();
 			} else if (data.type && data.type === 'send_disconnection') {
+				await this.stopTimer();
 				console.log('상대방이 나갔습니다.');
-				displayCanceledMatchingModal(
+				await displayCanceledMatchingModal(
 					language.remote[this.$state.region].cancelMatch,
 				);
-				await this.stopTimer();
-				navigate('/select');
+				await navigate('/select');
 			}
 		};
 
