@@ -8,7 +8,6 @@ export default class Login extends Component {
 	static instance = null;
 
 	static getInstance($container) {
-		console.log($container);
 		if (!Login.instance) {
 				Login.instance = new Login($container);
 		}

@@ -150,7 +150,6 @@ export default class Game extends Component {
 			function updateBarPositionRemote() {
 				let messages = [];
 				if (keyStates['w']) {
-					console.log('remote W');
 					messages.push({
 						type: 'push_button',
 						sender_player: `${window.localStorage.getItem('intraId')}`,
@@ -158,7 +157,6 @@ export default class Game extends Component {
 					});
 				}
 				else if (keyStates['s']) {
-					console.log('remote S');
 					messages.push({
 						type: 'push_button',
 						sender_player: `${window.localStorage.getItem('intraId')}`,
@@ -174,7 +172,6 @@ export default class Game extends Component {
 			function updateBarPosition() {
 				let messages = [];
 				if (keyStates['w']) {
-					console.log("w");
 					messages.push({
 						type: 'push_button',
 						sender_player: 'player1',
@@ -182,7 +179,6 @@ export default class Game extends Component {
 					});
 				}
 				if (keyStates['s']) {
-					console.log("s");
 					messages.push({
 						type: 'push_button',
 						sender_player: 'player1',
@@ -190,7 +186,6 @@ export default class Game extends Component {
 					});
 				}
 				if (keyStates['p']) {
-					console.log("p");
 					messages.push({
 						type: 'push_button',
 						sender_player: 'player2',
@@ -198,7 +193,6 @@ export default class Game extends Component {
 					});
 				}
 				if (keyStates[';']) {
-					console.log(";");
 					messages.push({
 						type: 'push_button',
 						sender_player: 'player2',
@@ -232,7 +226,6 @@ export default class Game extends Component {
 
 		gameSocket.onmessage = (event) => {
 			const data = JSON.parse(event.data);
-			// console.log(data);
 			if (data.type && data.type === 'get_user_info') {
 				this.setState({ player1: data.player1_name });
 				this.setState({ player2: data.player2_name });
@@ -249,14 +242,12 @@ export default class Game extends Component {
 				this.render();
 			}
 			else if (data.type && data.type === 'send_reconnection') {
-				console.log('send_reconnection:' + data);
 				gameSocket.close();
 				document.removeEventListener('keydown', this.event1);
 				document.removeEventListener('keyup', this.event2);
 				navigate('/select');
 			}
 			else if (data.type && data.type === 'end') {
-				console.log(data);
 				if (data.is_normal === false) {
 					const element3 = document.querySelector('.game-display');
 					element3.innerHTML = this.templateEnd();
@@ -288,7 +279,6 @@ export default class Game extends Component {
 				document.querySelector('.player2-game-score').textContent =
 					data.player2_score;
 			} else if (data.type && data.type === 'get_game_info') {
-				console.log(data);
 				this.setState({ ball_x: data.ball_x });
 				this.setState({ ball_y: data.ball_y });
 				this.setState({ player1_y: data.player1_y });
@@ -441,12 +431,10 @@ export default class Game extends Component {
 	}
 
 	mounted() {
-		if (!this.$state.game_id || this.$state.game_id === 0) {
-			console.log('navigate');
-			// this.gameSocket.close();
-			document.removeEventListener('keydown', this.event1);
-			document.removeEventListener('keyup', this.event2);
-			navigate('/select');
+		if (!this.$state.game_id) {
+				document.removeEventListener('keydown', this.event1);
+				document.removeEventListener('keyup', this.event2);
+				navigate('/select');
 		}
 		else {
 			var player1 = document.querySelector('.player1-image');

@@ -13,7 +13,7 @@ export default class tournamentBracket extends Component {
 		}
 		return tournamentBracket.instance;
 	}
-	
+
 	setup() {
 		this.$state = {
 			participant: [],
@@ -439,7 +439,6 @@ export default class tournamentBracket extends Component {
 			player4_name,
 		];
 		const winners = [first_winner, second_winner, final_winner];
-		console.log(winners);
 		if (
 			JSON.stringify(this.$state.participant) !==
 				JSON.stringify(participants) ||
@@ -456,91 +455,95 @@ export default class tournamentBracket extends Component {
 	}
 
 	async mounted() {
-		console.log('bracket mount!')
-		await this.getTournamentInfo(); //api로 정보 받아옴.
-
-		if (this.$state.gameround >= 4) {
-			const button = document.querySelector('.game-start');
-			button.textContent = language.tournament[this.$state.region].gameEndButton;
+		if (!window.localStorage.getItem('tournament-id')) {
+			navigate('/select');
 		}
+		else {
+			await this.getTournamentInfo(); //api로 정보 받아옴.
 
-		const playerBox1 = document.querySelector('.player1');
-		const playerBox2 = document.querySelector('.player2');
-		const playerBox3 = document.querySelector('.player3');
-		const playerBox4 = document.querySelector('.player4');
-		const game1WinnerBox = document.querySelector('.game1-winner');
-		const game2WinnerBox = document.querySelector('.game2-winner');
-		if (this.$state.gameround === 1)
-			this.gameRoundOne(playerBox1, playerBox2, playerBox3);
-		else if (
-			this.$state.gameround === 2 &&
-			this.$state.winner[0] === playerBox1.textContent
-		)
-			this.gameRoundTwoPlayerOne(
-				playerBox1,
-				playerBox2,
-				playerBox3,
-				playerBox4,
-				this.$state.winner[0],
-			);
-		else if (
-			this.$state.gameround === 2 &&
-			this.$state.winner[0] === playerBox2.textContent
-		)
-			this.gameRoundTwoPlayerTwo(
-				playerBox1,
-				playerBox2,
-				playerBox3,
-				playerBox4,
-				this.$state.winner[0],
-			);
-		else if (
-			this.$state.gameround >= 3 &&
-			this.$state.winner[0] === playerBox1.textContent &&
-			this.$state.winner[1] === playerBox3.textContent
-		)
-			this.gameRoundThreePlayerOneThree(
-				playerBox1,
-				playerBox2,
-				playerBox3,
-				playerBox4,
-				this.$state.winner,
-			);
-		else if (
-			this.$state.gameround >= 3 &&
-			this.$state.winner[0] === playerBox1.textContent &&
-			this.$state.winner[1] === playerBox4.textContent
-		)
-			this.gameRoundThreePlayerOneFour(
-				playerBox1,
-				playerBox2,
-				playerBox3,
-				playerBox4,
-				this.$state.winner,
-			);
-		else if (
-			this.$state.gameround >= 3 &&
-			this.$state.winner[0] === playerBox2.textContent &&
-			this.$state.winner[1] === playerBox3.textContent
-		)
-			this.gameRoundThreePlayerTwoThree(
-				playerBox1,
-				playerBox2,
-				playerBox3,
-				playerBox4,
-				this.$state.winner,
-			);
-		else if (
-			this.$state.gameround >= 3 &&
-			this.$state.winner[0] === playerBox2.textContent &&
-			this.$state.winner[1] === playerBox4.textContent
-		)
-			this.gameRoundThreePlayerTwoFour(
-				playerBox1,
-				playerBox2,
-				playerBox3,
-				playerBox4,
-				this.$state.winner,
-			);
+			if (this.$state.gameround >= 4) {
+				const button = document.querySelector('.game-start');
+				button.textContent = language.tournament[this.$state.region].gameEndButton;
+			}
+
+			const playerBox1 = document.querySelector('.player1');
+			const playerBox2 = document.querySelector('.player2');
+			const playerBox3 = document.querySelector('.player3');
+			const playerBox4 = document.querySelector('.player4');
+			const game1WinnerBox = document.querySelector('.game1-winner');
+			const game2WinnerBox = document.querySelector('.game2-winner');
+			if (this.$state.gameround === 1)
+				this.gameRoundOne(playerBox1, playerBox2, playerBox3);
+			else if (
+				this.$state.gameround === 2 &&
+				this.$state.winner[0] === playerBox1.textContent
+			)
+				this.gameRoundTwoPlayerOne(
+					playerBox1,
+					playerBox2,
+					playerBox3,
+					playerBox4,
+					this.$state.winner[0],
+				);
+			else if (
+				this.$state.gameround === 2 &&
+				this.$state.winner[0] === playerBox2.textContent
+			)
+				this.gameRoundTwoPlayerTwo(
+					playerBox1,
+					playerBox2,
+					playerBox3,
+					playerBox4,
+					this.$state.winner[0],
+				);
+			else if (
+				this.$state.gameround >= 3 &&
+				this.$state.winner[0] === playerBox1.textContent &&
+				this.$state.winner[1] === playerBox3.textContent
+			)
+				this.gameRoundThreePlayerOneThree(
+					playerBox1,
+					playerBox2,
+					playerBox3,
+					playerBox4,
+					this.$state.winner,
+				);
+			else if (
+				this.$state.gameround >= 3 &&
+				this.$state.winner[0] === playerBox1.textContent &&
+				this.$state.winner[1] === playerBox4.textContent
+			)
+				this.gameRoundThreePlayerOneFour(
+					playerBox1,
+					playerBox2,
+					playerBox3,
+					playerBox4,
+					this.$state.winner,
+				);
+			else if (
+				this.$state.gameround >= 3 &&
+				this.$state.winner[0] === playerBox2.textContent &&
+				this.$state.winner[1] === playerBox3.textContent
+			)
+				this.gameRoundThreePlayerTwoThree(
+					playerBox1,
+					playerBox2,
+					playerBox3,
+					playerBox4,
+					this.$state.winner,
+				);
+			else if (
+				this.$state.gameround >= 3 &&
+				this.$state.winner[0] === playerBox2.textContent &&
+				this.$state.winner[1] === playerBox4.textContent
+			)
+				this.gameRoundThreePlayerTwoFour(
+					playerBox1,
+					playerBox2,
+					playerBox3,
+					playerBox4,
+					this.$state.winner,
+				);
+			}
+		}
 	}
-}

@@ -24,7 +24,6 @@ export default class extends Component {
 
 		this.addEvent('click', '#login-to-start', async () => {
 			try {
-				console.log('!!!');
 				const accessToken = 'Bearer ' + localStorage.getItem('accessToken');
 				const data = await http.get(`${BASE_URL}/api/userinfo/`, {
 					Authorization: accessToken,
@@ -88,7 +87,7 @@ export default class extends Component {
 	mounted() {
 		const $select = this.$target.querySelector('#language-select');
 		const selectedRegion = this.$state.region;
-		
+
 		$select.querySelectorAll('option').forEach((option) => {
 			if (option.value === selectedRegion) {
 				option.selected = true;

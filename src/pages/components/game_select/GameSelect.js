@@ -13,11 +13,19 @@ export default class GameSelect extends Component {
 		if (GameSelect.instance === null) {
 			GameSelect.instance = new GameSelect($container);
 		}
-		console.log('game select',GameSelect.instance);
 		return GameSelect.instance;
 	}
 
 	async setup() {
+		if (
+			!localStorage.getItem('accessToken') ||
+			!localStorage.getItem('twoFA')) {
+			window.location.pathname = '/login';
+			// navigate("/login", true);
+		} else {
+			http.checkToken();
+		}
+
 		if (localStorage.getItem('language')) {
 			store.dispatch('changeLanguage', localStorage.getItem('language'));
 		}
@@ -29,22 +37,28 @@ export default class GameSelect extends Component {
 			tournamentModal: 'none',
 			remoteModal: 'none',
 		};
-		const data = await http.get(`${BASE_URL}/api/userinfo/`, {
-			Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-			'Content-Type': 'application/json',
-		});
-		if (data) {
-			console.log(data.intra_id, data.win_count, data.lose_count);
+		if (
+			!localStorage.getItem('intraId') ||
+			localStorage.getItem('intraId') === 'undefined' ||
+			!localStorage.getItem('winCount') ||
+			localStorage.getItem('winCount') === 'undefined' ||
+			!localStorage.getItem('loseCount') ||
+			localStorage.getItem('loseCount') === 'undefined' ||
+			!localStorage.getItem('intraImg') ||
+			localStorage.getItem('intraImg') === 'undefined'
+		) {
+			const data = await http.get(`${BASE_URL}/api/userinfo/`, {
+				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+				'Content-Type': 'application/json',
+			});
 			localStorage.setItem('intraId', data?.intra_id || 'anonymous');
-			// localStorage.setItem('winCount', data?.win_count || 0);
-			localStorage.setItem('winCount', 11);
+			localStorage.setItem('winCount', data?.win_count || 0);
 			localStorage.setItem('loseCount', data?.lose_count || 0);
 			localStorage.setItem(
 				'intraImg',
 				data?.image || '/static/images/user.png',
 			);
 		}
-		// }
 	}
 
 	setEvent() {
@@ -209,14 +223,6 @@ export default class GameSelect extends Component {
 	}
 
 	async mounted() {
-		if (
-			!localStorage.getItem('accessToken') ||
-			!localStorage.getItem('twoFA')) {
-			// window.location.pathname = '/login';
-			navigate("/login", true);
-		} else {
-			http.checkToken();
-		}
 		if (this.$state.progress === 'mode') {
 			const localModal = document.getElementById('select-modal-local-info');
 			const tournamentModal = document.getElementById(
@@ -245,12 +251,6 @@ export default class GameSelect extends Component {
 				}
 			});
 		}
-
-		// const win = 
-		// console.log(win);
-		// win.textContent = window.localStorage.getItem('intraId');
-		// const lose = window.querySelector('.record')
-	
 
 		document
 			.querySelectorAll('.game-select-difficult .level')
