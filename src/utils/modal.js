@@ -23,23 +23,6 @@ function displayConnectionFailedModal(text) {
 	});
 }
 
-// const displayCanceledMatchingModal = async (text) => {
-// 	const modalHTML = `
-// 		<div class="modal-overlay">
-// 			<div class="modal-content">${text}</div>
-// 		</div>
-// 	`;
-
-// 	const sleep = async (ms) => {
-// 		await new Promise((resolve) => setTimeout(resolve, ms));
-// 	};
-
-// 	document.body.innerHTML += modalHTML;
-// 	await sleep(3000);
-// 	const modalOverlay = document.querySelector('.modal-overlay');
-// 	modalOverlay.parentNode.removeChild(modalOverlay);
-// };
-
 const displayCanceledMatchingModal = async (text, mainboxElement) => {
 	const sleep = async (ms) => {
 		await new Promise((resolve) => setTimeout(resolve, ms));
@@ -52,7 +35,6 @@ const displayCanceledMatchingModal = async (text, mainboxElement) => {
 	overlayElement.className = 'modal-overlay';
 	contentElement.className = 'modal-content';
 	contentElement.textContent = text;
-
 	await sleep(3000);
 	const modalOverlay = document.querySelector('.modal-overlay');
 	modalOverlay.parentNode.removeChild(modalOverlay);
