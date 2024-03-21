@@ -17,7 +17,7 @@ class ReceiveHandler:
     # start_game
     @staticmethod
     async def start_pong_game(consumer):
-        if not (consumer.type == 'remote' and consumer.user.intra_id == consumer.get_player_name(PLAYER2)) \
+        if not (consumer.type == 'remote' and consumer.user.intra_id == consumer.get_player_name(PLAYER1)) \
                 and consumer.common[consumer.group_name].get('pong') is None:
             pong = Pong(consumer)
             consumer.common[consumer.group_name]['pong'] = pong
