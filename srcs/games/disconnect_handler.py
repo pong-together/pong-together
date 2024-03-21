@@ -29,7 +29,7 @@ class DisconnectHandler:
     async def disconnect_remote(self):
         pong = self.consumer.common[self.consumer.group_name]['pong']
         if Score.end_normal(pong.end_status) and \
-                self.consumer.user.intra_id == self.consumer.get_player_name(PLAYER1):
+                self.consumer.user.intra_id == self.consumer.get_player_name(PLAYER2):
             await self.disconnect_normal()
             await self.cancel_pong_task()
         if Score.end_abnormal(pong.end_status):
