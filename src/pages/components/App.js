@@ -234,8 +234,6 @@ export default class App extends Component {
 			this.changeModule();
 			this.routerModule();
 		});
-
-		this.calcRate();
 		if (
 			localStorage.getItem('accessToken') &&
 			localStorage.getItem('intraId') &&
@@ -243,8 +241,9 @@ export default class App extends Component {
 				localStorage.getItem('chatConnection') !== true)
 		) {
 			await http.checkToken();
-			this.connectSocket.bind(this)();
+			await this.connectSocket.bind(this)();
 		}
+		this.calcRate();
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {
 			store.dispatch('changeLoginProgress', 'done');
 		} else if (localStorage.getItem('accessToken')) {
