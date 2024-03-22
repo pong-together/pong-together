@@ -1,6 +1,5 @@
 import Component from '../../../core/Component.js';
 import http from '../../../core/http.js';
-// import TournamentBracket from '../tournament/Tournament-Bracket.js';
 import language from '../../../utils/language.js';
 import { navigate } from '../../../router/utils/navigate.js';
 
@@ -290,20 +289,27 @@ export default class Game extends Component {
 	setEvent() {
 		this.addEvent('click', '.game-end-button', ({ target }) => {
 			if (window.localStorage.getItem('gameMode') === 'tournament') {
-				navigate('/tournamentBracket');
+				navigate('/tournamentBracket', true);
 			}
 			else {
-				// window.location.pathname = '/select';
 				if (window.localStorage.getItem('gameMode') === 'local') {
 					window.localStorage.removeItem('local-id');
 				} else window.localStorage.removeItem('remote-id');
 				window.localStorage.removeItem('gameMode');
 				window.localStorage.removeItem('gameLevel');
-				// window.location.pathname = '/select';
 
-				navigate('/select');
+				navigate("/select", true);
 			}
 		});
+
+		const popEvent = (e) => {
+			document.removeEventListener('keydown', this.event1);
+			document.removeEventListener('keyup', this.event2);
+			if (this.gameSocket.readyState === WebSocket.OPEN)
+				this.gameSocket.close();
+			navigate("/select", true);
+		};
+		window.addEventListener('popstate', popEvent);
 	}
 
 	templateStart() {
@@ -322,7 +328,7 @@ export default class Game extends Component {
 
 	gameStart() {
 		const displayElement = document.querySelector('.game-display');
-		if (displayElement) {
+		if (displayElement && this.gameSocket.readyState === WebSocket.OPEN) {
 			displayElement.innerHTML = this.templateStart();
 			this.canvas();
 		}

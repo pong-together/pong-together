@@ -40,10 +40,10 @@ export default class GameSelect extends Component {
 		if (
 			!localStorage.getItem('intraId') ||
 			localStorage.getItem('intraId') === 'undefined' ||
-			!localStorage.getItem('winCount') ||
-			localStorage.getItem('winCount') === 'undefined' ||
-			!localStorage.getItem('loseCount') ||
-			localStorage.getItem('loseCount') === 'undefined' ||
+			// !localStorage.getItem('winCount') ||
+			// localStorage.getItem('winCount') === 'undefined' ||
+			// !localStorage.getItem('loseCount') ||
+			// localStorage.getItem('loseCount') === 'undefined' ||
 			!localStorage.getItem('intraImg') ||
 			localStorage.getItem('intraImg') === 'undefined'
 		) {
@@ -52,8 +52,8 @@ export default class GameSelect extends Component {
 				'Content-Type': 'application/json',
 			});
 			localStorage.setItem('intraId', data?.intra_id || 'anonymous');
-			localStorage.setItem('winCount', data?.win_count || 0);
-			localStorage.setItem('loseCount', data?.lose_count || 0);
+			// localStorage.setItem('winCount', data?.win_count || 0);
+			// localStorage.setItem('loseCount', data?.lose_count || 0);
 			localStorage.setItem(
 				'intraImg',
 				data?.image || '/static/images/user.png',

@@ -8,6 +8,10 @@ import { displayConnectionFailedModal } from '../../utils/modal';
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
 export default class App extends Component {
+	constructor($target, $props) {
+		super($target, $props);
+		this.chatSocket;
+	}
 	setup() {
 		if (localStorage.getItem('language')) {
 			store.dispatch('changeLanguage', localStorage.getItem('language'));
@@ -93,7 +97,6 @@ export default class App extends Component {
 								<div class="chip-logo"></div>
 								<div class="intra-info">
 										<div class="intra-nickname">${localStorage.getItem('intraId')}</div>
-										<div class="record">${localStorage.getItem('winCount')}${language.util[store.state.language].winCount} ${localStorage.getItem('loseCount')}${language.util[store.state.language].loseCount}(${localStorage.getItem('rate')}%)</div>
 								</div>
 						</div>
 						<div class="intra-picture">
@@ -133,6 +136,8 @@ export default class App extends Component {
 		const chatSocket = new WebSocket(
 			`${SOCKET_URL}/ws/chats/?token=${localStorage.getItem('accessToken')}`,
 		);
+
+		this.chatSocket = chatSocket;
 
 		chatSocket.onopen = () => {
 			console.log("chat connect");
@@ -235,7 +240,8 @@ export default class App extends Component {
 			(!localStorage.getItem('chatConnection') ||
 				localStorage.getItem('chatConnection') !== true)
 		) {
-			this.connectSocket.bind(this)();
+			if (this.chatSocket.readyState !== WebSocket.OPEN && this.chatSocket)
+				this.connectSocket.bind(this)();
 		}
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {
 			store.dispatch('changeLoginProgress', 'done');
