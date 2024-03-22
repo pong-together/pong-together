@@ -1,6 +1,5 @@
 import Component from '../../../core/Component.js';
 import http from '../../../core/http.js';
-// import TournamentBracket from '../tournament/Tournament-Bracket.js';
 import language from '../../../utils/language.js';
 import { navigate } from '../../../router/utils/navigate.js';
 
