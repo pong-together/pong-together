@@ -99,6 +99,11 @@ export default class tournamentBracket extends Component {
 				navigate("/select", true);
 			}
 		});
+
+		const popEvent = (e) => {
+			navigate("/select", true);
+		};
+		window.addEventListener('popstate', popEvent);
 	}
 
 	gameRoundOne(playerBox1, playerBox2, playerBox3) {

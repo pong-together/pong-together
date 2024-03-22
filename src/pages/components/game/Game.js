@@ -290,7 +290,7 @@ export default class Game extends Component {
 	setEvent() {
 		this.addEvent('click', '.game-end-button', ({ target }) => {
 			if (window.localStorage.getItem('gameMode') === 'tournament') {
-				navigate('/tournamentBracket');
+				navigate('/tournamentBracket', true);
 			}
 			else {
 				// window.location.pathname = '/select';
@@ -301,9 +301,18 @@ export default class Game extends Component {
 				window.localStorage.removeItem('gameLevel');
 				// window.location.pathname = '/select';
 
-				navigate('/select');
+				navigate("/select", true);
 			}
 		});
+
+		const popEvent = (e) => {
+			document.removeEventListener('keydown', this.event1);
+			document.removeEventListener('keyup', this.event2);
+			if (this.gameSocket.readyState === WebSocket.OPEN)
+				this.gameSocket.close();
+			navigate("/select", true);
+		};
+		window.addEventListener('popstate', popEvent);
 	}
 
 	templateStart() {
