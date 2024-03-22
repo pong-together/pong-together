@@ -6,7 +6,16 @@ import LocalApi from './LocalApi.js';
 import { navigate } from '../../../router/utils/navigate.js';
 // import { navigate } from '../../../router/utils/navigate.js';
 
-export default class extends Component {
+export default class Local extends Component {
+	static instance = null;
+
+	static getInstance($container) {
+		if (!Local.instance) {
+				Local.instance = new Local($container);
+		}
+		return Local.instance;
+	}
+
 	setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
@@ -55,7 +64,7 @@ export default class extends Component {
 
 	async registLocalNickname(localNicknames) {
 		var gamemode = '';
-		if (this.$state.gameMode == 'defualt') gamemode = 'default';
+		if (this.$state.gameMode == 'default') gamemode = 'default';
 		else gamemode = 'extreme';
 
 		const result = await LocalApi.create(localNicknames, gamemode);

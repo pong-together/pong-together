@@ -7,22 +7,21 @@ import { navigate } from '../../../router/utils/navigate.js';
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export default class GameSelect extends Component {
-	// static instance = null;
+	static instance = null;
 
-	// static getInstance($container) {
-	// 	if (GameSelect.instance === null) {
-	// 		GameSelect.instance = new GameSelect($container);
-	// 	}
-	// 	console.log('game select',GameSelect.instance);
-	// 	return GameSelect.instance;
-	// }
+	static getInstance($container) {
+		if (GameSelect.instance === null) {
+			GameSelect.instance = new GameSelect($container);
+		}
+		return GameSelect.instance;
+	}
 
 	async setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
 			!localStorage.getItem('twoFA')) {
-			// window.location.pathname = '/login';
-			navigate("/login", true);
+			window.location.pathname = '/login';
+			// navigate("/login", true);
 		} else {
 			http.checkToken();
 		}
@@ -131,11 +130,11 @@ export default class GameSelect extends Component {
 			localStorage.setItem('gameMode', this.$state.mode);
 			localStorage.setItem('gameLevel', this.$state.level);
 			if (this.$state.mode === 'local') {
-				navigate("/local");
+				navigate('/local');
 			} else if (this.$state.mode === 'tournament') {
-				navigate("/tournament")
+				navigate('/tournament');
 			} else if (this.$state.mode === 'remote') {
-				navigate("/remote");
+				navigate('/remote');
 			}
 		});
 	}

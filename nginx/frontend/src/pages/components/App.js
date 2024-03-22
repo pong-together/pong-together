@@ -7,7 +7,7 @@ import { displayConnectionFailedModal } from '../../utils/modal';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
-export default class extends Component {
+export default class App extends Component {
 	setup() {
 		if (localStorage.getItem('language')) {
 			store.dispatch('changeLanguage', localStorage.getItem('language'));
@@ -16,6 +16,15 @@ export default class extends Component {
 			region: store.state.language,
 		};
 		this.$store = this.$props;
+	}
+
+	static instance = null;
+
+	static getInstance($container) {
+		if (!App.instance) {
+			App.instance = new App($container);
+		}
+		return App.instance;
 	}
 
 	setEvent() {
@@ -65,7 +74,8 @@ export default class extends Component {
 			window.location.pathname === '/local' ||
 			window.location.pathname === '/remote' ||
 			window.location.pathname === '/tournament' ||
-			window.location.pathname === '/game'
+			window.location.pathname === '/game' ||
+			window.location.pathname === '/tournamentBracket'
 		) {
 			this.$target.innerHTML = '';
 			this.$target.innerHTML = `
@@ -212,7 +222,8 @@ export default class extends Component {
 	}
 
 	async mounted() {
-		window.addEventListener('load', () => {
+		console.log("mount!");
+		window.addEventListener('load', async () => {
 			this.changeModule();
 			this.routerModule();
 		});
@@ -226,7 +237,6 @@ export default class extends Component {
 		) {
 			this.connectSocket.bind(this)();
 		}
-
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {
 			store.dispatch('changeLoginProgress', 'done');
 		} else if (localStorage.getItem('accessToken')) {

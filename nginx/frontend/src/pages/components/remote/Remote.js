@@ -14,6 +14,15 @@ export default class Remote extends Component {
 		this.time;
 	}
 
+	static instance = null;
+
+	static getInstance($container) {
+		if (!Remote.instance) {
+			Remote.instance = new Remote($container);
+		}
+		return Remote.instance;
+	}
+
 	setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
@@ -80,6 +89,16 @@ export default class Remote extends Component {
 		`;
 	}
 
+	templateProgress() {
+		return `
+			<div class="progress progress-custom">
+				<div class="progress-bar bg-danger progress-bar-striped progress-bar-animated" style="width:200px ; height:30px">
+					<span>100%</span>
+				</div>
+			</div>
+		`;
+	}
+
 	async sleep(ms) {
 		await new Promise((resolve) => setTimeout(resolve, ms));
 	}
@@ -121,11 +140,13 @@ export default class Remote extends Component {
 	}
 
 	exclamationMark() {
+		const mainboxElement = document.querySelector('.mainbox');
 		const counterElement = document.getElementById('counter');
-		counterElement.parentNode.removeChild(counterElement);
-
 		const cancelElement = document.getElementById('search');
+		counterElement.parentNode.removeChild(counterElement);
 		cancelElement.parentNode.removeChild(cancelElement);
+
+		mainboxElement.innerHTML += this.templateProgress();
 
 		const imageElement = document.getElementById('question');
 		imageElement.src = 'static/images/exclamation-mark.png';
@@ -157,11 +178,11 @@ export default class Remote extends Component {
 				await this.sleep(3000);
 				this.remoteReady();
 			} else if (data.type && data.type === 'send_disconnection') {
-				console.log('상대방이 나갔습니다.');
-				displayCanceledMatchingModal(
-					language.remote[this.$state.region].cancelMatch,
-				);
 				await this.stopTimer();
+				await displayCanceledMatchingModal(
+					language.remote[this.$state.region].cancelMatch,
+					document.querySelector('.mainbox'),
+				);
 				navigate('/select');
 			}
 		};

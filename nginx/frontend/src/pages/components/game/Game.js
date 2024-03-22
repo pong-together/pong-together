@@ -1,12 +1,21 @@
 import Component from '../../../core/Component.js';
 import http from '../../../core/http.js';
-import TournamentBracket from '../tournament/Tournament-Bracket.js';
+// import TournamentBracket from '../tournament/Tournament-Bracket.js';
 import language from '../../../utils/language.js';
 import { navigate } from '../../../router/utils/navigate.js';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
 export default class Game extends Component {
+	static instance = null;
+
+	static getInstance($container) {
+		if (!Game.instance) {
+				Game.instance = new Game($container);
+		}
+		return Game.instance;
+	}
+
 	constructor($target, $props) {
 		super($target, $props);
 		this.gameSocket;
@@ -14,14 +23,6 @@ export default class Game extends Component {
 		this.event1;
 		this.event2;
 	}
-	// static instance = null;
-
-	// static getInstance($container) {
-	// 	if (!Game.instance) {
-	// 		Game.instance = new Game($container);
-	// 	}
-	// 	return Game.instance;
-	// }
 	setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
@@ -63,8 +64,9 @@ export default class Game extends Component {
 			this.$state.game_id = window.localStorage.getItem('remote-id');
 			this.$state.buttonMessage = language.game[this.$state.region].localButton;
 		}
-
-		this.connectGameSocket();
+		if (this.$state.game_id) {
+			this.connectGameSocket();
+		}
 	}
 
 	template() {
@@ -117,10 +119,12 @@ export default class Game extends Component {
 
 			this.event1 = (e) => {
 				if (window.localStorage.getItem('gameMode') === 'remote') {
-					if (e.key === 'w') keyStates[e.key] = true;
-					else if (e.key === 'ㅈ') keyStates['w'] = true;
-					else if (e.key === 's') keyStates[e.key] = true;
-					else if (e.key === 'ㄴ') keyStates['s'] = true;
+					if (e.key === 'ㅈ')
+						keyStates['w'] = true;
+					else if (e.key === 'ㄴ')
+						keyStates['s'] = true;
+					else if (e.key === 'ㅔ')
+						keyStates['p'] = true;
 					keyStates[e.key] = true;
 					updateBarPositionRemote();
 				} else {
@@ -151,7 +155,8 @@ export default class Game extends Component {
 						sender_player: `${window.localStorage.getItem('intraId')}`,
 						button: 'up',
 					});
-				} else if (keyStates['s']) {
+				}
+				else if (keyStates['s']) {
 					messages.push({
 						type: 'push_button',
 						sender_player: `${window.localStorage.getItem('intraId')}`,
@@ -201,10 +206,12 @@ export default class Game extends Component {
 			}
 
 			setTimeout(() => {
-				let start = {
-					type: 'start_game',
-				};
-				gameSocket.send(JSON.stringify(start));
+				if (gameSocket.readyState === WebSocket.OPEN) {
+					let start = {
+						type: "start_game",
+					};
+					gameSocket.send(JSON.stringify(start));
+				}
 			}, 3000);
 		};
 
@@ -233,7 +240,14 @@ export default class Game extends Component {
 					this.setState({ player2_image: imageUrl2 });
 				}
 				this.render();
-			} else if (data.type && data.type === 'end') {
+			}
+			else if (data.type && data.type === 'send_reconnection') {
+				gameSocket.close();
+				document.removeEventListener('keydown', this.event1);
+				document.removeEventListener('keyup', this.event2);
+				navigate('/select');
+			}
+			else if (data.type && data.type === 'end') {
 				if (data.is_normal === false) {
 					const element3 = document.querySelector('.game-display');
 					element3.innerHTML = this.templateEnd();
@@ -276,8 +290,9 @@ export default class Game extends Component {
 	setEvent() {
 		this.addEvent('click', '.game-end-button', ({ target }) => {
 			if (window.localStorage.getItem('gameMode') === 'tournament') {
-				new TournamentBracket(this.$target).init(this.$target);
-			} else {
+				navigate('/tournamentBracket');
+			}
+			else {
 				// window.location.pathname = '/select';
 				if (window.localStorage.getItem('gameMode') === 'local') {
 					window.localStorage.removeItem('local-id');
@@ -307,8 +322,10 @@ export default class Game extends Component {
 
 	gameStart() {
 		const displayElement = document.querySelector('.game-display');
-		displayElement.innerHTML = this.templateStart();
-		this.canvas();
+		if (displayElement) {
+			displayElement.innerHTML = this.templateStart();
+			this.canvas();
+		}
 	}
 
 	timer() {
@@ -414,24 +431,31 @@ export default class Game extends Component {
 	}
 
 	mounted() {
-		var player1 = document.querySelector('.player1-image');
-		var player2 = document.querySelector('.player2-image');
-		if (
-			window.localStorage.getItem('gameMode') === 'local' ||
-			window.localStorage.getItem('gameMode') === 'tournament'
-		) {
-			player1.style.backgroundImage =
-				"url('../../../../static/images/player1_image2.png')";
-			player2.style.backgroundImage =
-				"url('../../../../static/images/player2_image.png')";
-			player1.style.backgroundRepeat = 'round';
-			player2.style.backgroundRepeat = 'round';
-		} else if (window.localStorage.getItem('gameMode') === 'remote') {
-			player1.style.backgroundImage = `url('${this.$state.player1_image}')`;
-			player2.style.backgroundImage = `url('${this.$state.player2_image}')`;
-			player1.style.backgroundRepeat = 'round';
-			player2.style.backgroundRepeat = 'round';
+		if (!this.$state.game_id) {
+				document.removeEventListener('keydown', this.event1);
+				document.removeEventListener('keyup', this.event2);
+				navigate('/select');
 		}
-		this.timer();
+		else {
+			var player1 = document.querySelector('.player1-image');
+			var player2 = document.querySelector('.player2-image');
+			if (
+				window.localStorage.getItem('gameMode') === 'local' ||
+				window.localStorage.getItem('gameMode') === 'tournament'
+			) {
+				player1.style.backgroundImage =
+					"url('../../../../static/images/player1_image2.png')";
+				player2.style.backgroundImage =
+					"url('../../../../static/images/player2_image.png')";
+				player1.style.backgroundRepeat = 'round';
+				player2.style.backgroundRepeat = 'round';
+			} else if (window.localStorage.getItem('gameMode') === 'remote') {
+				player1.style.backgroundImage = `url('${this.$state.player1_image}')`;
+				player2.style.backgroundImage = `url('${this.$state.player2_image}')`;
+				player1.style.backgroundRepeat = 'round';
+				player2.style.backgroundRepeat = 'round';
+			}
+			this.timer();
+		}
 	}
 }
