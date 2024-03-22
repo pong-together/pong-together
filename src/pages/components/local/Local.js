@@ -11,7 +11,7 @@ export default class Local extends Component {
 
 	static getInstance($container) {
 		if (!Local.instance) {
-				Local.instance = new Local($container);
+			Local.instance = new Local($container);
 		}
 		return Local.instance;
 	}
@@ -23,8 +23,10 @@ export default class Local extends Component {
 		) {
 			// navigate("/login");
 			window.location.pathname = '/login';
-		} else {
+		}
+		if (store.state.checking !== 'on') {
 			http.checkToken();
+			store.state.checking = 'off';
 		}
 		this.$state = {
 			participant: ['', ''],
@@ -39,8 +41,7 @@ export default class Local extends Component {
 		if (window.localStorage.getItem('gameLevel') === 'default') {
 			this.$state.gamemodemessage =
 				language.local[this.$state.region].normalGameMode;
-		}
-		else
+		} else
 			this.$state.gamemodemessage =
 				language.local[this.$state.region].exteamGameMode;
 	}
@@ -78,7 +79,7 @@ export default class Local extends Component {
 			const isDuplicate = await this.localInputNickname(target, localPrev);
 
 			if (!isDuplicate) {
-				navigate("/game", true);
+				navigate('/game', true);
 				// window.location.pathname = '/game';
 			}
 		});

@@ -19,11 +19,14 @@ export default class GameSelect extends Component {
 	async setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
-			!localStorage.getItem('twoFA')) {
+			!localStorage.getItem('twoFA')
+		) {
 			window.location.pathname = '/login';
 			// navigate("/login", true);
-		} else {
+		}
+		if (store.state.checking !== 'on') {
 			http.checkToken();
+			store.state.checking = 'off';
 		}
 
 		if (localStorage.getItem('language')) {
