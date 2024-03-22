@@ -240,8 +240,7 @@ export default class App extends Component {
 			(!localStorage.getItem('chatConnection') ||
 				localStorage.getItem('chatConnection') !== true)
 		) {
-			if (this.chatSocket.readyState !== WebSocket.OPEN && this.chatSocket)
-				this.connectSocket.bind(this)();
+			this.connectSocket.bind(this)();
 		}
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {
 			store.dispatch('changeLoginProgress', 'done');
