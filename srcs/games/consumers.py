@@ -91,4 +91,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
 
     def is_reconnection_socket(self):
         channel_names = self.common[self.group_name]['channels']
-        return self.channel_name not in channel_names[0:2]
+        last = 1
+        if self.type == 'remote':
+            last = 2
+        return self.channel_name not in channel_names[0:last]
