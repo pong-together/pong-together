@@ -8,6 +8,10 @@ import { displayConnectionFailedModal } from '../../utils/modal';
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
 export default class App extends Component {
+	constructor($target, $props) {
+		super($target, $props);
+		this.chatSocket;
+	}
 	setup() {
 		if (localStorage.getItem('language')) {
 			store.dispatch('changeLanguage', localStorage.getItem('language'));
@@ -133,6 +137,8 @@ export default class App extends Component {
 			`${SOCKET_URL}/ws/chats/?token=${localStorage.getItem('accessToken')}`,
 		);
 
+		this.chatSocket = chatSocket;
+
 		chatSocket.onopen = () => {
 			console.log("chat connect");
 			this.addEvent('click', '.message-btn', (e) => {
@@ -234,7 +240,8 @@ export default class App extends Component {
 			(!localStorage.getItem('chatConnection') ||
 				localStorage.getItem('chatConnection') !== true)
 		) {
-			this.connectSocket.bind(this)();
+			if (this.chatSocket.readyState !== WebSocket.OPEN)
+				this.connectSocket.bind(this)();
 		}
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {
 			store.dispatch('changeLoginProgress', 'done');
