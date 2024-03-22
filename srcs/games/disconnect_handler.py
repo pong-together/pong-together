@@ -35,9 +35,10 @@ class DisconnectHandler:
         await self.cancel_pong_task()
 
     async def disconnect_remote(self):
-        if self.pong is None or Score.end_abnormal(self.pong.end_status):
+        status = self.consumer.common[self.consumer.group_name]['disconnection_status']
+        if Score.end_abnormal(status):
             await self.disconnect_abnormal()
-        if Score.end_normal(self.pong.end_status):
+        if Score.end_normal(status):
             await self.disconnect_normal()
         await self.consumer.channel_layer.group_discard(self.consumer.group_name, self.consumer.channel_name)
 
@@ -54,8 +55,7 @@ class DisconnectHandler:
             await self.update_lose()
 
     async def disconnect_abnormal(self):
-        if self.pong:
-            self.pong.end_status = Score.RUNNER_UP
+        self.consumer.common[self.consumer.group_name]['disconnection_status'] = Score.RUNNER_UP
         loser = self.consumer.user.intra_id
         winner = self.get_other_player(loser)
         await self.update_win(winner)
