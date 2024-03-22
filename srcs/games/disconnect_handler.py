@@ -23,7 +23,7 @@ class DisconnectHandler:
             await self.cancel_pong_task()
 
     async def handle_reconnection(self):
-        if self.consumer.is_reconnection():
+        if self.consumer.is_reconnection_socket():
             await self.consumer.channel_layer.group_discard(self.consumer.group_name, self.consumer.channel_name)
             raise ValueError()
 
