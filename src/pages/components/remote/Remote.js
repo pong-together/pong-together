@@ -239,13 +239,15 @@ export default class Remote extends Component {
 		}
 
 		const stopTimer = async () => {
-			clearInterval(this.time);
-			if (
-				this.remoteSocket &&
-				this.remoteSocket.readyState !== WebSocket.CLOSED
-			) {
-				await this.closeSocket();
-			}
+			return new Promise(async (resolve) => {
+				clearInterval(this.time);
+				if (
+					this.remoteSocket &&
+					this.remoteSocket.readyState !== WebSocket.CLOSED
+				) {
+					await this.closeSocket();
+				}
+			});
 		};
 		this.stopTimer = stopTimer;
 
