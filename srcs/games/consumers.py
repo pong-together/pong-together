@@ -26,7 +26,6 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             logger.info(f'Websocket GAME CONNECT {self.user.intra_id} {self.group_name}')
         except Exception as e:
             await self.close()
-            print(e)
 
     async def disconnect(self, code):
         try:
@@ -83,3 +82,9 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         if player == PLAYER2:
             key = 'player2_name'
         self.common[self.group_name][key] = name
+
+    # utils
+    def is_reconnection(self):
+        number_of_connection = len(self.common[self.group_name]['channels'])
+        return (self.type == 'remote' and number_of_connection > 2) \
+            or (self.type != 'remote' and number_of_connection > 1)

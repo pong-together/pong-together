@@ -12,6 +12,8 @@ class DisconnectHandler:
         self.consumer = consumer
 
     async def run(self):
+        await self.handle_reconnection()
+
         if self.consumer.type == 'remote':
             await self.disconnect_remote()
         elif self.consumer.type == 'tournament':
@@ -19,6 +21,11 @@ class DisconnectHandler:
         else:
             await self.consumer.channel_layer.group_discard(self.consumer.group_name, self.consumer.channel_name)
             await self.cancel_pong_task()
+
+    async def handle_reconnection(self):
+        if self.consumer.is_reconnection():
+            await self.consumer.channel_layer.group_discard(self.consumer.group_name, self.consumer.channel_name)
+            raise ValueError()
 
     async def disconnect_tournament(self):
         game = self.consumer.game
