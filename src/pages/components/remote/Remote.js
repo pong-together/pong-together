@@ -176,9 +176,11 @@ export default class Remote extends Component {
 				clearInterval(this.count);
 				this.exclamationMark();
 				await this.sleep(3000);
-				this.remoteReady();
+				if (this.remoteSocket && this.remoteSocket.readyState !== WebSocket.CLOSED) {
+					this.remoteReady();
+				}
 			} else if (data.type && data.type === 'send_disconnection') {
-				await this.stopTimer();
+				await this.stopInterval();
 				await displayCanceledMatchingModal(
 					language.remote[this.$state.region].cancelMatch,
 					document.querySelector('.mainbox'),
@@ -239,15 +241,13 @@ export default class Remote extends Component {
 		}
 
 		const stopTimer = async () => {
-			return new Promise(async (resolve) => {
-				clearInterval(this.time);
-				if (
-					this.remoteSocket &&
-					this.remoteSocket.readyState !== WebSocket.CLOSED
-				) {
-					await this.closeSocket();
-				}
-			});
+			clearInterval(this.time);
+			if (
+				this.remoteSocket &&
+				this.remoteSocket.readyState !== WebSocket.CLOSED
+			) {
+				await this.closeSocket();
+			}
 		};
 		this.stopTimer = stopTimer;
 
