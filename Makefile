@@ -17,7 +17,7 @@ down:
 	docker-compose down
 
 clean:
-	docker-compose down -v 
+	docker-compose down -v --rmi all
 
 fclean: clean
 	docker system prune -f
