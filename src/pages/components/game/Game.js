@@ -292,13 +292,11 @@ export default class Game extends Component {
 				navigate('/tournamentBracket', true);
 			}
 			else {
-				// window.location.pathname = '/select';
 				if (window.localStorage.getItem('gameMode') === 'local') {
 					window.localStorage.removeItem('local-id');
 				} else window.localStorage.removeItem('remote-id');
 				window.localStorage.removeItem('gameMode');
 				window.localStorage.removeItem('gameLevel');
-				// window.location.pathname = '/select';
 
 				navigate("/select", true);
 			}
