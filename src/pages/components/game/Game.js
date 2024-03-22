@@ -23,16 +23,23 @@ export default class Game extends Component {
 		this.event1;
 		this.event2;
 	}
+
+	async checkAccess() {
+		if (store.state.checking === 'off') {
+			store.state.checking = 'on';
+			await http.checkToken();
+			store.state.checking = 'off';
+		}
+	}
+
 	setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
 			!localStorage.getItem('twoFA')
 		) {
 			navigate('/login');
-		}
-		if (store.state.checking !== 'on') {
-			http.checkToken();
-			store.state.checking = 'off';
+		} else {
+			this.checkAccess();
 		}
 		this.$state = {
 			player1: '',

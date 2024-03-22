@@ -16,6 +16,14 @@ export default class GameSelect extends Component {
 		return GameSelect.instance;
 	}
 
+	async checkAccess() {
+		if (store.state.checking === 'off') {
+			store.state.checking = 'on';
+			await http.checkToken();
+			store.state.checking = 'off';
+		}
+	}
+
 	async setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
@@ -23,10 +31,8 @@ export default class GameSelect extends Component {
 		) {
 			window.location.pathname = '/login';
 			// navigate("/login", true);
-		}
-		if (store.state.checking !== 'on') {
-			http.checkToken();
-			store.state.checking = 'off';
+		} else {
+			this.checkAccess();
 		}
 
 		if (localStorage.getItem('language')) {
