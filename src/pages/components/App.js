@@ -230,11 +230,6 @@ export default class App extends Component {
 
 	async mounted() {
 		console.log('mount!');
-		window.addEventListener('load', async () => {
-			this.changeModule();
-			this.routerModule();
-		});
-
 		this.calcRate();
 		if (
 			localStorage.getItem('accessToken') &&
@@ -243,8 +238,12 @@ export default class App extends Component {
 				localStorage.getItem('chatConnection') !== true)
 		) {
 			await http.checkToken();
-			this.connectSocket.bind(this)();
+			await this.connectSocket.bind(this)();
 		}
+		window.addEventListener('load', async () => {
+			this.changeModule();
+			this.routerModule();
+		});
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {
 			store.dispatch('changeLoginProgress', 'done');
 		} else if (localStorage.getItem('accessToken')) {
