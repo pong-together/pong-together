@@ -36,7 +36,7 @@ class DisconnectHandler:
 
     async def disconnect_remote(self):
         status = self.consumer.common[self.consumer.group_name]['disconnection_status']
-        if Score.end_abnormal(status):
+        if status is None or Score.end_abnormal(status):
             await self.disconnect_abnormal()
         if Score.end_normal(status):
             await self.disconnect_normal()
