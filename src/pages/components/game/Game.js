@@ -2,6 +2,7 @@ import Component from '../../../core/Component.js';
 import http from '../../../core/http.js';
 import language from '../../../utils/language.js';
 import { navigate } from '../../../router/utils/navigate.js';
+import store from '../../../store/index.js';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
