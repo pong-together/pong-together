@@ -5,6 +5,7 @@ services:
     build: ./nginx
     volumes:
       - ./certs/nginx/:/etc/nginx/ssl/
+      - nginx_log:/log/nginx
     ports:
       - "80:80"
       - "443:443"
@@ -42,6 +43,8 @@ services:
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.12.2
+    volumes:
+      - ./certs/elasticsearch-8.2.3:/usr/share/elasticsearch/config/certs
     ports:
       - "9200:9200"
     environment:
@@ -50,6 +53,10 @@ services:
       - "node.name=pongtogether-node"
       - "network.host=0.0.0.0"
       - "xpack.security.enabled=false"
+      - "xpack.security.http.ssl.enabled=true"
+      - "xpack.security.http.ssl.key=/usr/share/elasticsearch/config/certs/es01.key"
+      - "xpack.security.http.ssl.certificate=/usr/share/elasticsearch/config/certs/es01.crt"
+      - "xpack.security.http.ssl.certificate_authorities=/usr/share/elasticsearch/config/certs/ca.crt"
 
   logstash:
     image: docker.elastic.co/logstash/logstash:8.12.2
@@ -58,6 +65,7 @@ services:
     volumes:
       - ./elk/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
       - ./elk/logstash/pipeline:/usr/share/logstash/pipeline
+      - ./certs/elasticsearch-8.2.3:/usr/share/logstash/config/certs
       - nginx_log:/log/nginx
       - django_log:/log/django
     depends_on:
@@ -65,10 +73,14 @@ services:
 
   kibana:
     image: docker.elastic.co/kibana/kibana:8.12.2
+    volumes:
+      - ./certs/elasticsearch-8.2.3:/usr/share/kibana/config/certs
     ports:
       - "5601:5601"
     environment:
-      - "ELASTICSEARCH_HOSTS=http://elasticsearch:9200"
+      - "ELASTICSEARCH_HOSTS=https://elasticsearch:9200"
+      - "ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES=/usr/share/kibana/config/certs"
+
     depends_on:
       - elasticsearch
   
