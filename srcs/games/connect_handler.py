@@ -49,6 +49,7 @@ class ConnectHandler:
     async def add_channel_to_group(self):
         if self.consumer.group_name not in self.consumer.common:
             self.consumer.common[self.consumer.group_name] = dict()
+            self.consumer.common[self.consumer.group_name]['pong'] = None
             self.consumer.common[self.consumer.group_name]['channels'] = list()
         self.consumer.common[self.consumer.group_name]['channels'].append(self.consumer.channel_name)
         await self.consumer.channel_layer.group_add(self.consumer.group_name, self.consumer.channel_name)

@@ -10,6 +10,7 @@ from users.models import User
 class DisconnectHandler:
     def __init__(self, consumer):
         self.consumer = consumer
+        self.pong = self.consumer.common[self.consumer.group_name]['pong']
 
     async def run(self):
         await self.handle_reconnection()
@@ -34,11 +35,10 @@ class DisconnectHandler:
         await self.cancel_pong_task()
 
     async def disconnect_remote(self):
-        pong = self.consumer.common[self.consumer.group_name]['pong']
-        if Score.end_normal(pong.end_status):
-            await self.disconnect_normal()
-        if Score.end_abnormal(pong.end_status):
+        if self.pong is None or Score.end_abnormal(self.pong.end_status):
             await self.disconnect_abnormal()
+        if Score.end_normal(self.pong.end_status):
+            await self.disconnect_normal()
         await self.consumer.channel_layer.group_discard(self.consumer.group_name, self.consumer.channel_name)
 
     async def disconnect_normal(self):
@@ -47,15 +47,15 @@ class DisconnectHandler:
             await self.cancel_pong_task()
 
     async def update_result(self):
-        winner = self.consumer.common[self.consumer.group_name]['pong'].get_winner()
+        winner = self.pong.get_winner()
         if winner == self.consumer.user.intra_id:
             await self.update_win()
         else:
             await self.update_lose()
 
     async def disconnect_abnormal(self):
-        pong = self.consumer.common[self.consumer.group_name]['pong']
-        pong.end_status = Score.RUNNER_UP
+        if self.pong:
+            self.pong.end_status = Score.RUNNER_UP
         loser = self.consumer.user.intra_id
         winner = self.get_other_player(loser)
         await self.update_win(winner)
@@ -107,8 +107,7 @@ class DisconnectHandler:
 
     @database_sync_to_async
     def tournament_update(self, game):
-        pong = self.consumer.common[self.consumer.group_name]['pong']
-        winner = pong.get_winner()
+        winner = self.pong.get_winner()
         if game.game_turn == 1:
             game.first_winner = winner
         elif game.game_turn == 2:
