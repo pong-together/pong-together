@@ -1,44 +1,38 @@
-import asyncio
-import logging
-
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 from games.connect_handler import ConnectHandler
+from games.constants import PLAYER2
 from games.disconnect_handler import DisconnectHandler
-from games.pong import Pong
-
-logger = logging.getLogger('main')
+from games.receive_handler import ReceiveHandler
+from pong_together.settings import logger
 
 
 class GameConsumer(AsyncJsonWebsocketConsumer):
-    remote_game = {}
+    # pong, pong_task, player1/2_name
+    common = dict()
 
     def __init__(self, *args, **kwargs):
         super().__init__(args, kwargs)
-        self.pong_task = None
-        self.pong = None
         self.type = None
         self.user = None
+        self.game = None
         self.group_name = None
-        self.player1_name = None
-        self.player2_name = None
 
     async def connect(self):
         try:
-            logger.info('Websocket GAME Try to connect')
             connect_handler = ConnectHandler(self)
+            logger.info(f'Websocket GAME Try to connect {self.user.intra_id} {self.group_name}')
             await connect_handler.run()
-            logger.info('Websocket GAME CONNECT')
+            logger.info(f'Websocket GAME CONNECT {self.user.intra_id} {self.group_name}')
         except Exception as e:
             await self.close()
-            print(e)
 
     async def disconnect(self, code):
         try:
-            logger.info('Websocket GAME Try to disconnect')
+            logger.info(f'Websocket GAME Try to disconnect {self.user.intra_id} {self.group_name}')
             disconnect_handler = DisconnectHandler(self)
             await disconnect_handler.run()
-            logger.info('Websocket GAME DISCONNECT')
+            logger.info(f'Websocket GAME DISCONNECT {self.user.intra_id} {self.group_name}')
         except Exception as e:
             await self.send_json({'error': str(e)})
 
@@ -50,44 +44,12 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
 
     async def receive_json(self, content, **kwargs):
         try:
-            if content['type'] == 'start_game':
-                await self.start_pong_game()
-            if content['type'] == 'push_button':
-                await self.receive_push_button(content['sender_player'], content['button'])
+            receive_handler = ReceiveHandler()
+            await receive_handler.run(self, content)
         except KeyError as e:
             await self.send_json({'error': f'{str(e)} is required'})
         except ValueError as e:
             await self.send_json({'error': str(e)})
-
-    async def start_pong_game(self):
-        if not (self.type == 'remote' and self.user.intra_id == self.player2_name):
-            self.pong = Pong(self)
-            self.pong_task = asyncio.create_task(self.pong.run())
-
-    async def receive_push_button(self, sender_player, button):
-        if not (sender_player == 'player1' or sender_player == 'player2'):
-            raise ValueError('sender_player must be \'player1\' or \'player2\'')
-
-        if self.pong_task:
-            self.push_button(sender_player, button)
-        else:
-            await self.channel_layer.send(self.remote_game[self.group_name][0], {
-                'type': 'send_push_button_event',
-                'sender_player': sender_player,
-                'button': button
-            })
-
-    def push_button(self, sender_player, button):
-        player = self.pong.player1
-        if sender_player == 'player2':
-            player = self.pong.player2
-        player.move(button)
-
-    async def send_push_button_event(self, event):
-        try:
-            self.push_button(event['sender_player'], event['button'])
-        except KeyError as e:
-            await self.send_json({'error': f'{str(e)} is required'})
 
     # event
     async def get_user_info(self, event):
@@ -107,3 +69,29 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             await self.send_json(event)
         except Exception as e:
             await self.send_json({'error': str(e)})
+
+    # getter/setter
+    def get_player_name(self, player):
+        key = 'player1_name'
+        if player == PLAYER2:
+            key = 'player2_name'
+        return self.common[self.group_name][key]
+
+    def set_player_name(self, player, name):
+        key = 'player1_name'
+        if player == PLAYER2:
+            key = 'player2_name'
+        self.common[self.group_name][key] = name
+
+    # utils
+    def is_reconnection(self):
+        number_of_connection = len(self.common[self.group_name]['channels'])
+        return (self.type == 'remote' and number_of_connection > 2) \
+            or (self.type != 'remote' and number_of_connection > 1)
+
+    def is_reconnection_socket(self):
+        channel_names = self.common[self.group_name]['channels']
+        last = 1
+        if self.type == 'remote':
+            last = 2
+        return self.channel_name in channel_names[last:]

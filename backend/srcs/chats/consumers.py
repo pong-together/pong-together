@@ -1,12 +1,12 @@
 import asyncio
 import json
-import logging
 from datetime import datetime
 
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
-logger = logging.getLogger('main')
+from pong_together.settings import logger
+from users.models import User
 
 
 class ChatConsumer(AsyncJsonWebsocketConsumer):
@@ -21,24 +21,25 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
 
     async def connect(self):
         try:
-            logger.info('Websocket CHAT Try to connect')
+            await self.init_connection()
+            logger.info(f'Websocket CHAT Try to connect {self.user.intra_id}')
             await self.channel_layer.group_add(self.GROUP_NAME, self.channel_name)
             await self.accept()
-            await self.init_connection()
+            await self.handle_multiple_connection()
             self.ping_task = asyncio.create_task(self.send_ping())
             await self.update_user_chat_connection(True)
-            logger.info('Websocket CHAT CONNECT')
+            logger.info(f'Websocket CHAT CONNECT {self.user.intra_id}')
         except Exception:
             await self.close()
 
     async def disconnect(self, code):
         try:
-            logger.info('Websocket CHAT Try to disconnect')
+            logger.info(f'Websocket CHAT Try to disconnect {self.user.intra_id}')
             await self.delete_chat_users()
             await self.channel_layer.group_discard(self.GROUP_NAME, self.channel_name)
             await self.cancel_ping_task()
             await self.update_user_chat_connection(False)
-            logger.info('Websocket CHAT DISCONNECT')
+            logger.info(f'Websocket CHAT DISCONNECT {self.user.intra_id}')
         except Exception as e:
             await self.send_json({'error': str(e)})
 
@@ -88,7 +89,6 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
 
     async def init_connection(self):
         self.user = self.scope['user']
-        await self.handle_multiple_connection()
 
     async def handle_multiple_connection(self):
         if self.user.intra_id in self.chat_users:
@@ -116,5 +116,6 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
 
     @database_sync_to_async
     def update_user_chat_connection(self, is_connected):
+        self.user = User.objects.get(intra_id=self.user.intra_id)
         self.user.chat_connection = is_connected
         self.user.save()

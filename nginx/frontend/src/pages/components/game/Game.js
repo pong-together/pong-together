@@ -1,20 +1,34 @@
 import Component from '../../../core/Component.js';
 import http from '../../../core/http.js';
-// import GameReady from './GameReady.js';
-import TournamentBracket from '../tournament/Tournament-Bracket.js';
+// import TournamentBracket from '../tournament/Tournament-Bracket.js';
 import language from '../../../utils/language.js';
 import { navigate } from '../../../router/utils/navigate.js';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
-export default class extends Component {
+export default class Game extends Component {
+	static instance = null;
+
+	static getInstance($container) {
+		if (!Game.instance) {
+				Game.instance = new Game($container);
+		}
+		return Game.instance;
+	}
+
+	constructor($target, $props) {
+		super($target, $props);
+		this.gameSocket;
+		this.bracket;
+		this.event1;
+		this.event2;
+	}
 	setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
 			!localStorage.getItem('twoFA')
 		) {
-			navigate("/login", true);
-			// window.location.pathname = '/login';
+			navigate('/login');
 		} else {
 			http.checkToken();
 		}
@@ -36,21 +50,23 @@ export default class extends Component {
 			region: localStorage.getItem('language')
 				? localStorage.getItem('language')
 				: 'kr',
-		}
+			player1_image: '',
+			player2_image: '',
+		};
 		if (this.$state.gameMode === 'local') {
 			this.$state.game_id = window.localStorage.getItem('local-id');
 			this.$state.buttonMessage = language.game[this.$state.region].localButton;
-		}
-		else if (this.$state.gameMode === 'tournament') {
+		} else if (this.$state.gameMode === 'tournament') {
 			this.$state.game_id = window.localStorage.getItem('tournament-id');
-			this.$state.buttonMessage = language.game[this.$state.region].tournamentButton;
-		}
-		else if (this.$state.gameMode === 'remote') {
+			this.$state.buttonMessage =
+				language.game[this.$state.region].tournamentButton;
+		} else if (this.$state.gameMode === 'remote') {
 			this.$state.game_id = window.localStorage.getItem('remote-id');
 			this.$state.buttonMessage = language.game[this.$state.region].localButton;
 		}
-
-		this.connectGameSocket();
+		if (this.$state.game_id) {
+			this.connectGameSocket();
+		}
 	}
 
 	template() {
@@ -79,7 +95,7 @@ export default class extends Component {
 		`;
 	}
 
-	setState(newState){
+	setState(newState) {
 		this.$state = { ...this.$state, ...newState };
 		// this.render();
 	}
@@ -87,129 +103,207 @@ export default class extends Component {
 	connectGameSocket() {
 		const gameSocket = new WebSocket(
 			`${SOCKET_URL}/ws/games/?token=${localStorage.getItem('accessToken')}&type=${this.$state.gameMode}&type_id=${this.$state.game_id}`,
-		)
+		);
 
+		this.gameSocket = gameSocket;
 
 		gameSocket.onopen = () => {
-			console.log("WebSocket connection opened.");
+			console.log('WebSocket connection opened.');
+			const keyStates = {};
 
-			// 여기에서 document에 직접 이벤트 리스너를 추가합니다.
-			document.addEventListener('keydown', (e) => {
-				let message = {};
-				switch(e.key) {
-					case 'w':
-						message = {
-							type: "push_button",
-							sender_player: 'player1',
-							button: "up",
-						};
-						break;
-					case 's':
-						message = {
-							type: "push_button",
-							sender_player: 'player1',
-							button: "down",
-						};
-						break;
-					case 'p':
-						message = {
-							type: "push_button",
-							sender_player: 'player2',
-							button: "up",
-						};
-						break;
-					case ';':
-						message = {
-							type: "push_button",
-							sender_player: 'player2',
-							button: "down",
-						};
-						break;
-					default:
-						// 키에 대응하는 조건이 없을 경우, 메시지를 보내지 않음
-						return;
+			window.addEventListener('beforeunload', function (event) {
+				if (gameSocket && gameSocket.readyState === WebSocket.OPEN) {
+					gameSocket.close();
 				}
-				console.log(e.key);
-				gameSocket.send(JSON.stringify(message));
-				console.log(message);
 			});
 
-			setTimeout(() => {
-				let start = {
-					type : "start_game",
+			this.event1 = (e) => {
+				if (window.localStorage.getItem('gameMode') === 'remote') {
+					if (e.key === 'ㅈ')
+						keyStates['w'] = true;
+					else if (e.key === 'ㄴ')
+						keyStates['s'] = true;
+					else if (e.key === 'ㅔ')
+						keyStates['p'] = true;
+					keyStates[e.key] = true;
+					updateBarPositionRemote();
+				} else {
+					if (e.key === 'ㅈ') keyStates['w'] = true;
+					else if (e.key === 'ㄴ') keyStates['s'] = true;
+					else if (e.key === 'ㅔ') keyStates['p'] = true;
+					keyStates[e.key] = true;
+					updateBarPosition();
 				}
-				gameSocket.send(JSON.stringify(start));
+			};
+
+			document.addEventListener('keydown', this.event1);
+
+			this.event2 = (e) => {
+				if (e.key === 'ㅈ') keyStates['w'] = false;
+				else if (e.key === 'ㄴ') keyStates['s'] = false;
+				else if (e.key === 'ㅔ') keyStates['p'] = false;
+				keyStates[e.key] = false;
+			};
+
+			document.addEventListener('keyup', this.event2);
+
+			function updateBarPositionRemote() {
+				let messages = [];
+				if (keyStates['w']) {
+					messages.push({
+						type: 'push_button',
+						sender_player: `${window.localStorage.getItem('intraId')}`,
+						button: 'up',
+					});
+				}
+				else if (keyStates['s']) {
+					messages.push({
+						type: 'push_button',
+						sender_player: `${window.localStorage.getItem('intraId')}`,
+						button: 'down',
+					});
+				}
+
+				messages.forEach((message) => {
+					gameSocket.send(JSON.stringify(message));
+				});
+			}
+
+			function updateBarPosition() {
+				let messages = [];
+				if (keyStates['w']) {
+					messages.push({
+						type: 'push_button',
+						sender_player: 'player1',
+						button: 'up',
+					});
+				}
+				if (keyStates['s']) {
+					messages.push({
+						type: 'push_button',
+						sender_player: 'player1',
+						button: 'down',
+					});
+				}
+				if (keyStates['p']) {
+					messages.push({
+						type: 'push_button',
+						sender_player: 'player2',
+						button: 'up',
+					});
+				}
+				if (keyStates[';']) {
+					messages.push({
+						type: 'push_button',
+						sender_player: 'player2',
+						button: 'down',
+					});
+				}
+
+				messages.forEach((message) => {
+					gameSocket.send(JSON.stringify(message));
+				});
+			}
+
+			setTimeout(() => {
+				if (gameSocket.readyState === WebSocket.OPEN) {
+					let start = {
+						type: "start_game",
+					};
+					gameSocket.send(JSON.stringify(start));
+				}
 			}, 3000);
 		};
 
 		gameSocket.onclose = () => {
-			console.log('gamesocket disconnect... Trying to reconnect...');
-			return ;
-		}
+			console.log('gamesocket closed');
+			return;
+		};
 
 		gameSocket.onerror = function (e) {
 			// console.log(e);
-		}
+		};
 
 		gameSocket.onmessage = (event) => {
 			const data = JSON.parse(event.data);
 			if (data.type && data.type === 'get_user_info') {
 				this.setState({ player1: data.player1_name });
 				this.setState({ player2: data.player2_name });
+				if (
+					window.localStorage.getItem('gameMode') === 'remote' &&
+					(data.player1_image || data.player2_image)
+				) {
+					var imageUrl1 = data.player1_image;
+					var imageUrl2 = data.player2_image;
+
+					this.setState({ player1_image: imageUrl1 });
+					this.setState({ player2_image: imageUrl2 });
+				}
 				this.render();
 			}
+			else if (data.type && data.type === 'send_reconnection') {
+				gameSocket.close();
+				document.removeEventListener('keydown', this.event1);
+				document.removeEventListener('keyup', this.event2);
+				navigate('/select');
+			}
 			else if (data.type && data.type === 'end') {
-				this.setState ({winner: data.winner});
+				if (data.is_normal === false) {
+					const element3 = document.querySelector('.game-display');
+					element3.innerHTML = this.templateEnd();
+				}
+				this.setState({ winner: data.winner });
 				if (data.winner === this.$state.player1) {
-					this.setState({player1_result: 'Win'});
-					this.setState({player2_result: 'Lose'});
+					document.querySelector('.player1-gameresult').textContent = 'Win';
+					document.querySelector('.player2-gameresult').textContent = 'Lose';
+				} else if (data.winner === this.$state.player2) {
+					document.querySelector('.player1-gameresult').textContent = 'Lose';
+					document.querySelector('.player2-gameresult').textContent = 'Win';
 				}
-				else if (data.winner === this.$state.player2) {
-					this.setState({player1_result: 'Lose'});
-					this.setState({player2_result: 'Win'});
-				}
-				this.$target.innerHTML = this.template();
-				if (window.localStorage.getItem('gameMode') === 'tournament'){
+				if (window.localStorage.getItem('gameMode') === 'tournament') {
 					const element = document.querySelector('.game-display');
 					element.innerHTML = this.templateEnd();
-				}
-				else if (window.localStorage.getItem('gameMode') === 'local') {
+				} else if (
+					window.localStorage.getItem('gameMode') === 'local' ||
+					window.localStorage.getItem('gameMode') === 'remote'
+				) {
 					const element2 = document.querySelector('.game-display');
-					console.log(element2);
 					element2.innerHTML = this.templateEnd();
-					console.log(element2.innerHTML);
 				}
-				if (data.is_normal === false) {
-					gameSocket.close();
-					navigate("/select", true);
-					// window.location.pathname = '/select';
-				}
+				document.removeEventListener('keydown', this.event1);
+				document.removeEventListener('keyup', this.event2);
+				gameSocket.close();
+			} else if (data.type && data.type === 'score') {
+				document.querySelector('.player1-game-score').textContent =
+					data.player1_score;
+				document.querySelector('.player2-game-score').textContent =
+					data.player2_score;
+			} else if (data.type && data.type === 'get_game_info') {
+				this.setState({ ball_x: data.ball_x });
+				this.setState({ ball_y: data.ball_y });
+				this.setState({ player1_y: data.player1_y });
+				this.setState({ player2_y: data.player2_y });
 			}
-			else if (data.type && data.type === 'score') {
-				this.setState ({player1_score: data.player1_score});
-				this.setState ({player2_score: data.player2_score});
-				document.querySelector('.player1-game-score').textContent = data.player1_score;
-				document.querySelector('.player2-game-score').textContent = data.player2_score;
-			}
-			else if (data.type && data.type === 'get_game_info') {
-				this.setState({ball_x: data.ball_x});
-				this.setState({ball_y: data.ball_y});
-				this.setState({player1_y: data.player1_y});
-				this.setState({player2_y: data.player2_y});
-			}
-		}
+		};
 	}
 
 	setEvent() {
-		this.addEvent('click', '.game-end-button', ({target}) => {
+		this.addEvent('click', '.game-end-button', ({ target }) => {
 			if (window.localStorage.getItem('gameMode') === 'tournament') {
-				new TournamentBracket(this.$target);
+				navigate('/tournamentBracket');
 			}
 			else {
-				navigate("/select", true);
 				// window.location.pathname = '/select';
+				if (window.localStorage.getItem('gameMode') === 'local') {
+					window.localStorage.removeItem('local-id');
+				} else window.localStorage.removeItem('remote-id');
+				window.localStorage.removeItem('gameMode');
+				window.localStorage.removeItem('gameLevel');
+				// window.location.pathname = '/select';
+
+				navigate('/select');
 			}
-		})
+		});
 	}
 
 	templateStart() {
@@ -228,8 +322,10 @@ export default class extends Component {
 
 	gameStart() {
 		const displayElement = document.querySelector('.game-display');
-		displayElement.innerHTML = this.templateStart();
-		this.canvas();
+		if (displayElement) {
+			displayElement.innerHTML = this.templateStart();
+			this.canvas();
+		}
 	}
 
 	timer() {
@@ -335,6 +431,31 @@ export default class extends Component {
 	}
 
 	mounted() {
-		this.timer();
+		if (!this.$state.game_id) {
+				document.removeEventListener('keydown', this.event1);
+				document.removeEventListener('keyup', this.event2);
+				navigate('/select');
+		}
+		else {
+			var player1 = document.querySelector('.player1-image');
+			var player2 = document.querySelector('.player2-image');
+			if (
+				window.localStorage.getItem('gameMode') === 'local' ||
+				window.localStorage.getItem('gameMode') === 'tournament'
+			) {
+				player1.style.backgroundImage =
+					"url('../../../../static/images/player1_image2.png')";
+				player2.style.backgroundImage =
+					"url('../../../../static/images/player2_image.png')";
+				player1.style.backgroundRepeat = 'round';
+				player2.style.backgroundRepeat = 'round';
+			} else if (window.localStorage.getItem('gameMode') === 'remote') {
+				player1.style.backgroundImage = `url('${this.$state.player1_image}')`;
+				player2.style.backgroundImage = `url('${this.$state.player2_image}')`;
+				player1.style.backgroundRepeat = 'round';
+				player2.style.backgroundRepeat = 'round';
+			}
+			this.timer();
+		}
 	}
 }

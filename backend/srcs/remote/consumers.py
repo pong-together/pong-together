@@ -1,33 +1,32 @@
 import asyncio
 import json
-import logging
 from datetime import datetime
 from urllib.parse import parse_qs
 
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
+from pong_together.settings import logger
 from remote.models import Remote
-
-logger = logging.getLogger('main')
 
 
 class RemoteConsumer(AsyncJsonWebsocketConsumer):
     waiting_list = {}
+    matched_group = {}
 
     def __init__(self, *args, **kwargs):
         super().__init__(args, kwargs)
         self.ping_task = None
-        self.matching_task = None
         self.user = None
         self.group_name = None
         self.channel_name = None
         self.remote = None
+        self.is_normal = False
 
     async def connect(self):
         try:
-            logger.info('Websocket REMOTE Try to connect')
             await self.init_connection()
+            logger.info(f'Websocket REMOTE Try to connect {self.user.intra_id}')
             await self.channel_layer.group_add(self.group_name, self.channel_name)
             await self.accept()
             self.ping_task = asyncio.create_task(self.send_ping())
@@ -38,16 +37,16 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
 
             if len(self.waiting_list[self.group_name]) >= 2:
                 await self.start_matching()
-            logger.info('Websocket REMOTE CONNECT')
+            logger.info(f'Websocket REMOTE CONNECT {self.user.intra_id}')
         except Exception:
             await self.close()
 
     async def disconnect(self, code):
         try:
-            logger.info('Websocket REMOTE Try to disconnect')
-            await self.channel_layer.group_send(self.group_name, {
-                'type': 'send_disconnection',
-            })
+            logger.info(f'Websocket REMOTE Try to disconnect {self.user.intra_id}')
+            if not self.is_normal:
+                await self.disconnect_abnormal()
+
             await self.channel_layer.group_discard(self.group_name, self.channel_name)
             await self.cancel_ping_task()
 
@@ -55,7 +54,7 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
                 if user[0] == self.channel_name:
                     self.waiting_list[self.group_name].remove(user)
                     break
-            logger.info('Websocket REMOTE DISCONNECT')
+            logger.info(f'Websocket REMOTE DISCONNECT {self.user.intra_id}')
         except Exception as e:
             await self.send_json({'error': str(e)})
 
@@ -80,12 +79,14 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
         first_channel, first_user = self.waiting_list[self.group_name][0]
         second_channel, second_user = self.waiting_list[self.group_name][1]
 
-        await self.save_remote_model(first_user, second_user)
+        self.matched_group[second_channel] = []
+        self.matched_group[second_channel].append(first_channel)
+        self.matched_group[second_channel].append(second_channel)
+        self.waiting_list[self.group_name] = self.waiting_list[self.group_name][2:]
 
+        await self.save_remote_model(first_user, second_user)
         await self.send_channel(first_channel, first_user, second_user)
         await self.send_channel(second_channel, second_user, first_user)
-
-        self.waiting_list[self.group_name] = self.waiting_list[self.group_name][2:]
 
     async def send_channel(self, channel, user, opponent_user):
 
@@ -112,6 +113,43 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
             await self.send({'error': f'{str(e)} is required'})
         except Exception as e:
             await self.send_json({'error': str(e)})
+
+    async def receive(self, text_data=None, bytes_data=None, **kwargs):
+        try:
+            await super().receive(text_data, bytes_data, **kwargs)
+        except Exception as e:
+            await self.send_json({'error': str(e)})
+
+    async def receive_json(self, content, **kwargs):
+        try:
+            if content['type'] == 'match_success':
+                self.is_normal = True
+        except KeyError as e:
+            await self.send({'error': f'{str(e)} is required'})
+        except Exception as e:
+            await self.send_json({'error': str(e)})
+
+    async def disconnect_abnormal(self):
+
+        if self.channel_name in self.matched_group:
+            opponent_channel = self.matched_group[self.channel_name][0]
+        else:
+            opponent_channel = await self.disconnect_opponent_channel()
+        if opponent_channel is not None:
+            await self.channel_layer.send(opponent_channel, {
+                'type': 'send_disconnection',
+            })
+
+    async def disconnect_opponent_channel(self):
+        opponent_channel = None
+        for key, groups in self.matched_group.items():
+            if groups[0] == self.channel_name:
+                opponent_channel = groups[1]
+                break
+            elif groups[1] == self.channel_name:
+                opponent_channel = groups[0]
+                break
+        return opponent_channel
 
     async def send_disconnection(self, event):
         try:

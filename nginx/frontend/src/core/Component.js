@@ -7,6 +7,13 @@ export default class {
 	constructor($target, $props) {
 		this.$target = $target;
 		this.$props = $props;
+		// this.setup();
+		// this.setEvent();
+		// this.render();
+	}
+
+	init($target){
+		this.$target = $target;
 		this.setup();
 		this.setEvent();
 		this.render();

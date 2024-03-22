@@ -6,7 +6,16 @@ import { navigate } from '../../../router/utils/navigate.js';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-export default class extends Component {
+export default class GameSelect extends Component {
+	static instance = null;
+
+	static getInstance($container) {
+		if (GameSelect.instance === null) {
+			GameSelect.instance = new GameSelect($container);
+		}
+		return GameSelect.instance;
+	}
+
 	async setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
@@ -121,14 +130,11 @@ export default class extends Component {
 			localStorage.setItem('gameMode', this.$state.mode);
 			localStorage.setItem('gameLevel', this.$state.level);
 			if (this.$state.mode === 'local') {
-				navigate("/local", true);
-				// window.location.pathname = '/local';
+				navigate('/local');
 			} else if (this.$state.mode === 'tournament') {
-				navigate("/tournament", true)
-				// window.location.pathname = '/tournament';
+				navigate('/tournament');
 			} else if (this.$state.mode === 'remote') {
-				navigate("/remote", true);
-				// window.location.pathname = '/remote';
+				navigate('/remote');
 			}
 		});
 	}

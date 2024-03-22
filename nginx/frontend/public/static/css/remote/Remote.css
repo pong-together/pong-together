@@ -39,9 +39,7 @@
 
 .top-text {
 	color: white;
-
 	font-size: 28px;
-
 	margin-top: 35px;
 }
 
@@ -69,6 +67,8 @@
 	width: 30px;
 	height: 130px;
 	animation: ani 2s ease-in-out infinite alternate;
+	position: absolute;
+	top: 300px;
 }
 
 #picture {
@@ -81,6 +81,15 @@
 	color: white;
 
 	font-size: 32px;
+}
+
+.progress-custom {
+	margin-top: 0px;
+	margin-bottom: 60px;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .match-button {
