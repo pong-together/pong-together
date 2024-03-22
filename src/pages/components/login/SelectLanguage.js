@@ -39,20 +39,20 @@ export default class extends Component {
 					// }
 					localStorage.setItem('intraId', data?.intra_id);
 					store.dispatch('changeIntraId', data?.intra_id);
-					localStorage.setItem('winCount', data?.win_count);
-					store.dispatch('changeWinCount', data?.win_count);
-					localStorage.setItem('loseCount', data?.lose_count);
-					store.dispatch('changeLoseCount', data?.lose_count);
+					// localStorage.setItem('winCount', data?.win_count);
+					// store.dispatch('changeWinCount', data?.win_count);
+					// localStorage.setItem('loseCount', data?.lose_count);
+					// store.dispatch('changeLoseCount', data?.lose_count);
 					localStorage.setItem('intraImg', data?.image);
 					store.dispatch('changeIntraImg', data?.image);
-					if (data?.win_count + data?.lose_count !== 0) {
-						localStorage.setItem(
-							'rate',
-							(data?.win_count / (data?.lose_count + data?.win_count)) * 100,
-						);
-					} else {
-						localStorage.setItem('rate', 0);
-					}
+					// if (data?.win_count + data?.lose_count !== 0) {
+					// 	localStorage.setItem(
+					// 		'rate',
+					// 		(data?.win_count / (data?.lose_count + data?.win_count)) * 100,
+					// 	);
+					// } else {
+					// 	localStorage.setItem('rate', 0);
+					// }
 				}
 			} catch (e) {}
 
