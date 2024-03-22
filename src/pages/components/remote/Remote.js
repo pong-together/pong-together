@@ -153,7 +153,7 @@ export default class Remote extends Component {
 		imageElement.id = 'exclamation';
 	}
 
-	connectSocket() {
+	async connectSocket() {
 		this.remoteSocket = new WebSocket(
 			`${SOCKET_URL}/ws/remote/?token=${localStorage.getItem('accessToken')}&game_mode=${localStorage.getItem('gameLevel')}`,
 		);
@@ -265,9 +265,9 @@ export default class Remote extends Component {
 		this.startTimer();
 	}
 
-	mounted() {
+	async mounted() {
 		console.log('마운트가 한번만 되는지 확인하는 로그 : Remote');
 		this.counter();
-		this.connectSocket();
+		await this.connectSocket();
 	}
 }

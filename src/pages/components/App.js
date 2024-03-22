@@ -230,10 +230,7 @@ export default class App extends Component {
 
 	async mounted() {
 		console.log('mount!');
-		window.addEventListener('load', async () => {
-			this.changeModule();
-			this.routerModule();
-		});
+		this.calcRate();
 		if (
 			localStorage.getItem('accessToken') &&
 			localStorage.getItem('intraId') &&
@@ -243,7 +240,10 @@ export default class App extends Component {
 			await http.checkToken();
 			await this.connectSocket.bind(this)();
 		}
-		this.calcRate();
+		window.addEventListener('load', async () => {
+			this.changeModule();
+			this.routerModule();
+		});
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {
 			store.dispatch('changeLoginProgress', 'done');
 		} else if (localStorage.getItem('accessToken')) {
