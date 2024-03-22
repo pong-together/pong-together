@@ -11,10 +11,11 @@ class DisconnectHandler:
     def __init__(self, consumer):
         self.consumer = consumer
         self.pong = self.consumer.common[self.consumer.group_name]['pong']
+        if self.pong:
+            self.consumer.common[self.consumer.group_name]['disconnection_status'] = self.pong.end_status
 
     async def run(self):
         await self.handle_reconnection()
-
         if self.consumer.type == 'remote':
             await self.disconnect_remote()
         elif self.consumer.type == 'tournament':
@@ -37,7 +38,7 @@ class DisconnectHandler:
 
     async def disconnect_remote(self):
         status = self.consumer.common[self.consumer.group_name]['disconnection_status']
-        if status is None or Score.end_abnormal(status):
+        if Score.end_abnormal(status):
             await self.disconnect_abnormal()
         if Score.end_normal(status):
             await self.disconnect_normal()
