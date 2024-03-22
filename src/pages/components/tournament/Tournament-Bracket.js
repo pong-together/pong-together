@@ -29,8 +29,7 @@ export default class tournamentBracket extends Component {
 		if (window.localStorage.getItem('gameLevel') === 'default') {
 			this.$state.gamemodemessage =
 				language.tournament[this.$state.region].normalGameMode;
-		}
-		else
+		} else
 			this.$state.gamemodemessage =
 				language.tournament[this.$state.region].extreamGameMode;
 	}
@@ -88,20 +87,19 @@ export default class tournamentBracket extends Component {
 	}
 
 	setEvent() {
-		this.addEvent('click', '.game-start', ({target}) => {
-			if (this.$state.gameround < 4)
-				navigate("/game", true)
-				// window.location.pathname = '/game';
+		this.addEvent('click', '.game-start', ({ target }) => {
+			if (this.$state.gameround < 4) navigate('/game', true);
+			// window.location.pathname = '/game';
 			else {
 				window.localStorage.removeItem('gameMode');
 				window.localStorage.removeItem('tournament-id');
 				window.localStorage.removeItem('gameLevel');
-				navigate("/select", true);
+				navigate('/select', true);
 			}
 		});
 
 		const popEvent = (e) => {
-			navigate("/select", true);
+			navigate('/select', true);
 		};
 		window.addEventListener('popstate', popEvent);
 	}
@@ -462,13 +460,13 @@ export default class tournamentBracket extends Component {
 	async mounted() {
 		if (!window.localStorage.getItem('tournament-id')) {
 			navigate('/select');
-		}
-		else {
+		} else {
 			await this.getTournamentInfo(); //api로 정보 받아옴.
 
 			if (this.$state.gameround >= 4) {
 				const button = document.querySelector('.game-start');
-				button.textContent = language.tournament[this.$state.region].gameEndButton;
+				button.textContent =
+					language.tournament[this.$state.region].gameEndButton;
 			}
 
 			const playerBox1 = document.querySelector('.player1');
@@ -549,6 +547,6 @@ export default class tournamentBracket extends Component {
 					playerBox4,
 					this.$state.winner,
 				);
-			}
 		}
 	}
+}
