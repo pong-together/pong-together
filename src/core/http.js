@@ -8,15 +8,12 @@ const CHECK_BASE_URL = `${BASE_URL}/api/auth/otp/`;
 
 const parseResponse = async (response) => {
 	const { status } = response;
-	let data = null; // 초기값을 null로 설정
+	let data = null;
 	try {
 		if (status !== 204) {
 			data = await response.json();
 		}
-	} catch (error) {
-		//console.error('Error parsing response:', error);
-		// data는 null로 유지됩니다.
-	}
+	} catch (error) {}
 
 	return {
 		status,
@@ -39,7 +36,6 @@ const checkToken = async () => {
 			if (response.status === 401) {
 				console.log('access token이 만료되었습니다.');
 				await refreshToken();
-				// location.reload();
 			}
 		}
 	} catch (error) {
@@ -82,8 +78,7 @@ const refreshToken = async () => {
 						language.util[region].expiredTokenMessage,
 					);
 					localStorage.clear();
-					navigate('/login');
-					// window.location.pathname = '/login';
+					window.location.pathname = '/login';
 				}
 			} else {
 				const data = await response.json();
@@ -101,8 +96,7 @@ const refreshToken = async () => {
 		console.log('refresh token이 존재하지 않습니다.');
 		console.log('다시 로그인을 시작하여 주세요.');
 		localStorage.clear();
-		navigate('/login');
-		// window.location.pathname = '/login';
+		window.location.pathname = '/login';
 	}
 };
 
