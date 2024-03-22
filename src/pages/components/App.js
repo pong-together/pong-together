@@ -132,7 +132,7 @@ export default class App extends Component {
 				: 0;
 	}
 
-	async connectSocket() {
+	connectSocket() {
 		const chatSocket = new WebSocket(
 			`${SOCKET_URL}/ws/chats/?token=${localStorage.getItem('accessToken')}`,
 		);
@@ -241,7 +241,7 @@ export default class App extends Component {
 				localStorage.getItem('chatConnection') !== true)
 		) {
 			if (this.chatSocket.readyState !== WebSocket.OPEN && this.chatSocket)
-				await this.connectSocket.bind(this)();
+				this.connectSocket.bind(this)();
 		}
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {
 			store.dispatch('changeLoginProgress', 'done');
