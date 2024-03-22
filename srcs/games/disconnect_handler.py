@@ -29,8 +29,9 @@ class DisconnectHandler:
             raise ValueError()
 
     async def disconnect_tournament(self):
-        game = self.consumer.game
-        await self.tournament_update(game)
+        status = self.consumer.common[self.consumer.group_name]['disconnection_status']
+        if Score.end_normal(status):
+            await self.tournament_update(self.consumer.game)
         await self.consumer.channel_layer.group_discard(self.consumer.group_name, self.consumer.channel_name)
         await self.cancel_pong_task()
 
