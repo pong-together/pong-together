@@ -58,7 +58,8 @@ class DisconnectHandler:
         pong.end_status = Score.RUNNER_UP
         loser = self.consumer.user.intra_id
         winner = self.get_other_player(loser)
-        await self.update_game_result(winner, loser)
+        await self.update_win(winner)
+        await self.update_lose(loser)
         await self.consumer.channel_layer.group_send(self.consumer.group_name, {
             'type': 'end',
             'is_normal': False,
@@ -80,14 +81,12 @@ class DisconnectHandler:
         except asyncio.CancelledError:
             pass
 
-    async def update_game_result(self, winner, loser):
-        await self.update_win(winner)
-        await self.update_lose(loser)
-
     @database_sync_to_async
-    def update_lose(self):
+    def update_lose(self, loser=None):
+        if loser is None:
+            loser = self.consumer.user.intra_id
         try:
-            user = User.objects.get(intra_id=self.consumer.user.intra_id)
+            user = User.objects.get(intra_id=loser)
             user.lose_count += 1
             user.game_count += 1
             user.save()
@@ -95,9 +94,11 @@ class DisconnectHandler:
             pass
 
     @database_sync_to_async
-    def update_win(self):
+    def update_win(self, winner=None):
+        if winner is None:
+            winner = self.consumer.user.intra_id
         try:
-            user = User.objects.get(intra_id=self.consumer.user.intra_id)
+            user = User.objects.get(intra_id=winner)
             user.win_count += 1
             user.game_count += 1
             user.save()
