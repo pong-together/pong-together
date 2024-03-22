@@ -11,7 +11,5 @@ COPY --from=build-stage /code/dist /usr/share/nginx/html
 RUN apk update && \
 	apk add --no-cache openssl
 COPY ./conf /etc/nginx/conf.d
-COPY ./scripts/entrypoint.sh .
-RUN chmod +x entrypoint.sh 
 EXPOSE 443
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT exec nginx -g "daemon off;"
