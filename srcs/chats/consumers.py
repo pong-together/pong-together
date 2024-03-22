@@ -6,6 +6,7 @@ from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 from pong_together.settings import logger
+from users.models import User
 
 
 class ChatConsumer(AsyncJsonWebsocketConsumer):
@@ -115,5 +116,6 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
 
     @database_sync_to_async
     def update_user_chat_connection(self, is_connected):
+        self.user = User.objects.get(intra_id=self.user.intra_id)
         self.user.chat_connection = is_connected
         self.user.save()
