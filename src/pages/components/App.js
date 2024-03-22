@@ -241,7 +241,10 @@ export default class App extends Component {
 			(!localStorage.getItem('chatConnection') ||
 				localStorage.getItem('chatConnection') !== true)
 		) {
-			await http.checkToken();
+			if (store.state.checking !== 'on') {
+				await http.checkToken();
+				store.state.checking = 'off';
+			}
 			await this.connectSocket.bind(this)();
 		}
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {

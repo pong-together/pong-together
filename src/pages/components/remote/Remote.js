@@ -3,6 +3,7 @@ import http from '../../../core/http.js';
 import { navigate } from '../../../router/utils/navigate.js';
 import language from '../../../utils/language.js';
 import { displayCanceledMatchingModal } from '../../../utils/modal';
+import store from '../../../store/index.js';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
@@ -29,8 +30,10 @@ export default class Remote extends Component {
 			!localStorage.getItem('twoFA')
 		) {
 			window.location.pathname = '/login';
-		} else {
+		}
+		if (store.state.checking !== 'on') {
 			http.checkToken();
+			store.state.checking = 'off';
 		}
 
 		this.$state = {
@@ -176,7 +179,10 @@ export default class Remote extends Component {
 				clearInterval(this.count);
 				this.exclamationMark();
 				await this.sleep(3000);
-				if (this.remoteSocket && this.remoteSocket.readyState !== WebSocket.CLOSED) {
+				if (
+					this.remoteSocket &&
+					this.remoteSocket.readyState !== WebSocket.CLOSED
+				) {
 					this.remoteReady();
 				}
 			} else if (data.type && data.type === 'send_disconnection') {
