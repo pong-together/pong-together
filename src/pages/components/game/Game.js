@@ -330,7 +330,7 @@ export default class Game extends Component {
 
 	gameStart() {
 		const displayElement = document.querySelector('.game-display');
-		if (displayElement) {
+		if (displayElement && this.gameSocket.readyState === WebSocket.OPEN) {
 			displayElement.innerHTML = this.templateStart();
 			this.canvas();
 		}
