@@ -250,8 +250,7 @@ export default class App extends Component {
 				await http.checkToken();
 				store.state.checking = 'off';
 			}
-			if (this.chatSocket && this.chatSocket.readyState !== WebSocket.OPEN)
-				this.connectSocket.bind(this)();
+			this.connectSocket.bind(this)();
 		}
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {
 			store.dispatch('changeLoginProgress', 'done');
