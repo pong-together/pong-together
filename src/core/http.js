@@ -1,6 +1,5 @@
 import language from '../utils/language.js';
-import { displayCanceledMatchingModal as displayExpiredTokenModal } from '../utils/modal';
-import { navigate } from '../router/utils/navigate';
+import { displayExpiredTokenModal } from '../utils/modal';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const REFRESH_BASE_URL = `${BASE_URL}/api/auth/token/refresh/`;

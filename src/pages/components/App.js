@@ -4,6 +4,7 @@ import { navigate } from '../../router/utils/navigate.js';
 import store from '../../store/index.js';
 import language from '../../utils/language.js';
 import { displayConnectionFailedModal } from '../../utils/modal';
+import http from '../../core/http.js';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
@@ -33,13 +34,16 @@ export default class App extends Component {
 			if (localStorage.getItem('tournament-id')) {
 				localStorage.removeItem('tournament-id');
 			}
-			if (window.location.pathname !== '/remote' && window.location.pathname !== '/game'){
-				navigate("/select");
+			if (
+				window.location.pathname !== '/remote' &&
+				window.location.pathname !== '/game'
+			) {
+				navigate('/select');
 			}
 		});
 
 		this.addEvent('click', '.modal-close-btn', () => {
-			navigate("/login", true);
+			navigate('/login', true);
 			// window.location.pathname = '/login';
 		});
 	}
@@ -50,13 +54,12 @@ export default class App extends Component {
 		`;
 	}
 
-	routerModule(){
+	routerModule() {
 		// const $body = this.$target.querySelector('#app');
 		// new Router($body);
 		const $body = this.$target.querySelector('.body-wrapper');
 		new Router($body);
 	}
-
 
 	changeModule() {
 		if (
@@ -135,7 +138,7 @@ export default class App extends Component {
 		);
 
 		chatSocket.onopen = () => {
-			console.log("chat connect");
+			console.log('chat connect');
 			this.addEvent('click', '.message-btn', (e) => {
 				e.preventDefault();
 				var message = this.$target.querySelector('#m').value;
@@ -158,10 +161,14 @@ export default class App extends Component {
 
 		chatSocket.onclose = function (event) {
 			console.log('WebSocket closed.');
-			if(event.code === 1000){
+			if (event.code === 1000) {
 				console.log('Try multiple connections');
 				displayConnectionFailedModal(
-					language.util[localStorage.getItem('language')?localStorage.getItem('language'):'en'].chatMessage,
+					language.util[
+						localStorage.getItem('language')
+							? localStorage.getItem('language')
+							: 'en'
+					].chatMessage,
 				);
 				localStorage.clear();
 			}
@@ -222,7 +229,7 @@ export default class App extends Component {
 	}
 
 	async mounted() {
-		console.log("mount!");
+		console.log('mount!');
 		window.addEventListener('load', async () => {
 			this.changeModule();
 			this.routerModule();
@@ -235,6 +242,7 @@ export default class App extends Component {
 			(!localStorage.getItem('chatConnection') ||
 				localStorage.getItem('chatConnection') !== true)
 		) {
+			await http.checkToken();
 			this.connectSocket.bind(this)();
 		}
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {
