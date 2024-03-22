@@ -94,4 +94,4 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         last = 1
         if self.type == 'remote':
             last = 2
-        return self.channel_name not in channel_names[0:last]
+        return self.channel_name in channel_names[last:]
