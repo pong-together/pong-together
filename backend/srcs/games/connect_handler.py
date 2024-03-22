@@ -28,12 +28,13 @@ class ConnectHandler:
 
     async def run(self):
         self.consumer.game = await self.get_game()
+        if self.consumer.type == 'tournament':
+            self.consumer.group_name += f'_turn{str(self.consumer.game.game_turn)}'
 
         await self.add_channel_to_group()
         await self.consumer.accept()
 
-        if await self.check_reconnection():
-            return
+        await self.handle_reconnection()
 
         if self.consumer.type == 'remote':
             await self.start_remote_game()
@@ -48,19 +49,18 @@ class ConnectHandler:
     async def add_channel_to_group(self):
         if self.consumer.group_name not in self.consumer.common:
             self.consumer.common[self.consumer.group_name] = dict()
+            self.consumer.common[self.consumer.group_name]['pong'] = None
+            self.consumer.common[self.consumer.group_name]['disconnection_status'] = None
             self.consumer.common[self.consumer.group_name]['channels'] = list()
         self.consumer.common[self.consumer.group_name]['channels'].append(self.consumer.channel_name)
         await self.consumer.channel_layer.group_add(self.consumer.group_name, self.consumer.channel_name)
 
-    async def check_reconnection(self):
-        number_of_connection = len(self.consumer.common[self.consumer.group_name]['channels'])
-        if (self.consumer.type == 'remote' and number_of_connection > 2) \
-                or (self.consumer.type != 'remote' and number_of_connection > 1):
+    async def handle_reconnection(self):
+        if self.consumer.is_reconnection():
             await self.consumer.send_json({
                 'type': 'send_reconnection'
             })
-            return True
-        return False
+            raise ValueError()
 
     async def start_remote_game(self):
         if len(self.consumer.common[self.consumer.group_name]['channels']) == 2:

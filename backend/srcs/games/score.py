@@ -13,4 +13,4 @@ class Score(Enum):
 
     @classmethod
     def end_abnormal(cls, end_status):
-        return end_status == cls.NONE
+        return end_status is None or end_status == cls.NONE
