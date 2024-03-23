@@ -1,6 +1,5 @@
 import language from '../utils/language.js';
 import { displayExpiredTokenModal } from '../utils/modal';
-import store from '../store/index.js';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const REFRESH_BASE_URL = `${BASE_URL}/api/auth/token/refresh/`;
@@ -22,7 +21,6 @@ const parseResponse = async (response) => {
 };
 
 const checkToken = async () => {
-	store.state.checking = 'on';
 	let header = {
 		'Content-Type': 'application/json',
 		Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
