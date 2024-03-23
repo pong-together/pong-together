@@ -21,6 +21,7 @@ export default class Game extends Component {
 		this.bracket;
 		this.event1;
 		this.event2;
+		this.time;
 	}
 	setup() {
 		if (
@@ -244,6 +245,7 @@ export default class Game extends Component {
 				gameSocket.close();
 				document.removeEventListener('keydown', this.event1);
 				document.removeEventListener('keyup', this.event2);
+				clearInterval(this.time);
 				navigate('/select');
 			}
 			else if (data.type && data.type === 'end') {
@@ -305,6 +307,7 @@ export default class Game extends Component {
 		const popEvent = (e) => {
 			document.removeEventListener('keydown', this.event1);
 			document.removeEventListener('keyup', this.event2);
+			clearInterval(this.time);
 			if (this.gameSocket.readyState === WebSocket.OPEN)
 				this.gameSocket.close();
 			navigate("/select", true);
@@ -336,7 +339,6 @@ export default class Game extends Component {
 
 	timer() {
 		let seconds = 2;
-		let time;
 		const countdown = document.querySelector('.game-count');
 
 		const updateTimer = () => {
@@ -344,10 +346,10 @@ export default class Game extends Component {
 		};
 
 		const startTimer = () => {
-			time = setInterval(() => {
+			this.time = setInterval(() => {
 				updateTimer();
 				if (seconds === 0) {
-					clearInterval(time);
+					clearInterval(this.time);
 					this.gameStart();
 				} else {
 					seconds--;
