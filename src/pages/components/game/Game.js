@@ -106,7 +106,6 @@ export default class Game extends Component {
 
 	setState(newState) {
 		this.$state = { ...this.$state, ...newState };
-		// this.render();
 	}
 
 	connectGameSocket() {
