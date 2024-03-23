@@ -23,13 +23,9 @@ export default class Store {
 		self.state = new Proxy(params.state || {}, {
 			set: function (state, key, value) {
 				state[key] = value;
-
-				//console.log(`stateChange: ${key}: ${value}`);
-
 				self.events.publish(key + 'Change');
 
 				if (self.status !== 'mutation') {
-					//console.warn(`You should use a mutation to set ${key}`);
 				}
 
 				self.status = 'resting';
@@ -43,11 +39,8 @@ export default class Store {
 		let self = this;
 
 		if (typeof self.actions[actionKey] !== 'function') {
-			//console.error(`Action "${actionKey} doesn't exist.`);
 			return false;
 		}
-
-		//console.groupCollapsed(`ACTION: ${actionKey}`);
 
 		self.actions[actionKey](self, payload);
 
@@ -60,7 +53,6 @@ export default class Store {
 		let self = this;
 
 		if (typeof self.mutations[mutationKey] !== 'function') {
-			//console.log(`Mutation "${mutationKey}" doesn't exist`);
 			return false;
 		}
 
