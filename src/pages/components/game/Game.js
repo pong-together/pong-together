@@ -2,6 +2,7 @@ import Component from '../../../core/Component.js';
 import http from '../../../core/http.js';
 import language from '../../../utils/language.js';
 import { navigate } from '../../../router/utils/navigate.js';
+import store from '../../../store/index.js';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
@@ -10,7 +11,7 @@ export default class Game extends Component {
 
 	static getInstance($container) {
 		if (!Game.instance) {
-				Game.instance = new Game($container);
+			Game.instance = new Game($container);
 		}
 		return Game.instance;
 	}
@@ -23,6 +24,15 @@ export default class Game extends Component {
 		this.event2;
 		this.time;
 	}
+
+	async checkAccess() {
+		if (store.state.checking === 'off') {
+			store.state.checking = 'on';
+			await http.checkToken();
+			store.state.checking = 'off';
+		}
+	}
+
 	setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
@@ -30,7 +40,7 @@ export default class Game extends Component {
 		) {
 			navigate('/login');
 		} else {
-			http.checkToken();
+			this.checkAccess();
 		}
 		this.$state = {
 			player1: '',
@@ -97,7 +107,6 @@ export default class Game extends Component {
 
 	setState(newState) {
 		this.$state = { ...this.$state, ...newState };
-		// this.render();
 	}
 
 	connectGameSocket() {
@@ -119,12 +128,9 @@ export default class Game extends Component {
 
 			this.event1 = (e) => {
 				if (window.localStorage.getItem('gameMode') === 'remote') {
-					if (e.key === 'ㅈ')
-						keyStates['w'] = true;
-					else if (e.key === 'ㄴ')
-						keyStates['s'] = true;
-					else if (e.key === 'ㅔ')
-						keyStates['p'] = true;
+					if (e.key === 'ㅈ') keyStates['w'] = true;
+					else if (e.key === 'ㄴ') keyStates['s'] = true;
+					else if (e.key === 'ㅔ') keyStates['p'] = true;
 					keyStates[e.key] = true;
 					updateBarPositionRemote();
 				} else {
@@ -155,8 +161,7 @@ export default class Game extends Component {
 						sender_player: `${window.localStorage.getItem('intraId')}`,
 						button: 'up',
 					});
-				}
-				else if (keyStates['s']) {
+				} else if (keyStates['s']) {
 					messages.push({
 						type: 'push_button',
 						sender_player: `${window.localStorage.getItem('intraId')}`,
@@ -208,7 +213,7 @@ export default class Game extends Component {
 			setTimeout(() => {
 				if (gameSocket.readyState === WebSocket.OPEN) {
 					let start = {
-						type: "start_game",
+						type: 'start_game',
 					};
 					gameSocket.send(JSON.stringify(start));
 				}
@@ -240,15 +245,13 @@ export default class Game extends Component {
 					this.setState({ player2_image: imageUrl2 });
 				}
 				this.render();
-			}
-			else if (data.type && data.type === 'send_reconnection') {
+			} else if (data.type && data.type === 'send_reconnection') {
 				gameSocket.close();
 				document.removeEventListener('keydown', this.event1);
 				document.removeEventListener('keyup', this.event2);
 				clearInterval(this.time);
 				navigate('/select');
-			}
-			else if (data.type && data.type === 'end') {
+			} else if (data.type && data.type === 'end') {
 				if (data.is_normal === false) {
 					const element3 = document.querySelector('.game-display');
 					element3.innerHTML = this.templateEnd();
@@ -292,15 +295,14 @@ export default class Game extends Component {
 		this.addEvent('click', '.game-end-button', ({ target }) => {
 			if (window.localStorage.getItem('gameMode') === 'tournament') {
 				navigate('/tournamentBracket', true);
-			}
-			else {
+			} else {
 				if (window.localStorage.getItem('gameMode') === 'local') {
 					window.localStorage.removeItem('local-id');
 				} else window.localStorage.removeItem('remote-id');
 				window.localStorage.removeItem('gameMode');
 				window.localStorage.removeItem('gameLevel');
 
-				navigate("/select", true);
+				navigate('/select', true);
 			}
 		});
 
@@ -310,7 +312,7 @@ export default class Game extends Component {
 			clearInterval(this.time);
 			if (this.gameSocket.readyState === WebSocket.OPEN)
 				this.gameSocket.close();
-			navigate("/select", true);
+			navigate('/select', true);
 		};
 		window.addEventListener('popstate', popEvent);
 	}
@@ -440,11 +442,10 @@ export default class Game extends Component {
 
 	mounted() {
 		if (!this.$state.game_id) {
-				document.removeEventListener('keydown', this.event1);
-				document.removeEventListener('keyup', this.event2);
-				navigate('/select');
-		}
-		else {
+			document.removeEventListener('keydown', this.event1);
+			document.removeEventListener('keyup', this.event2);
+			navigate('/select');
+		} else {
 			var player1 = document.querySelector('.player1-image');
 			var player2 = document.querySelector('.player2-image');
 			if (

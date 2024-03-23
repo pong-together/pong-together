@@ -16,14 +16,22 @@ export default class GameSelect extends Component {
 		return GameSelect.instance;
 	}
 
+	async checkAccess() {
+		if (store.state.checking === 'off') {
+			store.state.checking = 'on';
+			await http.checkToken();
+			store.state.checking = 'off';
+		}
+	}
+
 	async setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
-			!localStorage.getItem('twoFA')) {
+			!localStorage.getItem('twoFA')
+		) {
 			window.location.pathname = '/login';
-			// navigate("/login", true);
 		} else {
-			http.checkToken();
+			this.checkAccess();
 		}
 
 		if (localStorage.getItem('language')) {
@@ -40,10 +48,6 @@ export default class GameSelect extends Component {
 		if (
 			!localStorage.getItem('intraId') ||
 			localStorage.getItem('intraId') === 'undefined' ||
-			// !localStorage.getItem('winCount') ||
-			// localStorage.getItem('winCount') === 'undefined' ||
-			// !localStorage.getItem('loseCount') ||
-			// localStorage.getItem('loseCount') === 'undefined' ||
 			!localStorage.getItem('intraImg') ||
 			localStorage.getItem('intraImg') === 'undefined'
 		) {
@@ -52,8 +56,6 @@ export default class GameSelect extends Component {
 				'Content-Type': 'application/json',
 			});
 			localStorage.setItem('intraId', data?.intra_id || 'anonymous');
-			// localStorage.setItem('winCount', data?.win_count || 0);
-			// localStorage.setItem('loseCount', data?.lose_count || 0);
 			localStorage.setItem(
 				'intraImg',
 				data?.image || '/static/images/user.png',
@@ -243,7 +245,7 @@ export default class GameSelect extends Component {
 			document.querySelectorAll('.game-select-mode').forEach((label) => {
 				const checkbox = label.querySelector('.mode');
 				if (checkbox.value !== this.$state.mode) {
-					checkbox.checked = false; // 현재 선택한 것 외에는 모두 선택 해제
+					checkbox.checked = false;
 					label.classList.remove('checked');
 				} else {
 					checkbox.checked = true;

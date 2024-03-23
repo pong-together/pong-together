@@ -3,6 +3,7 @@ import http from '../../../core/http.js';
 import { navigate } from '../../../router/utils/navigate.js';
 import language from '../../../utils/language.js';
 import { displayCanceledMatchingModal } from '../../../utils/modal';
+import store from '../../../store/index.js';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
@@ -23,6 +24,14 @@ export default class Remote extends Component {
 		return Remote.instance;
 	}
 
+	async checkAccess() {
+		if (store.state.checking === 'off') {
+			store.state.checking = 'on';
+			await http.checkToken();
+			store.state.checking = 'off';
+		}
+	}
+
 	setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
@@ -30,7 +39,7 @@ export default class Remote extends Component {
 		) {
 			window.location.pathname = '/login';
 		} else {
-			http.checkToken();
+			this.checkAccess();
 		}
 
 		this.$state = {
@@ -48,7 +57,6 @@ export default class Remote extends Component {
 		const cancelEvent = async (e) => {
 			const target = e.target;
 			if (target.id === 'search') {
-				console.log('취소하기 실행');
 				await this.stopCounter();
 				document.removeEventListener('click', cancelEvent);
 				window.removeEventListener('popstate', popEvent);
@@ -58,7 +66,6 @@ export default class Remote extends Component {
 		document.addEventListener('click', cancelEvent);
 
 		const popEvent = (e) => {
-			console.log('뒤로가기 실행');
 			this.stopInterval();
 			window.removeEventListener('popstate', popEvent);
 			document.removeEventListener('click', cancelEvent);
@@ -106,10 +113,6 @@ export default class Remote extends Component {
 	async closeSocket() {
 		return new Promise((resolve) => {
 			this.remoteSocket.onclose = () => {
-				console.log(
-					'원격 소켓 닫힘, readyState =',
-					this.remoteSocket.readyState,
-				);
 				resolve();
 			};
 			this.remoteSocket.close();
@@ -119,11 +122,9 @@ export default class Remote extends Component {
 	async stopInterval() {
 		if (this.count) {
 			clearInterval(this.count);
-			console.log('Counter 중지');
 		}
 		if (this.time) {
 			clearInterval(this.time);
-			console.log('Timer 중지');
 		}
 		if (
 			this.remoteSocket &&
@@ -153,32 +154,32 @@ export default class Remote extends Component {
 		imageElement.id = 'exclamation';
 	}
 
-	connectSocket() {
+	async connectSocket() {
 		this.remoteSocket = new WebSocket(
 			`${SOCKET_URL}/ws/remote/?token=${localStorage.getItem('accessToken')}&game_mode=${localStorage.getItem('gameLevel')}`,
 		);
 
-		this.remoteSocket.onopen = () => {
-			console.log('원격 소켓이 서버에 연결되었습니다.');
-		};
+		this.remoteSocket.onopen = () => {};
 
 		this.remoteSocket.onmessage = async (e) => {
 			const data = JSON.parse(e.data);
 			if (data.type && data.type === 'ping') {
-				console.log('remote', e.data);
 				this.remoteSocket.send(JSON.stringify({ type: 'pong' }));
-				console.log('remote pong');
 			} else if (data.type && data.type === 'find_opponent') {
-				console.log('원격 소켓이 서버로부터 메시지를 수신했습니다.');
 				this.$state.opponentIntraID = data.opponent;
 				this.$state.opponentIntraPic = data.opponent_image;
 				localStorage.setItem('remote-id', data.id);
 				clearInterval(this.count);
 				this.exclamationMark();
 				await this.sleep(3000);
-				this.remoteReady();
+				if (
+					this.remoteSocket &&
+					this.remoteSocket.readyState !== WebSocket.CLOSED
+				) {
+					this.remoteReady();
+				}
 			} else if (data.type && data.type === 'send_disconnection') {
-				await this.stopTimer();
+				await this.stopInterval();
 				await displayCanceledMatchingModal(
 					language.remote[this.$state.region].cancelMatch,
 					document.querySelector('.mainbox'),
@@ -188,7 +189,6 @@ export default class Remote extends Component {
 		};
 
 		this.remoteSocket.onerror = () => {
-			console.log('원격 소켓 에러');
 			this.stopInterval();
 		};
 	}
@@ -265,9 +265,8 @@ export default class Remote extends Component {
 		this.startTimer();
 	}
 
-	mounted() {
-		console.log('마운트가 한번만 되는지 확인하는 로그 : Remote');
+	async mounted() {
 		this.counter();
-		this.connectSocket();
+		await this.connectSocket();
 	}
 }

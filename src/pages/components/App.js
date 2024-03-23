@@ -4,6 +4,7 @@ import { navigate } from '../../router/utils/navigate.js';
 import store from '../../store/index.js';
 import language from '../../utils/language.js';
 import { displayConnectionFailedModal } from '../../utils/modal';
+import http from '../../core/http.js';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
@@ -37,14 +38,16 @@ export default class App extends Component {
 			if (localStorage.getItem('tournament-id')) {
 				localStorage.removeItem('tournament-id');
 			}
-			if (window.location.pathname !== '/remote' && window.location.pathname !== '/game'){
-				navigate("/select");
+			if (
+				window.location.pathname !== '/remote' &&
+				window.location.pathname !== '/game'
+			) {
+				navigate('/select');
 			}
 		});
 
 		this.addEvent('click', '.modal-close-btn', () => {
-			navigate("/login", true);
-			// window.location.pathname = '/login';
+			navigate('/login', true);
 		});
 	}
 
@@ -54,13 +57,10 @@ export default class App extends Component {
 		`;
 	}
 
-	routerModule(){
-		// const $body = this.$target.querySelector('#app');
-		// new Router($body);
+	routerModule() {
 		const $body = this.$target.querySelector('.body-wrapper');
 		new Router($body);
 	}
-
 
 	changeModule() {
 		if (
@@ -140,15 +140,13 @@ export default class App extends Component {
 		this.chatSocket = chatSocket;
 
 		chatSocket.onopen = () => {
-			console.log("chat connect");
+			console.log('chat connect');
 			this.addEvent('click', '.message-btn', (e) => {
 				e.preventDefault();
 				var message = this.$target.querySelector('#m').value;
 				if (message && chatSocket.readyState === WebSocket.OPEN) {
-					// 여기에 조건 추가
 					if (message.trim() !== '') {
 						chatSocket.send(JSON.stringify({ message }));
-						// console.log('Message sent: ' + message);
 						this.$target.querySelector('#m').value = '';
 					}
 				}
@@ -163,36 +161,25 @@ export default class App extends Component {
 
 		chatSocket.onclose = function (event) {
 			console.log('WebSocket closed.');
-			if(event.code === 1000){
+			if (event.code === 1000) {
 				console.log('Try multiple connections');
-				displayConnectionFailedModal(
-					language.util[localStorage.getItem('language')?localStorage.getItem('language'):'en'].chatMessage,
-				);
+				displayConnectionFailedModal();
 				localStorage.clear();
 			}
-			// console.log("Close event code:", event.code, "Reason:", event.reason);
-			// localStorage.clear();
-			// chatSocket.close();
 			return;
 		};
 
 		chatSocket.onerror = function (e) {
-			displayConnectionFailedModal(
-				language.util[this.$state.region].chatMessage,
-			);
+			displayConnectionFailedModal();
 			localStorage.clear();
-			// localStorage.setItem('chatConnection', true);
-			// chatSocket.close();
 			return;
 		};
 
 		chatSocket.onmessage = (event) => {
-			// console.log(event.data);
 			const data = JSON.parse(event.data);
 			if (data.type && data.type === 'chat_message') {
 				this.displayMessage(data);
 			} else if (data.type && data.type === 'ping') {
-				// console.log('pong');
 				chatSocket.send(JSON.stringify({ type: 'pong' }));
 			} else if (data.type && data.type === 'send_multiple_connection') {
 				chatSocket.close(1000, 'Try multiple connections');
@@ -201,8 +188,6 @@ export default class App extends Component {
 	}
 
 	displayMessage(data) {
-		// Moved outside and made a class method
-		// console.log(data);
 		const messageContainer = this.$target.querySelector('.message-container');
 		const messageElement = document.createElement('div');
 		messageElement.classList.add('messages');
@@ -227,12 +212,11 @@ export default class App extends Component {
 	}
 
 	async mounted() {
-		console.log("mount!");
+		console.log('mount!');
 		window.addEventListener('load', async () => {
 			this.changeModule();
 			this.routerModule();
 		});
-
 		this.calcRate();
 		if (
 			localStorage.getItem('accessToken') &&
@@ -240,6 +224,14 @@ export default class App extends Component {
 			(!localStorage.getItem('chatConnection') ||
 				localStorage.getItem('chatConnection') !== true)
 		) {
+<<<<<<< HEAD
+=======
+			if (store.state.checking === 'off') {
+				store.state.checking = 'on';
+				await http.checkToken();
+				store.state.checking = 'off';
+			}
+>>>>>>> main
 			this.connectSocket.bind(this)();
 		}
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {

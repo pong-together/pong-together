@@ -1,15 +1,15 @@
 import language from './language';
 import store from '../store/index';
 
-function displayConnectionFailedModal(text) {
+function displayConnectionFailedModal() {
 	const $state = store.state;
 	if (localStorage.getItem('language')) {
-		$state.language = localStorage.getItem('language');
+		$state.language = localStorage.getItem('language')?localStorage.getItem('language') : 'kr';
 	}
 	const modalHTML = `
 		<div class="modal-overlay">
 			<div class="modal-content">
-				<p>${text}</p>
+				<p>${language.util[$state.language].chatMessage}</p>
 				<button class="modal-close-btn">${language.util[$state.language].ok}</button>
 			</div>
 		</div>
@@ -40,4 +40,26 @@ const displayCanceledMatchingModal = async (text, mainboxElement) => {
 	modalOverlay.parentNode.removeChild(modalOverlay);
 };
 
-export { displayConnectionFailedModal, displayCanceledMatchingModal };
+const displayExpiredTokenModal = async (text) => {
+	return new Promise((resolve) => {
+		const modalHTML = `
+			<div class="modal-overlay">
+				<div class="modal-content">${text}</div>
+			</div>
+		`;
+
+		document.body.innerHTML += modalHTML;
+
+		setTimeout(() => {
+			const modalOverlay = document.querySelector('.modal-overlay');
+			modalOverlay.parentNode.removeChild(modalOverlay);
+			resolve();
+		}, 1000);
+	});
+};
+
+export {
+	displayConnectionFailedModal,
+	displayCanceledMatchingModal,
+	displayExpiredTokenModal,
+};
