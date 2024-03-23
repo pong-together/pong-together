@@ -1,6 +1,6 @@
 .chat-container {
 	width: 646px;
-	height: 350px;
+	height: 650px;
 	border: 3px solid lightgray;
 	border-radius: 15px;
 	display: flex;
@@ -13,7 +13,7 @@
 
 .message-container {
 	width: 605px;
-	height: 365px;
+	height: 665px;
 	overflow-y: auto;
 }
 
