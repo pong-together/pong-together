@@ -198,7 +198,7 @@ const remote = {
 		readyText: 'Found a participant!',
 		cancelMatch: 'Match canceled.',
 		winWord: 'wins',
-		lossWord: 'losses',
+		loseWord: 'losses',
 	},
 	kr: {
 		searchText: '참가자 찾는 중...',
@@ -210,7 +210,7 @@ const remote = {
 		readyText: '참가자를 찾았습니다!',
 		cancelMatch: '매칭이 취소됐습니다.',
 		winWord: '승',
-		lossWord: '패',
+		loseWord: '패',
 	},
 	jp: {
 		searchText: '参加者募集中...',
@@ -222,7 +222,7 @@ const remote = {
 		readyText: '参加者を見つけました!',
 		cancelMatch: 'マッチングがキャンセルされました。',
 		winWord: '勝',
-		lossWord: '敗',
+		loseWord: '敗',
 	},
 };
 
