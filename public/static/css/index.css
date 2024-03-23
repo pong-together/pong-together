@@ -65,8 +65,3 @@ body {
 	height: 253px;
 	margin-right: calc(100% - 226px - 646px);
 }
-
-.footer-chat {
-	width: 646px;
-	height: 350px;
-}

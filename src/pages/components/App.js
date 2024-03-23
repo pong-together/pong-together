@@ -214,7 +214,6 @@ export default class App extends Component {
 	async mounted() {
 		console.log('mount!');
 		window.addEventListener('load', async () => {
-			store.state.checking = 'on';
 			this.changeModule();
 			this.routerModule();
 		});
@@ -227,10 +226,10 @@ export default class App extends Component {
 		) {
 			if (store.state.checking === 'off') {
 				store.state.checking = 'on';
-				console.log('store checking before: ', store.state.checking);
 				await http.checkToken();
 				store.state.checking = 'off';
-				console.log('store checking after: ', store.state.checking);
+			}
+			this.connectSocket.bind(this)();
 		}
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {
 			store.dispatch('changeLoginProgress', 'done');
@@ -238,5 +237,4 @@ export default class App extends Component {
 			store.dispatch('changeLoginProgress', 'twoFA');
 		}
 	}
-}
 }
