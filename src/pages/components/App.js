@@ -163,22 +163,14 @@ export default class App extends Component {
 			console.log('WebSocket closed.');
 			if (event.code === 1000) {
 				console.log('Try multiple connections');
-				displayConnectionFailedModal(
-					language.util[
-						localStorage.getItem('language')
-							? localStorage.getItem('language')
-							: 'kr'
-					].chatMessage,
-				);
+				displayConnectionFailedModal();
 				localStorage.clear();
 			}
 			return;
 		};
 
 		chatSocket.onerror = function (e) {
-			displayConnectionFailedModal(
-				language.util[this.$state.region].chatMessage,
-			);
+			displayConnectionFailedModal();
 			localStorage.clear();
 			return;
 		};
