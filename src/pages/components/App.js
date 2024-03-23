@@ -48,7 +48,6 @@ export default class App extends Component {
 
 		this.addEvent('click', '.modal-close-btn', () => {
 			navigate('/login', true);
-			// window.location.pathname = '/login';
 		});
 	}
 
@@ -59,8 +58,6 @@ export default class App extends Component {
 	}
 
 	routerModule() {
-		// const $body = this.$target.querySelector('#app');
-		// new Router($body);
 		const $body = this.$target.querySelector('.body-wrapper');
 		new Router($body);
 	}
