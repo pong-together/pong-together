@@ -44,18 +44,17 @@ services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.12.2
     volumes:
-      - ./certs/elasticsearch-8.2.3:/usr/share/elasticsearch/config/certs
+      - ./elk/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./tls/certs/ca/ca.crt:/usr/share/elasticsearch/config/ca.crt
+      - ./tls/certs/elasticsearch/elasticsearch.crt:/usr/share/elasticsearch/config/elasticsearch.crt
+      - ./tls/certs/elasticsearch/elasticsearch.key:/usr/share/elasticsearch/config/elasticsearch.key
     ports:
       - "9200:9200"
     environment:
-      - "discovery.type=single-node"
-      - "cluster.name=pongtogether-elasticsearch-cluster"
-      - "node.name=pongtogether-node"
-      - "network.host=0.0.0.0"
-      - "xpack.security.enabled=false"
-      - "xpack.security.http.ssl.enabled=true"
-      - "xpack.security.http.ssl.keystore.path=${SSL_KEY}"
-      - "xpack.security.http.ssl.keystore.password=${SSL_PW}"
+      node.name: elasticsearch
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
+      discovery.type: single-node
       
   logstash:
     image: docker.elastic.co/logstash/logstash:8.12.2
@@ -64,22 +63,28 @@ services:
     volumes:
       - ./elk/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
       - ./elk/logstash/pipeline:/usr/share/logstash/pipeline
-      - ./certs/elasticsearch-8.2.3:/usr/share/logstash/config/certs
+      - ./tls/certs/ca/ca.crt:/usr/share/logstash/config/ca.crt
       - nginx_log:/log/nginx
       - django_log:/log/django
+    environment:
+      LOGSTASH_INTERNAL_PASSWORD: ${LOGSTASH_INTERNAL_PASSWORD:-}
     depends_on:
       - elasticsearch
 
   kibana:
     image: docker.elastic.co/kibana/kibana:8.12.2
     volumes:
-      - ./certs/elasticsearch-8.2.3:/usr/share/kibana/config/certs
+      # - ./certs/elasticsearch-8.2.3:/usr/share/kibana/config/certs
+      - ./elk/kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml
+      - ./tls/certs/ca/ca.crt:/usr/share/kibana/config/ca.crt
+      - ./tls/certs/kibana/kibana.crt:/usr/share/kibana/config/kibana.crt
+      - ./tls/certs/kibana/kibana.key:/usr/share/kibana/config/kibana.key
     ports:
       - "5601:5601"
     environment:
-      - "ELASTICSEARCH_HOSTS=https://elasticsearch:9200"
-      - "ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES=/usr/share/kibana/config/certs"
-
+      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
+      # - "ELASTICSEARCH_HOSTS=https://elasticsearch:9200"
+      # - "ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES=/usr/share/kibana/config/certs"
     depends_on:
       - elasticsearch
   
