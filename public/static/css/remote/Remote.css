@@ -133,6 +133,14 @@
 	margin-bottom: 35px;
 }
 
+.match-record {
+	color: white;
+	background-color: #faa8a8;
+
+	font-size: 32px;
+	font-weight: bold;
+}
+
 #match-intra {
 	color: white;
 	background-color: #faa8a8;

@@ -46,6 +46,8 @@ export default class Remote extends Component {
 			region: 'kr',
 			opponentIntraID: 'undefined',
 			opponentIntraPic: 'undefined',
+			opponentWins: '0',
+			opponentLosses: '0',
 		};
 
 		if (localStorage.getItem('language')) {
@@ -92,7 +94,9 @@ export default class Remote extends Component {
 		return `
 			<div class="top-text">${language.remote[this.$state.region].readyText}</div>
 			<img src="${this.$state.opponentIntraPic}" id="picture">
-			<button id="match-intra">${this.$state.opponentIntraID}(5)</button>
+			<div class="match-record">${this.$state.opponentWins}${language.remote[this.$state.region].winWord} \ 
+				${this.$state.opponentLosses}${language.remote[this.$state.region].lossWord}</div>
+			<div id="match-intra">${this.$state.opponentIntraID}(5)</div>
 		`;
 	}
 
