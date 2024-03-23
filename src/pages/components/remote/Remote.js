@@ -59,18 +59,18 @@ export default class Remote extends Component {
 		const cancelEvent = async (e) => {
 			const target = e.target;
 			if (target.id === 'search') {
-				// await this.stopCounter();
-				// document.removeEventListener('click', cancelEvent);
-				// window.removeEventListener('popstate', popEvent);
+				await this.stopCounter();
+				document.removeEventListener('click', cancelEvent);
+				window.removeEventListener('popstate', popEvent);
 				navigate('/select');
 			}
 		};
 		document.addEventListener('click', cancelEvent);
 
 		const popEvent = (e) => {
-			// this.stopInterval();
-			// window.removeEventListener('popstate', popEvent);
-			// document.removeEventListener('click', cancelEvent);
+			this.stopInterval();
+			window.removeEventListener('popstate', popEvent);
+			document.removeEventListener('click', cancelEvent);
 		};
 		window.addEventListener('popstate', popEvent);
 	}
