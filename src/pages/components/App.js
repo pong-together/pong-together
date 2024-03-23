@@ -148,10 +148,8 @@ export default class App extends Component {
 				e.preventDefault();
 				var message = this.$target.querySelector('#m').value;
 				if (message && chatSocket.readyState === WebSocket.OPEN) {
-					// 여기에 조건 추가
 					if (message.trim() !== '') {
 						chatSocket.send(JSON.stringify({ message }));
-						// console.log('Message sent: ' + message);
 						this.$target.querySelector('#m').value = '';
 					}
 				}
@@ -172,14 +170,11 @@ export default class App extends Component {
 					language.util[
 						localStorage.getItem('language')
 							? localStorage.getItem('language')
-							: 'en'
+							: 'kr'
 					].chatMessage,
 				);
 				localStorage.clear();
 			}
-			// console.log("Close event code:", event.code, "Reason:", event.reason);
-			// localStorage.clear();
-			// chatSocket.close();
 			return;
 		};
 
@@ -188,18 +183,14 @@ export default class App extends Component {
 				language.util[this.$state.region].chatMessage,
 			);
 			localStorage.clear();
-			// localStorage.setItem('chatConnection', true);
-			// chatSocket.close();
 			return;
 		};
 
 		chatSocket.onmessage = (event) => {
-			// console.log(event.data);
 			const data = JSON.parse(event.data);
 			if (data.type && data.type === 'chat_message') {
 				this.displayMessage(data);
 			} else if (data.type && data.type === 'ping') {
-				// console.log('pong');
 				chatSocket.send(JSON.stringify({ type: 'pong' }));
 			} else if (data.type && data.type === 'send_multiple_connection') {
 				chatSocket.close(1000, 'Try multiple connections');
@@ -208,8 +199,6 @@ export default class App extends Component {
 	}
 
 	displayMessage(data) {
-		// Moved outside and made a class method
-		// console.log(data);
 		const messageContainer = this.$target.querySelector('.message-container');
 		const messageElement = document.createElement('div');
 		messageElement.classList.add('messages');
