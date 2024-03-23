@@ -19,7 +19,15 @@ export default class Tournament extends Component {
 		}
 		return Tournament.instance;
 	}
-	
+
+	async checkAccess() {
+		if (store.state.checking === 'off') {
+			store.state.checking = 'on';
+			await http.checkToken();
+			store.state.checking = 'off';
+		}
+	}
+
 	setup() {
 		if (
 			!localStorage.getItem('accessToken') ||
@@ -28,7 +36,7 @@ export default class Tournament extends Component {
 			// navigate("/login");
 			window.location.pathname = '/login';
 		} else {
-			http.checkToken();
+			this.checkAccess();
 		}
 		this.$state = {
 			participant: [],
@@ -44,8 +52,7 @@ export default class Tournament extends Component {
 		if (window.localStorage.getItem('gameLevel') === 'default') {
 			this.$state.gamemodemessage =
 				language.tournament[this.$state.region].normalGameMode;
-		}
-		else
+		} else
 			this.$state.gamemodemessage =
 				language.tournament[this.$state.region].extreamGameMode;
 	}
