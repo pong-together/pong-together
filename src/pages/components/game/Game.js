@@ -444,6 +444,7 @@ export default class Game extends Component {
 		if (!this.$state.game_id) {
 			document.removeEventListener('keydown', this.event1);
 			document.removeEventListener('keyup', this.event2);
+			clearInterval(this.time);
 			navigate('/select');
 		} else {
 			var player1 = document.querySelector('.player1-image');
