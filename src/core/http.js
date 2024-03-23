@@ -33,15 +33,13 @@ const checkToken = async () => {
 		});
 		if (!response.ok) {
 			if (response.status === 401) {
-				console.log('access token이 만료되었습니다.');
 				await refreshToken();
 			}
 		}
-	} catch (error) {
-		console.log('checkToken()에서 에러 catch');
+	} catch (e) {
 		return {
-			status: error.status,
-			message: error.message,
+			status: e.status,
+			message: e.message,
 		};
 	}
 };
@@ -64,11 +62,8 @@ const refreshToken = async () => {
 				headers: new window.Headers(header),
 				body: refBody,
 			});
-			console.log('status:', response.status);
 			if (!response.ok) {
 				if (response.status === 401) {
-					console.log('refresh token이 만료되었습니다.');
-					console.log('다시 로그인을 시작하여 주세요.');
 					let region = 'kr';
 					if (localStorage.getItem('language')) {
 						region = localStorage.getItem('language');
@@ -82,18 +77,14 @@ const refreshToken = async () => {
 			} else {
 				const data = await response.json();
 				localStorage.setItem('accessToken', data.access);
-				console.log('accessToken reissued');
 			}
-		} catch (error) {
-			console.log('refreshToken()에서 에러 catch');
+		} catch (e) {
 			return {
-				status: error.status,
-				message: error.message,
+				status: e.status,
+				message: e.message,
 			};
 		}
 	} else {
-		console.log('refresh token이 존재하지 않습니다.');
-		console.log('다시 로그인을 시작하여 주세요.');
 		localStorage.clear();
 		window.location.pathname = '/login';
 	}
@@ -115,16 +106,14 @@ const request = async (params) => {
 		response = await window.fetch(url, config);
 		if (!response.ok) {
 			if (response.status === 401) {
-				console.log('access token이 만료되었습니다.');
 				await refreshToken();
 				response = await window.fetch(url, config);
 			}
 		}
-	} catch (error) {
-		console.log('Network error:', error);
+	} catch (e) {
 		return {
-			status: 500, // 예시로 500 상태 코드를 반환
-			data: null, // 데이터는 없음
+			status: 500,
+			data: null,
 		};
 	}
 
