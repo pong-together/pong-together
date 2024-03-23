@@ -24,6 +24,7 @@ body {
 
 .back-wrapper {
 	width: 1000px;
+	height: fit-content;
 	background-color: white;
 	margin: 0 auto;
 }
