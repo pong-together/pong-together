@@ -14,10 +14,11 @@ export default class NotFound extends Component {
 	setEvent() {
 		this.addEvent('click', '.not-found-btn', () => {
 			if (localStorage.getItem('accessToken'))
-			 	navigate("/select", true);
+				window.location.pathname = '/select';
 			else window.location.pathname = '/';
 		});
 	}
+
 	template() {
 		return `
 		<div class="body-wrapper">
