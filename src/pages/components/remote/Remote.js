@@ -59,18 +59,18 @@ export default class Remote extends Component {
 		const cancelEvent = async (e) => {
 			const target = e.target;
 			if (target.id === 'search') {
-				await this.stopCounter();
-				document.removeEventListener('click', cancelEvent);
-				window.removeEventListener('popstate', popEvent);
+				// await this.stopCounter();
+				// document.removeEventListener('click', cancelEvent);
+				// window.removeEventListener('popstate', popEvent);
 				navigate('/select');
 			}
 		};
 		document.addEventListener('click', cancelEvent);
 
 		const popEvent = (e) => {
-			this.stopInterval();
-			window.removeEventListener('popstate', popEvent);
-			document.removeEventListener('click', cancelEvent);
+			// this.stopInterval();
+			// window.removeEventListener('popstate', popEvent);
+			// document.removeEventListener('click', cancelEvent);
 		};
 		window.addEventListener('popstate', popEvent);
 	}
@@ -103,7 +103,7 @@ export default class Remote extends Component {
 	templateProgress() {
 		return `
 			<div class="progress progress-custom">
-				<div class="progress-bar bg-danger progress-bar-striped progress-bar-animated" style="width:200px ; height:30px">
+				<div class="progress-bar bg-danger progress-bar-striped progress-bar-animated" style="width:200px;height:60px">
 					<span>100%</span>
 				</div>
 			</div>
@@ -170,9 +170,11 @@ export default class Remote extends Component {
 			if (data.type && data.type === 'ping') {
 				this.remoteSocket.send(JSON.stringify({ type: 'pong' }));
 			} else if (data.type && data.type === 'find_opponent') {
-				this.$state.opponentIntraID = data.opponent;
-				this.$state.opponentIntraPic = data.opponent_image;
-				localStorage.setItem('remote-id', data.id);
+				this.$state.opponentIntraID = data?.opponent;
+				this.$state.opponentIntraPic = data?.opponent_image;
+				this.$state.opponentWins = data?.opponent_win_count;
+				this.$state.opponentLosses = data?.opponent_lose_count;
+				localStorage.setItem('remote-id', data?.id);
 				clearInterval(this.count);
 				this.exclamationMark();
 				await this.sleep(3000);

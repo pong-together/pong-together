@@ -75,6 +75,8 @@
 	width: 133px;
 	height: 133px;
 	border-radius: 180px;
+
+	margin-top: 10px;
 }
 
 #counter {
@@ -135,10 +137,10 @@
 
 .match-record {
 	color: white;
-	background-color: #faa8a8;
+	font-size: 20px;
 
-	font-size: 32px;
-	font-weight: bold;
+	position: relative;
+	margin-bottom: -10px;
 }
 
 #match-intra {
@@ -153,4 +155,8 @@
 
 	margin-top: 0px;
 	margin-bottom: 35px;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
