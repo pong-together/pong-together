@@ -8,7 +8,7 @@ all: $(NAME)
 
 $(NAME): up
 
-up: cert
+up: setup
 	docker-compose up --build -d
 
 setup:
