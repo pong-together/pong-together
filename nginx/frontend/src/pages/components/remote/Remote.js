@@ -62,6 +62,7 @@ export default class Remote extends Component {
 				await this.stopCounter();
 				document.removeEventListener('click', cancelEvent);
 				window.removeEventListener('popstate', popEvent);
+				window.removeEventListener('beforeunload', unloadEvent);
 				navigate('/select');
 			}
 		};
@@ -69,10 +70,21 @@ export default class Remote extends Component {
 
 		const popEvent = (e) => {
 			this.stopInterval();
-			window.removeEventListener('popstate', popEvent);
+			localStorage.removeItem('remote-id');
 			document.removeEventListener('click', cancelEvent);
+			window.removeEventListener('popstate', popEvent);
+			window.removeEventListener('beforeunload', unloadEvent);
 		};
 		window.addEventListener('popstate', popEvent);
+
+		const unloadEvent = (e) => {
+			this.stopInterval();
+			localStorage.removeItem('remote-id');
+			document.removeEventListener('click', cancelEvent);
+			window.removeEventListener('popstate', popEvent);
+			window.removeEventListener('beforeunload', unloadEvent);
+		}
+		window.addEventListener('beforeunload', unloadEvent);
 	}
 
 	template() {
@@ -97,6 +109,19 @@ export default class Remote extends Component {
 			<div class="match-record">${this.$state.opponentWin}${language.remote[this.$state.region].winWord}\
 				${this.$state.opponentLose}${language.remote[this.$state.region].loseWord}</div>
 			<div id="match-intra">${this.$state.opponentIntraID}(5)</div>
+<<<<<<< HEAD
+		`;
+	}
+
+	templateProgress() {
+		return `
+			<div class="progress progress-custom">
+				<div class="progress-bar bg-danger progress-bar-striped progress-bar-animated" style="width:200px;height:60px">
+					<span>100%</span>
+				</div>
+			</div>
+=======
+>>>>>>> main
 		`;
 	}
 
@@ -185,6 +210,7 @@ export default class Remote extends Component {
 					this.remoteReady();
 				}
 			} else if (data.type && data.type === 'send_disconnection') {
+				localStorage.removeItem('remote-id');
 				await this.stopInterval();
 				await displayCanceledMatchingModal(
 					language.remote[this.$state.region].cancelMatch,

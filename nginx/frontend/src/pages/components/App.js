@@ -43,6 +43,7 @@ export default class App extends Component {
 				window.location.pathname !== '/game'
 			) {
 				navigate('/select');
+				// window.location.pathname = '/select';
 			}
 		});
 
@@ -117,9 +118,9 @@ export default class App extends Component {
 				</div>
 				</div>
 		</div>
-				`;
+					`;
+			}
 		}
-	}
 
 	calcRate() {
 		this.$state.rate =
@@ -141,6 +142,7 @@ export default class App extends Component {
 
 		chatSocket.onopen = () => {
 			console.log('chat connect');
+			localStorage.setItem('chatConnected', 'true');
 			this.addEvent('click', '.message-btn', (e) => {
 				e.preventDefault();
 				var message = this.$target.querySelector('#m').value;
@@ -161,18 +163,6 @@ export default class App extends Component {
 
 		chatSocket.onclose = function (event) {
 			console.log('WebSocket closed.');
-			if (event.code === 1000) {
-				console.log('Try multiple connections');
-				displayConnectionFailedModal();
-				localStorage.clear();
-			}
-			return;
-		};
-
-		chatSocket.onerror = function (e) {
-			displayConnectionFailedModal();
-			localStorage.clear();
-			return;
 		};
 
 		chatSocket.onmessage = (event) => {
@@ -182,10 +172,13 @@ export default class App extends Component {
 			} else if (data.type && data.type === 'ping') {
 				chatSocket.send(JSON.stringify({ type: 'pong' }));
 			} else if (data.type && data.type === 'send_multiple_connection') {
-				chatSocket.close(1000, 'Try multiple connections');
+					chatSocket.close();
+					console.log('Try multiple connections');
+					displayConnectionFailedModal();
+					localStorage.clear();
+				}
 			}
-		};
-	}
+	};
 
 	displayMessage(data) {
 		const messageContainer = this.$target.querySelector('.message-container');
@@ -213,9 +206,24 @@ export default class App extends Component {
 
 	async mounted() {
 		console.log('mount!');
+		if (this.chatSocket && this.chatSocket.readyState === WebSocket.OPEN) {
+			if (!localStorage.getItem('chatConnected')){
+				localStorage.setItem('chatConnected', 'true');
+				console.log("chat storage generate!");
+			}
+		} else {
+			localStorage.removeItem('chatConnected');
+			console.log("chat storage removed!");
+		}
 		window.addEventListener('load', async () => {
 			this.changeModule();
 			this.routerModule();
+		});
+		window.addEventListener('beforeunload', async ()=>{
+			if (this.chatSocket.readyState === WebSocket.OPEN){
+				this.chatSocket.close();
+				console.log('WebSocket is closed.');
+			}
 		});
 		this.calcRate();
 		if (
@@ -229,7 +237,10 @@ export default class App extends Component {
 				await http.checkToken();
 				store.state.checking = 'off';
 			}
-			this.connectSocket.bind(this)();
+			if (!localStorage.getItem('chatConnected')){
+				this.connectSocket.bind(this)();
+				console.log ("chat connect success!");
+			}
 		}
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {
 			store.dispatch('changeLoginProgress', 'done');

@@ -98,6 +98,9 @@ export default class tournamentBracket extends Component {
 		});
 
 		const popEvent = (e) => {
+			window.localStorage.removeItem('gameMode');
+			window.localStorage.removeItem('tournament-id');
+			window.localStorage.removeItem('gameLevel');
 			navigate('/select', true);
 		};
 		window.addEventListener('popstate', popEvent);
