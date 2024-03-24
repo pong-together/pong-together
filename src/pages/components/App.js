@@ -170,7 +170,6 @@ export default class App extends Component {
 
 		chatSocket.onclose = function (event) {
 			console.log('WebSocket closed.');
-			return;
 		};
 
 		chatSocket.onmessage = (event) => {
@@ -180,14 +179,13 @@ export default class App extends Component {
 			} else if (data.type && data.type === 'ping') {
 				chatSocket.send(JSON.stringify({ type: 'pong' }));
 			} else if (data.type && data.type === 'send_multiple_connection') {
-					chatSocket.close('Try multiple connections');
+					chatSocket.close();
 					console.log('Try multiple connections');
 					displayConnectionFailedModal();
 					localStorage.clear();
 				}
 			}
-		};
-	}
+	};
 
 	displayMessage(data) {
 		const messageContainer = this.$target.querySelector('.message-container');
