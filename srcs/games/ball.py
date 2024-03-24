@@ -29,7 +29,6 @@ class Ball:
     def __init__(self, x, y, mode):
         self.x = x
         self.y = y
-        self.rely = -1
 
         self.start_speed = self.DEFAULT_START_SPEED
         self.minimum_speed = self.DEFAULT_MINIMUM_SPEED
