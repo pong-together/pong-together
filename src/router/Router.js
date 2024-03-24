@@ -32,7 +32,6 @@ export default class Router {
 							history.pushState(null, '', to);
 							this.route(isReplace);
 					}
-					this.route();
 			});
 	}
 };
