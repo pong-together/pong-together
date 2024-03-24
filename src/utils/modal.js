@@ -44,7 +44,7 @@ function displayLoginFailedModal() {
 		modalOverlay.remove();
 		window.location.pathname = '/login';
 	});
-}
+};
 
 const displayCanceledMatchingModal = async (text, mainboxElement) => {
 	const modalHTML = `
@@ -83,6 +83,7 @@ const displayExpiredTokenModal = async (text) => {
 
 export {
 	displayConnectionFailedModal,
+	displayLoginFailedModal,
 	displayCanceledMatchingModal,
 	displayExpiredTokenModal,
 };
