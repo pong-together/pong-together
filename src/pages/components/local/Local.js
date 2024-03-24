@@ -37,7 +37,7 @@ export default class Local extends Component {
 		this.$state = {
 			participant: ['', ''],
 			checkError: '',
-			gameMode: store.state.gameLevel,
+			gameMode: window.localStorage.getItem('gameLevel'),
 			region: localStorage.getItem('language')
 				? localStorage.getItem('language')
 				: 'kr',
