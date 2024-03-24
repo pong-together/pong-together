@@ -177,10 +177,16 @@ export default class App extends Component {
 			return;
 		};
 
+		window.addEventListener('beforeunload', () => {
+			if (this.chatSocket && this.chatSocket.readyState === WebSocket.OPEN) {
+					this.chatSocket.close(1000, 'Page refreshed or closed');
+			}
+		});
+
 		chatSocket.onerror = function (e) {
-			displayConnectionFailedModal();
-			localStorage.clear();
-			return;
+			// displayConnectionFailedModal();
+			// localStorage.clear();
+			// return;
 		};
 
 		chatSocket.onmessage = (event) => {
@@ -222,7 +228,6 @@ export default class App extends Component {
 	async mounted() {
 		console.log('mount!');
 		window.addEventListener('load', async () => {
-			window.addEventListener('beforeunload', () => this.disconnectSocket());
 			this.changeModule();
 			this.routerModule();
 		});
