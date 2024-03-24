@@ -276,6 +276,7 @@ export default class Game extends Component {
 				}
 				document.removeEventListener('keydown', this.event1);
 				document.removeEventListener('keyup', this.event2);
+				clearInterval(this.time);
 				gameSocket.close();
 			} else if (data.type && data.type === 'score') {
 				document.querySelector('.player1-game-score').textContent =

@@ -89,7 +89,6 @@ export default class tournamentBracket extends Component {
 	setEvent() {
 		this.addEvent('click', '.game-start', ({ target }) => {
 			if (this.$state.gameround < 4) navigate('/game', true);
-			// window.location.pathname = '/game';
 			else {
 				window.localStorage.removeItem('gameMode');
 				window.localStorage.removeItem('tournament-id');
@@ -125,7 +124,6 @@ export default class tournamentBracket extends Component {
 		playerBox1.textContent = '';
 		playerBox2.style.backgroundColor = 'lightgray';
 
-		//set winner
 		const game1Winner = document.querySelector('.game1-winner');
 		game1Winner.textContent = winner;
 		game1Winner.style.border = '5px solid white';
@@ -182,7 +180,6 @@ export default class tournamentBracket extends Component {
 		playerBox4.style.border = '5px solid white';
 		this.gameRoundTwoPlayerOneBorderLine(playerBox1, playerBox2, winner);
 
-		//game2 line
 		const rightline = document.querySelector('.game2-rightline');
 		rightline.style.width = '5px';
 		rightline.style.marginLeft = '340px';
@@ -194,7 +191,6 @@ export default class tournamentBracket extends Component {
 		leftline.style.width = '5px';
 		const winnerLine = document.querySelector('.game2-winner-line');
 		winnerLine.style.width = '5px';
-		// winnerLine.style.height = "25px";
 	}
 
 	gameRoundTwoPlayerTwo(
@@ -208,7 +204,6 @@ export default class tournamentBracket extends Component {
 		playerBox4.style.border = '5px solid white';
 
 		this.gameRoundTwoPlayerTwoBorderLine(playerBox1, playerBox2, winner);
-		//game2 line
 		const rightline = document.querySelector('.game2-rightline');
 		rightline.style.width = '5px';
 		const vertline1 = document.querySelector('.game2-vertline1');
@@ -242,7 +237,6 @@ export default class tournamentBracket extends Component {
 		game2Winner.textContent = winner[1];
 		game2Winner.style.border = '5px solid white';
 
-		//game2 line
 		const rightline = document.querySelector('.game2-rightline');
 		rightline.style.width = '5px';
 		rightline.style.marginLeft = '335px';
@@ -282,10 +276,8 @@ export default class tournamentBracket extends Component {
 		game2Winner.textContent = winner[1];
 		game2Winner.style.border = '5px solid white';
 
-		//game2 line
 		const rightline = document.querySelector('.game2-leftline');
 		rightline.style.width = '5px';
-		// rightline.style.marginLeft = "335px"
 		const vertline1 = document.querySelector('.game2-vertline2');
 		vertline1.style.height = '5px';
 		vertline1.style.marginLeft = '423px';
@@ -323,7 +315,6 @@ export default class tournamentBracket extends Component {
 		game2Winner.textContent = winner[1];
 		game2Winner.style.border = '5px solid white';
 
-		//game2 line
 		const rightline = document.querySelector('.game2-rightline');
 		rightline.style.width = '5px';
 		rightline.style.marginLeft = '250px';
@@ -362,10 +353,8 @@ export default class tournamentBracket extends Component {
 		game2Winner.textContent = winner[1];
 		game2Winner.style.border = '5px solid white';
 
-		//game2 line
 		const rightline = document.querySelector('.game2-leftline');
 		rightline.style.width = '5px';
-		// rightline.style.marginLeft = "335px"
 		const vertline1 = document.querySelector('.game2-vertline2');
 		vertline1.style.height = '5px';
 		vertline1.style.marginLeft = '338px';
@@ -388,7 +377,6 @@ export default class tournamentBracket extends Component {
 
 		const finalGameLeftLine = document.querySelector('.finalgame-leftline');
 		finalGameLeftLine.style.width = '5px';
-		// finalGameLeftLine.style.marginLeft = "375px"
 		const finalGameVertLine2 = document.querySelector('.finalgame-vertline2');
 		finalGameVertLine2.style.height = '5px';
 		finalGameVertLine2.style.marginLeft = '375px';
@@ -419,7 +407,6 @@ export default class tournamentBracket extends Component {
 		);
 		finalGameWinnerLine.style.width = '5px';
 	}
-	//api부분 함수
 	async getTournamentInfo() {
 		const result = await tourapi.list(
 			window.localStorage.getItem('tournament-id'),
@@ -461,7 +448,7 @@ export default class tournamentBracket extends Component {
 		if (!window.localStorage.getItem('tournament-id')) {
 			navigate('/select');
 		} else {
-			await this.getTournamentInfo(); //api로 정보 받아옴.
+			await this.getTournamentInfo();
 
 			if (this.$state.gameround >= 4) {
 				const button = document.querySelector('.game-start');
