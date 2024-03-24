@@ -10,6 +10,6 @@ export const navigate = (to, isReplace = false) => {
 				isReplace,
 			},
 		});
+		dispatchEvent(historyChangeEvent);
 	}
-	dispatchEvent(historyChangeEvent);
 };
