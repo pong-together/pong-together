@@ -177,12 +177,6 @@ export default class App extends Component {
 			return;
 		};
 
-		window.addEventListener('beforeunload', () => {
-			if (this.chatSocket && this.chatSocket.readyState === WebSocket.OPEN) {
-					this.chatSocket.close(1000, 'Page refreshed or closed');
-			}
-		});
-
 		chatSocket.onerror = function (e) {
 			// displayConnectionFailedModal();
 			// localStorage.clear();
@@ -227,6 +221,13 @@ export default class App extends Component {
 
 	async mounted() {
 		console.log('mount!');
+		if (this.chatSocket && this.chatSocket.readyState === WebSocket.OPEN) {
+			localStorage.setItem('chatConnected', 'true');
+			console.log("chat Connected!");
+		} else {
+			localStorage.removeItem('chatConnected');
+			console.log("chat Removed!");
+		}
 		window.addEventListener('load', async () => {
 			this.changeModule();
 			this.routerModule();
@@ -243,7 +244,8 @@ export default class App extends Component {
 				await http.checkToken();
 				store.state.checking = 'off';
 			}
-			this.connectSocket.bind(this)();
+			if (!localStorage.getItem('chatConnected'))
+				this.connectSocket.bind(this)();
 		}
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {
 			store.dispatch('changeLoginProgress', 'done');
