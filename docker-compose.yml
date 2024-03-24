@@ -4,7 +4,8 @@ services:
   nginx:
     build: ./nginx
     volumes:
-      - ./certs/nginx/:/etc/nginx/ssl/
+      - ./nginx/certs/:/etc/nginx/ssl/
+      - nginx_log:/log/nginx
     ports:
       - "80:80"
       - "443:443"
@@ -13,19 +14,26 @@ services:
     depends_on:
       - backend
     restart: always
+    networks:
+      - pong-together
 
   backend:
     build: ./backend
     command: sh /scripts/top-entrypoint.sh
     volumes:
       - ./backend/srcs/:/code
+      - django_log:/log/django
     expose:
       - "8000"
+    ports:
+      - "8000:8000"
     env_file:
       - .env
     depends_on:
       - db
     restart: always
+    networks:
+      - pong-together
   
   db:
     image: postgres
@@ -36,6 +44,78 @@ services:
     env_file:
       - .env
     restart: always
+    networks:
+      - pong-together
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.2
+    volumes:
+      - ./elk/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./elk/certs/ca/ca.crt:/usr/share/elasticsearch/config/ca.crt
+      - ./elk/certs/elasticsearch/elasticsearch.crt:/usr/share/elasticsearch/config/elasticsearch.crt
+      - ./elk/certs/elasticsearch/elasticsearch.key:/usr/share/elasticsearch/config/elasticsearch.key
+    ports:
+      - "9200:9200"
+    environment:
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+      discovery.type: single-node
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+    networks:
+      - elk-network
+    
+  setup-elk:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.2
+    command: >
+      /bin/bash -c "/usr/share/elasticsearch/init_users.sh"
+    volumes:
+      - ./elk/init_users.sh:/usr/share/elasticsearch/init_users.sh
+    env_file:
+      - .env
+    depends_on:
+      - elasticsearch
+    networks:
+      - elk-network
+      
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.12.2
+    ports:
+      - "5003:5003"
+    volumes:
+      - ./elk/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./elk/logstash/pipeline:/usr/share/logstash/pipeline
+      - ./elk/certs/ca/ca.crt:/usr/share/logstash/config/ca.crt
+      - nginx_log:/log/nginx
+      - django_log:/log/django
+    environment:
+      LOGSTASH_INTERNAL_PASSWORD: ${LOGSTASH_INTERNAL_PASSWORD}
+    depends_on:
+      - elasticsearch
+    networks:
+      - elk-network
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.12.2
+    volumes:
+      - ./elk/kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml
+      - ./elk/certs/ca/ca.crt:/usr/share/kibana/config/ca.crt
+      - ./elk/certs/kibana/kibana.crt:/usr/share/kibana/config/kibana.crt
+      - ./elk/certs/kibana/kibana.key:/usr/share/kibana/config/kibana.key
+    ports:
+      - "5601:5601"
+    environment:
+      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD}
+    depends_on:
+      - elasticsearch
+    networks:
+      - elk-network
   
 volumes:
   postgres_data: {}
+  nginx_log: {}
+  django_log: {}
+
+networks:
+  pong-together:
+    driver: bridge
+  elk-network:
+    driver: bridge

@@ -1,0 +1,32 @@
+## Default Kibana configuration from Kibana base image.
+## https://github.com/elastic/kibana/blob/main/src/dev/build/tasks/os_packages/docker_generator/templates/kibana_yml.template.ts
+#
+server.name: kibana
+server.host: 0.0.0.0
+server.port: 5601
+elasticsearch.hosts: [ https://elasticsearch:9200 ]
+
+monitoring.ui.container.elasticsearch.enabled: true
+monitoring.ui.container.logstash.enabled: true
+
+## X-Pack security credentials
+#
+elasticsearch.username: kibana_system
+elasticsearch.password: ${KIBANA_SYSTEM_PASSWORD}
+
+##
+## TLS configuration
+## See instructions from README to enable.
+##
+
+## Communications between Kibana and Elasticsearch
+## see https://www.elastic.co/guide/en/kibana/current/configuring-tls.html#configuring-tls-kib-es
+#
+elasticsearch.ssl.certificateAuthorities: [ config/ca.crt ]
+
+## Communications between web browsers and Kibana
+## see https://www.elastic.co/guide/en/kibana/current/configuring-tls.html#configuring-tls-browser-kib
+#
+server.ssl.enabled: true 
+server.ssl.certificate: config/kibana.crt
+server.ssl.key: config/kibana.key
