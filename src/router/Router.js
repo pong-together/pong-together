@@ -26,10 +26,11 @@ export default class Router {
 			window.addEventListener('popstate', () => this.route());
 			window.addEventListener('historychange', ({ detail }) => {
 					const { to, isReplace } = detail;
-					if (isReplace) {
+					if (to === isReplace && to === location.pathname) {
 							history.replaceState(null, '', to);
 					} else {
 							history.pushState(null, '', to);
+							route(isReplace);
 					}
 					this.route();
 			});
