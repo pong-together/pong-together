@@ -4,6 +4,7 @@ from channels.db import database_sync_to_async
 
 from games.constants import PLAYER1, PLAYER2
 from games.score import Score
+from pong_together.settings import logger
 from users.models import User
 
 
@@ -58,6 +59,7 @@ class DisconnectHandler:
 
     async def disconnect_abnormal(self):
         self.consumer.common[self.consumer.group_name]['disconnection_status'] = Score.RUNNER_UP
+        self.pong.end_status = Score.RUNNER_UP
         loser = self.consumer.user.intra_id
         winner = self.get_other_player(loser)
         await self.update_win(winner)
