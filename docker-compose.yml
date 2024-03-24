@@ -51,12 +51,11 @@ services:
     ports:
       - "9200:9200"
     environment:
-      node.name: elasticsearch
       ES_JAVA_OPTS: -Xms512m -Xmx512m
-      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
       discovery.type: single-node
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
     
-  init-users:
+  setup-elk:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.12.2
     command: >
       /bin/bash -c "/usr/share/elasticsearch/init_users.sh"
