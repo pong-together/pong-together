@@ -61,16 +61,12 @@ export default class LoginRedirect extends Component {
 					{ 'Content-Type': 'application/json' },
 				);
 
-				// if (data?.chat_connection === true) {
-				// 	displayConnectionFailedModal('다른 사용자가 이미 접속중입니다.');
-				// 	localStorage.clear();
-				// 	return;
-				// }
 				if (data?.login === 'success') {
 					localStorage.setItem('accessToken', data.access_token);
 					localStorage.setItem('refreshToken', data.refresh_token);
 					navigate("/login");
-					// window.location.pathname = '/login';
+				} else {
+					displayConnectionFailedModal();
 				}
 			} catch (error) {
 				console.log('error: ', error);
