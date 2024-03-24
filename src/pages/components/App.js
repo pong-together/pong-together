@@ -222,11 +222,13 @@ export default class App extends Component {
 	async mounted() {
 		console.log('mount!');
 		if (this.chatSocket && this.chatSocket.readyState === WebSocket.OPEN) {
-			localStorage.setItem('chatConnected', 'true');
-			console.log("chat Connected!");
+			if (!localStorage.getItem('chatConnected')){
+				localStorage.setItem('chatConnected', 'true');
+				console.log("chat storage generate!");
+			}
 		} else {
 			localStorage.removeItem('chatConnected');
-			console.log("chat Removed!");
+			console.log("chat storage removed!");
 		}
 		window.addEventListener('load', async () => {
 			this.changeModule();
@@ -244,8 +246,10 @@ export default class App extends Component {
 				await http.checkToken();
 				store.state.checking = 'off';
 			}
-			if (!localStorage.getItem('chatConnected'))
+			if (!localStorage.getItem('chatConnected')){
 				this.connectSocket.bind(this)();
+				console.log ("chat connect success!");
+			}
 		}
 		if (localStorage.getItem('accessToken') && localStorage.getItem('twoFA')) {
 			store.dispatch('changeLoginProgress', 'done');
