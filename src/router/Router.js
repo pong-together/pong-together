@@ -23,15 +23,15 @@ export default class Router {
 	}
 
 	init() {
-    window.addEventListener('popstate', () => this.route());
-    window.addEventListener('historychange', ({ detail }) => {
-        const { to, isReplace } = detail;
-        if (isReplace) {
-            history.replaceState(null, '', to);
-        } else {
-            history.pushState(null, '', to);
-        }
-        this.route(); // isReplace 인자 제거
-    });
+			window.addEventListener('popstate', () => this.route());
+			window.addEventListener('historychange', ({ detail }) => {
+					const { to, isReplace } = detail;
+					if (isReplace) {
+							history.replaceState(null, '', to);
+					} else {
+							history.pushState(null, '', to);
+					}
+					this.route();
+			});
 	}
 };
