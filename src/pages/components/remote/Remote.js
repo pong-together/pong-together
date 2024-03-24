@@ -59,6 +59,7 @@ export default class Remote extends Component {
 		const cancelEvent = async (e) => {
 			const target = e.target;
 			if (target.id === 'search') {
+				await this.stopInterval();
 				await this.stopCounter();
 				document.removeEventListener('click', cancelEvent);
 				window.removeEventListener('popstate', popEvent);
