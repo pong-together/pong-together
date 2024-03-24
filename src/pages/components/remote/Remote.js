@@ -71,8 +71,9 @@ export default class Remote extends Component {
 
 		const popEvent = (e) => {
 			this.stopInterval();
-			window.removeEventListener('popstate', popEvent);
+			localStorage.removeItem('remote-id');
 			document.removeEventListener('click', cancelEvent);
+			window.removeEventListener('popstate', popEvent);
 		};
 		window.addEventListener('popstate', popEvent);
 	}
