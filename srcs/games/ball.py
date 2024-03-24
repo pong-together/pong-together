@@ -4,7 +4,7 @@ from random import randint
 
 from games import constants
 from games.score import Score
-
+from pong_together.settings import logger
 
 class Ball:
     WIDTH = 20
@@ -40,6 +40,8 @@ class Ball:
             self.maximum_speed = self.EXTREME_MAXIMUM_SPEED
             self.maximum_slope = self.EXTREME_MAXIMUM_SLOPE
         self.velocity = [self.start_speed, 0]
+
+        logger.warning(f'Websocket GAME mode: {mode}, start_speed: {self.start_speed}')
 
     def set_position(self, x, y):
         self.x = x
