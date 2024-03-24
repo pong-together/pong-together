@@ -59,11 +59,13 @@ export default class Remote extends Component {
 		const cancelEvent = async (e) => {
 			const target = e.target;
 			if (target.id === 'search') {
+				// await this.stopInterval();
 				await this.stopCounter();
 				document.removeEventListener('click', cancelEvent);
 				window.removeEventListener('popstate', popEvent);
 				window.removeEventListener('beforeunload', unloadEvent);
 				navigate('/select');
+				// window.location.pathname = '/select';
 			}
 		};
 		document.addEventListener('click', cancelEvent);
@@ -204,6 +206,7 @@ export default class Remote extends Component {
 					document.querySelector('.mainbox'),
 				);
 				navigate('/select');
+				// window.location.pathname = '/select';
 			}
 		};
 

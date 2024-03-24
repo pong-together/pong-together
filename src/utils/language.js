@@ -230,6 +230,7 @@ const util = {
 	en: {
 		ok: 'OK',
 		submit: 'submit',
+		failLogin: 'This account is already connected.',
 		chatMessage: 'Chat connection failed.',
 		dupMessage: 'Another user is already connected.',
 		expiredTokenMessage: 'The token has expired. Please sign in again.',
@@ -239,6 +240,7 @@ const util = {
 	kr: {
 		ok: '확인',
 		submit: '전송',
+		failLogin: '이 계정이 이미 접속중입니다.',
 		chatMessage: '채팅 연결에 실패했습니다.',
 		dupMessage: '다른 사용자가 이미 접속중입니다.',
 		expiredTokenMessage: '토큰이 만료됐습니다. 다시 로그인해 주세요.',
@@ -248,6 +250,7 @@ const util = {
 	jp: {
 		ok: 'OK',
 		submit: '転送',
+		failLogin: 'このアカウントは既にアクセス中です。',
 		chatMessage: 'チャット接続に失敗しました。',
 		dupMessage: '他のユーザーはすでにアクセスしています。',
 		expiredTokenMessage:

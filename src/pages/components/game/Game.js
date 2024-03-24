@@ -276,6 +276,7 @@ export default class Game extends Component {
 				}
 				document.removeEventListener('keydown', this.event1);
 				document.removeEventListener('keyup', this.event2);
+				clearInterval(this.time);
 				gameSocket.close();
 			} else if (data.type && data.type === 'score') {
 				document.querySelector('.player1-game-score').textContent =
@@ -441,9 +442,11 @@ export default class Game extends Component {
 	}
 
 	mounted() {
+		clearInterval(this.time);
 		if (!this.$state.game_id) {
 			document.removeEventListener('keydown', this.event1);
 			document.removeEventListener('keyup', this.event2);
+			clearInterval(this.time);
 			navigate('/select');
 		} else {
 			var player1 = document.querySelector('.player1-image');
