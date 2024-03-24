@@ -87,7 +87,7 @@ export default class App extends Component {
 				<div class="back-logo-wrapper"><img class="back-logo" src="/static/images/logoBlue.png" alt=""/></div>
 				<div class="body-wrapper"></div>
 				<div class="footer-wrapper">
-						<div class="chip-container">
+					<div class="chip-container">
 						<div class="chip-top">
 								<div class="yellow-box1"></div>
 								<div class="yellow-box2"></div>
@@ -105,7 +105,7 @@ export default class App extends Component {
 						<div class="chip-bottom">
 								<div class="triangle"></div>
 						</div>
-				</div>
+					</div>
 
 				<div class="chat-container">
 						<div class="message-container">
