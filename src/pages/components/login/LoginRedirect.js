@@ -2,7 +2,7 @@ import Component from '../../../core/Component';
 import store from '../../../store/store';
 import http from '../../../core/http';
 import language from '../../../utils/language';
-import { displayConnectionFailedModal } from '../../../utils/modal';
+import { displayLoginFailedModal } from '../../../utils/modal';
 import { navigate } from '../../../router/utils/navigate';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -66,7 +66,7 @@ export default class LoginRedirect extends Component {
 					localStorage.setItem('refreshToken', data.refresh_token);
 					navigate("/login");
 				} else {
-					displayConnectionFailedModal();
+					displayLoginFailedModal();
 				}
 			} catch (error) {
 				console.log('error: ', error);

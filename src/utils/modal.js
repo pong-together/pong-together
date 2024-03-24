@@ -23,6 +23,29 @@ function displayConnectionFailedModal() {
 	});
 }
 
+
+function displayLoginFailedModal() {
+	const $state = store.state;
+	if (localStorage.getItem('language')) {
+		$state.language = localStorage.getItem('language')?localStorage.getItem('language') : 'kr';
+	}
+	const modalHTML = `
+		<div class="modal-overlay">
+			<div class="modal-content">
+				<p>${language.util[$state.language].failLogin}</p>
+				<button class="modal-close-btn">${language.util[$state.language].ok}</button>
+			</div>
+		</div>
+	`;
+
+	document.body.innerHTML += modalHTML;
+	document.querySelector('.modal-close-btn').addEventListener('click', () => {
+		const modalOverlay = document.querySelector('.modal-overlay');
+		modalOverlay.remove();
+		window.location.pathname = '/login';
+	});
+}
+
 const displayCanceledMatchingModal = async (text, mainboxElement) => {
 	const modalHTML = `
 		<div class="modal-overlay">
