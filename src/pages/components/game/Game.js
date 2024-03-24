@@ -249,6 +249,9 @@ export default class Game extends Component {
 				gameSocket.close();
 				if (window.localStorage.getItem('gameMode') === 'local') {
 					window.localStorage.removeItem('local-id');
+				}
+				else if (window.localStorage.getItem('gameMode') === 'tournament'){
+					window.localStorage.removeItem('tournament-id');
 				} else window.localStorage.removeItem('remote-id');
 				document.removeEventListener('keydown', this.event1);
 				document.removeEventListener('keyup', this.event2);
