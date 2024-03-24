@@ -24,7 +24,8 @@ body {
 
 .back-wrapper {
 	width: 1000px;
-	height: 1000px;
+	height: fit-content;
+	padding-bottom: 10px;
 	background-color: white;
 	margin: 0 auto;
 }
@@ -64,9 +65,4 @@ body {
 	width: 226px;
 	height: 253px;
 	margin-right: calc(100% - 226px - 646px);
-}
-
-.footer-chat {
-	width: 646px;
-	height: 350px;
 }
