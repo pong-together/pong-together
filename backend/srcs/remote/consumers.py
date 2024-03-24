@@ -94,6 +94,8 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
             'type': 'find_opponent',
             'opponent': opponent_user.intra_id,
             'opponent_image': opponent_user.image,
+            'opponent_win_count': opponent_user.win_count,
+            'opponent_lose_count': opponent_user.lose_count,
 
             'intra_id': user.intra_id,
             'id': self.remote.pk
@@ -101,14 +103,14 @@ class RemoteConsumer(AsyncJsonWebsocketConsumer):
 
     async def find_opponent(self, event):
         try:
-            message = {
-                'type': 'find_opponent',
-                'opponent': event['opponent'],
-                'opponent_image': event['opponent_image'],
-                'intra_id': event['intra_id'],
-                'id': event['id']
-            }
-            await self.send_json(message)
+            # message = {
+            #     'type': 'find_opponent',
+            #     'opponent': event['opponent'],
+            #     'opponent_image': event['opponent_image'],
+            #     'intra_id': event['intra_id'],
+            #     'id': event['id']
+            # }
+            await self.send_json(event)
         except KeyError as e:
             await self.send({'error': f'{str(e)} is required'})
         except Exception as e:
