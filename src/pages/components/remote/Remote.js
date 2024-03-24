@@ -62,6 +62,7 @@ export default class Remote extends Component {
 				await this.stopCounter();
 				document.removeEventListener('click', cancelEvent);
 				window.removeEventListener('popstate', popEvent);
+				window.removeEventListener('beforeunload', unloadEvent);
 				navigate('/select');
 			}
 		};
@@ -72,8 +73,18 @@ export default class Remote extends Component {
 			localStorage.removeItem('remote-id');
 			document.removeEventListener('click', cancelEvent);
 			window.removeEventListener('popstate', popEvent);
+			window.removeEventListener('beforeunload', unloadEvent);
 		};
 		window.addEventListener('popstate', popEvent);
+
+		const unloadEvent = (e) => {
+			this.stopInterval();
+			localStorage.removeItem('remote-id');
+			document.removeEventListener('click', cancelEvent);
+			window.removeEventListener('popstate', popEvent);
+			window.removeEventListener('beforeunload', unloadEvent);
+		}
+		window.addEventListener('beforeunload', unloadEvent);
 	}
 
 	template() {
