@@ -133,13 +133,6 @@ export default class App extends Component {
 				: 0;
 	}
 
-	disconnectSocket() {
-    if (this.chatSocket && this.chatSocket.readyState === WebSocket.OPEN) {
-        this.chatSocket.close();
-        console.log('WebSocket is closed.');
-    }
-	}
-
 	connectSocket() {
 		const chatSocket = new WebSocket(
 			`${SOCKET_URL}/ws/chats/?token=${localStorage.getItem('accessToken')}`,
