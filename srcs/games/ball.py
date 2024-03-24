@@ -15,9 +15,11 @@ class Ball:
 
     DEFAULT_START_SPEED = 4
     DEFAULT_MINIMUM_SPEED = 6
+    DEFAULT_MAXIMUM_SPEED = 11
     DEFAULT_MAXIMUM_SLOPE = 1.2
     EXTREME_START_SPEED = 6
     EXTREME_MINIMUM_SPEED = 8
+    EXTREME_MAXIMUM_SPEED = 15
     EXTREME_MAXIMUM_SLOPE = 1.5
 
     ESCAPE_DEGREE = 20
@@ -34,10 +36,12 @@ class Ball:
 
         self.start_speed = self.DEFAULT_START_SPEED
         self.minimum_speed = self.DEFAULT_MINIMUM_SPEED
+        self.maximum_speed = self.DEFAULT_MAXIMUM_SPEED
         self.maximum_slope = self.DEFAULT_MAXIMUM_SLOPE
         if mode == 'extreme':
             self.start_speed = self.EXTREME_START_SPEED
             self.minimum_speed = self.EXTREME_MINIMUM_SPEED
+            self.maximum_speed = self.EXTREME_MAXIMUM_SPEED
             self.maximum_slope = self.EXTREME_MAXIMUM_SLOPE
         logger.info(f'mode: {mode}, start_speed: {self.start_speed}')
         self.velocity = [self.start_speed, 0]
@@ -100,6 +104,8 @@ class Ball:
             return
         if size2 < self.minimum_speed ** 2:
             self.change_velocity_by_speed(self.minimum_speed, size2)
+        if size2 > self.maximum_speed ** 2:
+            self.change_velocity_by_speed(self.maximum_speed, size2)
 
     def change_velocity_by_speed(self, speed, size2):
         rate = speed / math.sqrt(size2)
