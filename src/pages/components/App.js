@@ -149,6 +149,7 @@ export default class App extends Component {
 
 		chatSocket.onopen = () => {
 			console.log('chat connect');
+			localStorage.setItem('chatConnected', 'true');
 			this.addEvent('click', '.message-btn', (e) => {
 				e.preventDefault();
 				var message = this.$target.querySelector('#m').value;
