@@ -48,7 +48,6 @@ export default class App extends Component {
 
 		this.addEvent('click', '.modal-close-btn', () => {
 			navigate('/login', true);
-			// window.location.pathname = '/login';
 		});
 	}
 
@@ -59,8 +58,6 @@ export default class App extends Component {
 	}
 
 	routerModule() {
-		// const $body = this.$target.querySelector('#app');
-		// new Router($body);
 		const $body = this.$target.querySelector('.body-wrapper');
 		new Router($body);
 	}
@@ -90,7 +87,7 @@ export default class App extends Component {
 				<div class="back-logo-wrapper"><img class="back-logo" src="/static/images/logoBlue.png" alt=""/></div>
 				<div class="body-wrapper"></div>
 				<div class="footer-wrapper">
-						<div class="chip-container">
+					<div class="chip-container">
 						<div class="chip-top">
 								<div class="yellow-box1"></div>
 								<div class="yellow-box2"></div>
@@ -108,7 +105,7 @@ export default class App extends Component {
 						<div class="chip-bottom">
 								<div class="triangle"></div>
 						</div>
-				</div>
+					</div>
 
 				<div class="chat-container">
 						<div class="message-container">
@@ -148,10 +145,8 @@ export default class App extends Component {
 				e.preventDefault();
 				var message = this.$target.querySelector('#m').value;
 				if (message && chatSocket.readyState === WebSocket.OPEN) {
-					// 여기에 조건 추가
 					if (message.trim() !== '') {
 						chatSocket.send(JSON.stringify({ message }));
-						// console.log('Message sent: ' + message);
 						this.$target.querySelector('#m').value = '';
 					}
 				}
@@ -168,38 +163,23 @@ export default class App extends Component {
 			console.log('WebSocket closed.');
 			if (event.code === 1000) {
 				console.log('Try multiple connections');
-				displayConnectionFailedModal(
-					language.util[
-						localStorage.getItem('language')
-							? localStorage.getItem('language')
-							: 'en'
-					].chatMessage,
-				);
+				displayConnectionFailedModal();
 				localStorage.clear();
 			}
-			// console.log("Close event code:", event.code, "Reason:", event.reason);
-			// localStorage.clear();
-			// chatSocket.close();
 			return;
 		};
 
 		chatSocket.onerror = function (e) {
-			displayConnectionFailedModal(
-				language.util[this.$state.region].chatMessage,
-			);
+			displayConnectionFailedModal();
 			localStorage.clear();
-			// localStorage.setItem('chatConnection', true);
-			// chatSocket.close();
 			return;
 		};
 
 		chatSocket.onmessage = (event) => {
-			// console.log(event.data);
 			const data = JSON.parse(event.data);
 			if (data.type && data.type === 'chat_message') {
 				this.displayMessage(data);
 			} else if (data.type && data.type === 'ping') {
-				// console.log('pong');
 				chatSocket.send(JSON.stringify({ type: 'pong' }));
 			} else if (data.type && data.type === 'send_multiple_connection') {
 				chatSocket.close(1000, 'Try multiple connections');
@@ -208,8 +188,6 @@ export default class App extends Component {
 	}
 
 	displayMessage(data) {
-		// Moved outside and made a class method
-		// console.log(data);
 		const messageContainer = this.$target.querySelector('.message-container');
 		const messageElement = document.createElement('div');
 		messageElement.classList.add('messages');
