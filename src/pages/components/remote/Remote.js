@@ -187,6 +187,7 @@ export default class Remote extends Component {
 					this.remoteReady();
 				}
 			} else if (data.type && data.type === 'send_disconnection') {
+				localStorage.removeItem('remote-id');
 				await this.stopInterval();
 				await displayCanceledMatchingModal(
 					language.remote[this.$state.region].cancelMatch,
