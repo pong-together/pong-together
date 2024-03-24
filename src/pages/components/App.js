@@ -170,7 +170,7 @@ export default class App extends Component {
 
 		chatSocket.onclose = function (event) {
 			console.log('WebSocket closed.');
-			if (event.code === 1000) {
+			if (event.code === 1003) {
 				console.log('Try multiple connections');
 				displayConnectionFailedModal();
 				localStorage.clear();
@@ -191,7 +191,7 @@ export default class App extends Component {
 			} else if (data.type && data.type === 'ping') {
 				chatSocket.send(JSON.stringify({ type: 'pong' }));
 			} else if (data.type && data.type === 'send_multiple_connection') {
-				chatSocket.close(1000, 'Try multiple connections');
+				chatSocket.close(1003, 'Try multiple connections');
 			}
 		};
 	}
