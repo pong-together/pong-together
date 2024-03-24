@@ -30,7 +30,7 @@ export default class Router {
 							history.replaceState(null, '', to);
 					} else {
 							history.pushState(null, '', to);
-							route(isReplace);
+							this.route(isReplace);
 					}
 					this.route();
 			});
