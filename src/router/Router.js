@@ -26,7 +26,7 @@ export default class Router {
     window.addEventListener('popstate', () => this.route());
     window.addEventListener('historychange', ({ detail }) => {
         const { to, isReplace } = detail;
-        if (location.pathname === to) {
+        if (isReplace) {
             history.replaceState(null, '', to);
         } else {
             history.pushState(null, '', to);
