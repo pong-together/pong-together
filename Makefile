@@ -23,8 +23,8 @@ clean:
 	docker-compose down -v --rmi all
 
 fclean: clean
-	docker system prune -f
 	rm -rf $(NGINX_CERTS_DIR) $(ELK_CERTS_DIR) $(ELK_BIN)
+	docker system prune -f
 
 re:
 	make fclean
