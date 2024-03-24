@@ -1,7 +1,7 @@
 NAME = pong-together
-CERT_DIR = ./certs
-SSL_FILE = $(CERT_DIR)/run_openssl.sh
-NGINX_SSL_DIR = $(CERT_DIR)/nginx
+CERTS_FILE = run_openssl.sh
+NGINX_CERTS_DIR = nginx/certs
+ELK_CERTS_DIR = elk/certs
 
 all: $(NAME)
 
@@ -11,7 +11,7 @@ up: cert
 	docker-compose up --build -d
 
 cert:
-	sh $(SSL_FILE)
+	sh $(CERTS_FILE)
 
 down:
 	docker-compose down
@@ -21,7 +21,7 @@ clean:
 
 fclean: clean
 	docker system prune -f
-	rm -rf $(NGINX_SSL_DIR)
+	rm -rf $(NGINX_CERTS_DIR) $(ELK_CERTS_DIR)
 
 re:
 	make fclean
