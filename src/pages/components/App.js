@@ -42,7 +42,7 @@ export default class App extends Component {
 				window.location.pathname !== '/remote' &&
 				window.location.pathname !== '/game'
 			) {
-				navigate('/select');
+				navigate('/select', true);
 			}
 		});
 
