@@ -253,6 +253,8 @@ export default class Game extends Component {
 				else if (window.localStorage.getItem('gameMode') === 'tournament'){
 					window.localStorage.removeItem('tournament-id');
 				} else window.localStorage.removeItem('remote-id');
+				window.localStorage.removeItem('gameMode');
+				window.localStorage.removeItem('gameLevel');
 				document.removeEventListener('keydown', this.event1);
 				document.removeEventListener('keyup', this.event2);
 				clearInterval(this.time);
@@ -283,8 +285,10 @@ export default class Game extends Component {
 				if (window.localStorage.getItem('gameMode') === 'local') {
 					window.localStorage.removeItem('local-id');
 				} else window.localStorage.removeItem('remote-id');
-				window.localStorage.removeItem('gameMode');
-				window.localStorage.removeItem('gameLevel');
+				if (window.localStorage.getItem('gameMode') === 'local' || window.localStorage.getItem('gameMode') === 'remote') {
+					window.localStorage.removeItem('gameMode');
+					window.localStorage.removeItem('gameLevel');
+				}
 				document.removeEventListener('keydown', this.event1);
 				document.removeEventListener('keyup', this.event2);
 				clearInterval(this.time);
@@ -321,6 +325,12 @@ export default class Game extends Component {
 		const popEvent = (e) => {
 			document.removeEventListener('keydown', this.event1);
 			document.removeEventListener('keyup', this.event2);
+			if (window.localStorage.getItem('gameMode') === 'local') {
+				window.localStorage.removeItem('local-id');
+			}
+			else if (window.localStorage.getItem('gameMode') === 'tournament'){
+				window.localStorage.removeItem('tournament-id');
+			} else window.localStorage.removeItem('remote-id');
 			clearInterval(this.time);
 			if (this.gameSocket.readyState === WebSocket.OPEN)
 				this.gameSocket.close();
