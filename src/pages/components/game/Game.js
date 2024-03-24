@@ -247,6 +247,9 @@ export default class Game extends Component {
 				this.render();
 			} else if (data.type && data.type === 'send_reconnection') {
 				gameSocket.close();
+				if (window.localStorage.getItem('gameMode') === 'local') {
+					window.localStorage.removeItem('local-id');
+				} else window.localStorage.removeItem('remote-id');
 				document.removeEventListener('keydown', this.event1);
 				document.removeEventListener('keyup', this.event2);
 				clearInterval(this.time);
@@ -274,6 +277,11 @@ export default class Game extends Component {
 					const element2 = document.querySelector('.game-display');
 					element2.innerHTML = this.templateEnd();
 				}
+				if (window.localStorage.getItem('gameMode') === 'local') {
+					window.localStorage.removeItem('local-id');
+				} else window.localStorage.removeItem('remote-id');
+				window.localStorage.removeItem('gameMode');
+				window.localStorage.removeItem('gameLevel');
 				document.removeEventListener('keydown', this.event1);
 				document.removeEventListener('keyup', this.event2);
 				clearInterval(this.time);

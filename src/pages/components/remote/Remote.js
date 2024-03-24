@@ -109,6 +109,19 @@ export default class Remote extends Component {
 			<div class="match-record">${this.$state.opponentWin}${language.remote[this.$state.region].winWord}\
 				${this.$state.opponentLose}${language.remote[this.$state.region].loseWord}</div>
 			<div id="match-intra">${this.$state.opponentIntraID}(5)</div>
+<<<<<<< HEAD
+		`;
+	}
+
+	templateProgress() {
+		return `
+			<div class="progress progress-custom">
+				<div class="progress-bar bg-danger progress-bar-striped progress-bar-animated" style="width:200px;height:60px">
+					<span>100%</span>
+				</div>
+			</div>
+=======
+>>>>>>> main
 		`;
 	}
 
