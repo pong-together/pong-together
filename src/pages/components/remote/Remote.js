@@ -62,8 +62,8 @@ export default class Remote extends Component {
 				await this.stopCounter();
 				document.removeEventListener('click', cancelEvent);
 				window.removeEventListener('popstate', popEvent);
-				// navigate('/select');
-				window.location.pathname = '/select';
+				navigate('/select');
+				// window.location.pathname = '/select';
 			}
 		};
 		document.addEventListener('click', cancelEvent);
@@ -191,8 +191,8 @@ export default class Remote extends Component {
 					language.remote[this.$state.region].cancelMatch,
 					document.querySelector('.mainbox'),
 				);
-				// navigate('/select');
-				window.location.pathname = '/select';
+				navigate('/select');
+				// window.location.pathname = '/select';
 			}
 		};
 
