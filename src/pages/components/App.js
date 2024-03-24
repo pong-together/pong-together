@@ -118,9 +118,9 @@ export default class App extends Component {
 				</div>
 				</div>
 		</div>
-				`;
+					`;
+			}
 		}
-	}
 
 	calcRate() {
 		this.$state.rate =
@@ -131,6 +131,13 @@ export default class App extends Component {
 							100,
 					)
 				: 0;
+	}
+
+	disconnectSocket() {
+    if (this.chatSocket && this.chatSocket.readyState === WebSocket.OPEN) {
+        this.chatSocket.close();
+        console.log('WebSocket is closed.');
+    }
 	}
 
 	connectSocket() {
@@ -215,6 +222,7 @@ export default class App extends Component {
 	async mounted() {
 		console.log('mount!');
 		window.addEventListener('load', async () => {
+			window.addEventListener('beforeunload', () => this.disconnectSocket());
 			this.changeModule();
 			this.routerModule();
 		});
