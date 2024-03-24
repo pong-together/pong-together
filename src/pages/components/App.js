@@ -219,6 +219,12 @@ export default class App extends Component {
 			this.changeModule();
 			this.routerModule();
 		});
+		window.addEventListener('beforeunload', async ()=>{
+			if (this.chatSocket.readyState === WebSocket.OPEN){
+				this.chatSocket.close();
+				console.log('WebSocket is closed.');
+			}
+		});
 		this.calcRate();
 		if (
 			localStorage.getItem('accessToken') &&
