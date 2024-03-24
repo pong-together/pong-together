@@ -1,5 +1,6 @@
 NAME = pong-together
-CERTS_FILE = run_openssl.sh
+NGINX_SETUP_FILE = nginx/setup.sh
+ELK_SETUP_FILE = elk/setup.sh
 NGINX_CERTS_DIR = nginx/certs
 ELK_CERTS_DIR = elk/certs
 
@@ -10,8 +11,9 @@ $(NAME): up
 up: cert
 	docker-compose up --build -d
 
-cert:
-	sh $(CERTS_FILE)
+setup:
+	sh $(NGINX_SETUP_FILE)
+	sh $(ELK_SETUP_FILE)
 
 down:
 	docker-compose down
