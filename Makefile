@@ -3,6 +3,7 @@ NGINX_SETUP_FILE = nginx/setup.sh
 ELK_SETUP_FILE = elk/setup.sh
 NGINX_CERTS_DIR = nginx/certs
 ELK_CERTS_DIR = elk/certs
+ELK_BIN = elk/elasticsearch-8.2.3
 
 all: $(NAME)
 
@@ -23,7 +24,7 @@ clean:
 
 fclean: clean
 	docker system prune -f
-	rm -rf $(NGINX_CERTS_DIR) $(ELK_CERTS_DIR)
+	rm -rf $(NGINX_CERTS_DIR) $(ELK_CERTS_DIR) $(ELK_BIN)
 
 re:
 	make fclean
