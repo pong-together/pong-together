@@ -63,7 +63,7 @@ export default class Remote extends Component {
 				document.removeEventListener('click', cancelEvent);
 				window.removeEventListener('popstate', popEvent);
 				window.removeEventListener('beforeunload', unloadEvent);
-				navigate('/select', true);
+				navigate('/select');
 			}
 		};
 		document.addEventListener('click', cancelEvent);
@@ -203,7 +203,7 @@ export default class Remote extends Component {
 					language.remote[this.$state.region].cancelMatch,
 					document.querySelector('.mainbox'),
 				);
-				navigate('/select', true);
+				navigate('/select');
 			}
 		};
 
