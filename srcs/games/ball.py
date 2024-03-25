@@ -6,6 +6,7 @@ from games import constants
 from games.score import Score
 from pong_together.settings import logger
 
+
 class Ball:
     WIDTH = 20
     HEIGHT = 20
